@@ -1,0 +1,304 @@
+T1	circumstantial-information 9 56	terrazas  del  club  hipico      calle  bolivia
+A1	location T1
+T2	electricity 0 7	#sinluz
+A2	without-service T2
+T3	electricity 60 67	#sinluz
+A3	without-service T3
+T4	circumstantial-information 69 90	valle  de  la  pascua
+A4	location T4
+T5	circumstantial-information 92 113	desde  las  7  00  am
+A5	duration T5
+T6	circumstantial-information 115 124	20  horas
+A6	duration T6
+T7	electricity 132 139	#sinluz
+A7	without-service T7
+T8	social-report 141 184	hoy  toca  ramen  a  la  luz  de  una  vela
+T9	electricity 186 193	#sinluz
+A8	without-service T9
+T10	social-report 202 382	dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso
+T11	electricity 388 395	#sinluz
+A9	without-service T11
+T12	social-report 397 428	que  gran  invento  el  celular
+T13	electricity 430 437	#sinluz
+A10	without-service T13
+T14	social-report 448 575	esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores  
+T15	electricity 439 446	#sinluz
+A11	fake-information T15
+T16	circumstantial-information 717 777	los  caobos    sabana  grande    la  florida    la  campigna
+A12	location T16
+T17	circumstantial-information 785 865	se  fue  por  fases  porque  hay  edificios  que  si  tienen  energia  electrica
+A13	reason T17
+T18	electricity 709 715	sinluz
+A14	without-service T18
+T19	circumstantial-information 875 994	#guayana  alta  vista    los  olivos    castillito    villa  colombia    villa  asia    villa  alianza    villa  brasil
+A15	location T19
+T20	electricity 996 1003	#sinluz
+A16	without-service T20
+T21	circumstantial-information 867 873	#22nov
+A17	location T21
+T22	circumstantial-information 1030 1044	san  francisco
+A18	location T22
+T23	electricity 1046 1053	#sinluz
+T24	circumstantial-information 1055 1064	15  horas
+A19	duration T24
+T25	electricity 1066 1073	#sinluz
+A20	without-service T25
+T26	gas 1088 1096	sin  gas
+A21	without-service T26
+T27	circumstantial-information 1135 1156	3  meses  y  19  dias
+A22	duration T27
+T28	water 1158 1166	#sinagua
+A23	without-service T28
+T29	social-report 1168 1193	agoniza  la  mal  querida
+T30	circumstantial-information 1195 1204	paraguana
+A24	location T30
+T31	electricity 1231 1238	#sinluz
+A25	without-service T31
+T32	circumstantial-information 1240 1263	desde  el  estado  lara
+A26	location T32
+T33	circumstantial-information 1286 1303	ya  son  4  horas
+A27	duration T33
+T34	electricity 1305 1312	#sinluz
+A28	without-service T34
+T35	circumstantial-information 1318 1332	#ciudadbolivar
+A29	location T35
+T36	circumstantial-information 1337 1344	semanas
+A30	duration T36
+T37	water 1346 1354	#sinagua
+A31	without-service T37
+T38	social-report 1390 1415	la  cola  llega  al  km18
+T39	gasoline 1454 1462	gasolina
+A32	without-service T39
+T40	circumstantial-information 1417 1421	#pnm
+A33	location T40
+T41	gasoline 1368 1380	#singasolina
+A34	without-service T41
+T42	circumstantial-information 1464 1514	en  walker  martinez  con  tobalaba    la  florida
+A35	location T42
+T43	electricity 1516 1523	#sinluz
+A36	without-service T43
+T44	circumstantial-information 1525 1550	colinas  de  bello  monte
+A37	location T44
+T45	electricity 1552 1559	#sinluz
+A38	without-service T45
+T46	circumstantial-information 1561 1571	12  25  pm
+A39	time T46
+T47	circumstantial-information 1356 1366	10  53  pm
+A40	time T47
+T48	circumstantial-information 1573 1582	madrugada
+A41	time T48
+T49	electricity 1584 1591	#sinluz
+A42	without-service T49
+T50	social-report 1596 1642	magnana  a  despertarse  para  hacer  la  cola
+T51	gasoline 1652 1661	#gasolina
+A43	without-service T51
+T52	social-report 1663 1879	no  habra  un  almuerzo  decente  al  retornar  con  suerte  alrededor  de  las  3  o  4pm  y  el  tanque  a  medio  llenar  con  solo  30  litros    puede  que  si  ya  llego  la  luz    logre  cenar  algo  caliente
+T53	social-report 1898 1927	en  que  bomba  hay  gasolina
+T54	circumstantial-information 1929 1938	#valencia
+A44	location T54
+T55	gasoline 1940 1952	#singasolina
+A45	without-service T55
+T56	circumstantial-information 1956 1962	#16dic
+A46	time T56
+T57	gasoline 1969 1998	#singasolinamcb  #singasolina
+A47	without-service T57
+T58	circumstantial-information 2000 2003	cbv
+A48	location T58
+T59	gasoline 2005 2017	#singasolina
+A49	without-service T59
+T60	circumstantial-information 2019 2022	ptl
+A50	location T60
+T61	gasoline 2024 2036	#singasolina
+A51	without-service T61
+T62	circumstantial-information 2036 2040	#ccs
+A52	location T62
+T63	gasoline 2042 2054	#congasolina
+A53	with-service T63
+T64	social-report 2058 2072	que  cosas  no
+T65	circumstantial-information 2121 2139	en  san  cristobal
+A54	location T65
+T66	electricity 2141 2157	estamos  #sinluz
+A55	without-service T66
+T67	circumstantial-information 2159 2174	desde  las  6am
+A56	time T67
+T68	circumstantial-information 2186 2208	apagones  desde  marzo
+A57	duration T68
+T69	gas 2212 2219	#singas
+A58	without-service T69
+T70	circumstantial-information 2221 2233	desde  enero
+A59	duration T70
+T71	circumstantial-information 2237 2244	magnana
+A60	time T71
+T72	water 2246 2265	estaremos  #sinagua
+A61	without-service T72
+T73	gasoline 2292 2304	#singasolina
+A62	without-service T73
+T74	circumstantial-information 2328 2346	desde  hace  agnos
+A63	duration T74
+T75	gasoline 2356 2396	estaciones  esperando  por  la  cisterna
+A64	without-service T75
+T76	circumstantial-information 2402 2524	pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista
+A65	location T76
+T77	circumstantial-information 2529 2574	la  que  esta  frente  a  c  alta  vista  2  
+A66	location T77
+T78	gasoline 2576 2588	#singasolina
+A67	without-service T78
+T79	circumstantial-information 2590 2598	#guayana
+A68	location T79
+T80	circumstantial-information 2600 2610	10  28  am
+A69	time T80
+T81	circumstantial-information 2612 2629	a  las  5  44  am
+A70	time T81
+T82	gasoline 2633 2681	aun  no  ha  llegado  la  gandola  con  gasolina
+A71	without-service T82
+T83	social-report 2685 2800	no  sabemos  a  que  hora  comenzaran  a  trabajar  los  empleados  de  la  estacion  de  servicio    asi  se  vive
+T84	gasoline 2802 2814	#singasolina
+A72	without-service T84
+T85	circumstantial-information 2816 2822	#28dic
+A73	location T85
+T86	gasoline 2824 2836	#singasolina
+A74	without-service T86
+T87	circumstantial-information 2840 2854	#ciudadguayana
+A75	location T87
+T88	social-report 2856 2887	deberian  ver  las  colas  aqui
+T89	circumstantial-information 2904 2932	desde  las  6  de  la  tarde
+A76	duration T89
+T90	circumstantial-information 2938 2949	viernes  27
+A77	time T90
+T91	social-report 2951 3027	para  equipar  el  lunes  30  ya  hay  aproximadamente  300  carros  y  sigu
+T92	circumstantial-information 3033 3057	valera  estado  trujillo
+A78	location T92
+T93	electricity 3059 3106	ya  cuenta  con  servicio  electrico    #sinluz
+A79	with-service T93
+T94	water 3108 3123	falta  el  agua
+A80	without-service T94
+T95	gas 3127 3134	el  gas
+A81	without-service T95
+T96	gasoline 3138 3150	la  gasolina
+A82	without-service T96
+T97	social-report 3209 3237	pero  por  algo  se  empieza
+T98	social-report 3245 3287	no  soporto  el  caos  que  se  ha  vuelto
+T99	circumstantial-information 3293 3302	maracaibo
+A83	location T99
+T100	social-report 3306 3329	el  calor  esta  brutal
+T101	electricity 3334 3341	#sinluz
+A84	without-service T101
+T102	social-report 3345 3363	no  puedo  moverme
+T103	gasoline 3373 3390	no  hay  gasolina
+A85	without-service T103
+T104	social-report 3394 3519	tengo  muy  poca  y  la  unica  estacion  que  vi  abierta  las  colas  kilometricas    de  verdad  hoy  no  tengo  paciencia
+T105	circumstantial-information 3521 3526	#1abr
+A86	time T105
+T106	social-report 3528 3601	en  foto  la  fuerte  cola  que  se  registro  en  horas  de  la  magnana
+T107	gasoline 3611 3630	bomba  de  gasolina
+A87	without-service T107
+T108	circumstantial-information 3640 3725	parroquia  #lavega  sector  #montalban  #caracas    en  el  distribuidor  la  yaguara
+A88	location T108
+T109	gasoline 3727 3739	#singasolina
+A89	without-service T109
+T110	social-report 3745 3777	hoy  me  desperte  y  amanecimos
+T111	water 3779 3787	#sinagua
+A90	without-service T111
+T112	gasoline 3789 3801	#singasolina
+A91	without-service T112
+T113	gas 3803 3810	#singas
+A92	without-service T113
+T114	social-report 3812 3902	yo  me  pregunto  en  una  sociedad  tan  moderna  en  venezuela  pasamos  estas  penurias
+T115	circumstantial-information 3930 3948	#mujeresdeltachira
+A93	location T115
+T116	social-report 3950 3967	mas  del  75%  de
+T117	circumstantial-information 3969 3978	maracaibo
+A94	location T117
+T118	electricity 4010 4017	#sinluz
+A95	without-service T118
+T119	social-report 4021 4047	a  la  penumbra  se  suman
+T120	circumstantial-information 4049 4081	varios  municipios  del  zulia  
+A96	location T120
+T121	social-report 4083 4277	si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+T122	circumstantial-information 4302 4338	parroquias  del  oeste  de  #caracas
+A97	location T122
+T123	social-report 4340 4367	se  reportan  largas  colas
+T124	gasoline 4375 4395	surtir  de  gasolina
+A98	without-service T124
+T125	social-report 4400 4454	hay  otras  donde  se  encuentran  cerrada  por  estar
+T126	gasoline 4456 4468	#singasolina
+A99	without-service T126
+T127	social-report 4472 4606	la  crisis  del  combustible  llego  a  la  capital    por  culpa  de  un  regimen  corrupto  increible  y  somos  un  pais  petrolero
+T128	electricity 4608 4627	#sinluzencuarentena
+A100	without-service T128
+T129	water 4629 4637	#sinagua
+A101	without-service T129
+T130	gasoline 4639 4651	#singasolina
+A102	without-service T130
+T131	social-report 4653 4679	asi  tenemos  que  aguanta
+T132	circumstantial-information 4719 4728	#carabobo
+A103	location T132
+T133	gasoline 4730 4742	#singasolina
+A104	without-service T133
+T134	social-report 4744 4867	imposible  salir  en  vehiculos  a  buscar  alimentos  y  agua  potable    #venezuela  tierra  de  zombies  #thewalkingdead
+T135	circumstantial-information 4869 4894	en  valle  de  la  pascua
+A105	location T135
+T136	social-report 4896 4917	la  situacion  de  la
+T137	gasoline 4919 4927	gasolina
+A106	without-service T137
+T138	social-report 4929 4942	es  alarmante
+T139	gasoline 4946 4958	#singasolina
+A107	without-service T139
+T140	electricity 4960 4967	#sinluz
+T141	social-report 4969 5094	esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores
+A108	fake-information T140
+T142	electricity 5104 5111	#sinluz
+A109	without-service T142
+T143	circumstantial-information 5113 5185	#lacabagna  #laboyera  #elhatillo  @elhatillo  @elhatillano  @eliasayegh
+A110	location T143
+T144	circumstantial-information 5187 5211	desde    hace  una  hora
+A111	duration T144
+T145	social-report 5213 5277	buenas  tardes  @corpoelecinfo  se  mantiene  el  no  suministro
+T146	electricity 5283 5301	energia  electrica
+A112	without-service T146
+T147	circumstantial-information 5303 5363	en  la  esquina  de  delicias  parroquia  san  juan  caracas
+A113	location T147
+T148	electricity 5367 5384	seguimos  #sinluz
+A114	without-service T148
+T149	circumstantial-information 5453 5484	centro  comercial  san  ignacio
+A115	location T149
+T150	electricity 5495 5502	#apagon
+A116	without-service T150
+T151	social-report 5508 5589	este  se  trata  de  la  peor  falla  electrica  desde  el  pasado  10  de  abril
+T152	electricity 5591 5598	#sinluz
+A117	without-service T152
+T153	circumstantial-information 5639 5656	7  hrs  continuas
+A118	duration T153
+T154	electricity 5658 5665	#sinluz
+A119	without-service T154
+T155	social-report 5667 5674	y  nada
+T156	social-report 5678 5776	@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario
+T157	circumstantial-information 5778 5799	desde  hace  12  dias
+A120	duration T157
+T158	electricity 5801 5821	los  cortes  #sinluz
+A121	without-service T158
+T159	social-report 5825 5885	estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+T160	circumstantial-information 5975 5998	parroquia  chiquinquira
+A122	location T160
+T161	electricity 6000 6017	sin  electricidad
+A123	without-service T161
+T162	circumstantial-information 6021 6055	sector  grano  de  oro  #maracaibo
+A124	location T162
+T163	electricity 6057 6082	#sinluz  #corpoeleczulia_
+A125	without-service T163
+T164	circumstantial-information 6084 6106	desde  las  07  10  pm
+A126	duration T164
+T165	circumstantial-information 6156 6171	desde  las  2pm
+A127	duration T165
+T166	electricity 6173 6180	#sinluz
+A128	without-service T166
+T167	circumstantial-information 6182 6205	#tachira  #sancristobal
+A129	location T167
+T168	social-report 6207 6268	@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis
+T169	circumstantial-information 6270 6282	desde  840pm
+A130	duration T169
+T170	electricity 6284 6291	#sinluz
+A131	without-service T170
+T171	circumstantial-information 6293 6318	en  circuito  las  marias
+A132	location T171
+T172	social-report 6320 6453	pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
