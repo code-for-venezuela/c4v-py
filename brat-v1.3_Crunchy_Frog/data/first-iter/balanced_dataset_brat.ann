@@ -302,3 +302,35 @@ A131	without-service T170
 T171	circumstantial-information 6293 6318	en  circuito  las  marias
 A132	location T171
 T172	social-report 6320 6453	pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+R1	relation Arg1:T1 Arg2:T2	
+R2	relation Arg1:T24 Arg2:T25	
+R3	relation Arg1:T27 Arg2:T28	
+R4	relation Arg1:T30 Arg2:T28	
+R5	relation Arg1:T30 Arg2:T25	
+R6	relation Arg1:T30 Arg2:T26	
+T173	twitter-account 1214 1229	@luisgonzaloprz
+A133	news-company T173
+R7	relation Arg1:T33 Arg2:T34	
+R8	relation Arg1:T35 Arg2:T34	
+R9	relation Arg1:T36 Arg2:T37	
+R10	relation Arg1:T48 Arg2:T49	
+R11	relation Arg1:T50 Arg2:T51	
+T174	twitter-account 1881 1896	@traffivalencia
+A134	news-company T174
+R12	relation Arg1:T58 Arg2:T59	
+R13	relation Arg1:T60 Arg2:T61	
+R14	relation Arg1:T62 Arg2:T63	
+T175	twitter-account 2074 2084	@vtvcanal8
+A135	news-company T175
+T176	twitter-account 2086 2119	@emmacaroagurto  @michelcaballero
+A136	news-company T176
+R15	relation Arg1:T65 Arg2:T66	
+R16	relation Arg1:T67 Arg2:T66	
+R17	relation Arg1:T68 Arg2:T69	
+R18	relation Arg1:T70 Arg2:T69	
+R19	relation Arg1:T71 Arg2:T72	
+R20	relation Arg1:T74 Arg2:T73	
+R21	relation Arg1:T92 Arg2:T93	
+R22	relation Arg1:T92 Arg2:T94	
+R23	relation Arg1:T92 Arg2:T95	
+R24	relation Arg1:T92 Arg2:T96	
