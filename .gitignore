@@ -1,2 +1,5 @@
+# ignore pip environment
 devmarianela
-start_env_jupter.sh
+
+# ignore env activationa and jupyter aumotated launch
+start_env_jupyter.sh
