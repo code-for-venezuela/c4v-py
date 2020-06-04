@@ -1,5 +1,2 @@
-# ignore pip environment
-devmarianela
-
-# ignore env activationa and jupyter aumotated launch
-start_env_jupyter.sh
+# ignore some Mac files
+*.DS_Store
