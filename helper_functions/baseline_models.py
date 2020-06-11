@@ -16,6 +16,7 @@ from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import LinearSVC
 from skmultilearn.adapt import MLkNN
 from scipy.sparse import csr_matrix, lil_matrix
+from datetime import datetime
 
 
 from data_loader import load_data as DataLoader
@@ -27,6 +28,7 @@ class Model_X:
         self.model_name = name
         self.model_x = model
         self.type_ = type
+
         if self.type_ == 'cc':
             self.selected_labels = y_train.columns[y_train.sum(axis=0, skipna=True) > 0].tolist()
             y_train = y_train.filter(self.selected_labels, axis=1)
@@ -71,15 +73,16 @@ def report_demo(filename: str) -> pd.DataFrame:
     # loading the data
     data = DataLoader(filename, binary=True)
     data.preprocess()
-
+    random_state = 21
+    
     # creating the models
     br_BernoulliNB_classifier = BinaryRelevance(BernoulliNB())
-    br_LogisticR_classifier = BinaryRelevance(LogisticRegression(random_state=21))
-    lp_LogisticR_classifier = LabelPowerset(LogisticRegression(random_state=21))
-    lp_SVM_classifier = LabelPowerset((LinearSVC(random_state=21)))
-    lp_gd_classifier = LabelPowerset(SGDClassifier(random_state=21, loss="log", penalty="elasticnet"))
+    br_LogisticR_classifier = BinaryRelevance(LogisticRegression(random_state=random_state))
+    lp_LogisticR_classifier = LabelPowerset(LogisticRegression(random_state=random_state))
+    lp_SVM_classifier = LabelPowerset((LinearSVC(random_state=random_state))) 
+    lp_gd_classifier = LabelPowerset(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
     ml_classifier = MLkNN(k=4)
-    cc_classifier = ClassifierChain(LogisticRegression(random_state=21))
+    cc_classifier = ClassifierChain(LogisticRegression(random_state=random_state))
 
     # Creating a list of model wrappers and training each model models
     models = [
@@ -94,7 +97,10 @@ def report_demo(filename: str) -> pd.DataFrame:
 
     # getting report
     report = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
-
+    
+    ## Ver como hacer el logging en data science antes de implementar esto!
+    # report.to_csv(f'report-{datetime.now}.csv')
+    
     return report
 
 

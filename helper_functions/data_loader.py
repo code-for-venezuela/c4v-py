@@ -61,7 +61,6 @@ class load_data:
         self.y_test = None
 
 
-
     def annotation_parser(self, dir_ann_file, print_grouped_annotations = False):
         '''
             Helper function to parse Brat's annotation file (.ann). 
@@ -256,7 +255,6 @@ class load_data:
 
             return self.parsed_df
 
-
     def preprocess(self, test_size = 0.3, random_state = 21, to_vectorize = True, method = 'tfidf'):
         '''
         Creates Train Test Split.
@@ -276,8 +274,6 @@ class load_data:
                                                                                 test_size = 0.3,
                                                                                 random_state = 21)
         
-        
-
     def vectorize(self, method = 'tfidf', 
                   stop_words= None, 
                   strip_accents = 'unicode', 
