@@ -2,3 +2,6 @@ __pycache__
 
 # ignore some Mac files
 *.DS_Store
+
+# ignoring pycharm hidden folders
+.idea/
