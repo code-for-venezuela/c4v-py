@@ -47,6 +47,7 @@ class Model_X:
             x_test = lil_matrix(x_test).toarray()
 
         y_pred = self.model_x.predict(x_test)
+
         return {
             'accuracy': accuracy_score(y_test, y_pred),
             'hamming_loss': hamming_loss(y_test, y_pred),
@@ -71,18 +72,18 @@ def report_demo(filename: str) -> pd.DataFrame:
     ;return; a pandas data frame object with the report on each of the models evaluated
     '''
     # loading the data
-    data = DataLoader(filename, binary=True)
-    data.preprocess()
-    random_state = 21
-    
+    random_state = 42
+    data = DataLoader(filename, binary=True, )
+    data.preprocess(random_state=random_state)
+
     # creating the models
     br_BernoulliNB_classifier = BinaryRelevance(BernoulliNB())
-    br_LogisticR_classifier = BinaryRelevance(LogisticRegression(random_state=random_state))
-    lp_LogisticR_classifier = LabelPowerset(LogisticRegression(random_state=random_state))
-    lp_SVM_classifier = LabelPowerset((LinearSVC(random_state=random_state))) 
-    lp_gd_classifier = LabelPowerset(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
+    br_LogisticR_classifier = BinaryRelevance(LogisticRegression())
+    lp_LogisticR_classifier = LabelPowerset(LogisticRegression())
+    lp_SVM_classifier = LabelPowerset(LinearSVC())
+    lp_gd_classifier = LabelPowerset(SGDClassifier( loss="log", penalty="elasticnet"))
     ml_classifier = MLkNN(k=4)
-    cc_classifier = ClassifierChain(LogisticRegression(random_state=random_state))
+    cc_classifier = ClassifierChain(LogisticRegression())
 
     # Creating a list of model wrappers and training each model models
     models = [
