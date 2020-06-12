@@ -272,7 +272,7 @@ class load_data:
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,
                                                                                 self.y,
                                                                                 test_size = 0.3,
-                                                                                random_state = 21)
+                                                                                random_state = random_state)
         
     def vectorize(self, method = 'tfidf', 
                   stop_words= None, 
