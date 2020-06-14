@@ -17,6 +17,7 @@ class data_sampler:
         self.random_state = random_state
         self.text_col = text_col
         self.annotator_name = annotator_name
+        self.filename = None
         self.get_sample()
 
     def cleaner(self, df,
@@ -30,7 +31,7 @@ class data_sampler:
             df: Dataframe or Pandas.Series object. 
             text_col: String. Column to clean. 
             is_pandas_series: Boolean, Optional. If df is pandas.Series
-        
+
         '''
         
         # to lower
@@ -108,8 +109,8 @@ class data_sampler:
 
         timestamp = datetime.now()
         formatted_timestamp = timestamp.strftime('%Y-%m-%d_%H:%M:%S')
-        filename = f'tobrat-{self.annotator_name}-sample_n_{self.sample_n}-random_state_{self.random_state}---{formatted_timestamp}.csv'
-        original_df.to_csv(f'../data/data_to_annotate/{self.annotator_name}/{filename}',
+        self.filename = f'tobrat-{self.annotator_name}-sample_n_{self.sample_n}-random_state_{self.random_state}---{formatted_timestamp}.csv'
+        original_df.to_csv(f'../data/data_to_annotate/{self.annotator_name}/{self.filename}',
                             sep = ' ',
                             header = False,
                             index = False,
@@ -124,35 +125,33 @@ if __name__ == '__main__':
     '''
     Example:
 
-python data_sampler.py ../data_analysis/tagging-set-original_for_jupyter_tagging.csv 10 19 full_text diego
+python data_sampler.py --path ../data_analysis/tagging-set-original_for_jupyter_tagging.csv --sample_size 30 --rand_state 19 --text_col full_text --annotator_name diegoo
     '''
      
-    ## command line arguments to be implemented
-    # opts, args = getopt.getopt(sys.argv, 'path:sample_n:random_sample:text_col:annotator_name')
-    # print(sys.argv[1:])
 
     def check_input():
-        parser = argparse.ArgumentParser(description='Path to csv file where tweets are located')
+        parser = argparse.ArgumentParser(description='''
+        Sample tweets dataframe for annotations in brat.
+        
+        Example:
+            python data_sampler.py --path ../data_analysis/tagging-set-original_for_jupyter_tagging.csv --sample_size 30 --rand_state 19 --text_col full_text --annotator_name diego
+        ''')
         parser.add_argument('--path',
                             type=str,
                             help= 'Path to csv file where tweets are located')
         
-        parser = argparse.ArgumentParser(description='Sample size to extract.')
         parser.add_argument('--sample_size',
                             type=int,
                             help= 'Sample size to extract.')
 
-        parser = argparse.ArgumentParser(description='Random State to use in the models')
         parser.add_argument('--rand_state',
                             type=int,
-                            help= 'Random State to us ein the models')
+                            help= 'Random State to used in the models')
         
-        parser = argparse.ArgumentParser(description='Column that contains raw tweets text')
         parser.add_argument('--text_col',
                             type=str,
                             help= 'Column that contains rwe tweets text')
         
-        parser = argparse.ArgumentParser(description='Name of the person that is annotating')
         parser.add_argument('--annotator_name',
                             type=str,
                             help= 'Name of the person that is annotating')
@@ -164,10 +163,18 @@ python data_sampler.py ../data_analysis/tagging-set-original_for_jupyter_tagging
     # print(args)
 
 
-    data_sampler(tweets_dataset_path = args['path'], 
+    sample_data = data_sampler(tweets_dataset_path = args['path'], 
                         sample_n = args['sample_size'], 
                         random_state = args['rand_state'], 
                         text_col = args['text_col'], 
                         annotator_name = args['annotator_name'])
 
-#  python data_sampler.py --path ../data_analysis/tagging-set-original_for_jupyter_tagging.csv --sample_n 10 --rand_state 19 --text_col full_text --annotator_name diego
+    print(f'''
+    Success!
+
+    Data was saved at ../data/data_to_annotate/{sample_data.annotator_name}/{sample_data.filename}
+
+    '''
+    )
+
+#  python data_sampler.py --path ../data_analysis/tagging-set-original_for_jupyter_tagging.csv --sample_size 30 --rand_state 19 --text_col full_text --annotator_name diego
