@@ -5,3 +5,6 @@ __pycache__
 
 # ignoring pycharm hidden folders
 .idea/
+
+# ignore brat temp files 
+#*.pyc
