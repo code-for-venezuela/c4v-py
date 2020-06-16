@@ -108,8 +108,8 @@ class data_sampler:
         
 
         timestamp = datetime.now()
-        formatted_timestamp = timestamp.strftime('%Y-%m-%d_%H:%M:%S')
-        self.filename = f'tobrat-{self.annotator_name}-sample_n_{self.sample_n}-random_state_{self.random_state}---{formatted_timestamp}.csv'
+        formatted_timestamp = timestamp.strftime('%Y-%m-%d_%H%M%S')
+        self.filename = f'{self.annotator_name}-sample_{self.sample_n}-randstate_{self.random_state}-{formatted_timestamp}.txt'
         original_df.to_csv(f'../data/data_to_annotate/{self.annotator_name}/{self.filename}',
                             sep = ' ',
                             header = False,
