@@ -20,6 +20,8 @@ Once inside brat, click login on the right top corner of the browser.
 - User: admin
 - Pass: admin
 
+### Annotate
+Click on Collections and select the file to annotate
 
 ## Entities and attributes
 
