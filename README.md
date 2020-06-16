@@ -7,6 +7,20 @@ This repo contains the first iterations of Code For Venezuela's Named-Entity Rec
 - First iteration of annotations can be found at [./brat-v1.3_Crunchy_Frog/data/first-iter](https://github.com/dieko95/brat-test/tree/master/brat-v1.3_Crunchy_Frog/data/first-iter)
 - Jupyter Notebooks with descriptive analytics about the annotations can be found at [./data_analysis](https://github.com/dieko95/brat-test/tree/master/data_analysis)
 
+## Steps to annotate
+
+### Change to Brat's directory
+`cd brat-test/brat-v1.3_Crunchy_Frog`
+
+### Run Brat's standalone server
+`python2 standalone.py`
+
+### Login into brat
+Once inside brat, click login on the right top corner of the browser.
+- User: admin
+- Pass: admin
+
+
 ## Entities and attributes
 
 Entities as bullet points and attributes as sub-bullet points:
