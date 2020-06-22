@@ -37,7 +37,13 @@ class Model_X:
 
         self.model_x.fit(x_train, y_train)
 
-    def get_predictions(self, x_test):
+    def get_predictions(self, x_test1):
+
+        if self.type_ in ['knn', 'logistic']:
+            x_test = lil_matrix(x_test1).toarray()
+        else:
+            x_test = x_test1
+
         return self.model_x.predict(x_test)
 
     def get_metrics(self, x_test1, y_test1) -> dict:
@@ -46,12 +52,7 @@ class Model_X:
         else:
             y_test = y_test1
 
-        if self.type_ in ['knn', 'logistic']:
-            x_test = lil_matrix(x_test1).toarray()
-        else:
-            x_test = x_test1
-
-        y_pred = self.get_predictions(x_test)
+        y_pred = self.get_predictions(x_test1)
 
         return {
             'accuracy': accuracy_score(y_test, y_pred),
@@ -72,14 +73,24 @@ class Model_X:
         return metrics
 
 
-def report_demo(filename: str) -> pd.DataFrame:
+def analysis_miss_classify_tweets(model_x_list: list, data: DataLoader):
+    for model in model_x_list:
+        # TODO: implement here the analysis
+        #  gather from each model the records that have not been correctly classified
+        print(model.model_name)
+        print('which ones have been wrongly predicted??')
+        print(model.get_predictions(data.X_test))
+        print(data.y_test)
+
+
+def report_demo(file_names: list) -> pd.DataFrame:
     '''
-    ;param flename; path of the files that contain the annotated data and the test data (tweets)
-    ;return; a pandas data frame object with the report on each of the models evaluated
+    :param file_names: list of file paths that contain the annotated data and the test data (tweets)
+    :return: a pandas data frame object with the report on each of the models evaluated
     '''
     # loading the data
     random_state = 42
-    data = DataLoader(filename, binary=True, )
+    data = DataLoader(file_names, binary=True, )
     data.preprocess(random_state=random_state)
 
     # Creating the models
@@ -117,26 +128,45 @@ def report_demo(filename: str) -> pd.DataFrame:
 
     ]
 
+    # TODO: add analysis about tweets that were not correctly identified
+    analysis_miss_classify_tweets(models, data)
+
     # getting report
     report = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
     
     # Storing on disk the csv corresponding to the report, the name of the original annotation
     # file and a timestamp is added in the name of the file.
     # TODO: Ver como hacer el logging en data science antes de implementar esto!
-    # save_report_on_disk(filename, report)
+    # save_report_on_disk(data.source_as_list(), report)
 
     return report
 
 
-def save_report_on_disk(filename: str, df: pd.DataFrame) -> None:
-    out_filename = f'report-{datetime.now().strftime("%Y%m%d_%H%M%S")}-{os.path.basename(filename)}.csv'
+def save_report_on_disk(filenames: list, df: pd.DataFrame) -> None:
+    out_filename = f'report-{datetime.now().strftime("%Y%m%d_%H%M%S")}-{os.path.basename(filenames[0])}.csv'
     df.to_csv(os.path.join('reports', out_filename))
+
+    # or we might use a json:
+    # {
+    #   files: filenames, # <- list of file names from which data was loaded
+    #   report: df.to_json()
+    # }
+
 
 
 if __name__ == '__main__':
     '''
     This line needs to be added in the jupyter notebook to make use of the classes
     '''
-    # print(report_demo(filename='../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat'))
+    r = report_demo(file_names=[
+        # '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
+        # '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
+        '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'
+    ])
+
+    print(r.sort_values(by='accuracy'))
+
+
     # print(report_demo(filename='../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'))
 
