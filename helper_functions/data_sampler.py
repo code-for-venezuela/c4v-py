@@ -115,7 +115,7 @@ class DataSampler:
             # prompts the user to mark the tweets as tagged
             user_response = str(input(f'''
             Do you wish to set these sampled data as tagged?
-            if not, press any other key.
+            If you select <n> or any other key, you are at risk of extracting data that you have already worked on.
             Answer (y/n): '''))
 
             if user_response == 'y':
