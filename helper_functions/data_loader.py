@@ -62,6 +62,9 @@ class load_data:
         self.X_test = None
         self.y_test = None
 
+    def source_as_list(self) -> list:
+        return self.pair_names
+
     def annotation_parser(self, dir_ann_file, print_grouped_annotations=False):
         """
             Helper function to parse Brat's annotation file (.ann). 
