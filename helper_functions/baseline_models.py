@@ -139,13 +139,13 @@ def report_demo(file_names: list) -> pd.DataFrame:
     # Storing on disk the csv corresponding to the report, a timestamp is added as part of the file's name.
     # the name of the original annotation file(s) will be saved on the csv with "-source" as suffix.
 
-    # save_report_on_disk(data.source_as_list(), report)
+    # save_report_on_disk(data.source_as_list(), report, data.X.shape[0])
 
     return report
 
 
-def save_report_on_disk(file_names: list, df: pd.DataFrame) -> None:
-    out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}'
+def save_report_on_disk(file_names: list, df: pd.DataFrame, data_set_size: int) -> None:
+    out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}-{data_set_size}t'
     df.sort_values(by='accuracy').to_csv(os.path.join('reports', out_filename+'.csv'), index=False)
     pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'), index=False)
 
