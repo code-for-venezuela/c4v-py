@@ -79,8 +79,8 @@ def analysis_miss_classify_tweets(model_x_list: list, data: DataLoader):
         #  gather from each model the records that have not been correctly classified
         print(model.model_name)
         print('which ones have been wrongly predicted??')
-        print(model.get_predictions(data.X_test))
-        print(data.y_test)
+        # print(model.get_predictions(data.X_test))
+        # print(data.y_test)
 
 
 def report_demo(file_names: list) -> pd.DataFrame:
@@ -91,6 +91,7 @@ def report_demo(file_names: list) -> pd.DataFrame:
     # loading the data
     random_state = 42
     data = DataLoader(file_names, binary=True, )
+    print(f'the shape of my data.X: {data.X.shape}')
     data.preprocess(random_state=random_state)
 
     # Creating the models
@@ -134,39 +135,62 @@ def report_demo(file_names: list) -> pd.DataFrame:
     # getting report
     report = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
     
-    # Storing on disk the csv corresponding to the report, the name of the original annotation
-    # file and a timestamp is added in the name of the file.
     # TODO: Ver como hacer el logging en data science antes de implementar esto!
+    # Storing on disk the csv corresponding to the report, a timestamp is added as part of the file's name.
+    # the name of the original annotation file(s) will be saved on the csv with "-source" as suffix.
+
     # save_report_on_disk(data.source_as_list(), report)
 
     return report
 
 
-def save_report_on_disk(filenames: list, df: pd.DataFrame) -> None:
-    out_filename = f'report-{datetime.now().strftime("%Y%m%d_%H%M%S")}-{os.path.basename(filenames[0])}.csv'
-    df.to_csv(os.path.join('reports', out_filename))
+def save_report_on_disk(file_names: list, df: pd.DataFrame) -> None:
+    out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}'
+    df.to_csv(os.path.join('reports', out_filename+'.csv'))
+    pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'))
 
-    # or we might use a json:
-    # {
-    #   files: filenames, # <- list of file names from which data was loaded
-    #   report: df.to_json()
-    # }
 
+def missed_tweets(with_annotation: str) -> None:
+    """
+    Shows tweets that have not been captured by the load_data class.
+    :param with_annotation: path from current location to the annotated pair .txt and .ann
+     no extension required.
+    :return: None
+    """
+    with open(f'{with_annotation}.txt') as f:
+        lines = f.read().replace('\n\n', '\n').split('\n')[:-1]
+
+    # annotated_data = pd.read_csv('helper_functions/marianela_39.csv')['text'].to_list()
+    annotated_data = DataLoader([with_annotation]).X
+    o_lines = [line.replace('\n', '') for line in annotated_data]
+
+    missed_values = [line for line in lines if line not in o_lines]
+    print('me faltan:', len(missed_values))
+    for m in missed_values:
+        print('*\t', m, '\n')
 
 
 if __name__ == '__main__':
     '''
     This line needs to be added in the jupyter notebook to make use of the classes
     '''
+
+    # -------------
+
+    # Show me the performance of the models using annotated data
+
     r = report_demo(file_names=[
         # '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
-        # '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
-        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
-        '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
+        # '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
+        # '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'
     ])
-
     print(r.sort_values(by='accuracy'))
 
+    # -------------
 
-    # print(report_demo(filename='../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'))
+    # shows me which tweets were ignored by the DataLoader class
+
+    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818')
+    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334')
 
