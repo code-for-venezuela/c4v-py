@@ -30,12 +30,12 @@ T16	electricity 436 453	crisis  electrica
 T17	social-report 529 582	un  poco  de  humor  hasta  que  nos  vuelva  la  luz
 T18	twitter-account 660 676	@corpoeleczulia_
 A13	utility-company T18
-T20	electricity 767 794	 servicio  de  electricidad
-T21	circumstantial-information 799 810	 #maracaibo
+T20	electricity 768 794	servicio  de  electricidad
+T21	circumstantial-information 800 810	#maracaibo
 A14	location T21
 T22	circumstantial-information 812 835	parroquia  chiquinquira
 A15	location T22
-T23	circumstantial-information 836 859	 sector  grano  de  oro
+T23	circumstantial-information 837 859	sector  grano  de  oro
 A16	location T23
 T24	twitter-account 894 908	@gusocandoalex
 A17	news-company T24
@@ -100,7 +100,7 @@ T55	twitter-account 6419 6433	@corpoelecinfo
 A42	utility-company T55
 T56	circumstantial-information 6435 6462	avenida  16  con  calle  84
 A43	location T56
-T57	circumstantial-information 6474 6490	 desde  las  2pm
+T57	circumstantial-information 6475 6490	desde  las  2pm
 A44	time T57
 T58	circumstantial-information 6508 6523	de  2am  a  8am
 A45	time T58
@@ -161,7 +161,7 @@ R6	relation Arg1:T73 Arg2:T83
 R7	relation Arg1:T82 Arg2:T83	
 T84	twitter-account 2938 2952	@corpoelecinfo
 A70	politician T84
-T85	circumstantial-information 2817 2843	 la  urbanizacion  miranda
+T85	circumstantial-information 2818 2843	la  urbanizacion  miranda
 A71	location T85
 T86	circumstantial-information 2847 2863	municipio  sucre
 A72	location T86
