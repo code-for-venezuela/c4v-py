@@ -146,8 +146,8 @@ def report_demo(file_names: list) -> pd.DataFrame:
 
 def save_report_on_disk(file_names: list, df: pd.DataFrame) -> None:
     out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}'
-    df.to_csv(os.path.join('reports', out_filename+'.csv'))
-    pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'))
+    df.sort_values(by='accuracy').to_csv(os.path.join('reports', out_filename+'.csv'), index=False)
+    pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'), index=False)
 
 
 def missed_tweets(with_annotation: str) -> None:
@@ -180,10 +180,10 @@ if __name__ == '__main__':
     # Show me the performance of the models using annotated data
 
     r = report_demo(file_names=[
-        # '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
+        '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
+        '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
         '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
-        # '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
-        # '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818'
     ])
     print(r.sort_values(by='accuracy'))
 
