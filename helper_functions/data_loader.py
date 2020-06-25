@@ -7,14 +7,14 @@ stop_words = set(stopwords.words('spanish'))
 
 class load_data:
 
-    def __init__(self, filepath: str, binary = True):
+    def __init__(self, files_path: list, binary=True):
         """
         Receives filepath of Annotation File and text file.
         These files must be in the same folder.
         Run sef.preprocess() to have train test split vectorized data. 
         ----------------------------------------------------
         Params
-            filepath: str. Path to text and annotation files without their file extension.
+            files_path: list. Path to text and annotation files without their file extension.
                 It is assumed that both files have the same nanme.
             
             binary: bool. Create one-hot encoded labels. 
@@ -34,7 +34,6 @@ class load_data:
 
             test = data_loader.load_data('../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30')
 
-
             # Print parsed dataframe
 
             print(test.parsed_df.head())
@@ -49,20 +48,29 @@ class load_data:
             print(test.X_train.shape)
 
         """
- 
-        self.text_filename = filepath + '.txt'
-        self.ann_filename =  filepath + '.ann'
+
+        # pair_names is a list containing the paths of the annotated pair files, since .txt and .ann have the same
+        #
+        self.pair_names = files_path
+
         self.parsed_df = self.get_parsed_df()
         self.X = self.parsed_df.iloc[:, 0]
-        self.y = self.parsed_df.iloc[:, 1:]
+
+        # TODO: Investigate why labels "gasoline" has float instead of integer types; and "gas" contains NAN
+        #  instead of 0 and floats instead of integer.  Start by looking at self.parsed_df
+        self.y = self.parsed_df.iloc[:, 1:].fillna(value=0).astype(int)  # replaces all NAN by 0
+
+        # Training (X,y) and Testing (X,y)
         self.X_train = None
         self.y_train = None
         self.X_test = None
         self.y_test = None
 
+    def source_as_list(self) -> list:
+        return self.pair_names
 
-    def annotation_parser(self, dir_ann_file, print_grouped_annotations = False):
-        '''
+    def annotation_parser(self, dir_ann_file, print_grouped_annotations=False):
+        """
             Helper function to parse Brat's annotation file (.ann). 
                 Returns a dataframe with the following schema: 
                     | id                	| object 	|
@@ -79,31 +87,33 @@ class load_data:
             
             print_grouped_annotation: Bool. Default = False. 
                 Prints count of Entities and Attributes.
-        '''
+        """
         
         
         ### Read Data
-        to_parse_df = pd.read_csv(dir_ann_file, sep = '\t',header = None)
+        to_parse_df = pd.read_csv(dir_ann_file, sep='\t', header=None)
 
-        # Rename coumns 
+        # Rename columns
         to_parse_df.columns = ['id', 'annotation', 'text']
 
         # Remove the ID numbers to know if it's an entity (T) or Attribute (A)
         to_parse_df['id_parsed'] = to_parse_df.id.str.replace('\d', '')
 
-        # Remove text span and IDs (T & A) from column. This columns has the name of the attributes and etitites 
+        # Remove text span and IDs (T & A) from column. This columns has the name of the attributes and entities
         to_parse_df['annotation_parsed'] = to_parse_df.annotation.str.replace('[\dTA]', '')
-
 
         # Remove Relation tags
         # Change Relation Id to Null
-        to_parse_df.id_parsed.replace('R', np.nan, inplace= True)
+        to_parse_df.id_parsed.replace('R', np.nan, inplace=True)
 
         # Remove nulls
-        to_parse_df.dropna(subset=['id_parsed'], inplace= True)
+        to_parse_df.dropna(subset=['id_parsed'], inplace=True)
 
         # Group by id_parsed, annotation parsed and count results
-        df = to_parse_df[['id_parsed', 'annotation_parsed']].groupby(['id_parsed', 'annotation_parsed'], sort = True).agg({'annotation_parsed':['count']}).copy()
+        df = to_parse_df[['id_parsed', 'annotation_parsed']]\
+            .groupby(['id_parsed', 'annotation_parsed'], sort=True)\
+            .agg({'annotation_parsed':['count']})\
+            .copy()
 
         # After the group by there's multi-index columns. We rename the columns to have the level that we want (count)
         df.columns = df.columns.levels[1]
@@ -112,15 +122,14 @@ class load_data:
         
         if print_grouped_annotations == True:
         
-            print(df.sort_values('count', ascending=False)\
-                .sort_index(level=[0], ascending=[True]))
+            print(df.sort_values('count', ascending=False).sort_index(level=[0], ascending=[True]))
         else:
             pass
         
         return to_parse_df
 
     def annotation_merger(self, path_to_txt_file, path_to_ann_file):
-        '''
+        """
         Helper function to merge text file and annotation file created from Brat. 
 
         The purpose of this function is to flatten the annotations in respect to the text. 
@@ -148,17 +157,17 @@ class load_data:
         path_to_ann_file: String, default = none.
         Complete or relative path to annotation file (.ann) where the annotations were stored. 
 
-        '''
+        """
 
         # Read sampled data
 
-        sampled_ann = self.annotation_parser(dir_ann_file = path_to_ann_file)
+        sampled_ann = self.annotation_parser(dir_ann_file=path_to_ann_file)
 
         # Subset Entities and rewrite dataframe
         sampled_ann = sampled_ann[sampled_ann.id_parsed == 'T']
 
         # Create span columns. Split by space.
-        split_ann = sampled_ann.annotation.str.split(' ', expand = True)
+        split_ann = sampled_ann.annotation.str.split(' ', expand=True)
 
         # Rename Columns
         split_ann.columns = ['Entities', 'first_char', 'last_char']
@@ -169,30 +178,26 @@ class load_data:
         split_ann.first_char = split_ann.first_char.astype(int)
         split_ann.last_char = split_ann.last_char.astype(int)
 
-
         with open(path_to_txt_file) as f:
             
-        # only replace the break lines
-            
-            REPLACE_br = lambda s: s.replace("\n","\n")
-            lines = map( REPLACE_br, f.readlines() )
-            
+            lines = f.readlines()
+
             # save number line, length of the text and text without break lines: /n
             # assuming one line corresponds to a single tweet
-            tuple_tweets = [(len(l), l) for l in lines if len(l) > 0]
+            tuple_tweets = [(len(line), line) for line in lines if len(line) > 0]
 
             start, end, text_ = list(), list(), list()
             new_start = 0
             for ttw in tuple_tweets:
 
-        # adds the length of the tweet
+                # adds the length of the tweet
                 start.append(new_start)
             
-        # finds the location of the last character of the tweet
+                # finds the location of the last character of the tweet
                 end.append(new_start + ttw[0] - 1)
                 text_.append(ttw[1])
                 
-        # gets the starting position of the next tweet
+                # gets the starting position of the next tweet
                 new_start = new_start + ttw[0]
 
             text_df = pd.DataFrame({
@@ -239,21 +244,27 @@ class load_data:
 
 
         '''
-        self.parsed_df = self.annotation_merger(
-			path_to_txt_file= self.text_filename,
-                 	path_to_ann_file= self.ann_filename
-			)
-        
-        if binary == True: 
 
-            self.parsed_df.iloc[:, 1:] = self.parsed_df.iloc[:, 1:].mask(self.parsed_df.iloc[:,1:] > 1, 1)
+        # self.parsed_df = self.annotation_merger(path_to_txt_file=f'{self.pair_names[0]}.txt',
+        #                                         path_to_ann_file=f'{self.pair_names[0]}.ann')
+        #
+
+        single_df_list = [self.annotation_merger(path_to_txt_file=f'{path}.txt', path_to_ann_file=f'{path}.ann')
+                          for path in self.pair_names]
+
+        merged_parsed_df = pd.concat(single_df_list, axis=0).reset_index(drop=True)
+
+        # Todo: Replace all NAN in merged_parsed_df.iloc[:, 1:] by 0.
+
+        if binary == True:
+
+            merged_parsed_df.iloc[:, 1:] = merged_parsed_df.iloc[:, 1:].mask(merged_parsed_df.iloc[:, 1:] > 1, 1)
         
-            
-            return self.parsed_df
+            return merged_parsed_df
         
         else: 
 
-            return self.parsed_df
+            return merged_parsed_df
 
     def preprocess(self, test_size = 0.3, random_state = 21, to_vectorize = True, method = 'tfidf'):
         '''

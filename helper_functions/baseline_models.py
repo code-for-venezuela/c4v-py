@@ -37,7 +37,13 @@ class Model_X:
 
         self.model_x.fit(x_train, y_train)
 
-    def get_predictions(self, x_test):
+    def get_predictions(self, x_test1):
+
+        if self.type_ in ['knn', 'logistic']:
+            x_test = lil_matrix(x_test1).toarray()
+        else:
+            x_test = x_test1
+
         return self.model_x.predict(x_test)
 
     def get_metrics(self, x_test1, y_test1) -> dict:
@@ -46,12 +52,7 @@ class Model_X:
         else:
             y_test = y_test1
 
-        if self.type_ in ['knn', 'logistic']:
-            x_test = lil_matrix(x_test1).toarray()
-        else:
-            x_test = x_test1
-
-        y_pred = self.get_predictions(x_test)
+        y_pred = self.get_predictions(x_test1)
 
         return {
             'accuracy': accuracy_score(y_test, y_pred),
@@ -72,14 +73,25 @@ class Model_X:
         return metrics
 
 
-def report_demo(filename: str) -> pd.DataFrame:
+def analysis_miss_classify_tweets(model_x_list: list, data: DataLoader):
+    for model in model_x_list:
+        # TODO: implement here the analysis
+        #  gather from each model the records that have not been correctly classified
+        print(model.model_name)
+        print('which ones have been wrongly predicted??')
+        # print(model.get_predictions(data.X_test))
+        # print(data.y_test)
+
+
+def report_demo(file_names: list) -> pd.DataFrame:
     '''
-    ;param flename; path of the files that contain the annotated data and the test data (tweets)
-    ;return; a pandas data frame object with the report on each of the models evaluated
+    :param file_names: list of file paths that contain the annotated data and the test data (tweets)
+    :return: a pandas data frame object with the report on each of the models evaluated
     '''
     # loading the data
     random_state = 42
-    data = DataLoader(filename, binary=True, )
+    data = DataLoader(file_names, binary=True, )
+    print(f'the shape of my data.X: {data.X.shape}')
     data.preprocess(random_state=random_state)
 
     # Creating the models
@@ -117,26 +129,68 @@ def report_demo(filename: str) -> pd.DataFrame:
 
     ]
 
+    # TODO: add analysis about tweets that were not correctly identified
+    analysis_miss_classify_tweets(models, data)
+
     # getting report
     report = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
     
-    # Storing on disk the csv corresponding to the report, the name of the original annotation
-    # file and a timestamp is added in the name of the file.
     # TODO: Ver como hacer el logging en data science antes de implementar esto!
-    # save_report_on_disk(filename, report)
+    # Storing on disk the csv corresponding to the report, a timestamp is added as part of the file's name.
+    # the name of the original annotation file(s) will be saved on the csv with "-source" as suffix.
+
+    # save_report_on_disk(data.source_as_list(), report, data.X.shape[0])
 
     return report
 
 
-def save_report_on_disk(filename: str, df: pd.DataFrame) -> None:
-    out_filename = f'report-{datetime.now().strftime("%Y%m%d_%H%M%S")}-{os.path.basename(filename)}.csv'
-    df.to_csv(os.path.join('reports', out_filename))
+def save_report_on_disk(file_names: list, df: pd.DataFrame, data_set_size: int) -> None:
+    out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}-{data_set_size}t'
+    df.sort_values(by='accuracy').to_csv(os.path.join('reports', out_filename+'.csv'), index=False)
+    pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'), index=False)
+
+
+def missed_tweets(with_annotation: str) -> None:
+    """
+    Shows tweets that have not been captured by the load_data class.
+    :param with_annotation: path from current location to the annotated pair .txt and .ann
+     no extension required.
+    :return: None
+    """
+    with open(f'{with_annotation}.txt') as f:
+        lines = f.read().replace('\n\n', '\n').split('\n')[:-1]
+
+    # annotated_data = pd.read_csv('helper_functions/marianela_39.csv')['text'].to_list()
+    annotated_data = DataLoader([with_annotation]).X
+    o_lines = [line.replace('\n', '') for line in annotated_data]
+
+    missed_values = [line for line in lines if line not in o_lines]
+    print('me faltan:', len(missed_values))
+    for m in missed_values:
+        print('*\t', m, '\n')
 
 
 if __name__ == '__main__':
     '''
     This line needs to be added in the jupyter notebook to make use of the classes
     '''
-    # print(report_demo(filename='../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat'))
-    # print(report_demo(filename='../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30'))
+
+    # -------------
+
+    # Show me the performance of the models using annotated data
+
+    r = report_demo(file_names=[
+        '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
+        '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818'
+    ])
+    print(r.sort_values(by='accuracy'))
+
+    # -------------
+
+    # shows me which tweets were ignored by the DataLoader class
+
+    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818')
+    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334')
 
