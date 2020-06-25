@@ -48,12 +48,16 @@ class load_data:
             print(test.X_train.shape)
 
         """
-        self.pair_names = files_path  # <- this will be a list containing the paths of the annotated pair files
-        # self.text_filename = filepath + '.txt'
-        # self.ann_filename = filepath + '.ann'
+
+        # pair_names is a list containing the paths of the annotated pair files, since .txt and .ann have the same
+        #
+        self.pair_names = files_path
 
         self.parsed_df = self.get_parsed_df()
         self.X = self.parsed_df.iloc[:, 0]
+
+        # TODO: Investigate why labels "gasoline" has float instead of integer types; and "gas" contains NAN
+        #  instead of 0 and floats instead of integer.  Start by looking at self.parsed_df
         self.y = self.parsed_df.iloc[:, 1:].fillna(value=0).astype(int)  # replaces all NAN by 0
 
         # Training (X,y) and Testing (X,y)
