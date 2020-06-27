@@ -5,7 +5,8 @@ import numpy as np
 from nltk.corpus import stopwords
 stop_words = set(stopwords.words('spanish'))
 
-class load_data:
+
+class DataLoader:
 
     def __init__(self, files_path: list, binary=True):
         """
@@ -54,8 +55,9 @@ class load_data:
         self.pair_names = files_path
 
         self.parsed_df = self.get_parsed_df()
-        self.X = self.parsed_df.iloc[:, 0]
+        self.__tweets = self.parsed_df.iloc[:, 0]
 
+        self.X = self.parsed_df.iloc[:, 0]
         # TODO: Investigate why labels "gasoline" has float instead of integer types; and "gas" contains NAN
         #  instead of 0 and floats instead of integer.  Start by looking at self.parsed_df
         self.y = self.parsed_df.iloc[:, 1:].fillna(value=0).astype(int)  # replaces all NAN by 0
@@ -65,6 +67,7 @@ class load_data:
         self.y_train = None
         self.X_test = None
         self.y_test = None
+        self.split_random_state = None
 
     def source_as_list(self) -> list:
         return self.pair_names
@@ -275,6 +278,7 @@ class load_data:
 
         '''
 
+        self.split_random_state = random_state
         if to_vectorize is True:
             self.vectorize()
         else:
@@ -282,20 +286,31 @@ class load_data:
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,
                                                                                 self.y,
-                                                                                test_size = 0.3,
-                                                                                random_state = random_state)
-        
-    def vectorize(self, method = 'tfidf', 
-                  stop_words= None, 
+                                                                                test_size=0.3,
+                                                                                random_state=random_state)
+
+    def get_X_as_text(self) -> tuple:
+        """
+        Returns the input data as text, instead of vectors
+
+        :return: A tuple with full records of input as text on the first position; records for training as text
+          on the second position; and records used for testing in the third position.
+        """
+
+        train, test = train_test_split(self.__tweets, test_size=0.3, random_state=self.split_random_state)
+        return self.__tweets, train, test
+
+    def vectorize(self, method='tfidf',
+                  stop_words= None,
                   strip_accents = 'unicode', 
                   analyzer = 'word',
                   ngram_range = (1,3), 
                   norm = 'l2', 
                   max_features = 10000):
-        '''
+        """
         Computes specified vectorization method and stores it into self.X. 
-        Do not run after preprocess method 
-        '''
+        Do not run after pre-process method
+        """
 
         if method == 'tfidf':
             
