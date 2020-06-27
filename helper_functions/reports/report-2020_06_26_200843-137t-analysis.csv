@@ -1,0 +1,1093 @@
+,text,circumstantial-information,electricity,gasoline,social-report,twitter-account,water,gas,pred_circumstantial-information,pred_electricity,pred_gasoline,pred_social-report,pred_twitter-account,pred_water,pred_gas,assert_circumstantial-information,assert_electricity,assert_gasoline,assert_social-report,assert_twitter-account,assert_water,assert_gas,model_name,model_class_name
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,1,0,1,0,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1,0,1,1,1,0,0,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,1,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1,1,0,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,1.0,0.0,1,1,1,0,1,0,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,1,0,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,1.0,0.0,0,1,1,1,1,0,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,1,0,1,0,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,0,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,1,1,0,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,1,1,1,1,1,0,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0,0,1,0,1,0,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,1,1,1,1,1,1,1,Multi kNN,<class 'skmultilearn.adapt.mlknn.MLkNN'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,0,1,1,0,0,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,0,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,0,1,1,0,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,0,1,1,0,0,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,0,0,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,0,0,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,0,1,1,0,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LogisticR,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,0,1,1,0,0,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,0,0,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,0,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,0,1,1,0,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_LinearSVC,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,0,1,1,0,0,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,0,0,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,0,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,0,1,1,0,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,0,1,1,BR_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.br.BinaryRelevance'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LogisticR,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1,1,0,0,0,0,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,1,0,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,0,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_LinearSVC,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1,0,1,1,1,0,0,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,0,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1,1,0,0,0,0,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,0,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,0,0,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,LP_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.lp.LabelPowerset'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,0,1,1,0,0,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,0,1,1,0,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_Bayes BernoulliNB,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LogisticR,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,0,1,0,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_LinearSVC,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+0,"#reporte  #23julio  atentos  a  la  informacion  aportada  por  nuestros  vecinos      a  las  8  50  am    #sinluz  santa  paula    el  cafetal    los  guayabitos    lomas  de  prados  del  este  y  parte  de  manzanares    la  alcaldia  activada  con  especial  atencion  en  esos  sectores  y  reportando  a    @corpoelecinfo
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+1,"#hipismoaqui  esta  nuestra  informacion  gratis  para  esta  semana!!para  los  hipodromos  venezolanos  #larinconada#valencia#losvamosasacar#sinluz    
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+2,"alguien  vio  la  pelicula  ""en  lo  profundo  del  bosque""    esta  pasando    #apocalipsis  #sinluz
+",0,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+3,"y  continuamos  ""disfrutando""  de  los  regalos  navidegnos  de  @corpoelecinfo  y  @corpoeleclara  mas  raciones  de  navidades  #sinluz  hoy  #25dic  de  verdad  que  la  supieron  hacer    felicitaciones!  nunca  nos  defraudan      
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+4,"bueno  y  se  fue  la  luz    tenia  dias  que  no  se  iba  de  dia  si  no  en  la  noche  y  cuando  es  asi  son  muchas  horas  sin  el  servicio    hasta  cuando  sera  esta  pesadilla#sinluz#apagon  #barinas
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+5,"valera  estado  trujillo  ya  cuenta  con  servicio  electrico    #sinluz  falta  el  agua    el  gas    la  gasolina    la  seguridad  la  salud    educacion    transporte    pero  por  algo  se  empieza      
+",1,1,1,1,0,1,1,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,0,0,1,0,0,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+6,"pzo  #singasolinamcb  #singasolina  cbv  #singasolina  ptl  #singasolina#ccs  #congasolina    que  cosas  no
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+7,"@corpoeleczulia_  @corpoelecinfo  avenida  16  con  calle  84    #sinluz  desde  las  2pm  y  previamente  de  2am  a  8am  
+",1,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+8,"sigo  gastando  mi  bateria  leyendo  tweets  #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+9,"@prensacorpoelec  felices  que  desgraciados  el  sector  romulo    betancourt    en  #maturin  #sinluz    desde  el  dia  14  de  diciembre    aun  esperan  por  un  transformador    qu8en  puede  tener  feliz  navidad  asi  @yelitzepsuv_
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+10,"@oficialedesur  @pauliimp2  hoy  tres  cortes  en  la  misma  tarde  y  te  dicen  que  ""siguen  por  privado""  para  no  decirte  nada    son  nefastos  #sinluz  #edesur
+",0,1,0,1,1,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+11,"@corpoeleczulia_  dios  mioo  que  pasa  sigue  el  viacrusis  desde  840pm  #sinluz  en  circuito  las  marias  pongan  la  luz  por  favor  el  calor  es  insoportable  @corpoelecinfo  @fbritomaestre  @mppeevzla  @omarprietogob  @diariopanorama
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+12,"#19marla  tarde  de  este  jueves  se  registro  un  apagon  que  afecta  zonas  de  los  estados  #miranda    #vargas    #aragua  y  #caracas  #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+13,"y  ahora  y  para  variar  desde  las  2pm  #sinluz  #tachira  #sancristobal
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+14,"#ahora  estaciones  esperando  por  la  cisterna  en  pto  ordaz    morochas  av    atlantico    la  de  los  olivos  villa  africana    las  americas  subiendo  a  alta  vista  y  la  que  esta  frente  a  c  alta  vista  2    #singasolina  #guayana  10  28  am
+",1,0,1,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+15,"20  horas        #sinluz
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+16,"ya  van  casi  tres  horas  #sinluz  en  el  rectorado  uc    la  lluvia  paro    ya  el  sol  seco  las  calles    pero  la  incapacidad  socialista  sigue      #socialismoesmiseria  #chavismoescrimen  #madurismoesestupidez    #lacavaescomplice  #menosmalqueyasevan
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+17,"maracaibo  presenta  nuevo  apagon  que  afecta  a  decenas  de  familias  y  enfermos  en  los  ya  deterioradas  hospitales  la  culpa  no  es  de  la  vaca      es  del  chavismo  revolucion  destructora  #crisis  #zulia  #mcbo  #sinluz  #venezuela    
+",1,1,0,1,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+18,"los  escualidos  pensaron  que  esta  guerra  de  cuarta  generacion  #sinluz  y  con  bombas  es  solo  para  los  chavistas    en  #venezuela  somos  todos  aqui  no  se  salva  nadie  !    
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+19,"dios  si  nos  devolves  la  loooz      me  vuelvo  provida    heterosexual      catolico  apostolico  romano  y  practicamente      homofobico  y  machirulo      te  va  todo  eso      #sinluz
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+20,"el  agua  @hidrocentro2011  el  agua  @evelynb_vasquez  el  agua  @mppaaguas  el  agua  @rafaellacava10  el  agua  @carabobogb  son  13  dias  #sinagua  en  la  parte  alta  de  la    urbanizacion  la  alegria  de  valencia  no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua      
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+21,"#sinluz  en  #guarenas  nueva  casarapa    camino  real    30  horas  sin  luz    esto  es  inhumano  
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+22,"#sinluz  en  la  bombilla  petare  nuevamente
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+23,"#sinluz  esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores        
+",0,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+24,"en  vela    otra  vez      @maienhaiku  #sinluz  en  5  7  5  #lunallena    #noviembre  #venezuela2019    
+",1,1,0,1,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+25,"#29feb  #caracas  #sinagua  @hidrocapitalca  sector  de  mariperez  sin  agua  hace  3  semanas  !!  por  favor  no  somos  camellos!!!  pongan  el  agua  es  urgente  hay  nignos  y  personas  adultas      @ojuanihermoso
+",1,0,0,1,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,0,0,0,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+26,"en  santa  cruz  de  mara  #sinluz  desde  las  9  pm    cdlm    @ldanieri
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+27,"increible  que  #23dic  y  la  dictadura  ni  una  palabra  para  explicar  que  #venezuela  esta  #singasolina  y  los  racionamientos  electricos  son  mas  extenso    navidad  feliz    sin  duda  que  no  
+",1,0,1,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,0,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+28,"a  ver        ayer  #14ago  en  #barinas  hubieron  4  cortes  electricos    hoy  #15ago    dio  inicio  el  dia  #sinluz    entonces      #venezuelaavanzayvence  huele  a  bots  circo  comunistas  #sosvenezuela  nos  estan  matando    no  hagan  la  vista  gorda!      
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+29,"les  cangures  contra  atacan!!!un  poco  de  humor  hasta  que  nos  vuelva  la  luz  a  todes@lesargentines#sinluz#apocalipsis#apagonuruguay#cortedeenergia    
+",0,0,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+30,"@willy_casanova  @nicolasmaduro  que  paso  con  hidrolago  no  bombea  agua  en  cuatricentenario  desde  hace  12  dias  los  cortes  #sinluz    estan  a  la  orden  del  dia  necesitamos  agua  por  favor
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+31,"actualizado    usuarios  sin  suministro  electrico    @oficialedesur  @edenorclientes  #sinluz  #secorto    
+",0,1,0,0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+32,"@corpoelecmerid_  @corpoelecinfo  @nicolasmaduro  @fbritomaestre  #sinluz  en  merida    en  el  sector  glorias  patrias  parroquia  el  llano  calles  34  y  36  entre  avenidas  2  y  5  llevamos  3  horas  sin  electricidad!  por  favor  resuelvan  esto    se  tiene  quebtrbajar!!
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+33,"#sinluz  sectores  del  edo  #carabobo  se  encuentran  sin  energia  electrica
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+34,"  @mauriciomacri  te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre  #sinluz  #venezuela  #edenor  #buendomingo  #mmlpqtp  #apocalipsis
+",0,0,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,0,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+35,"@mppaaguas  @drodriguezven  @nestorreverol  @jaarreaza  @mippcivzla  @aguasdecojedes  @dhcojedes  @margaudpsuv  @hidrovenca  agua  para  el  municipio  sucre  #miranda  #sinagua  @alcaldejvra
+",1,0,0,0,1,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,0,1,1,0,0,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+36,"#29nov  |  alertan  sobre  agudizacion  de  la  crisis  electrica  en  el  oriente  del  pais  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+37,"#19jul  |  falla  en  subestacion  yaracuy  afecto  suministro  electrico  en  maracaibo  &gt;&gt;    
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+38,"#ultimahora  #22j  |  se  registro  un  nuevo  #apagonnacional  los  estados  que  se  encuentran  #sinluz  son  guariconueva  espartala  guaira  distrito  capitalanzoateguiaraguamirandatachirameridacarabobozuliacojedesyaracuysucrefalconlaramonagas
+",1,1,0,0,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+39,"mas  del  75%  de  maracaibo  se  encuentra  a  esta  hora  #sinluz    a  la  penumbra  se  suman  varios  municipios  del  zulia    si  usted  esta  a  esta  hora  sin  luz    no  tiene  agua    gas  ni  gasolina  para  moverse    organice  una  protesta  en  su  comunidad  y  que  el  pueblo  arrecho  reclame  sus  derechos
+",1,1,0,1,0,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,0,1,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+40,"#sinluzencuarentena  #sinagua  #singasolina  asi  tenemos  que  aguantar  el  #coronavirusvenezuela  #covid19
+",0,1,1,1,0,1,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0,1,0,0,1,0,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
+41,"sin  luz    urgente    desd  las  8pm#parquecaiza  #16nov  colinasparquecaizacontrato  es100002181733  7poste53n57  cuenta10000159860contacto  04242588431  @corpoelecmiran_  @corpoelecinfo  @mppeevzla  #miranda  #venezuela  @alcaldejvra  @hectorodriguez  @fbritomaestre  #sinluz  @trafficmiranda
+",1,1,0,0,1,0,0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1,1,1,1,0,1,1,CC_GradDesc SGDCClassifier,<class 'skmultilearn.problem_transform.cc.ClassifierChain'>
