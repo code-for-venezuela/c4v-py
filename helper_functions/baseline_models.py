@@ -19,7 +19,7 @@ from sklearn.svm import LinearSVC
 from skmultilearn.adapt import MLkNN
 from scipy.sparse import lil_matrix
 
-from data_loader import load_data as DataLoader
+from data_loader import DataLoader
 
 
 class Model_X:
@@ -73,86 +73,113 @@ class Model_X:
         return metrics
 
 
-def analysis_miss_classify_tweets(model_x_list: list, data: DataLoader):
-    for model in model_x_list:
-        # TODO: implement here the analysis
-        #  gather from each model the records that have not been correctly classified
-        print(model.model_name)
-        print('which ones have been wrongly predicted??')
-        # print(model.get_predictions(data.X_test))
-        # print(data.y_test)
+class ModelAnalyzer:
+    def __init__(self, file_names: list):
+        self.data = None
+        self.performance = None
+        self.analysis = None
 
+        self.generate_report(file_names)
 
-def report_demo(file_names: list) -> pd.DataFrame:
-    '''
-    :param file_names: list of file paths that contain the annotated data and the test data (tweets)
-    :return: a pandas data frame object with the report on each of the models evaluated
-    '''
-    # loading the data
-    random_state = 42
-    data = DataLoader(file_names, binary=True, )
-    print(f'the shape of my data.X: {data.X.shape}')
-    data.preprocess(random_state=random_state)
+    def __analysis_tweets_classification(self, model_x_list: list, data: DataLoader) -> pd.DataFrame:
+        analysis_report = list()
+        for model in model_x_list:
+            expected = data.y_test
+            predicted = model.get_predictions(data.X_test)
+            all_tw, train_tw, test_tw = data.get_X_as_text()
+            test_tw_df = test_tw.to_frame()
+            predicted_df = pd.DataFrame(predicted.toarray(),
+                                        columns=['pred_' + name for name in expected.columns.to_list()])
 
-    # Creating the models
-    br_BernoulliNB_classifier = BinaryRelevance(BernoulliNB())
-    lp_BernoulliNB_classifier = LabelPowerset(BernoulliNB())
-    cc_BernoulliNB_classifier = ClassifierChain(BernoulliNB())
-    br_LogisticR_classifier = BinaryRelevance(LogisticRegression(random_state=random_state))
-    lp_LogisticR_classifier = LabelPowerset(LogisticRegression(random_state=random_state))
-    cc_LogisticR_classifier = ClassifierChain(LogisticRegression(random_state=random_state))
-    br_SVM_classifier = BinaryRelevance(LinearSVC(random_state=random_state))
-    lp_SVM_classifier = LabelPowerset(LinearSVC(random_state=random_state))
-    cc_SVM_classifier = ClassifierChain(LinearSVC(random_state=random_state))
-    br_GradDesc_classifier = BinaryRelevance(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
-    lp_GradDesc_classifier = LabelPowerset(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
-    cc_GradDesc_classifier = ClassifierChain(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
-    ml_classifier = MLkNN(k=4)
+            assert_df = pd.DataFrame(predicted.toarray() == expected.to_numpy(),
+                                     columns=['assert_' + name for name in expected.columns.to_list()])
+            assert_df = assert_df.mask(assert_df == True, 1).mask(assert_df == False, 0)
 
-    # Creating a list of model wrappers. Training happens after each wrapper is instantiated.
-    models = [
-        Model_X(ml_classifier, data.X_train, data.y_train, name='Multi kNN', type='knn'),
-        Model_X(br_BernoulliNB_classifier, data.X_train, data.y_train, name='BR_Bayes BernoulliNB'),
-        Model_X(br_LogisticR_classifier, data.X_train, data.y_train, name='BR_LogisticR'),
-        Model_X(br_SVM_classifier, data.X_train, data.y_train, name='BR_LinearSVC'),
-        Model_X(br_GradDesc_classifier, data.X_train, data.y_train, name='BR_GradDesc SGDCClassifier'),
+            model_wrapper_df = pd.DataFrame([model.model_class_name for _ in range(data.X_test.shape[0])],
+                                            columns=['model_class_name'])
+            model_name_df = pd.DataFrame([model.model_name for _ in range(data.X_test.shape[0])],
+                                         columns=['model_name'])
 
-        Model_X(lp_BernoulliNB_classifier, data.X_train, data.y_train, name='LP_Bayes BernoulliNB'),
-        Model_X(lp_LogisticR_classifier, data.X_train, data.y_train, name='LP_LogisticR'),
-        Model_X(lp_SVM_classifier, data.X_train, data.y_train, name='LP_LinearSVC'),
-        Model_X(lp_GradDesc_classifier, data.X_train, data.y_train, name='LP_GradDesc SGDCClassifier'),
+            end = pd.concat(
+                [test_tw_df.reset_index(drop=True), expected.reset_index(drop=True), predicted_df, assert_df,
+                 model_name_df,
+                 model_wrapper_df], axis=1)
 
-        Model_X(cc_BernoulliNB_classifier, data.X_train, data.y_train, name='CC_Bayes BernoulliNB', type='cc'),
-        Model_X(cc_LogisticR_classifier, data.X_train, data.y_train, name='CC_LogisticR', type='cc'),
-        Model_X(cc_SVM_classifier, data.X_train, data.y_train, name='CC_LinearSVC', type='cc'),
-        Model_X(cc_GradDesc_classifier, data.X_train, data.y_train, name='CC_GradDesc SGDCClassifier', type='cc')
+            analysis_report.append(end)
 
-    ]
+        return pd.concat(analysis_report)
 
-    # TODO: add analysis about tweets that were not correctly identified
-    analysis_miss_classify_tweets(models, data)
+    def generate_report(self, file_names: list) -> None:
+        '''
+        Generates pandas data frame objects with performance report using a different model. And also generates a
+        table that from which we will be able to recognize what type of data our models do not correctly predict.
+        :param file_names: list of file paths that contain the annotated data and the test data (tweets)
+        '''
+        # loading the data
+        random_state = 42
+        self.data = data = DataLoader(file_names, binary=True, )
+        print(f'the shape of my data.X: {data.X.shape}')
+        data.preprocess(random_state=random_state)
 
-    # getting report
-    report = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
-    
-    # TODO: Ver como hacer el logging en data science antes de implementar esto!
-    # Storing on disk the csv corresponding to the report, a timestamp is added as part of the file's name.
-    # the name of the original annotation file(s) will be saved on the csv with "-source" as suffix.
+        # Creating the models
+        br_BernoulliNB_classifier = BinaryRelevance(BernoulliNB())
+        lp_BernoulliNB_classifier = LabelPowerset(BernoulliNB())
+        cc_BernoulliNB_classifier = ClassifierChain(BernoulliNB())
+        br_LogisticR_classifier = BinaryRelevance(LogisticRegression(random_state=random_state))
+        lp_LogisticR_classifier = LabelPowerset(LogisticRegression(random_state=random_state))
+        cc_LogisticR_classifier = ClassifierChain(LogisticRegression(random_state=random_state))
+        br_SVM_classifier = BinaryRelevance(LinearSVC(random_state=random_state))
+        lp_SVM_classifier = LabelPowerset(LinearSVC(random_state=random_state))
+        cc_SVM_classifier = ClassifierChain(LinearSVC(random_state=random_state))
+        br_GradDesc_classifier = BinaryRelevance(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
+        lp_GradDesc_classifier = LabelPowerset(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
+        cc_GradDesc_classifier = ClassifierChain(SGDClassifier(random_state=random_state, loss="log", penalty="elasticnet"))
+        ml_classifier = MLkNN(k=4)
 
-    # save_report_on_disk(data.source_as_list(), report, data.X.shape[0])
+        # Creating a list of model wrappers. Training happens after each wrapper is instantiated.
+        models = [
+            Model_X(ml_classifier, data.X_train, data.y_train, name='Multi kNN', type='knn'),
+            Model_X(br_BernoulliNB_classifier, data.X_train, data.y_train, name='BR_Bayes BernoulliNB'),
+            Model_X(br_LogisticR_classifier, data.X_train, data.y_train, name='BR_LogisticR'),
+            Model_X(br_SVM_classifier, data.X_train, data.y_train, name='BR_LinearSVC'),
+            Model_X(br_GradDesc_classifier, data.X_train, data.y_train, name='BR_GradDesc SGDCClassifier'),
 
-    return report
+            Model_X(lp_BernoulliNB_classifier, data.X_train, data.y_train, name='LP_Bayes BernoulliNB'),
+            Model_X(lp_LogisticR_classifier, data.X_train, data.y_train, name='LP_LogisticR'),
+            Model_X(lp_SVM_classifier, data.X_train, data.y_train, name='LP_LinearSVC'),
+            Model_X(lp_GradDesc_classifier, data.X_train, data.y_train, name='LP_GradDesc SGDCClassifier'),
 
+            Model_X(cc_BernoulliNB_classifier, data.X_train, data.y_train, name='CC_Bayes BernoulliNB', type='cc'),
+            Model_X(cc_LogisticR_classifier, data.X_train, data.y_train, name='CC_LogisticR', type='cc'),
+            Model_X(cc_SVM_classifier, data.X_train, data.y_train, name='CC_LinearSVC', type='cc'),
+            Model_X(cc_GradDesc_classifier, data.X_train, data.y_train, name='CC_GradDesc SGDCClassifier', type='cc')
 
-def save_report_on_disk(file_names: list, df: pd.DataFrame, data_set_size: int) -> None:
-    out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}-{data_set_size}t'
-    df.sort_values(by='accuracy').to_csv(os.path.join('reports', out_filename+'.csv'), index=False)
-    pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'), index=False)
+        ]
+        # getting table with all results, ready to use for micro analysis
+        self.analysis = self.__analysis_tweets_classification(models, data)
+
+        # getting report of models performance
+        self.performance = pd.DataFrame([m.report_as_dict(data.X_test, data.y_test) for m in models])
+
+    def save_reports(self):
+        # TODO: Ver como hacer el logging en data science antes de implementar esto!
+        # Storing on disk the csv corresponding to the report, a timestamp is added as part of the file's name.
+        # the name of the original annotation file(s) will be saved on the csv with "-source" as suffix.
+        self.__save_report_on_disk(self.data.source_as_list(), self.data.X.shape[0])
+
+    def __save_report_on_disk(self, file_names: list, data_set_size: int) -> None:
+        out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}-{data_set_size}t'
+
+        self.performance.sort_values(by='accuracy').to_csv(os.path.join('reports', out_filename+'-performance.csv'))
+
+        pd.DataFrame({'source': file_names}).to_csv(os.path.join('reports', out_filename+'-sources.csv'))
+
+        self.analysis.to_csv(os.path.join('reports', out_filename + '-analysis.csv'))
 
 
 def missed_tweets(with_annotation: str) -> None:
     """
-    Shows tweets that have not been captured by the load_data class.
+    Shows tweets that have not been captured by the load_data class. This function makes use of DataLoader
     :param with_annotation: path from current location to the annotated pair .txt and .ann
      no extension required.
     :return: None
@@ -172,25 +199,29 @@ def missed_tweets(with_annotation: str) -> None:
 
 if __name__ == '__main__':
     '''
-    This line needs to be added in the jupyter notebook to make use of the classes
+    The code within the __main__ might need to be added in the jupyter notebook to make use of the classes
     '''
 
     # -------------
-
     # Show me the performance of the models using annotated data
-
-    r = report_demo(file_names=[
+    analyzer = ModelAnalyzer(file_names=[
         '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
         '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
-        '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',  # binary false.why?
+        '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',
         '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818'
     ])
-    print(r.sort_values(by='accuracy'))
+    print(analyzer.performance.sort_values(by='accuracy'))
 
     # -------------
+    # Analysis of the data
+    print(analyzer.analysis)
 
+    # -------------
+    # save results for further analysis, all reports will be saved on reports folder within helper_functions folder
+    analyzer.save_reports()
+
+    # -------------
     # shows me which tweets were ignored by the DataLoader class
-
     # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818')
     # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334')
 
