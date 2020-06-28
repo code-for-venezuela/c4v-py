@@ -177,7 +177,7 @@ class ModelAnalyzer:
         self.analysis.to_csv(os.path.join('reports', out_filename + '-analysis.csv'))
 
 
-def missed_tweets(with_annotation: str) -> None:
+def unannotated_tweets(with_annotation: str) -> None:
     """
     Shows tweets that have not been captured by the load_data class. This function makes use of DataLoader
     :param with_annotation: path from current location to the annotated pair .txt and .ann
@@ -187,14 +187,16 @@ def missed_tweets(with_annotation: str) -> None:
     with open(f'{with_annotation}.txt') as f:
         lines = f.read().replace('\n\n', '\n').split('\n')[:-1]
 
-    # annotated_data = pd.read_csv('helper_functions/marianela_39.csv')['text'].to_list()
+    # Careful here,
+    # if .X were to be used after .preprocess(), it might have been converted into a vector, no longer text.
     annotated_data = DataLoader([with_annotation]).X
     o_lines = [line.replace('\n', '') for line in annotated_data]
 
     missed_values = [line for line in lines if line not in o_lines]
-    print('me faltan:', len(missed_values))
+
+    print(f'**********************\nFile: {with_annotation}\nMissing: {len(missed_values)}\n')
     for m in missed_values:
-        print('*\t', m, '\n')
+        print('-\t', m, '\n')
 
 
 if __name__ == '__main__':
@@ -204,12 +206,13 @@ if __name__ == '__main__':
 
     # -------------
     # Show me the performance of the models using annotated data
-    analyzer = ModelAnalyzer(file_names=[
+    file_names = [
         '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
         '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
         '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',
         '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818'
-    ])
+    ]
+    analyzer = ModelAnalyzer(file_names)
     print(analyzer.performance.sort_values(by='accuracy'))
 
     # -------------
@@ -218,10 +221,11 @@ if __name__ == '__main__':
 
     # -------------
     # save results for further analysis, all reports will be saved on reports folder within helper_functions folder
-    analyzer.save_reports()
+    # uncomment the line below to save new reports
+    # analyzer.save_reports()
 
     # -------------
     # shows me which tweets were ignored by the DataLoader class
-    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818')
-    # missed_tweets('../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334')
+    for pair in file_names:
+        unannotated_tweets(pair)
 
