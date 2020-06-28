@@ -60,8 +60,6 @@ T32	twitter-account 1138 1153	@willy_casanova
 A26	politician T32
 T33	twitter-account 1155 1169	@fbritomaestre
 A27	other T33
-T34	electricity 1224 1236	#hipismoaqui
-A28	fake-information T34
 T35	social-report 1946 1982	hasta  cuando  sera  esta  pesadilla
 T36	electricity 1802 1818	se  fue  la  luz
 A29	without-service T36
@@ -91,7 +89,6 @@ A37	without-service T50
 T51	circumstantial-information 6964 6984	la  bombilla  petare
 A38	location T51
 T52	gasoline 6922 6934	#singasolina
-A39	without-service T52
 T53	twitter-account 6681 6689	@jguaido
 A40	politician T53
 T54	twitter-account 6401 6417	@corpoeleczulia_
@@ -131,7 +128,6 @@ A57	location T70
 T71	circumstantial-information 2223 2231	valencia
 A58	location T71
 T72	electricity 2448 2455	#apagon
-A59	without-service T72
 T73	circumstantial-information 2592 2604	santa  paula
 A60	location T73
 T74	circumstantial-information 2608 2618	el  cafeta
@@ -195,7 +191,7 @@ A85	duration T100
 T101	social-report 3459 3490	por  favor  no  somos  camellos
 T102	water 3495 3511	pongan  el  agua
 A86	without-service T102
-T103	social-report 3621 3669	el  pais  tiene  la  peor  conexion  en  america
+T103	social-report 3581 3668	cuando  hay  internet  en  venezuela    el  pais  tiene  la  peor  conexion  en  americ
 T104	water 3845 3852	sinagua
 A87	without-service T104
 T105	twitter-account 3719 3729	@jaarreaza
@@ -249,7 +245,6 @@ A109	without-service T128
 T129	electricity 6952 6958	sinluz
 A110	without-service T129
 T130	electricity 7045 7051	sinluz
-A111	without-service T130
 T131	twitter-account 7233 7248	@rafaellacava10
 A112	politician T131
 T132	electricity 7304 7320	sinserviciodeluz
@@ -261,4 +256,167 @@ T135	electricity 8214 8231	cortes  inhumanos
 A115	without-service T135
 T136	social-report 8265 8317	sea  responsable  gobernador  no  ignore  al  pueblo
 T137	electricity 9004 9010	sinluz
-A116	without-service T137
+T138	circumstantial-information 6324 6353	#baruta    #caracas  #miranda
+A117	location T138
+T139	electricity 639 654	#cortedeenergia
+T140	electricity 606 613	#sinluz
+A119	without-service T140
+A118	without-service T139
+T141	twitter-account 678 692	@fbritomaestre
+A120	politician T141
+T142	twitter-account 332 346	@oficialedesur
+A121	utility-company T142
+T143	twitter-account 348 363	@edenorclientes
+A122	utility-company T143
+T144	electricity 885 892	#sinluz
+A123	without-service T144
+T34	social-report 1232 1292	aqui  esta  nuestra  informacion  gratis  para  esta  semana
+R10	relation Arg1:T34 Arg2:T120	
+T145	social-report 1397 1590	te  robaste  2  pbis  en  tarifas  publicas    en  devaluacion    en  timba  financiera    en  blanqueo  de  deuda    no  podes  ni  siquiera  mantener  la  luz  encendida  en  el  #diadelpadre
+T146	electricity 1592 1599	#sinluz
+A28	fake-information T146
+R11	relation Arg1:T145 Arg2:T146	
+T147	social-report 1669 1788	alberto  dijo  que  congelaran  los  aumentos    las  empresas  responden    hagan  silencio  y  escuchen  la  realidad
+T148	electricity 1660 1667	#sinluz
+A124	fake-information T148
+T149	twitter-account 2046 2062	@evelynb_vasquez
+A125	politician T149
+T150	twitter-account 2074 2084	@mppaaguas
+A126	politician T150
+T151	social-report 2233 2335	no  se  puede  vivir  sin  agua  de  los  14  dias  que  lleva  el  mes  1  vez  hemos  recibido  agua
+R12	relation Arg1:T151 Arg2:T69	
+T152	twitter-account 3565 3579	@ojuanihermoso
+A127	other T152
+T153	circumstantial-information 2686 2696	manzanares
+A128	location T153
+T154	circumstantial-information 3160 3172	la  lagunita
+A129	location T154
+T155	circumstantial-information 4379 4393	mayito  centro
+T156	electricity 4307 4314	#sinluz
+A130	fake-information T156
+A131	without-service T16
+T157	social-report 2343 2430	esto  fue  el  dia  de  las  elecciones    todo  ha  estado  meticulosamente  calculado
+A59	fake-information T72
+R14	relation Arg1:T157 Arg2:T72	
+T158	twitter-account 3214 3225	@eliasayegh
+A132	politician T158
+T159	twitter-account 3227 3241	@jss_fernandez
+A133	politician T159
+T160	social-report 3191 3210	empieza  el  conteo
+R15	relation Arg1:T160 Arg2:T90	
+T161	twitter-account 3272 3287	@gabrielrod1974
+A134	news-company T161
+T162	twitter-account 3259 3270	@porlasvias
+A135	news-company T162
+R16	relation Arg1:T96 Arg2:T95	
+T163	circumstantial-information 3358 3364	#29feb
+A136	time T163
+T164	circumstantial-information 3367 3374	caracas
+A137	location T164
+T165	water 3376 3384	#sinagua
+A138	without-service T165
+T166	twitter-account 3854 3866	@alcaldejvra
+A139	politician T166
+T167	twitter-account 3761 3771	@dhcojedes
+A140	utility-company T167
+T168	twitter-account 3787 3798	@hidrovenca
+A141	utility-company T168
+T169	twitter-account 3773 3785	@margaudpsuv
+A142	politician T169
+T170	twitter-account 3731 3742	@mippcivzla
+A143	politician T170
+T171	twitter-account 3886 3900	@corpoelecinfo
+A144	utility-company T171
+T172	twitter-account 3868 3884	@corpoelecmerid_
+A145	utility-company T172
+T173	electricity 3934 3941	#sinluz
+A146	without-service T173
+T174	social-report 4098 4151	por  favor  resuelvan  esto    se  tiene  quebtrbajar
+R17	relation Arg1:T174 Arg2:T112	
+T175	twitter-account 4288 4302	@mauriciomacri
+A147	politician T175
+T176	social-report 4155 4286	los  autos  que  pasan  por  aca  ya  tienen  luz!  en  cualquier  momento  llega  la  luz  a  las  casas    no  afloje  presidente
+R13	relation Arg1:T176 Arg2:T156	
+A148	location T155
+T177	twitter-account 4330 4336	@cfemx
+A149	utility-company T177
+T178	twitter-account 4316 4328	@cfe_contigo
+A150	utility-company T178
+T179	circumstantial-information 4520 4528	caricuao
+A151	location T179
+T180	water 4528 4535	sinagua
+A152	without-service T180
+T181	twitter-account 4639 4653	@nicolasmaduro
+A153	politician T181
+T182	twitter-account 4621 4637	@evelynb_vasquez
+A154	politician T182
+T183	twitter-account 4610 4619	@randy2re
+A155	other T183
+T184	circumstantial-information 4786 4792	#26jul
+A156	time T184
+T185	social-report 4797 4847	40  %  de  los  comercios  no  abrio  tras  apagon
+T186	social-report 4863 5029	volvieron  los  cortes  de  luz    los  secuestros    la  droga    recien  pase  por  el  centro  de  la  plata  y  juro  que  me  asuste  del  malandraje  que  habia
+T187	electricity 5053 5060	#sinluz
+A157	fake-information T187
+R18	relation Arg1:T186 Arg2:T187	
+T188	social-report 5147 5241	no  te  preocupes    en  venezuela    nunca  nos  vamos  a  parecer  a  cuba    nunca!  decian
+T189	electricity 5249 5256	#sinluz
+A158	fake-information T189
+T190	circumstantial-information 5258 5262	6  h
+A159	duration T190
+T191	electricity 5264 5271	#sinluz
+A160	without-service T191
+T192	circumstantial-information 5281 5300	av    19  de  abril
+A161	location T192
+T193	gas 5350 5362	no  hay  gas
+A162	without-service T193
+R19	relation Arg1:T190 Arg2:T191	
+T194	social-report 5304 5346	que  desesperante    mi  cel  se  descargo
+T195	twitter-account 5579 5594	@edenorclientes
+A163	utility-company T195
+T196	circumstantial-information 5627 5644	villa  pueyrredon
+A164	location T196
+T197	electricity 5606 5621	cortes  de  luz
+A165	without-service T197
+T198	circumstantial-information 5646 5667	2  veces  en  el  dia
+A166	duration T198
+T199	electricity 5873 5880	#sinluz
+A167	without-service T199
+T200	circumstantial-information 5909 5914	zulia
+A168	location T200
+T201	social-report 6128 6157	se  viene  la  primera  tanda
+T202	electricity 6159 6166	#sinluz
+A169	fake-information T202
+T203	circumstantial-information 6357 6367	#venezuela
+A170	location T203
+T204	electricity 6466 6473	#sinluz
+A171	without-service T204
+T205	social-report 6527 6594	llego  la  hora  de  convocar  a  toda  venezuela  para  miraflores
+T206	electricity 6771 6778	#sinluz
+A172	fake-information T206
+T207	social-report 6780 6838	me  imagino  a  lopetegui  investigando  por  que  estamos
+T208	electricity 6841 6847	sinluz
+A173	fake-information T208
+A39	fake-information T52
+A111	fake-information T130
+T209	twitter-account 7069 7083	@corpoeleccar_
+A174	utility-company T209
+T210	circumstantial-information 7113 7128	ciudad  alianza
+A175	location T210
+T211	social-report 7451 7467	gooool  no  joda
+T212	social-report 7526 7580	grite  el  gol  como  si  hubiesemos  ganado  la  copa
+T213	electricity 7646 7652	sinluz
+A176	fake-information T213
+T214	social-report 7755 7904	la  tragedia  que  llevo  a  #venezuela  a  la  ruina  mas  historica  sin  precedentes  ha  estado  siempre  vinculada  a  una  #sociedad  #complice
+T215	electricity 8050 8056	apagon
+A177	fake-information T215
+R20	relation Arg1:T214 Arg2:T215	
+T216	water 8515 8522	sinagua
+A178	fake-information T216
+T217	gas 8525 8531	singas
+A179	fake-information T217
+T218	electricity 8546 8552	sinluz
+A180	fake-information T218
+T219	electricity 8874 8880	sinluz
+A181	fake-information T219
+A116	fake-information T137
