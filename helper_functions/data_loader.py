@@ -257,8 +257,6 @@ class DataLoader:
 
         merged_parsed_df = pd.concat(single_df_list, axis=0).reset_index(drop=True)
 
-        # Todo: Replace all NAN in merged_parsed_df.iloc[:, 1:] by 0.
-
         if binary == True:
 
             merged_parsed_df.iloc[:, 1:] = merged_parsed_df.iloc[:, 1:].mask(merged_parsed_df.iloc[:, 1:] > 1, 1)
