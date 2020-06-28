@@ -102,7 +102,7 @@ T58	social-report 2786 3022	que  co#o  esperan  los  venezolanos  para  formar  
 T59	twitter-account 3024 3032	@jguaido
 A44	politician T59
 T60	social-report 3038 3063	ya  estamos  amaestrados!
-T61	social-report 3065 3106	como  cuba!  cansa    echale  pichon!    
+T61	social-report 3065 3102	como  cuba!  cansa    echale  pichon!
 T62	circumstantial-information 3298 3324	en  san  carlos    cojedes
 A45	location T62
 T63	electricity 3326 3363	se  restauro  el  servicio  electrico
@@ -172,7 +172,6 @@ T96	twitter-account 4777 4822	@alcaldejvra  @hectorodriguez  @fbritomaestre
 A73	politician T96
 T97	circumstantial-information 4755 4775	#miranda  #venezuela
 A74	location T97
-T98	social-report 4850 5170	nora  carpena  macri  vidal  romero  alberto  fernandez  #sinluzy  se  armo  nomas  en  las  fuerzas  armadas!designaron  un  bonafinista  en  su  obra  social  para  manotear  sus  $20  mil  millones  de  caja  y  ahogarlos  economicamente  y  hete  aqui  los  resultados  me  lo  acaba  de  mandar  un  alto  oficial  
 T99	circumstantial-information 5211 5220	maracaibo
 A75	location T99
 T100	electricity 5239 5245	apagon
@@ -194,3 +193,19 @@ A82	time T108
 T109	twitter-account 5761 5770	@ldanieri
 A83	politician T109
 A84	news-company T109
+T110	electricity 5203 5209	sinluz
+A85	fake-information T110
+T111	circumstantial-information 3108 3140	longaray  el  valle  en  caracas
+A86	location T111
+T112	electricity 3143 3149	sinluz
+A87	without-service T112
+T113	circumstantial-information 3151 3168	desde  las  5  30
+A88	time T113
+T114	social-report 3206 3290	ojala  en  vez  de  radares  militares  hubiesen  puesto  cables  y  transformadores
+T98	electricity 4908 4914	sinluz
+A89	fake-information T98
+T115	social-report 4914 5168	y  se  armo  nomas  en  las  fuerzas  armadas!designaron  un  bonafinista  en  su  obra  social  para  manotear  sus  $20  mil  millones  de  caja  y  ahogarlos  economicamente  y  hete  aqui  los  resultados  me  lo  acaba  de  mandar  un  alto  oficial
+T116	social-report 5176 5200	y  se  nos  fue  la  luz
+T117	social-report 4325 4426	importante  que  el  mundo  sepa    que  ustedes  seran  los  responsables  de  las  muertes  masivas
+T118	circumstantial-information 4432 4438	mexico
+A90	location T118

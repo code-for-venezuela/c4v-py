@@ -342,3 +342,9 @@ T178	twitter-account 9313 9327	@fbritomaestre
 A155	politician T178
 T179	twitter-account 9329 9339	@reporteya
 A156	news-company T179
+T180	electricity 1112 1118	sinluz
+A157	without-service T180
+T181	electricity 908 943	restitucion  parcial  del  servicio
+A158	with-service T181
+T182	electricity 1015 1063	5  dias  solventar  la  totalidad  del  servicio
+A159	without-service T182
