@@ -21,7 +21,7 @@ A9	without-service T11
 T12	social-report 397 428	que  gran  invento  el  celular
 T13	electricity 430 437	#sinluz
 A10	without-service T13
-T14	social-report 448 575	esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores  
+T14	social-report 448 573	esta  usted  y  su  falla  debe  ser  neurologica  ahora  apoya  a  cfk      pregunta  como  anda  su  pyme  de  35  asesores
 T15	electricity 439 446	#sinluz
 A11	fake-information T15
 T16	circumstantial-information 717 777	los  caobos    sabana  grande    la  florida    la  campigna
@@ -340,6 +340,6 @@ T179	circumstantial-information 669 675	5julio
 A139	time T179
 T180	electricity 599 605	apagon
 A140	without-service T180
-R25	relation Arg1:T14 Arg2:T15	
 R26	relation Arg1:T177 Arg2:T180	
 R27	relation Arg1:T179 Arg2:T180	
+R25	relation Arg1:T14 Arg2:T15	
