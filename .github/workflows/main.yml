@@ -16,12 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: 'Python 3.6.11'
+          - name: 'Python 3.6.10'
             os: ubuntu-18.04
-            python-version: '3.6.11'
-          - name: 'Python 3.7.8'
+            python-version: '3.6.10'
+          - name: 'Python 3.7.7'
             os: ubuntu-18.04
-            python-version: '3.7.8'
+            python-version: '3.7.7'
           - name: 'Python 3.8.3'
             os: ubuntu-18.04
             python-version: '3.8.3'
