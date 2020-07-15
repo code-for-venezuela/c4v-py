@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - poetry
   pull_request:
     branches:
       - master
