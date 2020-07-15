@@ -23,7 +23,7 @@ packages = [
 include = ["*.html", "*.ini", "*.json",]
 
 [tool.poetry.dependencies]
-python = "^3.6.9"
+python = "^3.6.10"
 pip = "^20.0.0"
 tensorflow = "2.2.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
