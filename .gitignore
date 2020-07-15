@@ -1,10 +1,40 @@
-__pycache__
+.history
+.cache
 
 # ignore some Mac files
 *.DS_Store
 
-# ignoring pycharm hidden folders
-.idea/
+# VS Code files
+/.vscode
 
-# ignore brat temp files 
-#*.pyc
+# PyCharm
+/.idea/workspace.xml
+/.idea/libraries/
+/.idea/dictionaries/
+/.idea/other.xml
+/.idea/modules/root.iml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/codeStyles
+/env
+
+# Setuptools
+/build
+/dist
+/src/c4v.egg-info*
+/src/c4v_py.egg-info*
+
+
+# Jupyter
+*.ipynb_checkpoints
+*__pycache__
+
+
+# Tensorflow
+*tensorboard/
+
+# Nox
+/.nox
+
+# PyTest
+/.pytest_cache
+/.coverage*
