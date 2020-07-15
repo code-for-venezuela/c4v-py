@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "c4v-py"
+version = "0.1.0.dev1"
+description = "Code for Venezuela python library."
+authors = ["Edilmo Palencia <edilmo@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://www.codeforvenezuela.org/"
+repository = "https://github.com/Edilmo/c4v-py"
+keywords = [
+    "NLP",
+    "NLU",
+    "Machine Learning",
+    "ipython",
+    "jupyter",
+    "widgets",
+    "brat",
+    "annotation",
+    ]
+packages = [
+    { include = "c4v", from = "src" },
+]
+include = ["*.html", "*.ini", "*.json",]
+
+[tool.poetry.dependencies]
+python = "^3.6.9"
+pip = "^20.0.0"
+tensorflow = "2.2.0"
+tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
+tensorflow-probability = "0.10.0"
+jupyter = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.3"
+black = "^19.10b0"
+coverage = { extras = ["toml"], version = "^5.1" }
+pytest-cov = "^2.10.0"
+pytest-mock = "^3.1.1"
+importlib_metadata = { version = "^1.7.0", python = "~3.6 || ~3.7" }
+zipp = { version = "^3.1.0", python = "~3.6 || ~3.7" }
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["c4v"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 0
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
