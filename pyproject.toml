@@ -6,7 +6,7 @@ authors = ["Edilmo Palencia <edilmo@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://www.codeforvenezuela.org/"
-repository = "https://github.com/Edilmo/c4v-py"
+repository = "https://github.com/dieko95/c4v-py"
 keywords = [
     "NLP",
     "NLU",
@@ -29,6 +29,10 @@ tensorflow = "2.2.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
 tensorflow-probability = "0.10.0"
 jupyter = "^1.0.0"
+scikit-learn = "0.23.1"
+scikit-multilearn = "0.2.0"
+pandas = "1.0.5"
+nltk = "^3.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"

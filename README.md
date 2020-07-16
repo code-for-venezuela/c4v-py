@@ -23,10 +23,16 @@ The main difference lies in the source code itself which is not constraint to da
 
 ## Pendings
 
-[ ] Change the authors field in pyproject.toml
-[ ] Change the repository field in pyproject.toml
-[ ] Move the content below to a place near to the data in the data folder or use the reference folder.
+- [ ] Change the authors field in pyproject.toml
+- [ ] Change the repository field in pyproject.toml 
+- [ ] Move the content below to a place near to the data in the data folder or use the reference folder.
 Check [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data-science/) for details.
+- [ ] Understand what is in the following folders and decide what to do with them.
+    - brat-v1.3_Crunchy_Frog
+    - creating_models
+    - data/data_to_annotate
+    - data_analysis
+- 
 
 ## brat-test
 
