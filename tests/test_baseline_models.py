@@ -12,11 +12,11 @@ def test_baseline():
     # -------------
     # Show me the performance of the models using annotated data
     file_names = [
-        # '../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
-        '../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
-        '../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',
-        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
-        '../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-28_093100'
+        # '../../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30',
+        '../../brat-v1.3_Crunchy_Frog/data/first-iter/balanced_dataset_brat',
+        '../../brat-v1.3_Crunchy_Frog/data/second-iter/diego-sample_30-randstate_19-2020-06-15_202334',
+        '../../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-13_195818',
+        '../../brat-v1.3_Crunchy_Frog/data/second-iter/marianela-sample_50-randstate_42-2020-06-28_093100'
     ]
 
     # -------------
