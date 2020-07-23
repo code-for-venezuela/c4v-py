@@ -2,13 +2,13 @@
 
 import sys
 sys.path.append('../helper_functions/')
-import data_loader
+from c4v.data.data_loader import BratDataLoader
 import numpy as np
 import pandas as pd
 
 #Load Data into class and parse dataframe
 
-test = data_loader.load_data('../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30')
+test = BratDataLoader(['data/processed/brat/sampled_58_30'])
 
 
 # Print parsed dataframe
