@@ -169,7 +169,7 @@ class ModelAnalyzer:
 
     def __save_report_on_disk(self, file_names: list, data_set_size: int) -> None:
         out_filename = f'report-{datetime.now().strftime("%Y_%m_%d_%H%M%S")}-{data_set_size}t'
-        reports_folder = '../../../reports/ml_models_performance_analysis'
+        reports_folder = '/reports/ml_models_performance_analysis'
         self.performance.sort_values(by='accuracy').to_csv(os.path.join(reports_folder, out_filename+'-performance.csv'))
 
         pd.DataFrame({'source': file_names}).to_csv(os.path.join(reports_folder, out_filename+'-sources.csv'))
