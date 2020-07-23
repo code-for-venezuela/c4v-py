@@ -1,13 +1,12 @@
-
 from c4v.data.baseline_models import unannotated_tweets
 from c4v.data.baseline_models import ModelAnalyzer
-
 
 
 def test_baseline():
     '''
     The code within the __main__ might need to be added in the jupyter notebook to make use of the classes
     '''
+    print('hello')
 
     # -------------
     # Show me the performance of the models using annotated data
