@@ -1,0 +1,350 @@
+T1	social-report 1 79	ahora  las  5  zonas  mas  afectadas  sin  suministro  electrico  por  empresa
+T2	electricity 84 90	sinluz
+A1	fake-information T2
+R1	relation Arg1:T1 Arg2:T2	
+T3	social-report 151 224	que  loco  mi  pais  !!!!  todo  es  trucho!  lo  anterior  lo  posterior
+T4	electricity 228 234	sinluz
+A2	fake-information T4
+T5	twitter-account 236 250	@corpoelecinfo
+A3	utility-company T5
+T6	circumstantial-information 313 325	lacandelaria
+A4	location T6
+T7	electricity 330 336	sinluz
+A5	without-service T7
+T8	social-report 341 474	desde  la  madrugada  intenta  llegar  por  pocos  minutos  y  se  va    ya  perdi  la  cuenta!!!!  informen  por  favor  que  ocurre
+T9	circumstantial-information 269 280	desde  ayer
+A6	duration T9
+T10	electricity 282 306	sin  servicio  electrico
+A7	without-service T10
+T11	twitter-account 502 516	@corpoelecinfo
+A8	utility-company T11
+T12	twitter-account 490 500	@reporteya
+A9	news-company T12
+T13	twitter-account 478 488	@reporteya
+A10	news-company T13
+T14	twitter-account 518 532	@corpoelecinfo
+A11	utility-company T14
+T15	twitter-account 532 546	@corpoeleccar_
+A12	utility-company T15
+T16	electricity 546 554	sin  luz
+A13	without-service T16
+T17	circumstantial-information 556 577	urb  lomas  del  este
+A14	location T17
+T18	circumstantial-information 638 679	lomas  del  este  valencia  edo  carabobo
+A15	location T18
+T19	twitter-account 707 722	@rafaellacava10
+A16	politician T19
+T20	circumstantial-information 739 745	#24sep
+A17	time T20
+T21	circumstantial-information 750 768	mas  de  12  horas
+A18	duration T21
+T22	electricity 770 778	sin  luz
+A19	without-service T22
+T23	circumstantial-information 803 814	el  hatillo
+A20	location T23
+T24	circumstantial-information 831 840	venezuela
+A21	location T24
+T25	circumstantial-information 1165 1181	valles  del  tuy
+A22	location T25
+T26	circumstantial-information 1192 1202	charallave
+A23	location T26
+T27	twitter-account 1204 1220	@corpoeleczulia_
+A24	utility-company T27
+T28	twitter-account 1222 1236	@fbritomaestre
+A25	politician T28
+T29	twitter-account 1250 1264	@corpoelecinfo
+A26	utility-company T29
+T30	circumstantial-information 1266 1324	sector  bello  monte    los  estanques    brisas  del  sur
+A27	location T30
+T31	circumstantial-information 1368 1379	2pm  a  8pm
+A28	duration T31
+T32	social-report 1505 1547	esto  es  inhumano    abocarse  por  favor
+T33	electricity 1326 1333	#sinluz
+A29	without-service T33
+R2	relation Arg1:T31 Arg2:T33	
+T34	electricity 1381 1386	llego
+A30	with-service T34
+T35	circumstantial-information 1396 1457	8  12pm    cayo  una  llovizna  y  se  fue  a  las  9  20  pm
+A31	duration T35
+R3	relation Arg1:T35 Arg2:T34	
+R4	relation Arg1:T32 Arg2:T34	
+T36	water 1551 1670	y  mientras  el  @nicolasmaduro  se  #ancla  mas  en  #miraflores  y  #venezuela  sucumbe  entre  #petros    #sanciones
+T37	gas 1691 1697	singas
+A32	fake-information T37
+T38	gasoline 1675 1686	singasolina
+A33	fake-information T38
+T39	electricity 1702 1708	sinluz
+A34	fake-information T39
+T40	twitter-account 1862 1876	@corpoelecinfo
+A35	utility-company T40
+T41	electricity 1912 1926	llego  la  luz
+A36	with-service T41
+T42	circumstantial-information 1992 2003	10  minutos
+A37	duration T42
+R5	relation Arg1:T42 Arg2:T41	
+T43	circumstantial-information 1948 1964	mas  de  5  hora
+A38	duration T43
+T44	electricity 1967 1973	sinluz
+A39	without-service T44
+R6	relation Arg1:T43 Arg2:T44	
+T45	twitter-account 2005 2015	@vtvcanal8
+A40	news-company T45
+T46	twitter-account 2017 2031	@nicolasmaduro
+A41	politician T46
+T47	electricity 2089 2095	sinluz
+A42	fake-information T47
+T48	gas 2098 2104	singas
+A43	fake-information T48
+T49	gasoline 2107 2118	singasolina
+A44	fake-information T49
+T50	social-report 2194 2430	aunque  la  escasez  de  gas  es  una  realidad  que  no  se  puede  ocultar    en  casa  acostumbramos  a  cocinar  las  hallacas  en  legna  sin  embargo    este  agno  el  nuevo  reto  para  el  venezolano    es  elaborarlas  #sinluz
+T51	circumstantial-information 2186 2192	#23dic
+A45	time T51
+T52	circumstantial-information 2457 2465	#barinas
+A46	location T52
+T53	electricity 2465 2472	#sinluz
+A47	without-service T53
+T54	social-report 2615 2680	hay  que  salir  de  la  tiraniapsuv  con  besitos  y  elecciones
+T55	electricity 2605 2611	sinluz
+A48	fake-information T55
+T56	social-report 2829 3038	s/medicinas  s  comida  sin  vida  digna    los  miembros  d  la    banda  de  la  mafia  roja    20    agnos  d  corrupcion    miseria  y  muerte    son  el  estigma  de  la  peor  herencia  de  la  humanidad
+T57	electricity 2788 2794	sinluz
+A49	fake-information T57
+T58	water 2813 2820	sinagua
+T59	gas 2822 2827	s/gas
+A51	fake-information T59
+A50	fake-information T58
+T60	circumstantial-information 2770 2774	vzla
+A52	location T60
+T61	circumstantial-information 3080 3123	barcelona    puerto  la  cruz      lecheria
+T62	gasoline 3188 3203	#sincombustible
+A54	without-service T62
+T63	gasoline 3216 3227	singasolina
+A55	without-service T63
+A53	location T61
+T64	circumstantial-information 3054 3064	anzoategui
+A56	location T64
+T65	circumstantial-information 3253 3275	san  carlos    cojedes
+A57	location T65
+T66	electricity 3281 3314	restauro  el  servicio  electrico
+A58	with-service T66
+T67	twitter-account 3398 3412	@corpoelecinfo
+A59	utility-company T67
+T68	circumstantial-information 3479 3557	sector  de  prados  del  este    santa  fe    alto  prado  y  zonas  aledagnas
+A60	location T68
+T69	circumstantial-information 3593 3619	administracion  de  cargas
+A61	reason T69
+T70	electricity 3666 3672	sinluz
+A62	fake-information T70
+T71	social-report 3648 3658	no  y  que
+T72	twitter-account 3636 3646	@nituperez
+A63	news-company T72
+T73	twitter-account 3623 3634	@amsanchezs
+A64	other T73
+T74	social-report 3717 3750	iris  varela  operacion  libertad
+T75	electricity 3700 3706	sinluz
+A65	fake-information T75
+T76	electricity 3757 3772	volvio  la  luz
+A66	with-service T76
+T77	circumstantial-information 3778 3792	villa  urquiza
+A67	location T77
+T78	twitter-account 3803 3816	@idaaninforma
+A68	utility-company T78
+T79	circumstantial-information 3847 3856	sabanitas
+A69	location T79
+T80	water 3889 3896	sinagua
+A70	without-service T80
+T81	circumstantial-information 3978 3984	#21nov
+A71	time T81
+T82	electricity 4012 4036	sin  servicio  electrico
+A72	without-service T82
+T83	circumstantial-information 4038 4053	a  media  noche
+A73	time T83
+T84	circumstantial-information 4056 4062	merida
+A74	location T84
+T85	twitter-account 4078 4092	@jquinteronews
+A75	news-company T85
+T86	twitter-account 4173 4188	@edenorclientes
+A76	utility-company T86
+T87	electricity 4165 4171	sinluz
+A77	without-service T87
+T88	circumstantial-information 4098 4123	segundo  dia  consecutivo
+A78	time T88
+T89	twitter-account 4216 4232	@corpoeleczulia_
+A79	utility-company T89
+T90	twitter-account 4234 4248	@fbritomaestre
+A80	politician T90
+T91	circumstantial-information 4275 4291	desde  las  10pm
+A81	time T91
+T92	electricity 4293 4307	si    servicio
+A82	without-service T92
+T93	circumstantial-information 4309 4325	en  el  varillal
+A83	location T93
+T94	circumstantial-information 4330 4366	son  las  3  10am  y  mada  q  llega
+A84	time T94
+T95	social-report 4374 4445	cuantas  horas  son  por  favor    la  noche  se  hizo  para  descansar
+T96	twitter-account 4520 4535	@edenorclientes
+A85	utility-company T96
+T97	twitter-account 4504 4518	@oficialedesur
+A86	utility-company T97
+T98	twitter-account 4906 4920	@oficialedesur
+A87	utility-company T98
+T99	circumstantial-information 4994 5002	5  horas
+A88	duration T99
+T100	circumstantial-information 5012 5022	avellaneda
+A89	location T100
+T101	social-report 4571 4904	con  ambos  telefonos  y  la  pc  descargada    me  quede  dormida  toda  la  tarde    me  desperte  a  las  7  30  pm    vi  que  no  habia  luz  aun    asi  que  volvi  a  dormir  aunque  me  costo    cuando  pusieron  la  luz    me  despertaron  al  comienzo  de  un  ciclo  de  suegno    asi  que  mi  humor  no  es  nada  bonito
+T102	electricity 4561 4567	sinluz
+A90	fake-information T102
+T103	electricity 5034 5040	sinluz
+A91	without-service T103
+T104	electricity 5136 5143	#sinluz
+A92	without-service T104
+T105	circumstantial-information 5165 5186	#chicauma  en  #lampa
+A93	location T105
+T106	twitter-account 5117 5132	@enelclientescl
+A94	utility-company T106
+T107	social-report 5239 5450	gobierno  dice  afinar  detalles  para  mejorar  el  sistema  electrico  del  pais      el  sistema  electrico  nacional  (sen)  fue    sin  duda    uno  de  los  principales  protagonistas  del  reflejo  de  la
+T108	circumstantial-information 5525 5534	venezuela
+A95	location T108
+T109	electricity 5469 5475	apagon
+A96	fake-information T109
+T110	twitter-account 5540 5554	@corpoeleccar_
+A97	utility-company T110
+T111	electricity 5557 5563	sinluz
+A98	without-service T111
+T112	circumstantial-information 5567 5575	el  parr
+A99	location T112
+T113	circumstantial-information 5581 5615	desde  que  inicio  fuerte  lluvia
+A100	reason T113
+T114	circumstantial-information 5644 5653	venezuela
+A101	location T114
+T115	electricity 5684 5690	sinluz
+A102	fake-information T115
+T116	social-report 5719 5773	producto  de  la  grave  crisis  electrica  de  maduro
+R7	relation Arg1:T116 Arg2:T115	
+R8	relation Arg1:T114 Arg2:T115	
+T117	circumstantial-information 5786 5833	casco  central  de  guarenas  y  pueblo  arriba
+A103	location T117
+T118	circumstantial-information 5835 5853	desde  la  1  25pm
+A104	time T118
+T119	circumstantial-information 5856 5861	17nov
+A105	time T119
+T120	electricity 5777 5784	#sinluz
+A106	without-service T120
+T121	electricity 5863 5870	#sinluz
+A107	without-service T121
+T122	circumstantial-information 5881 5926	tachira  san  cristobal  sector  los  kioskos
+A108	location T122
+T123	twitter-account 5964 5978	@fbritomaestre
+A109	politician T123
+T124	twitter-account 5980 5993	@freddybernal
+A110	politician T124
+T125	twitter-account 5995 6009	@corpoelecinfo
+A111	utility-company T125
+T126	twitter-account 6011 6026	@corpoelectach_
+A112	utility-company T126
+T128	electricity 6117 6123	sinluz
+A113	fake-information T128
+T127	twitter-account 6099 6114	@edenorclientes
+A114	utility-company T127
+T129	twitter-account 6083 6097	@oficialedesur
+A115	utility-company T129
+T130	electricity 6226 6232	sinluz
+A116	fake-information T130
+T131	electricity 6235 6241	sinluz
+A117	without-service T131
+T132	circumstantial-information 6243 6269	en  guaynabo  y  san  juan
+A118	location T132
+T133	twitter-account 6289 6303	@mauriciomacri
+A119	politician T133
+T134	social-report 6305 6384	tal  cual    material  a  patadas    dicen  que  la  luz  vuelve  en  diciembre
+T135	electricity 6387 6393	sinluz
+A120	fake-information T135
+T136	twitter-account 6404 6436	@corpoeleczulia_  @corpoelecinfo
+A121	utility-company T136
+T137	twitter-account 6450 6480	@fbritomaestre  @omarprietogob
+A122	politician T137
+T138	electricity 6483 6489	sinluz
+A123	without-service T138
+T139	circumstantial-information 6491 6514	la  pecera  los  olivos
+A124	location T139
+T140	social-report 6529 6668	gran  mentira  el  show  de  los  bolsas  lengua  afura  de  lo  linieros  en  las  torres  del  lago        un  show  es  solo  eso  fotos
+T141	circumstantial-information 6851 6859	carabobo
+A125	location T141
+T142	electricity 6822 6828	sinluz
+A126	without-service T142
+T143	circumstantial-information 6919 6955	circulo  militar  de  san  cristobal
+A127	location T143
+T144	electricity 6964 6983	servicio  electrico
+A128	with-service T144
+R9	relation Arg1:T143 Arg2:T144	
+T145	social-report 7007 7101	hasta  se  tropiezan  entre  ellos  en  el  bagno  y  se  les  caen  los  jabones  sin  querer
+T146	circumstantial-information 7196 7201	zulia
+A129	location T146
+T147	circumstantial-information 7302 7319	48h  consecutivas
+A130	duration T147
+T148	electricity 7322 7328	sinluz
+A131	without-service T148
+T149	social-report 7356 7414	es  criminal  como  han  arreciado  con  el  racionamiento
+T150	circumstantial-information 7419 7424	24jul
+A132	time T150
+T151	circumstantial-information 7721 7726	10dic
+A133	time T151
+T152	gasoline 7515 7526	singasolina
+A134	fake-information T152
+T153	social-report 7530 7699	si  en  lugar  de  socializar    hacemos  la  cola  de  autos  en  mitad  de  la  via  y  trancamos  calles    carreteras  y  autopistas  creo  q  nos  haremos  escuchar
+T154	gasoline 7729 7740	singasolina
+A135	fake-information T154
+T155	social-report 7742 7919	gasolina  proveniente  de  rusia  no  cumple  con  los  estandares  requeridos  en  estas  latitudes    por  lo  que  causan  averias  y  mal  funcionamiento  de  los  vehiculos
+T156	electricity 8175 8181	sinluz
+A136	fake-information T156
+T157	circumstantial-information 8237 8280	av    fuerzas  armadas  cir    adolfo  pons
+A137	location T157
+T158	electricity 8283 8289	sinluz
+A138	without-service T158
+T159	circumstantial-information 8291 8308	dsd  las  2  30pm
+A139	time T159
+T160	twitter-account 8474 8490	@corpoeleczulia_
+A140	utility-company T160
+T161	electricity 8514 8521	#apagon
+A141	fake-information T161
+T162	electricity 8526 8533	#sinluz
+A142	fake-information T162
+T163	electricity 8864 8879	sinelectricidad
+A143	fake-information T163
+T164	circumstantial-information 8662 8671	maracaibo
+A144	location T164
+T165	circumstantial-information 8606 8618	7  de  marzo
+A145	time T165
+T166	social-report 8312 8472	porq  no  se  la  quitan  a  la  zona  vip    sera  xq  ahi  vive  un  alto  funcionario  del  estado    #malpariosdelincuentes  #sucios  #racionamientocriminal
+T167	social-report 8675 8734	que  alguien  de  la  cara  y  explique  que  esta  pasando
+T168	circumstantial-information 8882 8887	24feb
+A146	time T168
+T169	circumstantial-information 8902 8929	la  guairita  en  #guarenas
+A147	location T169
+T170	electricity 8954 8960	sinluz
+A148	without-service T170
+T171	circumstantial-information 8974 8981	4  00pm
+A149	time T171
+T172	twitter-account 9029 9041	@absaoficial
+A150	utility-company T172
+T173	social-report 9120 9144	algo  no  funciona  bien
+T174	water 9186 9193	sinagua
+A151	without-service T174
+T175	twitter-account 9248 9262	@corpoelecinfo
+A152	utility-company T175
+T176	electricity 9265 9271	sinluz
+A153	without-service T176
+T177	circumstantial-information 9273 9311	valle  alto  valles  del  tuy  miranda
+A154	location T177
+T178	twitter-account 9313 9327	@fbritomaestre
+A155	politician T178
+T179	twitter-account 9329 9339	@reporteya
+A156	news-company T179
+T180	electricity 1112 1118	sinluz
+A157	without-service T180
+T181	electricity 908 943	restitucion  parcial  del  servicio
+A158	with-service T181
+T182	electricity 1015 1063	5  dias  solventar  la  totalidad  del  servicio
+A159	without-service T182
