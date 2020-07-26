@@ -22,7 +22,7 @@ from scipy.sparse import lil_matrix
 from c4v.data.data_loader import BratDataLoader
 
 
-class Model_Wrapper:
+class ModelWrapper:
     def __init__(self, model, x_train, y_train, name, type='normal'):
         self.model_class_name = model.__class__
         self.model_name = name
@@ -138,21 +138,21 @@ class ModelAnalyzer:
 
         # Creating a list of model wrappers. Training happens after each wrapper is instantiated.
         models = [
-            Model_Wrapper(ml_classifier, data.X_train, data.y_train, name='Multi kNN', type='knn'),
-            Model_Wrapper(br_BernoulliNB_classifier, data.X_train, data.y_train, name='BR_Bayes BernoulliNB'),
-            Model_Wrapper(br_LogisticR_classifier, data.X_train, data.y_train, name='BR_LogisticR'),
-            Model_Wrapper(br_SVM_classifier, data.X_train, data.y_train, name='BR_LinearSVC'),
-            Model_Wrapper(br_GradDesc_classifier, data.X_train, data.y_train, name='BR_GradDesc SGDCClassifier'),
+            ModelWrapper(ml_classifier, data.X_train, data.y_train, name='Multi kNN', type='knn'),
+            ModelWrapper(br_BernoulliNB_classifier, data.X_train, data.y_train, name='BR_Bayes BernoulliNB'),
+            ModelWrapper(br_LogisticR_classifier, data.X_train, data.y_train, name='BR_LogisticR'),
+            ModelWrapper(br_SVM_classifier, data.X_train, data.y_train, name='BR_LinearSVC'),
+            ModelWrapper(br_GradDesc_classifier, data.X_train, data.y_train, name='BR_GradDesc SGDCClassifier'),
 
-            Model_Wrapper(lp_BernoulliNB_classifier, data.X_train, data.y_train, name='LP_Bayes BernoulliNB'),
-            Model_Wrapper(lp_LogisticR_classifier, data.X_train, data.y_train, name='LP_LogisticR'),
-            Model_Wrapper(lp_SVM_classifier, data.X_train, data.y_train, name='LP_LinearSVC'),
-            Model_Wrapper(lp_GradDesc_classifier, data.X_train, data.y_train, name='LP_GradDesc SGDCClassifier'),
+            ModelWrapper(lp_BernoulliNB_classifier, data.X_train, data.y_train, name='LP_Bayes BernoulliNB'),
+            ModelWrapper(lp_LogisticR_classifier, data.X_train, data.y_train, name='LP_LogisticR'),
+            ModelWrapper(lp_SVM_classifier, data.X_train, data.y_train, name='LP_LinearSVC'),
+            ModelWrapper(lp_GradDesc_classifier, data.X_train, data.y_train, name='LP_GradDesc SGDCClassifier'),
 
-            Model_Wrapper(cc_BernoulliNB_classifier, data.X_train, data.y_train, name='CC_Bayes BernoulliNB', type='cc'),
-            Model_Wrapper(cc_LogisticR_classifier, data.X_train, data.y_train, name='CC_LogisticR', type='cc'),
-            Model_Wrapper(cc_SVM_classifier, data.X_train, data.y_train, name='CC_LinearSVC', type='cc'),
-            Model_Wrapper(cc_GradDesc_classifier, data.X_train, data.y_train, name='CC_GradDesc SGDCClassifier', type='cc')
+            ModelWrapper(cc_BernoulliNB_classifier, data.X_train, data.y_train, name='CC_Bayes BernoulliNB', type='cc'),
+            ModelWrapper(cc_LogisticR_classifier, data.X_train, data.y_train, name='CC_LogisticR', type='cc'),
+            ModelWrapper(cc_SVM_classifier, data.X_train, data.y_train, name='CC_LinearSVC', type='cc'),
+            ModelWrapper(cc_GradDesc_classifier, data.X_train, data.y_train, name='CC_GradDesc SGDCClassifier', type='cc')
 
         ]
         # getting table with all results, ready to use for micro analysis
