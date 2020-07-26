@@ -20,31 +20,37 @@ class BratDataLoader:
                 If false, parsed_df contains the counts of each entity per document.
 
         Examples
-            
-            # Import class
 
-            import data_loader
-            import numpy as np
-            import pandas as pd
-            import sys
-            sys.path.append('../helper_functions/')
+	    # Append root folder
+	    import sys
+	    sys.path.append('../')
 
-            #Load Data into class and parse dataframe
+	    # Import libraries
+	    import numpy as np
+	    import pandas as pd
+	    import sys
+	    from src.c4v.data.data_loader import BratDataLoader
 
-            test = data_loader.load_data('../brat-v1.3_Crunchy_Frog/data/first-iter/sampled_58_30')
+	    # Instantiate class with one dataset
+	    loaded_data = BratDataLoader(['../data/processed/brat/sampled_58_30'], binary=True)
 
-            # Print parsed dataframe
+	    ## Get parsed dataframe with text and one-hot encoded responses
+	    loaded_data.get_parsed_df()
 
-            print(test.parsed_df.head())
+	    # Create training and test sets
+	    loaded_data.preprocess()
 
+	    ## Print training and test sets
+	    print(
+	    f'''
+	    Training set shape:
+	    X_train: {loaded_data.X_train.shape}
+	    y_train: {loaded_data.y_train.shape}
 
-            # Vectorize text and train test split
-                # This method initialized following attributes:
-                    # X_train, X_test, y_train, y_test, X, y
-            test.preprocess()
-
-            # Print X_train shape 
-            print(test.X_train.shape)
+	    Testing set shape:
+	    X_test: {loaded_data.X_test.shape}
+	    y_test: {loaded_data.y_test.shape}
+    ''')            
 
         """
 
