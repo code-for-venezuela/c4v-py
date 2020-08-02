@@ -2,7 +2,6 @@ import os, sys
 from datetime import datetime
 import pandas as pd
 import numpy as np
-# import matplotlib.pyplot as plt
 
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
