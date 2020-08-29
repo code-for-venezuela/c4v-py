@@ -33,7 +33,7 @@ scikit-learn = "0.23.1"
 scikit-multilearn = "0.2.0"
 pandas = "1.0.5"
 nltk = "^3.5"
-google-cloud-bigquery = "1.26.1"
+google-cloud-bigquery = "1.27.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
