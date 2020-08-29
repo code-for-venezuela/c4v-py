@@ -1,9 +1,12 @@
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import os
+
+SERVICE_ACCOUNT_KEY_PATH_ENV_VAR = "ANGOSTURA_SERVICE_ACCOUNT"
 
 
 class AngosturaLoader:
-    def __init__(self, service_account_key_path):
+    def __init__(self, service_account_key_path=None):
         """
         Creates connection to perform queries to Code For Venezuela's Angostura ETL.
         BigQuery is used as warehouse.
@@ -37,7 +40,14 @@ class AngosturaLoader:
             print(df.head())
         """
         self.client = None
-        self.key = service_account_key_path
+
+        if service_account_key_path:
+            self.key_path = service_account_key_path
+        elif SERVICE_ACCOUNT_KEY_PATH_ENV_VAR in os.environ:
+            self.keypath = os.environ[service_account_key_path]
+            print("IT WORKED")
+        else:
+            self.keypath = "event-pipeline-beac3494771d.json"
 
     # First we need to get the JSON key for authentication
 

@@ -55,6 +55,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Creating Angostura Secret
+        run: |
+          echo "${{ secrets.ANGOSTURA_KEY }}" > ./angostura_connection.json
+
       - name: Run Nox session
         run: |
+          export ANGOSTURA_SERVICE_ACCOUNT="./angostura_connection.json"
           nox -r -s tests-${{ matrix.python-version }}
