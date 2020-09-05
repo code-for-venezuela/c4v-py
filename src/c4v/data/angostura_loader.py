@@ -30,8 +30,10 @@ class AngosturaLoader:
 
         Examples:
         ---------
-
-            test = AngosturaLoader(service_account_key_path = "./event-pipeline-beac3494771d.json")
+        
+            # Note - It is necessary to have the key angostura_connection.json in the 
+            # root directory. If you don't have it please contact anyone from c4v's Sambil team.
+            test = AngosturaLoader()
             
             df = test.create_query(
                     "SELECT * FROM `event-pipeline.angostura.sinluz_rawtweets` LIMIT 1"
@@ -42,14 +44,14 @@ class AngosturaLoader:
         self.client = None
 
         if service_account_key_path:
+            print("Using user input key path.")
             self.key_path = service_account_key_path
         elif SERVICE_ACCOUNT_KEY_PATH_ENV_VAR in os.environ:
-            self.keypath = os.environ[service_account_key_path]
-            print("IT WORKED")
+            print("Using environment variable.")
+            self.key_path = os.environ[SERVICE_ACCOUNT_KEY_PATH_ENV_VAR]
         else:
-            self.keypath = "event-pipeline-beac3494771d.json"
-
-    # First we need to get the JSON key for authentication
+            print("Looking for key in project's root directory.")
+            self.key_path = "angostura_connection.json"
 
     def create_connection(self):
         """
@@ -68,10 +70,8 @@ class AngosturaLoader:
                 Connection object to Angostura.
         """
 
-        key_path = self.key
-
         credentials = service_account.Credentials.from_service_account_file(
-            key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+            self.key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
         )
 
         self.client = bigquery.Client(
