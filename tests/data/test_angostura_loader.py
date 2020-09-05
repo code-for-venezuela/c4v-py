@@ -1,5 +1,6 @@
 from c4v.data.angostura_loader import AngosturaLoader
 
+
 def test_angostura():
 
     test = AngosturaLoader()
