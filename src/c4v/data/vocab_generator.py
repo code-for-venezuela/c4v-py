@@ -28,10 +28,10 @@ def cleaner(df: pd.DataFrame) -> pd.DataFrame:
     df = df.str.replace("ñ", "gn")
 
     # Remove links
-    df = df.str.replace("http.+", " ")
+    df = df.str.replace(r"http.+", " ")
 
     # Remove Punctuation
-    df = df.str.replace("[\\.\\-:,\\?]", " ")
+    df = df.str.replace(r"[\.\-:,\?]", " ")
 
     # Remove white spaces
     df = df.str.replace(r"[\s]+", " ")
