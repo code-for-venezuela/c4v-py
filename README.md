@@ -33,3 +33,8 @@ Check [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data
     - [X] data/data_to_annotate
     - [ ] data_analysis
 - [ ] Set symbolic links between `brat-v1.3_Crunchy_Frog/data` and `data/data_to_annotate`.  `data_sampler` extracts to `data/data_to_annotate`.  Files placed here are read by Brat.
+    - [ ] Download Brat - `wget https://brat.nlplab.org/index.html`
+    - [ ] untar brat - `tar -xzvf brat-v1.3_Crunchy_Frog.tar.gz`
+    - [ ] install brat - `cd brat-v1.3_Crunchy_Frog && ./install.sh`
+    - [ ] replace default annotation conf for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/annotation.conf -O annotation.conf`
+    - [ ] replace default config.py for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/config.py -O config.py`
