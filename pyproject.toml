@@ -26,6 +26,7 @@ include = ["*.html", "*.ini", "*.json",]
 python = "^3.6.9"
 pip = "^20.0.0"
 tensorflow = "2.2.0"
+tensorflow_datasets = "3.2.1"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
 tensorflow-probability = "0.10.0"
 jupyter = "^1.0.0"
