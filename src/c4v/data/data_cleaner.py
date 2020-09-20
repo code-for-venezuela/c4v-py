@@ -11,7 +11,7 @@ class DataCleaner:
 
     @staticmethod
     def set_lowercase(df: pd.DataFrame) -> pd.DataFrame:
-        # change all string to lowecase
+        # change all string to lowercase
         return df.str.lower()
 
     @staticmethod
