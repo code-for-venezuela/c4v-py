@@ -17,6 +17,7 @@ class DataCleaner:
     @staticmethod
     def convert_common_spanish_accents_n_tilde(df: pd.DataFrame) -> pd.DataFrame:
         # á é í ó ú -> aeiou and ñ -> gn
+        df = df.str.replace("ú", "u")
         df = df.str.replace("ù", "u")
         df = df.str.replace("ü", "u")
         df = df.str.replace("ó", "o")
@@ -33,40 +34,60 @@ class DataCleaner:
     @staticmethod
     def remove_emojis(df: pd.DataFrame) -> pd.DataFrame:
         # Ignore emojis
-        df = df.apply(lambda x: x.encode("ascii", "ignore").decode("ascii"))
-        return df
+        return df.apply(lambda x: x.encode("ascii", "ignore").decode("ascii"))
 
     @staticmethod
     def remove_newlines(df: pd.DataFrame) -> pd.DataFrame:
         # Remove new line
-        df = df.str.replace("\n", "")
-        return df
+        return df.str.replace("\n", " ")
 
     @staticmethod
     def remove_mentions(df: pd.DataFrame) -> pd.DataFrame:
         # mentions
-        pass
+        df = df.str.replace(r"@[\w]+", "MENTION")
+        return df
 
     @staticmethod
     def remove_hashtags(df: pd.DataFrame) -> pd.DataFrame:
         # hashtags
-        pass
+        df = df.str.replace(r"#[\w\d]+", "HASHTAG")
+        return df
 
     @staticmethod
     def remove_urls(df: pd.DataFrame) -> pd.DataFrame:
         # remove url: http links
-        return df.str.replace(r"http.+", " ")
+        return df.str.replace(r"http.+", "LINK")
 
     @staticmethod
     def remove_some_punctuation(df: pd.DataFrame) -> pd.DataFrame:
         # punctuation: . - : , ?
         # TODO: QUESTION!!!
-        #  should we also remove !, opening exclamation and interrogation?
+        #  Should we also remove !, opening exclamation and interrogation?  => ¿ ? and
+        #  .: punto, punto
+        #  final(period)
+        #  ,: coma(comma)
+        #  :: dos
+        #  puntos(colon)
+        #  ;: punto y coma(semicolon)
+        #  —: raya(dash)
+        #  -: guión(hyphen)
+        #  « »: comillas(quotation marks)
+        #  " : comillas (quotation marks)
+        #  ' : comillas simples (single quotation marks)
+        #  ¿ ?: principio y fin de interrogación(question marks)
+        #  ¡ !: principio y fin de exclamación o admiración(exclamation points)
+        #  ( ): paréntesis(parenthesis)
+        #  []: corchetes, parénteses cuadrados(brackets)
+        #  {}: corchetes(braces, curly brackets)
+        #  *: asterisco(asterisk)
+        #  ...: puntos suspensivos(ellipsis)
+
+        # alternative regex that removes more punctuation r"[\.\-:,\?¿!¡*\}\{\[\]\(\)\'\"\;]"
         return df.str.replace(r"[\.\-:,\?]", " ")
 
     @staticmethod
     def remove_extra_spaces(df: pd.DataFrame) -> pd.DataFrame:
-        # extra spaces
+        # removes extra spaces
         return df.str.replace(r"[\s]+", " ")
 
     @staticmethod
@@ -77,7 +98,7 @@ class DataCleaner:
     @staticmethod
     def data_prep_4_vocab(df: pd.DataFrame) -> pd.DataFrame:
         """
-        This method is an improved copy of the oe used in data_sampler.py
+        This method provides preprocessing cleaning steps to prepare data for the vocabulary generation.
         """
         df = DataCleaner.set_lowercase(df)
 
@@ -87,13 +108,25 @@ class DataCleaner:
         # Remove links
         df = DataCleaner.remove_urls(df)
 
-        # Remove Punctuation
+        # Remove mentions
+        df = DataCleaner.remove_mentions(df)
+
+        # Remove hashtags
+        df = DataCleaner.remove_hashtags(df)
+
+        # Remove Emojis
+        df = DataCleaner.remove_emojis(df)
+
+        # Remove newlines
+        df = DataCleaner.remove_newlines(df)
+        #
+        # # Remove Punctuation
         df = DataCleaner.remove_some_punctuation(df)
-
-        # Remove white spaces
+        #
+        # # Remove white spaces
         df = DataCleaner.remove_extra_spaces(df)
-
-        # I need to remove all spaces before and after each string
+        #
+        # # I need to remove all spaces before and after each string
         df = DataCleaner.trim(df)
 
         return df
