@@ -57,7 +57,7 @@ jobs:
 
       - name: Creating Angostura Secret
         run: |
-          echo "${{ secrets.ANGOSTURA_KEY }}" > ./angostura_connection.json
+          cat "${{ secrets.ANGOSTURA_KEY }}" > ./angostura_connection.json
 
       - name: Run Nox session
         run: |
