@@ -16,15 +16,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: 'Python 3.6.10'
+          - name: 'Python 3.6'
             os: ubuntu-18.04
-            python-version: '3.6.10'
-          - name: 'Python 3.7.7'
+            python-version: '3.6'
+          - name: 'Python 3.7'
             os: ubuntu-18.04
-            python-version: '3.7.7'
-          - name: 'Python 3.8.3'
+            python-version: '3.7'
+          - name: 'Python 3.8'
             os: ubuntu-18.04
-            python-version: '3.8.3'
+            python-version: '3.8'
     steps:
       - uses: actions/checkout@v2
 
@@ -55,6 +55,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Creating Angostura Secret
+        run: |
+          echo "${{ secrets.ANGOSTURA_KEY }}" > ./angostura_connection.json
+
       - name: Run Nox session
         run: |
+          export ANGOSTURA_SERVICE_ACCOUNT="./angostura_connection.json"
           nox -r -s tests-${{ matrix.python-version }}
