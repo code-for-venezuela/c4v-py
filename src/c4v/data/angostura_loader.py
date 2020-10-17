@@ -1,6 +1,9 @@
+import logging
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import os
+
+logger = logging.getLogger(__name__)
 
 SERVICE_ACCOUNT_KEY_PATH_ENV_VAR = "ANGOSTURA_SERVICE_ACCOUNT"
 
@@ -44,13 +47,13 @@ class AngosturaLoader:
         self.client = None
 
         if service_account_key_path:
-            print("Using user input key path.")
+            logger.info("Using user input key path.")
             self.key_path = service_account_key_path
         elif SERVICE_ACCOUNT_KEY_PATH_ENV_VAR in os.environ:
-            print("Using environment variable.")
+            logger.info("Using environment variable.")
             self.key_path = os.environ[SERVICE_ACCOUNT_KEY_PATH_ENV_VAR]
         else:
-            print("Looking for key in project's root directory.")
+            logger.info("Looking for key in project's root directory.")
             self.key_path = "angostura_connection.json"
 
     def create_connection(self):
@@ -97,7 +100,7 @@ class AngosturaLoader:
         if self.client is None:
             self.create_connection()
 
-        print("Querying Database...")
+        logger.info("Querying Database...")
         QUERY = query
 
         results_df = self.client.query(QUERY).to_dataframe()
