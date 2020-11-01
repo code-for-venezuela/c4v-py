@@ -25,15 +25,15 @@ The main difference lies in the source code itself which is not constraint to da
 1. Install pyenv and select a version, ie: 3.8.3.  Once installed run `pyenv install 3.8.3`
 2. Install poetry in your system
 3. Clone this repo in a desired location `git clone https://github.com/code-for-venezuela/c4v-py.git`
-4. Navegate to the folder `cd c4v-py`
+4. Navigate to the folder `cd c4v-py`
 5. Make sure your poetry picks up the right version of python by running `pyenv local 3.8.3`, if 3.8.3 is your right version.
 6. Since our toml file is already created, we need to get all dependencies by running `poetry install`. This step might take a few minutes to complete.
 7. Install nox
-8. From `c4v-py` directory, on your termnal, run the command `nox -s tests` to make sure all the tests run.
+8. From `c4v-py` directory, on your terminal, run the command `nox -s tests` to make sure all the tests run.
 
 If you were able to follow every step with no error, you are ready to start contributing.
 
-## Pendings
+## Pending
 
 - [ ] Change the authors field in pyproject.toml
 - [ ] Change the repository field in pyproject.toml 
