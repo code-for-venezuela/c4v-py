@@ -1,78 +1,97 @@
 # import sys
 # sys.path.append(r'../')
-import os, sys
-import pandas as pd
+import os
+import logging
+
 import tensorflow_datasets as tfds
 
+import pandas as pd
 from c4v.data.data_cleaner import DataCleaner
-from c4v.data.angostura_loader import AngosturaLoader
 
 # set path for resources
-PATH_TO_COURPUS = "../../../data/raw/tweets/tagging-set-original_for_jupyter_tagging.csv"
-FULL_TEXT_LABEL = "full_text"
-VOCAB_FILENAME = "vocab"
-PATH_TO_VOCAB = os.path.join("../../../data/processed", VOCAB_FILENAME)
+# PATH_TO_SAMPLE_CORPUS = "../../../data/raw/tweets/tagging-set-original_for_jupyter_tagging.csv"
+# PROCESSED_DATA_FOLDER = "../../../data/processed"
 
 
+class Vocabulary:
+    """
+    Generates a vocabulary using byte pair encoding
+    """
+    def __init__(self, corpus, vocab_size=10000, vocab_filepath=None):
+        """
+               Uses byte pair encoding provided by tensorflow to generate a vocabulary.
+               Receives a corpus, vocab_size and vocab_filepath.
+               Yields an encoder ready to be used based on the vocabulary generated.
+               ----------------------------------------------------
 
-def read_from_angostura():
-    test = AngosturaLoader()
-    df = test.create_query(
-        "SELECT * FROM `event-pipeline.angostura.sinluz_rawtweets` LIMIT 1"
-    )
-    df.info()
-    return df
+               Params:
 
+                   corpus: pd.DataFrame Required.
+                       The corpus that will be used to generate the vocabulary.
 
-def read_tweets_from_source(source_type: str = 'csv'):
-    if source_type == 'csv':
-        # read from the csv
-        corpus = pd.read_csv(PATH_TO_COURPUS)
-    elif source_type == 'bq':
-        corpus = read_from_angostura()
-    else:
-        raise Exception('not a valid type of source. csv or bq for big query sources')
+                   vocab_size: Int. Default = 10000.
+                       Sets the number of elements to be generated as part of the vocabulary.
 
-    return corpus
+                   vocab_filepath: Str. Default = None.
+                       Filepath used to store the vocabulary.  If None provided, the vocabulary
+                       will be stored on the path from which the class was invoked under the name
+                       vocab_[vocab_size].
 
+               Example:
+                   data = pd.DataFrame()
+                   voc = Vocabulary(data, 500, path)
+                   encoder = voc.generate_and_save()
 
-def show_cleaned_data(raw_data, cleaned_data):
-    # show the tweets after they have been "cleaned"
-    for tweet, clean_tweet in zip(raw_data[FULL_TEXT_LABEL].to_list(), cleaned_data.to_list()):
-        print("---<START>")
-        print("\t", tweet)
-        print("\t", clean_tweet)
-        print("<END>---")
+                   tweet = "Mi mama me cocino mucha comida hoy"
+                   ids = encoder.encode(tweet)
+                   text = encoder.decode([1, 2, 3, 4])
+                   print(f'example: {ids}\n result: {text}')
+                   """
+        self.logger = logging.getLogger(__name__)
 
+        self.corpus = corpus
+        self.size = vocab_size
+        self.filepath = self._vocab_path(vocab_filepath)
 
-def generate_vocab():
-    # read data
-    try:
-        corpus = read_tweets_from_source(source_type='bq')
+        self._clean_corpus = None
 
+    def get_clean_corpus(self):
+        return self._clean_corpus
+
+    def _vocab_path(self, filepath):
+        if filepath is None:
+            return os.path.join("./", "vocab_" + str(self.size))
+        else:
+            return os.path.join(filepath)
+
+    def _generate_vocab(self):
         # clean the text
-        cleaned_corpus = DataCleaner.data_prep_4_vocab(corpus[FULL_TEXT_LABEL])
-
-        # This is a debugging line
-        show_cleaned_data(corpus, cleaned_corpus)
+        self.clean_corpus = DataCleaner.data_prep_4_vocab(self.corpus)
 
         # Build and save the vocab
-        encoder = tfds.features.text.SubwordTextEncoder.build_from_corpus(
-            cleaned_corpus.to_list(), target_vocab_size=10000
+        encoder = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus(
+            self.clean_corpus.to_list(), target_vocab_size=self.size
         )
+        return encoder
 
+    def _save_vocab(self, encoder):
         # Save the vocabulary
-        encoder.save_to_file(PATH_TO_VOCAB)
-        print("size: ", encoder.vocab_size)
+        encoder.save_to_file(self.filepath)
+        self.logger.info("saved: ", self.filepath)
+        self.logger.info("size: ", self.size)
 
-    except FileNotFoundError:
-        type_, value, traceback = sys.exc_info()
-        print(f'Error: {value}')
+    def generate_and_save(self):
+        """
+        Generated the vocabulary, saves it on the designated location and returns the encoder.
+        """
+        new_encoder = self._generate_vocab()
+        self._save_vocab(new_encoder)
+        return new_encoder
 
-    except:
-        type_, value, traceback = sys.exc_info()
-        print(f'Error: {value}')
 
-
-if __name__ == '__main__':
-    generate_vocab()
+# if __name__ == '__main__':
+#
+#     data = pd.read_csv(PATH_TO_SAMPLE_CORPUS)
+#     path = os.path.join(PROCESSED_DATA_FOLDER, 'spanish_vocabulary')
+#     voc = Vocabulary(data, 500, path)
+#     en = voc.generate_and_save()
