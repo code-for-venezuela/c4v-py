@@ -12,7 +12,7 @@ class DataCleaner:
     @staticmethod
     def set_lowercase(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # change all string to lowercase
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.lower()
         elif isinstance(data, str):
             return data.lower()
@@ -22,7 +22,7 @@ class DataCleaner:
         data: pd.DataFrame or str,
     ) -> pd.DataFrame or str:
         # á é í ó ú -> aeiou and ñ -> gn
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             data = data.str.replace("ú", "u")
             data = data.str.replace("ù", "u")
             data = data.str.replace("ü", "u")
@@ -54,7 +54,7 @@ class DataCleaner:
     @staticmethod
     def remove_emojis(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # Ignore emojis
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.apply(lambda x: x.encode("ascii", "ignore").decode("ascii"))
         elif isinstance(data, str):
             return data.encode("ascii", "ignore").decode("ascii")
@@ -63,7 +63,7 @@ class DataCleaner:
     def remove_newlines(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # Remove new line
         blank = "\n"
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(blank, " ")
         elif isinstance(data, str):
             return data.replace(blank, " ")
@@ -72,7 +72,7 @@ class DataCleaner:
     def remove_mentions(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # remove mentions
         regex = r"@[\w]+"
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(regex, "MENTION")
         elif isinstance(data, str):
             return re.sub(regex, "MENTION", data)
@@ -81,7 +81,7 @@ class DataCleaner:
     def remove_hashtags(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # hashtags
         regex = r"#[\w\d]+"
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(regex, "HASHTAG")
         elif isinstance(data, str):
             return re.sub(regex, "HASHTAG", data)
@@ -90,7 +90,7 @@ class DataCleaner:
     def remove_urls(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # remove url: http links
         regex = r"https?://[\.\w\/\-=&?%\d]+"
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(regex, "LINK")
         elif isinstance(data, str):
             return re.sub(regex, "LINK", data)
@@ -126,7 +126,7 @@ class DataCleaner:
             # punctuation => . - : , ?
             regex = r"[\.\-:,\?]"
 
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(regex, " ")
         elif isinstance(data, str):
             return re.sub(regex, " ", data)
@@ -135,7 +135,7 @@ class DataCleaner:
     def remove_extra_spaces(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # removes extra spaces
         regex = r"[\s]+"
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.replace(regex, " ")
         elif isinstance(data, str):
             return re.sub(regex, " ", data)
@@ -143,7 +143,7 @@ class DataCleaner:
     @staticmethod
     def trim(data: pd.DataFrame or str) -> pd.DataFrame or str:
         # spaces before and after string content.
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
             return data.str.strip()
         elif isinstance(data, str):
             return data.strip()
