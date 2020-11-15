@@ -8,7 +8,7 @@ import os
 class TweetLoader:
     def __init__(self):
         """
-        Abstraction of AngosturaLoader to programatically query Angostura's tweets tables.
+        Abstraction of AngosturaLoader to programmatically query Angostura's tweets tables.
         """
         self.angostura_loader = AngosturaLoader()
 
@@ -17,7 +17,7 @@ class TweetLoader:
     ):
         """
         Queries `angostura.meditweet_sin_luz`.
-        Recieves batch_size and number of batches to query.
+        Receives batch_size and number of batches to query.
         Yields a generator that returns the queried data.
         ----------------------------------------------------
 
