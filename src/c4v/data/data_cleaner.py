@@ -3,9 +3,8 @@ import re
 
 class DataCleaner:
     """
-    This class will provide all methods needed for cleaning the data.
+    This class will provide all methods needed for cleaning the data of type: str, pd.DataFrame or pd.Series
     """
-
     def __init__(self):
         pass
 
@@ -69,31 +68,46 @@ class DataCleaner:
             return data.replace(blank, " ")
 
     @staticmethod
-    def remove_mentions(data: pd.DataFrame or str) -> pd.DataFrame or str:
+    def remove_mentions(data: pd.DataFrame or str, replace_with_blank: bool = True) -> pd.DataFrame or str:
         # remove mentions
+        if replace_with_blank:
+            replace_mention_by = " "
+        else:
+            replace_mention_by = "MENTION"
+
         regex = r"@[\w]+"
         if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
-            return data.str.replace(regex, "MENTION")
+            return data.str.replace(regex, replace_mention_by)
         elif isinstance(data, str):
-            return re.sub(regex, "MENTION", data)
+            return re.sub(regex, replace_mention_by, data)
 
     @staticmethod
-    def remove_hashtags(data: pd.DataFrame or str) -> pd.DataFrame or str:
+    def remove_hashtags(data: pd.DataFrame or str, replace_with_blank: bool = True) -> pd.DataFrame or str:
         # hashtags
+        if replace_with_blank:
+            replace_hashtag_by = " "
+        else:
+            replace_hashtag_by = "HASHTAG"
+
         regex = r"#[\w\d]+"
         if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
-            return data.str.replace(regex, "HASHTAG")
+            return data.str.replace(regex, replace_hashtag_by)
         elif isinstance(data, str):
-            return re.sub(regex, "HASHTAG", data)
+            return re.sub(regex, replace_hashtag_by, data)
 
     @staticmethod
-    def remove_urls(data: pd.DataFrame or str) -> pd.DataFrame or str:
+    def remove_urls(data: pd.DataFrame or str, replace_with_blank: bool = True) -> pd.DataFrame or str:
         # remove url: http links
+        if replace_with_blank:
+            replace_link_by = " "
+        else:
+            replace_link_by = "LINK"
+
         regex = r"https?://[\.\w\/\-=&?%\d]+"
         if isinstance(data, pd.DataFrame) or isinstance(data, pd.Series):
-            return data.str.replace(regex, "LINK")
+            return data.str.replace(regex, replace_link_by)
         elif isinstance(data, str):
-            return re.sub(regex, "LINK", data)
+            return re.sub(regex, replace_link_by, data)
 
     @staticmethod
     def remove_some_punctuation(
@@ -150,7 +164,7 @@ class DataCleaner:
 
 
     @staticmethod
-    def data_prep_4_vocab(df: pd.DataFrame) -> pd.DataFrame:
+    def data_prep_4_vocab(df: pd.DataFrame, replace_with_blank=True) -> pd.DataFrame:
         """
         This method provides preprocessing cleaning steps to prepare data for the vocabulary generation.
         Taking a panda DataFrame and returning the same object with all modifications applied.
@@ -161,13 +175,13 @@ class DataCleaner:
         df = DataCleaner.convert_common_spanish_accents_n_tilde(df)
 
         # Remove links
-        df = DataCleaner.remove_urls(df)
+        df = DataCleaner.remove_urls(df, replace_with_blank=replace_with_blank)
 
         # Remove mentions
-        df = DataCleaner.remove_mentions(df)
+        df = DataCleaner.remove_mentions(df, replace_with_blank=replace_with_blank)
 
         # Remove hashtags
-        df = DataCleaner.remove_hashtags(df)
+        df = DataCleaner.remove_hashtags(df, replace_with_blank=replace_with_blank)
 
         # Remove Emojis
         df = DataCleaner.remove_emojis(df)
