@@ -2,6 +2,10 @@ from c4v.data.data_cleaner import DataCleaner
 import pandas as pd
 
 
+FULL_TEXT_LABEL = "full_text"
+PATH_TO_SAMPLE_CORPUS = "../../data/raw/tweets/tagging-set-original_for_jupyter_tagging.csv"
+
+
 def test_set_lowercase():
     sentence_to_convert = "La MaRaCuchA"
     sentence_converted = "la maracucha"
@@ -34,18 +38,36 @@ def test_remove_newlines():
 def test_remove_mentions():
     sentence_to_convert = "La culpa es   de @CorpoElec."
     sentence_converted = "La culpa es   de MENTION."
+    assert DataCleaner.remove_mentions(sentence_to_convert, replace_with_blank=False) == sentence_converted
+
+
+def test_remove_mentions2():
+    sentence_to_convert = "La culpa es   de @CorpoElec."
+    sentence_converted = "La culpa es   de  ."
     assert DataCleaner.remove_mentions(sentence_to_convert) == sentence_converted
 
 
 def test_remove_hashtags():
     sentence_to_convert = "#sinLuz"
     sentence_converted = "HASHTAG"
+    assert DataCleaner.remove_hashtags(sentence_to_convert, replace_with_blank=False) == sentence_converted
+
+
+def test_remove_hashtags2():
+    sentence_to_convert = "#sinLuz"
+    sentence_converted = " "
     assert DataCleaner.remove_hashtags(sentence_to_convert) == sentence_converted
 
 
 def test_remove_urls():
     sentence_to_convert = "el link es: https://www.geeksforgeeks.org/python-operators/?v=1&v=2&name=Diego%20Gimenez y ya no hay mas links"
     sentence_converted = "el link es: LINK y ya no hay mas links"
+    assert DataCleaner.remove_urls(sentence_to_convert, replace_with_blank=False) == sentence_converted
+
+
+def test_remove_urls2():
+    sentence_to_convert = "el link es: https://www.geeksforgeeks.org/python-operators/?v=1&v=2&name=Diego%20Gimenez y ya no hay mas links"
+    sentence_converted = "el link es:   y ya no hay mas links"
     assert DataCleaner.remove_urls(sentence_to_convert) == sentence_converted
 
 
@@ -89,50 +111,17 @@ def test_trim():
     sentence_converted = "La cosa es asi"
     assert DataCleaner.trim(sentence_to_convert) == sentence_converted
 
-#
-# def test_data_prep_4_vocab():
-#     df_to_convert = {
-#         "text": [
-#             "úùüóòíìéèáàñ",
-#             "@NicolasMaduro fuerza nada #arranque",
-#             "#sinluz apagon #sinagua muy mal   ",
-#             "así son las cosas, î",
-#             "un emoji   desde algun apagina en internet    https://un.link/largo/con/varias/cosas?y=queries&mas=cosas%20s1"
-#         ]
-#     }
-#     df_converted = {
-#         "text": [
-#             "uuuooiieeaan",
-#             "MENTION fuerza nada HASHTAG",
-#             "HASHTAG apagon HASHTAG muy mal",
-#             "asi son las cosas, î",
-#             "un emoji desde algun apagina en internet LINK"
-#         ]
-#     }
-#     assert DataCleaner.data_prep_4_vocab(pd.DataFrame(df_to_convert)) == pd.DataFrame(df_converted)
-#
-#
-# def test_data_prep_4_annotate():
-#     df_to_convert = {
-#         "text":[
-#             "úùüóòíìéèáàñ",
-#             "",
-#             "",
-#             "",
-#             "",
-#             "",
-#             ""
-#         ]
-#     }
-#     df_converted = {
-#         "text":[
-#             "uuuooiieeaan",
-#             "",
-#             "",
-#             "",
-#             "",
-#             "",
-#             ""
-#         ]
-#     }
-#     assert DataCleaner.data_prep_4_annotate(pd.DataFrame(df_to_convert)) == pd.DataFrame(df_converted)
+
+def test_show_cleaned_data():
+
+    raw_data = pd.read_csv(PATH_TO_SAMPLE_CORPUS)
+    cleaned_data = DataCleaner.data_prep_4_vocab(raw_data[FULL_TEXT_LABEL], replace_with_blank=False)
+
+    # show the tweets after they have been "cleaned"
+    for tweet, clean_tweet in zip(
+        raw_data[FULL_TEXT_LABEL].to_list(), cleaned_data.to_list()
+    ):
+        print("---<START>")
+        print("\t", tweet)
+        print("\t", clean_tweet)
+        print("<END>---")
