@@ -1,5 +1,9 @@
 # C4V-Py
 
+- [Installation](#installation)
+- [Development](#development)
+- [Pending](#pending)
+
 ## Installation
 
 Use pip to install the package:
