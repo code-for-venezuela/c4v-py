@@ -20,10 +20,8 @@ At first, if the input is CSV, this can be a simple csv uploader script.
 2. Angostura does it’s processing and persists the data to a big query table
 
 3. A task defined in airflow queries for yet-to-be-enriched data and proceeds to scrape.
-It then persists the output to either
-    * The same table - inserting the scraped data in the relevant column.
-    * A new table, which has then all the fields and no nullable fields.
-
+It can then persists the output to the table that classification workflow(s) will start from. 
+   
     More on this job below. 
 
 * Any further tasks such as cleaning and classification can be done further along the pipeline.
