@@ -57,5 +57,13 @@ A sample design can simply be to:
 
 This is modularised, and lets us write specific scrapers for specific sources easily and independently of each other. We can only start with a few scrapers for specific, high-priority data sources.
 
+**Picking the first source to write a scraper for**
 
+From the excel [_TODO: add link_] that was provided by the partner NGO, we've worked out that the following distribution of sources:
+
+![top_20_sources](../images/top_20_sources_osvp_excel.png)
+
+This suggests that we should start writing a scraper for [El Pitazo](https://elpitazo.net/) first. 
+
+Of course, we should confirm with the _servicios publicos_ team what they and the ngo see as the highest priority sources. 
 
