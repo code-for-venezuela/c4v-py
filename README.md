@@ -1,4 +1,13 @@
-# C4V-Py
+# c4v-py
+
+<p align="center">
+  <img width="125" src="assets/logo.png">
+</p>
+
+> Solving Venezuela pressing matters one commmit at a time
+
+`c4v-py` is a library used to address Venezuela's pressing issues
+using computer and data science.
 
 ## Installation
 
