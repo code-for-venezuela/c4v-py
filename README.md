@@ -50,7 +50,7 @@ The main difference lies in the source code itself which is not constraint to da
 7. Install nox
 8. From `c4v-py` directory, on your terminal, run the command `nox -s tests` to make sure all the tests run.
 
-If you were able to follow every step with no error, you are ready to start contributing.
+If you were able to follow every step with no error, you are ready to start contributing. Otherwise, [open a new issue](https://github.com/code-for-venezuela/c4v-py/issues/new/choose)!
 
 ## Pending
 
