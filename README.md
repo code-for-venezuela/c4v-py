@@ -52,20 +52,25 @@ The main difference lies in the source code itself which is not constraint to da
 
 If you were able to follow every step with no error, you are ready to start contributing. Otherwise, [open a new issue](https://github.com/code-for-venezuela/c4v-py/issues/new/choose)!
 
-## Pending
+## Roadmap
 
+- [ ] Add CONTRIBUTING guidelines
+- [ ] Add issue templates
+- [ ] Document where to find things (datasets, more info, etc.)
+  - This might be done (in conjunction) with Github Projects. Managing tasks there might be a good idea.
+- [ ] Add LICENSE
 - [ ] Change the authors field in pyproject.toml
-- [ ] Change the repository field in pyproject.toml 
+- [ ] Change the repository field in pyproject.toml
 - [ ] Move the content below to a place near to the data in the data folder or use the reference folder.
-Check [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data-science/) for details.
+      Check [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data-science/) for details.
 - [ ] Understand what is in the following folders and decide what to do with them.
-    - [ ] brat-v1.3_Crunchy_Frog
-    - [ ] creating_models
-    - [X] data/data_to_annotate
-    - [ ] data_analysis
-- [ ] Set symbolic links between `brat-v1.3_Crunchy_Frog/data` and `data/data_to_annotate`.  `data_sampler` extracts to `data/data_to_annotate`.  Files placed here are read by Brat.
-    - [ ] Download Brat - `wget https://brat.nlplab.org/index.html`
-    - [ ] untar brat - `tar -xzvf brat-v1.3_Crunchy_Frog.tar.gz`
-    - [ ] install brat - `cd brat-v1.3_Crunchy_Frog && ./install.sh`
-    - [ ] replace default annotation conf for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/annotation.conf -O annotation.conf`
-    - [ ] replace default config.py for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/config.py -O config.py`
+  - [ ] brat-v1.3_Crunchy_Frog
+  - [ ] creating_models
+  - [x] data/data_to_annotate
+  - [ ] data_analysis
+- [ ] Set symbolic links between `brat-v1.3_Crunchy_Frog/data` and `data/data_to_annotate`. `data_sampler` extracts to `data/data_to_annotate`. Files placed here are read by Brat.
+  - [ ] Download Brat - `wget https://brat.nlplab.org/index.html`
+  - [ ] untar brat - `tar -xzvf brat-v1.3_Crunchy_Frog.tar.gz`
+  - [ ] install brat - `cd brat-v1.3_Crunchy_Frog && ./install.sh`
+  - [ ] replace default annotation conf for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/annotation.conf -O annotation.conf`
+  - [ ] replace default config.py for current configuration - `wget https://raw.githubusercontent.com/dieko95/c4v-py/master/brat-v1.3_Crunchy_Frog/config.py -O config.py`
