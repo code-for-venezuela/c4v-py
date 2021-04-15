@@ -12,13 +12,22 @@ using computer and data science.
 ## Installation
 
 Use pip to install the package:
-```
+
+```python3
 pip install c4v-py
 ```
 
-## Development
+## Usage
+
+_TODO_
+
+[Can you help us? Open a new issue in
+minutes!](https://github.com/code-for-venezuela/c4v-py/issues/new/choose)
+
+## Contributing
 
 The following tools are used in this project:
+
 - [Poetry](https://python-poetry.org/) is used as package manager.
 - [Nox](https://nox.thea.codes/) is used as automation tool, mainly for testing.
 - [Black](https://black.readthedocs.io/) is the mandatory formatter tool.
@@ -30,8 +39,9 @@ The general structure of the project is trying to follow the recommendations
 in [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data-science/).
 The main difference lies in the source code itself which is not constraint to data science code.
 
-### Setting up your machine to contribute
-1. Install pyenv and select a version, ie: 3.8.2.  Once installed run `pyenv install 3.8.2`
+### Setup
+
+1. Install pyenv and select a version, ie: 3.8.2. Once installed run `pyenv install 3.8.2`
 2. Install poetry in your system
 3. Clone this repo in a desired location `git clone https://github.com/code-for-venezuela/c4v-py.git`
 4. Navigate to the folder `cd c4v-py`
