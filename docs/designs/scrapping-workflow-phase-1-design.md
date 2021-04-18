@@ -14,12 +14,11 @@
 _Goal_: Leverage existing angostura infrastructure as much as possible
 ![image](../images/scrapping-workflow-phase-1-design.png)
 
-1. A custom written data uploader processes NGO submitted data and emits the events to the Angostura proxy gate.
-At first, if the input is CSV, this can be a simple csv uploader script.
+1. We upload the training data to big query.
+    - Can be done in different ways. Easiest seems to be to upload the excel to google sheets, and import it into bigquery from there.
+    - [This link](https://cloud.google.com/blog/products/gcp/how-to-crunch-your-business-data-from-sheets-in-bigquery) seems to describe a process to do just that.
 
-2. Angostura does it’s processing and persists the data to a big query table
-
-3. A task defined in airflow queries for yet-to-be-enriched data and proceeds to scrape.
+2. A task defined in airflow queries for yet-to-be-enriched data and proceeds to scrape.
 It can then persists the output to the table that classification workflow(s) will start from. 
    
     More on this job below. 
