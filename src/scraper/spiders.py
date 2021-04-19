@@ -6,7 +6,7 @@ from re import S
 import scrapy
 
 #Project imports
-import scrapper.utils as utils
+import scraper.utils as utils
 
 #Python imports
 from typing import List
