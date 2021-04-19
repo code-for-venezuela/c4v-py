@@ -2,7 +2,6 @@
     This file exports every spider or scrapper implementation for each site.
 """
 # external imports
-from re import S
 import scrapy
 
 #Project imports

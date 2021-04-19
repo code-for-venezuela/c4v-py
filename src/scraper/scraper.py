@@ -1,5 +1,5 @@
 """
-    
+    Main module interface
 """
 from scrapy.crawler import CrawlerProcess
 from scrapy         import signals
@@ -19,13 +19,21 @@ def scrape(url : str) -> List[dict]:
             A list of dict objects, each describing the data that could be 
             extracted for this url. Obtained data depends on the url itself, 
             so available data may change depending on the scrapped url.
+            Dict format:
+             {
+                 "url" : (str) url where the data came from,
+                 "data": (dict) Data scraped for this url
+             }
     """
     # Items accumulator
     items = []
     
     # callback function to collect items on the fly
     def items_scrapped(item, response, spider): 
-        items.append(item)
+        items.append({ 
+            "url" : response._url,
+            "data" : item 
+            })
 
     # Get corresponding spider from url
     spider = _get_spider_from_url(url)
