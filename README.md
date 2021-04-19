@@ -9,6 +9,10 @@
 `c4v-py` is a library used to address Venezuela's pressing issues
 using computer and data science.
 
+- [Installation](#installation)
+- [Development](#development)
+- [Pending](#pending)
+
 ## Installation
 
 Use pip to install the package:
