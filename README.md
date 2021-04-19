@@ -35,10 +35,10 @@ If you were able to follow every step with no error, you are ready to start cont
 
 ### In case of trouble
 
-If you have problems between python version due to clashes between pyenv and virtualenv, you could use the following solution:
+If you have problems with python versions due to clashes between pyenv and virtualenv, you could use the following solution:
 
 * Look for the python version installed by pyenv, by default in `/home/myuser/.pyenv/versions/<version number>/bin/python`
-* run `mkvirtualenv -p=<python version path found in previous step> myenv`
+* Run `mkvirtualenv -p=<python version path found in previous step> myenv`
 * Use created environment when working in the project.
 
 ## Pending
