@@ -35,6 +35,8 @@ pandas = "1.0.5"
 nltk = "^3.5"
 google-cloud-bigquery = "1.25.0"
 tensorflow-cpu = "2.3.1"
+Scrapy = "^2.5.0"
+autifulsoup4 = "^4.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
