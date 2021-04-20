@@ -2,13 +2,14 @@
     Main module interface
 """
 from scrapy.crawler import CrawlerProcess
-from scrapy         import signals
-from typing         import List
-from .settings      import URL_TO_SPIDERS, CRAWLER_SETTINGS
+from scrapy import signals
+from typing import List
+from .settings import URL_TO_SPIDERS, CRAWLER_SETTINGS
 
 _process = CrawlerProcess(CRAWLER_SETTINGS)
 
-def scrape(url : str) -> List[dict]:
+
+def scrape(url: str) -> List[dict]:
     """
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
@@ -27,13 +28,10 @@ def scrape(url : str) -> List[dict]:
     """
     # Items accumulator
     items = []
-    
+
     # callback function to collect items on the fly
-    def items_scrapped(item, response, spider): 
-        items.append({ 
-            "url" : response._url,
-            "data" : item 
-            })
+    def items_scrapped(item, response, spider):
+        items.append({"url": response._url, "data": item})
 
     # Get corresponding spider from url
     spider = _get_spider_from_url(url)
@@ -50,7 +48,8 @@ def scrape(url : str) -> List[dict]:
     # return post processed scrapped objects
     return items
 
-def _get_spider_from_url(url : str):
+
+def _get_spider_from_url(url: str):
     """
         Validates if this url is scrapable and returns its 
         corresponding spider when it is

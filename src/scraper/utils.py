@@ -3,7 +3,8 @@
 """
 from bs4 import BeautifulSoup
 
-def clean(element : str) -> str:
+
+def clean(element: str) -> str:
     """
         Get text from a html formated string
         Parameters:
@@ -13,10 +14,11 @@ def clean(element : str) -> str:
     """
 
     # use BeautifulSoup to clean string
-    soup = BeautifulSoup(element, 'lxml')
+    soup = BeautifulSoup(element, "lxml")
     return soup.get_text()
 
-def get_element_text(selector : str, response) -> str:
+
+def get_element_text(selector: str, response) -> str:
     """
         Return cleaned text from an element selected by "selector".
         May return None if element was not found
@@ -35,6 +37,6 @@ def get_element_text(selector : str, response) -> str:
         return None
 
     # clean from html tags
-    soup = BeautifulSoup(value.get(), 'html')
+    soup = BeautifulSoup(value.get(), "html")
 
     return soup.get_text()

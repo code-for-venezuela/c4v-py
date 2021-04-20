@@ -4,11 +4,11 @@
 """
 import scraper.spiders as spiders
 
-# Dict with information to map from domain to 
+# Dict with information to map from domain to
 # Spider
 URL_TO_SPIDERS = {
-    "elpitazo.net" : spiders.ElPitazoSpider,
+    "elpitazo.net": spiders.ElPitazoSpider,
 }
 
 # Settings passed to the crawler
-CRAWLER_SETTINGS = {"LOG_ENABLED" : True} 
+CRAWLER_SETTINGS = {"LOG_ENABLED": True}
