@@ -2,13 +2,10 @@
     This file manages multiple settings shared across the scrapper,
     such as mappings from urls to spiders
 """
-import scraper.spiders as spiders
+from scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 
 # Dict with information to map from domain to
 # Spider
-URL_TO_SPIDERS = {
-    "elpitazo.net": spiders.ElPitazoSpider,
+URL_TO_SCRAPER = {
+    "elpitazo.net": ElPitazoScraper,
 }
-
-# Settings passed to the crawler
-CRAWLER_SETTINGS = {"LOG_ENABLED": True}

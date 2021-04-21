@@ -1,15 +1,15 @@
 """
     Main module interface
 """
-from scrapy.crawler import CrawlerProcess
-from scrapy import signals
-from typing import List
-from .settings import URL_TO_SPIDERS, CRAWLER_SETTINGS
+from typing import List, Type
 
-_process = CrawlerProcess(CRAWLER_SETTINGS)
+import scrapy
+
+from scraper.scrapers.base_scraper import BaseScraper
+from .settings import URL_TO_SCRAPER
 
 
-def scrape(url: str) -> List[dict]:
+def scrape(url: str) -> dict:
     """
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
@@ -17,7 +17,7 @@ def scrape(url: str) -> List[dict]:
         Params:
             + url - str : Url to scrape
         Return:
-            A list of dict objects, each describing the data that could be 
+            A dict object, each describing the data that could be 
             extracted for this url. Obtained data depends on the url itself, 
             so available data may change depending on the scrapped url.
             Dict format:
@@ -26,37 +26,49 @@ def scrape(url: str) -> List[dict]:
                  "data": (dict) Data scraped for this url
              }
     """
-    # Items accumulator
+    scraper = _get_scraper_from_url(url)()
+    return scraper.scrape(url)
+
+
+def bulk_scrape(urls: List[str]) -> List[dict]:
+    """
+        Performs a bulk scraping over a list of urls.
+        Order in the item list it's not guaranteed to be
+        the same as in the input list
+
+        Parameters:
+            + urls : [str] = Urls to be scraped
+        Return:
+            A list of items scraped for each url in the original list
+    """
+
     items = []
+    scrapers = {}
+    for url in urls:
+        # Classify urls to its according scraper
+        scraper = _get_scraper_from_url(url)
 
-    # callback function to collect items on the fly
-    def items_scrapped(item, response, spider):
-        items.append({"url": response._url, "data": item})
+        if not (url_list := scrapers.get(scraper)):
+            url_list = scrapers[scraper] = []
 
-    # Get corresponding spider from url
-    spider = _get_spider_from_url(url)
-    spider.start_urls = [url]
+        url_list.append(url)
 
-    # create crawler for this spider, connect signal so we can collect items
-    crawler = _process.create_crawler(spider)
-    crawler.signals.connect(items_scrapped, signal=signals.item_scraped)
+    # Bulk scrape urls
+    for (scraper, url_list) in scrapers.items():
+        s = scraper()  # Create a new scraper instance
+        items.extend(s.bulk_scrape(url_list))
 
-    # start scrapping
-    _process.crawl(crawler)
-    _process.start()
-
-    # return post processed scrapped objects
     return items
 
 
-def _get_spider_from_url(url: str):
+def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
     """
         Validates if this url is scrapable and returns its 
         corresponding spider when it is
     """
 
-    for known_url in URL_TO_SPIDERS.keys():
+    for known_url in URL_TO_SCRAPER.keys():
         if known_url in url:
-            return URL_TO_SPIDERS[known_url]
+            return URL_TO_SCRAPER[known_url]
 
     raise ValueError(f"Unable to scrap this site: {url}")
