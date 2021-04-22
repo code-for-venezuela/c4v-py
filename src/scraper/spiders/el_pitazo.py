@@ -41,7 +41,7 @@ class ElPitazoSpider(scrapy.Spider):
 
         # categories
         categories = response.css(".tdb-entry-category").getall()
-        categories = list(map(utils.clean, categories))
+        categories = list(map(utils.strip_http_tags, categories))
 
         return {
             "title": title,
@@ -57,15 +57,18 @@ class ElPitazoSpider(scrapy.Spider):
             Get article body as a single string
         """
         body = response.css("#bsf_rt_marker > p").getall()
-        body = map(utils.clean, body)
-        body = "".join(body)
+        body = filter(lambda p: p.startswith("<p>") and p.endswith("</p>"), body)
+        body = map(utils.strip_http_tags, body)
 
-        return body
+
+        body = "\n".join(body)
+
+        return body.strip()
 
     def _get_tags(self, response) -> List[str]:
         """
             Try to get tags from document if available
         """
         tags = response.css(".tdb-tags > li > a").getall()
-        tags = list(map(utils.clean, tags))
+        tags = list(map(utils.strip_http_tags, tags))
         return tags

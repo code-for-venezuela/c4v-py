@@ -1,24 +1,21 @@
-# TODO move tests out this module when approved.
-
-from scraper.tests.utils import fake_response_from_file
-from scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
+import scraper.spider_manager as spider_manager
+from scraper.spiders.el_pitazo import ElPitazoSpider
+import scraper.tests.utils as utils
 from scraper.settings import ROOT_DIR
 import os
 
 
-def test_parse_ok():
-    """
-        Check that ElPitazoScraper parses a valid page as expected
-    """
-    url = "tests/html_bodies/el_pitazo_fallas_electricas_carne.html"
-    test_file = os.path.join(ROOT_DIR, url)
-    response = fake_response_from_file(
+def test_spider_parse():
+    file = "tests/html_bodies/el_pitazo_fallas_electricas_carne.html"
+    test_file = os.path.join(ROOT_DIR, file)
+    response = utils.fake_response_from_file(
         test_file,
         "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
     )
 
-    scraper = ElPitazoScraper()
-    parse_output = scraper.parse(response)
+    manager = spider_manager.SpiderManager(ElPitazoSpider)
+
+    parse_output = manager.parse(response)
 
     assert parse_output["body"] == get_body_for_parse_ok(), "body does not match"
     assert (
