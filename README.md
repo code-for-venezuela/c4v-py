@@ -10,8 +10,8 @@
 using computer and data science.
 
 - [Installation](#installation)
-- [Development](#development)
-- [Pending](#pending)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
 
 ## Installation
 
