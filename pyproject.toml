@@ -35,7 +35,6 @@ pandas = "1.0.5"
 nltk = "^3.5"
 google-cloud-bigquery = "1.25.0"
 tensorflow-cpu = "2.3.1"
-tensorflow-datasets = "^4.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
