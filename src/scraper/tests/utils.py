@@ -1,4 +1,3 @@
-import encodings
 from scrapy.http import Request, Response, HtmlResponse
 
 

@@ -1,12 +1,14 @@
 """
     Main module interface
 """
-from typing import List, Type
 
-import scrapy
-
+# Local imports
 from scraper.scrapers.base_scraper import BaseScraper
 from .settings import URL_TO_SCRAPER
+from scraper.utils import get_domain_from_url, valid_url
+
+# Python imports
+from typing import List, Type
 
 
 def scrape(url: str) -> dict:
@@ -67,8 +69,12 @@ def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
         corresponding spider when it is
     """
 
-    for known_url in URL_TO_SCRAPER.keys():
-        if known_url in url:
-            return URL_TO_SCRAPER[known_url]
+    if not valid_url(url):
+        raise ValueError(f"This is not a valid url: {url}")
 
-    raise ValueError(f"Unable to scrap this site: {url}")
+    domain = get_domain_from_url(url)
+
+    if not (scraper := URL_TO_SCRAPER.get(domain)):
+        raise ValueError(f"Unable to scrap this url: {url}")
+
+    return scraper

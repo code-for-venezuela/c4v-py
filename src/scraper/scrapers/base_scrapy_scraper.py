@@ -41,13 +41,10 @@ class BaseScrapyScraper(BaseScraper):
         self._spider_manager = SpiderManager(self.spider)
 
     def parse(self, response) -> dict:
-        # Delegate parse function to scrapy implementation
         return self._spider_manager.parse(response)
 
     def scrape(self, url: str) -> dict:
-        # Delegate scrape function to scrapy implementation
         return self._spider_manager.scrape(url)
 
     def bulk_scrape(self, urls: List[str]) -> List[dict]:
-        # Delegate bulk_scrape function to scrapy implementation
         return self._spider_manager.bulk_scrape(urls)

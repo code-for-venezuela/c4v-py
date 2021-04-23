@@ -20,7 +20,6 @@ class SpiderManager:
 
     def __init__(self, spider) -> None:
         self.spider = spider
-        pass
 
     def parse(self, response) -> dict:
         """

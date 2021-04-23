@@ -60,7 +60,6 @@ class ElPitazoSpider(scrapy.Spider):
         body = filter(lambda p: p.startswith("<p>") and p.endswith("</p>"), body)
         body = map(utils.strip_http_tags, body)
 
-
         body = "\n".join(body)
 
         return body.strip()

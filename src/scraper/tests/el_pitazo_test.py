@@ -1,4 +1,4 @@
-# TODO move tests out this module when approved.
+# TODO move tests out of this module when approved.
 
 from scraper.tests.utils import fake_response_from_file
 from scraper.scrapers.el_pitazo_scraper import ElPitazoScraper

@@ -1,6 +1,4 @@
-from sys import stderr
 from scraper.utils import *
-from scrapy.http import Request, HtmlResponse, request
 from scraper.tests import utils
 
 
@@ -27,6 +25,33 @@ def test_get_text():
     assert get_element_text(".c1 > p", fake_response) == "tangananina"
     assert get_element_text(".c2 > span", fake_response) == "tanganana"
     assert get_element_text("ul", fake_response) == "arepapernilmondongo"
+
+
+def test_get_domain_from_url():
+    expected_domain1 = "www.codeforvenezuela.org"
+    expected_domain2 = "www.google.com"
+    expected_domain3 = "elpitazo.net"
+    url1 = "https://www.codeforvenezuela.org"
+    url2 = "https://www.codeforvenezuela.org/about-us"
+    url3 = "https://www.google.com/search?client=opera-gx&q=google&sourceid=opera&ie=UTF-8&oe=UTF-8"
+    url4 = "https://elpitazo.net/occidente/trabajadores-de-ambulatorio-en-ciudad-ojeda-duermen-en-colchonetas-por-cortes-de-luz/"
+
+    assert get_domain_from_url(url1) == expected_domain1
+    assert get_domain_from_url(url2) == expected_domain1
+    assert get_domain_from_url(url3) == expected_domain2
+    assert get_domain_from_url(url4) == expected_domain3
+
+
+def test_valid_url():
+    url1 = "wwww.google.com"
+    url2 = "https://www.google.com/search?client=opera-gx&q=cats&sourceid=opera&ie=UTF-8&oe=UTF-8"
+    url3 = "elpitazo.com"
+    url4 = "a"
+
+    assert valid_url(url1) == False
+    assert valid_url(url2)
+    assert valid_url(url3) == False
+    assert valid_url(url4) == False
 
 
 def get_dummy_response():
