@@ -3,7 +3,7 @@ import pandas as pd
 
 
 FULL_TEXT_LABEL = "full_text"
-PATH_TO_SAMPLE_CORPUS = "../../data/raw/tweets/tagging-set-original_for_jupyter_tagging.csv"
+PATH_TO_SAMPLE_CORPUS = "data/raw/tweets/tagging-set-original_for_jupyter_tagging.csv"
 
 
 def test_set_lowercase():
