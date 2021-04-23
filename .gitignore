@@ -40,4 +40,6 @@
 /.pytest_cache
 /.coverage*
 
+
+# key
 angostura_connection.json
