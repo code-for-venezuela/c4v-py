@@ -8,10 +8,10 @@ from .settings import URL_TO_SCRAPER
 from scraper.utils import get_domain_from_url, valid_url
 
 # Python imports
-from typing import List, Type
+from typing import List, Type, Dict, Any
 
 
-def scrape(url: str) -> dict:
+def scrape(url: str) -> Dict[str, Any]:
     """
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
@@ -32,7 +32,7 @@ def scrape(url: str) -> dict:
     return scraper.scrape(url)
 
 
-def bulk_scrape(urls: List[str]) -> List[dict]:
+def bulk_scrape(urls: List[str]) -> List[Dict[str, Any]]:
     """
         Performs a bulk scraping over a list of urls.
         Order in the item list it's not guaranteed to be

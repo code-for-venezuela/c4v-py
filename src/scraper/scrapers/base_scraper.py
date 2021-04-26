@@ -9,7 +9,7 @@
 """
 
 # Python imports
-from typing import List
+from typing import List, Dict, Any
 
 
 class BaseScraper:
@@ -17,7 +17,7 @@ class BaseScraper:
         Base class for scrapers implementations
     """
 
-    def parse(self, response) -> dict:
+    def parse(self, response) -> Dict[str, Any]:
         """
             return scraped data from a response object 
             Parameters:
@@ -28,7 +28,7 @@ class BaseScraper:
         """
         pass
 
-    def scrape(self, url: str) -> dict:
+    def scrape(self, url: str) -> Dict[str, Any]:
         """
             return scraped data from url.
             Parameters: 
@@ -39,7 +39,7 @@ class BaseScraper:
         """
         pass
 
-    def bulk_scrape(self, urls: List[str]) -> List[dict]:
+    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
         """
             Return scraped data for a list of urls. Override it 
             if your scraper implementation could handle an optimized

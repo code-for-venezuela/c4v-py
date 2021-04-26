@@ -5,7 +5,7 @@ import scraper.utils as utils
 import scrapy
 
 # Python imports
-from typing import List
+from typing import List, Dict, Any
 
 
 class ElPitazoSpider(scrapy.Spider):
@@ -17,7 +17,7 @@ class ElPitazoSpider(scrapy.Spider):
 
     start_urls = []
 
-    def parse(self, response):
+    def parse(self, response) -> Dict[str, Any]:
         """
             Returns a dict like structure with the following 
             fields:

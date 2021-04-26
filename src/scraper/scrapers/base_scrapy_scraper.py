@@ -17,7 +17,7 @@ from scraper.scrapers.base_scraper import BaseScraper
 from scraper.spider_manager import SpiderManager
 
 # Python imports
-from typing import Type, List
+from typing import Type, List, Dict, Any
 
 
 class BaseScrapyScraper(BaseScraper):
@@ -40,11 +40,11 @@ class BaseScrapyScraper(BaseScraper):
 
         self._spider_manager = SpiderManager(self.spider)
 
-    def parse(self, response) -> dict:
+    def parse(self, response) -> Dict[str, Any]:
         return self._spider_manager.parse(response)
 
-    def scrape(self, url: str) -> dict:
+    def scrape(self, url: str) -> Dict[str, Any]:
         return self._spider_manager.scrape(url)
 
-    def bulk_scrape(self, urls: List[str]) -> List[dict]:
+    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
         return self._spider_manager.bulk_scrape(urls)

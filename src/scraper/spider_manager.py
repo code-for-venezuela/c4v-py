@@ -7,7 +7,7 @@ import scrapy.signals
 import scraper.scrapy_settings as settings
 
 # Python imports
-from typing import List
+from typing import List, Dict, Any
 
 
 class SpiderManager:
@@ -21,7 +21,7 @@ class SpiderManager:
     def __init__(self, spider) -> None:
         self.spider = spider
 
-    def parse(self, response) -> dict:
+    def parse(self, response) -> Dict[str, Any]:
         """
             return scraped data from a valid response
             Parameters: 
@@ -32,7 +32,7 @@ class SpiderManager:
         spider = self.spider()
         return spider.parse(response)
 
-    def scrape(self, url: str) -> dict:
+    def scrape(self, url: str) -> Dict[str, Any]:
         """
             Return scraped data from a single Url
             Parameters:
@@ -44,7 +44,7 @@ class SpiderManager:
 
         return scraped[0] if scraped else None
 
-    def bulk_scrape(self, urls: List[str]) -> List[dict]:
+    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
         """
             return scraped data from a list of valid URLs
             Parameters:
