@@ -4,7 +4,7 @@ from scrapy.crawler import CrawlerProcess
 import scrapy.signals
 
 # Project imports
-import scraper.scrapy_settings as settings
+import c4v.scraper.scrapy_settings as settings
 
 # Python imports
 from typing import List, Dict, Any

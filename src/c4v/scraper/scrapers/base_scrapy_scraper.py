@@ -13,8 +13,8 @@
 from scrapy import Spider
 
 # Internal imports
-from scraper.scrapers.base_scraper import BaseScraper
-from scraper.spider_manager import SpiderManager
+from c4v.scraper.scrapers.base_scraper import BaseScraper
+from c4v.scraper.spider_manager import SpiderManager
 
 # Python imports
 from typing import Type, List, Dict, Any

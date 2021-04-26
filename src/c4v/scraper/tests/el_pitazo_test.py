@@ -1,8 +1,7 @@
 # TODO move tests out of this module when approved.
-
-from scraper.tests.utils import fake_response_from_file
-from scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
-from scraper.settings import ROOT_DIR
+from c4v.scraper.tests.utils import fake_response_from_file
+from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
+from c4v.scraper.settings import ROOT_DIR
 import os
 
 

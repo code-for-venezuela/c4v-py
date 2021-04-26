@@ -1,7 +1,10 @@
-import scraper.spider_manager as spider_manager
-from scraper.spiders.el_pitazo import ElPitazoSpider
-import scraper.tests.utils as utils
-from scraper.settings import ROOT_DIR
+# Local imports
+import c4v.scraper.spider_manager   as spider_manager
+import c4v.scraper.tests.utils      as utils
+from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
+from c4v.scraper.settings          import ROOT_DIR
+
+# Python imports
 import os
 
 

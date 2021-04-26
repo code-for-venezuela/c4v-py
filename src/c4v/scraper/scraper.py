@@ -3,9 +3,9 @@
 """
 
 # Local imports
-from scraper.scrapers.base_scraper import BaseScraper
+from c4v.scraper.scrapers.base_scraper import BaseScraper
 from .settings import URL_TO_SCRAPER
-from scraper.utils import get_domain_from_url, valid_url
+from c4v.scraper.utils import get_domain_from_url, valid_url
 
 # Python imports
 from typing import List, Type, Dict, Any

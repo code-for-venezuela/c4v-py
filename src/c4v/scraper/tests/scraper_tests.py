@@ -1,5 +1,5 @@
-from scraper.scraper import _get_scraper_from_url
-from scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
+from c4v.scraper.scraper import _get_scraper_from_url
+from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 
 
 def test_get_scraper_from_url_elpitazo():

@@ -1,5 +1,5 @@
 # Internal imports
-import scraper.utils as utils
+import c4v.scraper.utils as utils
 
 # External imports
 import scrapy
