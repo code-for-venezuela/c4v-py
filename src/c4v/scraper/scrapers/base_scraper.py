@@ -17,6 +17,12 @@ class BaseScraper:
         Base class for scrapers implementations
     """
 
+    # domain to be scraped by this scraper
+    intended_domain = None
+
+    # Output type corresponding to this scraper
+    # output type = WIP
+
     def parse(self, response) -> Dict[str, Any]:
         """
             return scraped data from a response object 

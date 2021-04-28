@@ -12,4 +12,5 @@ class ElPitazoScraper(BaseScrapyScraper):
         scrapy for this.
     """
 
+    intended_domain = "elpitazo.net"
     spider = ElPitazoSpider
