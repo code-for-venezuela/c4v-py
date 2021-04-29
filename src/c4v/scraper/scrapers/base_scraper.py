@@ -8,8 +8,11 @@
            a domain name to your new scraper. Import it if necessary
 """
 
+# Local imports
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseScrapedData
+
 # Python imports
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Type
 
 
 class BaseScraper:
@@ -18,12 +21,15 @@ class BaseScraper:
     """
 
     # domain to be scraped by this scraper
-    intended_domain = None
+    intended_domain: str = None
+
+    # output format class (aka ScrapedData class) for this scraper
+    scraped_data_format: Type[BaseScrapedData] = None
 
     # Output type corresponding to this scraper
     # output type = WIP
 
-    def parse(self, response) -> Dict[str, Any]:
+    def parse(self, response) -> BaseScrapedData:
         """
             return scraped data from a response object 
             Parameters:
@@ -34,7 +40,7 @@ class BaseScraper:
         """
         pass
 
-    def scrape(self, url: str) -> Dict[str, Any]:
+    def scrape(self, url: str) -> BaseScrapedData:
         """
             return scraped data from url.
             Parameters: 
@@ -45,7 +51,7 @@ class BaseScraper:
         """
         pass
 
-    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
+    def bulk_scrape(self, urls: List[str]) -> List[BaseScrapedData]:
         """
             Return scraped data for a list of urls. Override it 
             if your scraper implementation could handle an optimized

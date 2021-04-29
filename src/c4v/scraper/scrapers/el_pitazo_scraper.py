@@ -4,6 +4,7 @@
 # Internal imports
 from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
 from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
+from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 
 
 class ElPitazoScraper(BaseScrapyScraper):
@@ -14,3 +15,4 @@ class ElPitazoScraper(BaseScrapyScraper):
 
     intended_domain = "elpitazo.net"
     spider = ElPitazoSpider
+    scraped_data_format = ElPitazoData

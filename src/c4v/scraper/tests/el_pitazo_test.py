@@ -17,16 +17,17 @@ def test_parse_ok():
     )
 
     scraper = ElPitazoScraper()
+
     parse_output = scraper.parse(response)
 
-    assert parse_output["body"] == get_body_for_parse_ok(), "body does not match"
+    assert parse_output.body == get_body_for_parse_ok(), "body does not match"
     assert (
-        parse_output["title"]
+        parse_output.title
         == "Las fallas eléctricas han disminuido la cantidad de carne que consume el venezolano"
     ), "title does not match"
-    assert parse_output["author"] == "Redacción El Pitazo", "author does not match"
-    assert parse_output["tags"] == [], "tags does not match"
-    assert set(parse_output["categories"]) == set(
+    assert parse_output.author == "Redacción El Pitazo", "author does not match"
+    assert parse_output.tags == [], "tags does not match"
+    assert set(parse_output.categories) == set(
         ["Crónicas", "Regiones"]
     ), "categorias no coinciden"
 

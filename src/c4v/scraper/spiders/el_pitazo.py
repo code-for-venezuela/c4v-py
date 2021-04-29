@@ -1,5 +1,6 @@
 # Internal imports
 import c4v.scraper.utils as utils
+from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 
 # External imports
 import scrapy
@@ -17,7 +18,7 @@ class ElPitazoSpider(scrapy.Spider):
 
     start_urls = []
 
-    def parse(self, response) -> Dict[str, Any]:
+    def parse(self, response) -> ElPitazoData:
         """
             Returns a dict like structure with the following 
             fields:
@@ -43,14 +44,14 @@ class ElPitazoSpider(scrapy.Spider):
         categories = response.css(".tdb-entry-category").getall()
         categories = list(map(utils.strip_http_tags, categories))
 
-        return {
-            "title": title,
-            "date": date,
-            "categories": categories,
-            "body": body,
-            "author": author,
-            "tags": tags,
-        }
+        return ElPitazoData(
+            body=body,
+            tags=tags,
+            categories=categories,
+            title=title,
+            author=author,
+            date=date,
+        )
 
     def _get_body(self, response) -> str:
         """

@@ -5,6 +5,7 @@ import scrapy.signals
 
 # Project imports
 import c4v.scraper.scrapy_settings as settings
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseScrapedData
 
 # Python imports
 from typing import List, Dict, Any
@@ -21,7 +22,7 @@ class SpiderManager:
     def __init__(self, spider) -> None:
         self.spider = spider
 
-    def parse(self, response) -> Dict[str, Any]:
+    def parse(self, response) -> BaseScrapedData:
         """
             return scraped data from a valid response
             Parameters: 
@@ -32,7 +33,7 @@ class SpiderManager:
         spider = self.spider()
         return spider.parse(response)
 
-    def scrape(self, url: str) -> Dict[str, Any]:
+    def scrape(self, url: str) -> BaseScrapedData:
         """
             Return scraped data from a single Url
             Parameters:
@@ -44,7 +45,7 @@ class SpiderManager:
 
         return scraped[0] if scraped else None
 
-    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
+    def bulk_scrape(self, urls: List[str]) -> List[BaseScrapedData]:
         """
             return scraped data from a list of valid URLs
             Parameters:
