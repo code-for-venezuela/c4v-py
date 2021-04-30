@@ -1,4 +1,5 @@
 # Local imports
+from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 import c4v.scraper.spider_manager as spider_manager
 import c4v.scraper.tests.utils as utils
 from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
@@ -18,7 +19,7 @@ def test_spider_parse():
 
     manager = spider_manager.SpiderManager(ElPitazoSpider)
 
-    parse_output = manager.parse(response)
+    parse_output: ElPitazoData = manager.parse(response)
 
     assert parse_output.body == get_body_for_parse_ok(), "body does not match"
     assert (

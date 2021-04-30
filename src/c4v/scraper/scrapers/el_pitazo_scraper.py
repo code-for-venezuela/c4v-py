@@ -15,4 +15,3 @@ class ElPitazoScraper(BaseScrapyScraper):
 
     intended_domain = "elpitazo.net"
     spider = ElPitazoSpider
-    scraped_data_format = ElPitazoData

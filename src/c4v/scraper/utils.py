@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 # local imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
-from c4v.scraper.scraped_data_classes.base_scraped_data import BaseScrapedData
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 
 # Python imports
 import re
@@ -98,28 +98,3 @@ def check_scraper_consistency(scraper: Type[BaseScraper]):
     assert scraper.intended_domain != None and isinstance(
         scraper.intended_domain, str
     ), f"Scraper {scraper} does not provide intended_domain"
-
-    assert (
-        scraper.scraped_data_format != None
-    ), f"Scraper {scraper} does not provide a valid data format"
-
-
-def get_scheme_factory(scrapers: List[Type[BaseScraper]]) -> Any:
-    """
-        Return the final schema after unifyieng every scraper 
-    """
-    fields = {}
-    for scraper in scrapers:
-        names_and_types = map(
-            lambda f: (f.name, f.type), dataclasses.fields(scraper.scraped_data_format)
-        )
-
-        for (name, type_hint) in names_and_types:
-            fields[name] = type_hint
-
-    X = dataclasses.make_dataclass("Scheme", fields.items())
-
-    def scheme_factory():
-        return X
-
-    return scheme_factory

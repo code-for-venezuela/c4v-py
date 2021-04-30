@@ -4,6 +4,7 @@
 
 # Local imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from .settings import URL_TO_SCRAPER
 from c4v.scraper.utils import get_domain_from_url, valid_url
 
@@ -11,7 +12,7 @@ from c4v.scraper.utils import get_domain_from_url, valid_url
 from typing import List, Type, Dict, Any
 
 
-def scrape(url: str) -> Dict[str, Any]:
+def scrape(url: str) -> ScrapedData:
     """
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
@@ -32,7 +33,7 @@ def scrape(url: str) -> Dict[str, Any]:
     return scraper.scrape(url)
 
 
-def bulk_scrape(urls: List[str]) -> List[Dict[str, Any]]:
+def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
     """
         Performs a bulk scraping over a list of urls.
         Order in the item list it's not guaranteed to be

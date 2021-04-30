@@ -15,7 +15,7 @@ from scrapy import Spider
 # Internal imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.spider_manager import SpiderManager
-from c4v.scraper.scraped_data_classes.base_scraped_data import BaseScrapedData
+from c4v.scraper.scraped_data_classes.base_scraped_data import ScrapedData
 
 # Python imports
 from typing import Type, List, Dict, Any
@@ -41,11 +41,14 @@ class BaseScrapyScraper(BaseScraper):
 
         self._spider_manager = SpiderManager(self.spider)
 
-    def parse(self, response) -> BaseScrapedData:
-        return self._spider_manager.parse(response)
+    def parse(self, response) -> ScrapedData:
+        return self._spider_manager.parse(response).to_scraped_data()
 
-    def scrape(self, url: str) -> BaseScrapedData:
-        return self._spider_manager.scrape(url)
+    def scrape(self, url: str) -> ScrapedData:
+        return self._spider_manager.scrape(url).to_scraped_data()
 
-    def bulk_scrape(self, urls: List[str]) -> List[BaseScrapedData]:
-        return self._spider_manager.bulk_scrape(urls)
+    def bulk_scrape(self, urls: List[str]) -> List[ScrapedData]:
+        output = self._spider_manager.bulk_scrape(urls)
+        output = list(map(lambda o: o.to_scraped_data(), output))
+
+        return output
