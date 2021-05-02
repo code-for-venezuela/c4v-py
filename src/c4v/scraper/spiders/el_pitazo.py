@@ -56,9 +56,9 @@ class ElPitazoSpider(scrapy.Spider):
         """
             Get article body as a single string
         """
-        body = response.css("#bsf_rt_marker > p").getall()
-        body = filter(lambda p: p.startswith("<p>") and p.endswith("</p>"), body)
-        body = map(utils.strip_http_tags, body)
+        body = response.css("#bsf_rt_marker > p ::text").getall()
+        # body = filter(lambda p: p.startswith("<p>") and p.endswith("</p>"), body)
+        # body = map(utils.strip_http_tags, body)
 
         body = "\n".join(body)
 
