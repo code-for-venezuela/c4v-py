@@ -4,7 +4,7 @@ from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 from c4v.scraper.settings import ROOT_DIR
 
 
-def test_parse_ok(get_body_for_parse_ok):
+def test_parse_ok(get_body_for_parse_ok_el_pitazo):
     """
         Check that ElPitazoScraper parses a valid page as expected
     """
@@ -18,7 +18,7 @@ def test_parse_ok(get_body_for_parse_ok):
     scraper = ElPitazoScraper()
     parse_output = scraper.parse(response)
 
-    assert parse_output["body"] == get_body_for_parse_ok, "body does not match"
+    assert parse_output["body"] == get_body_for_parse_ok_el_pitazo, "body does not match"
     assert (
         parse_output["title"]
         == "Las fallas eléctricas han disminuido la cantidad de carne que consume el venezolano"

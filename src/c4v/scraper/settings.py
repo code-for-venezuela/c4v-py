@@ -15,3 +15,6 @@ URL_TO_SCRAPER = {
 
 # root dir, so we can get resources from module directories
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# todo: find a better way to get c4v-py abs path.  Root library directory.
+C4V_ROOT_DIR = "/".join(ROOT_DIR.split("/")[:-3])
