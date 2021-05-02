@@ -18,6 +18,14 @@ def get_body_for_parse_ok_el_pitazo():
     return text_of_interest
 
 
+@pytest.fixture
+def get_body_for_parse_ok_primicia():
+    text_of_interest = _get_json_from_file(TEST_SCRAPER_CONSTANTS)["primicia"][
+        "get-body-parse-ok"
+    ]
+    return text_of_interest
+
+
 def _get_json_from_file(filename):
     f = open(filename)
     return json.load(f)
