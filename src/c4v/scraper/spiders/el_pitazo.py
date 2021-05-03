@@ -31,17 +31,17 @@ class ElPitazoSpider(scrapy.Spider):
 
         # These are simple properties, just get its text with a valid
         # selector
-        title = utils.get_element_text(".tdb-title-text", response) or ""
-        date = utils.get_element_text(".entry-date", response) or ""
-        author = utils.get_element_text(".tdb-author-name", response) or ""
+        title = response.css(".tdb-title-text ::text").get() or ""
+        date =  response.css(".entry-date ::text").get() or ""
+        author = response.css(".tdb-author-name ::text").get() or ""
 
         body = self._get_body(response)
 
         tags = self._get_tags(response)
 
         # categories
-        categories = response.css(".tdb-entry-category").getall()
-        categories = list(map(utils.strip_http_tags, categories))
+        categories = response.css(".tdb-entry-category")
+        categories = list(map(lambda c: c.css("::text").get(), categories))
 
         return {
             "title": title,
@@ -68,6 +68,6 @@ class ElPitazoSpider(scrapy.Spider):
         """
             Try to get tags from document if available
         """
-        tags = response.css(".tdb-tags > li > a").getall()
-        tags = list(map(utils.strip_http_tags, tags))
+        tags = response.css(".tdb-tags > li > a")
+        tags = list(map(lambda t: t.css("::text").get(), tags))
         return tags
