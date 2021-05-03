@@ -3,6 +3,7 @@
     such as mappings from urls to scrapers
 """
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
+from c4v.scraper.scrapers.scraper_primicia import ScraperPrimicia
 import os
 
 
