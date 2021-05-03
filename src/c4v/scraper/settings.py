@@ -10,6 +10,7 @@ import os
 # Spider
 URL_TO_SCRAPER = {
     "elpitazo.net": ElPitazoScraper,
+    "primicia.com.ve": ScraperPrimicia
 }
 
 
