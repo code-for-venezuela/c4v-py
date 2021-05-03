@@ -1,5 +1,5 @@
 # TODO move tests out of this module when approved.
-from c4v.scraper.tests.utils import fake_response_from_file
+from tests.scraper.utils import fake_response_from_file
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 from c4v.scraper.settings import ROOT_DIR
 import os
@@ -9,10 +9,9 @@ def test_parse_ok():
     """
         Check that ElPitazoScraper parses a valid page as expected
     """
-    url = "tests/html_bodies/el_pitazo_fallas_electricas_carne.html"
-    test_file = os.path.join(ROOT_DIR, url)
     response = fake_response_from_file(
-        test_file,
+        "resources.scraper.tests.elpitazo",
+        "el_pitazo_fallas_electricas_carne.html",
         "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
     )
 

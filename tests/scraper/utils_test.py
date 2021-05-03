@@ -1,5 +1,5 @@
 from c4v.scraper.utils import *
-import c4v.scraper.tests.utils as utils
+import tests.scraper.utils as utils
 
 
 def test_strip_http_tags():

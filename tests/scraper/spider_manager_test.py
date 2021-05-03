@@ -1,7 +1,7 @@
 # Local imports
 from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 import c4v.scraper.spider_manager as spider_manager
-import c4v.scraper.tests.utils as utils
+import tests.scraper.utils as utils
 from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
 from c4v.scraper.settings import ROOT_DIR
 
@@ -10,10 +10,9 @@ import os
 
 
 def test_spider_parse():
-    file = "tests/html_bodies/el_pitazo_fallas_electricas_carne.html"
-    test_file = os.path.join(ROOT_DIR, file)
     response = utils.fake_response_from_file(
-        test_file,
+        "resources.scraper.tests.elpitazo",
+        "el_pitazo_fallas_electricas_carne.html",
         "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
     )
 
