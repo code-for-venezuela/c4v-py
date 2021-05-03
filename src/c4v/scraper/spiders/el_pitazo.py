@@ -40,8 +40,7 @@ class ElPitazoSpider(scrapy.Spider):
         tags = self._get_tags(response)
 
         # categories
-        categories = response.css(".tdb-entry-category")
-        categories = list(map(lambda c: c.css("::text").get(), categories))
+        categories = response.css(".tdb-entry-category ::text").getall()
 
         return {
             "title": title,
@@ -68,6 +67,5 @@ class ElPitazoSpider(scrapy.Spider):
         """
             Try to get tags from document if available
         """
-        tags = response.css(".tdb-tags > li > a")
-        tags = list(map(lambda t: t.css("::text").get(), tags))
+        tags = response.css(".tdb-tags > li > a ::text").getall()
         return tags
