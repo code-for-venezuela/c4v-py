@@ -1,17 +1,21 @@
 # TODO move tests out of this module when approved.
-from tests.scraper.utils import fake_response_from_file
+from tests.scraper.utils import fake_response_from_str
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 from c4v.scraper.settings import ROOT_DIR
 import os
 
 
-def test_parse_ok():
+def test_parse_ok(  el_pitazo_snapshot, 
+                    el_pitazo_expected_body,
+                    el_pitazo_expected_categories,
+                    el_pitazo_expected_author,
+                    el_pitazo_expected_title
+                ):
     """
         Check that ElPitazoScraper parses a valid page as expected
     """
-    response = fake_response_from_file(
-        "resources.scraper.tests.elpitazo",
-        "el_pitazo_fallas_electricas_carne.html",
+    response = fake_response_from_str(
+        el_pitazo_snapshot,
         "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
     )
 
@@ -19,15 +23,16 @@ def test_parse_ok():
 
     parse_output = scraper.parse(response)
 
-    assert parse_output.content == get_body_for_parse_ok(), "body does not match"
+    assert parse_output.content == el_pitazo_expected_body, "body does not match"
     assert (
         parse_output.title
-        == "Las fallas eléctricas han disminuido la cantidad de carne que consume el venezolano"
+        == el_pitazo_expected_title
     ), "title does not match"
-    assert parse_output.author == "Redacción El Pitazo", "author does not match"
+    assert parse_output.author == el_pitazo_expected_author, "author does not match"
     assert set(parse_output.categories) == set(
-        ["Crónicas", "Regiones"]
+        el_pitazo_expected_categories
     ), "categorias no coinciden"
+    
 
 
 def get_body_for_parse_ok():

@@ -3,32 +3,34 @@ from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 import c4v.scraper.spider_manager as spider_manager
 import tests.scraper.utils as utils
 from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
-from c4v.scraper.settings import ROOT_DIR
-
-# Python imports
-import os
 
 
-def test_spider_parse():
-    response = utils.fake_response_from_file(
-        "resources.scraper.tests.elpitazo",
-        "el_pitazo_fallas_electricas_carne.html",
-        "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
+def test_spider_parse(
+                        el_pitazo_snapshot,
+                        el_pitazo_expected_body,
+                        el_pitazo_expected_title,
+                        el_pitazo_expected_author,
+                        el_pitazo_expected_tags,
+                        el_pitazo_expected_categories
+                        ):
+    response = utils.fake_response_from_str(
+        el_pitazo_snapshot,
+        "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/", # could be any string
     )
 
     manager = spider_manager.SpiderManager(ElPitazoSpider)
 
     parse_output: ElPitazoData = manager.parse(response)
 
-    assert parse_output.body == get_body_for_parse_ok(), "body does not match"
+    assert parse_output.body == el_pitazo_expected_body, "body does not match"
     assert (
         parse_output.title
-        == "Las fallas eléctricas han disminuido la cantidad de carne que consume el venezolano"
+        == el_pitazo_expected_title
     ), "title does not match"
-    assert parse_output.author == "Redacción El Pitazo", "author does not match"
-    assert parse_output.tags == [], "tags does not match"
+    assert parse_output.author == el_pitazo_expected_author, "author does not match"
+    assert parse_output.tags == el_pitazo_expected_tags, "tags does not match"
     assert set(parse_output.categories) == set(
-        ["Crónicas", "Regiones"]
+        el_pitazo_expected_categories
     ), "categorias no coinciden"
 
 
