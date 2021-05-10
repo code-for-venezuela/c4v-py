@@ -3,11 +3,12 @@
     such as mappings from urls to scrapers
 """
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
+from c4v.scraper.scrapers.primicia_scraper import PrimiciaScraper
 from c4v.scraper.utils import check_scrapers_consistency
 
 import os
 
-INSTALLED_SCRAPERS = [ElPitazoScraper]
+INSTALLED_SCRAPERS = [ElPitazoScraper, PrimiciaScraper]
 
 # Check for scraper consistency
 check_scrapers_consistency(INSTALLED_SCRAPERS)
