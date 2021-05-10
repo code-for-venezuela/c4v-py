@@ -1,5 +1,5 @@
 """
-    Base class for ElPitazo site scraped data. Includes:
+    Base class for Primicia sites scraped data. Includes:
         + body
         + title
         + author
@@ -16,7 +16,7 @@ from typing import List
 
 
 @dataclass(frozen=True)
-class ElPitazoData(BaseDataFormat):
+class PrimiciaData(BaseDataFormat):
     """
         Scraped data expected for ElPitazo news articles
     """
