@@ -58,10 +58,48 @@ class BaseScraper:
                 List of scraped items. Notice that the order it's not guaranteed to be
                 the same as in the input list.
         """
+        self.schedule_scraping(urls)
+        self.start_bulk_scrape()
+        return self.get_scraped_items()
 
+    def schedule_scraping(self, urls: List[str]):
+        """
+            Schedule a list of urls to be scraped later.
+            This is necessary so you can scrape data from multiple
+            sources at the same time with multiple scrapers.
+
+            Parameters:
+                + urls : [str] = urls to be scheduled to scrape
+        """
+        self._to_scrape = urls
+
+    def start_bulk_scrape(self):
+        """
+            Start a bulk scraping process, storing results internally
+        """
+
+        # Consistency check: cannot bulk scrape without something to scrape
+        assert hasattr(
+            self, "_to_scrape"
+        ), "There's no scheduled items to scrape. Call schedule_scraping first to set items to be scraped"
         items = []
-        for url in urls:
+
+        for url in self._to_scrape:
             if (item := self.scrape(url)) :
                 items.append(item)
 
-        return items
+        del self._to_scrape
+        self._scraped_items = items
+
+    def get_scraped_items(self) -> List[ScrapedData]:
+        """
+            Return the scraped list of items after a bulk scrape process
+        """
+        assert hasattr(
+            self, "_scraped_items"
+        ), "There's no scraped items. Call start_bulk_scrape first to get items to retrieve"
+
+        out = self._scraped_items
+        del self._to_scrape
+
+        return out

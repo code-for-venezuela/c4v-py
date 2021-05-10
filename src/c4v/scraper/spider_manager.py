@@ -1,11 +1,13 @@
 # external imports
+from signal import signal
+from sys import stderr
 import scrapy
 from scrapy.crawler import CrawlerProcess
 import scrapy.signals
 
 # Project imports
 import c4v.scraper.scrapy_settings as settings
-from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
 from typing import List, Dict, Any
@@ -20,9 +22,16 @@ class SpiderManager:
     process = CrawlerProcess(settings.CRAWLER_SETTINGS)
 
     def __init__(self, spider) -> None:
-        self.spider = spider
 
-    def parse(self, response) -> BaseDataFormat:
+        self.spider = spider
+        self._scraped_items = []
+
+        def add_item(item):
+            self._scraped_items.append(item)
+
+        self._add_items = add_item
+
+    def parse(self, response) -> ScrapedData:
         """
             return scraped data from a valid response
             Parameters: 
@@ -33,7 +42,7 @@ class SpiderManager:
         spider = self.spider()
         return spider.parse(response)
 
-    def scrape(self, url: str) -> BaseDataFormat:
+    def scrape(self, url: str) -> ScrapedData:
         """
             Return scraped data from a single Url
             Parameters:
@@ -41,41 +50,47 @@ class SpiderManager:
             Return:
                 dict like object with scraped data
         """
-        scraped = self.bulk_scrape([url])
-
+        self.schedule_scraping([url])
+        self.start_bulk_scrape()
+        scraped = self.get_scraped_items()
         return scraped[0] if scraped else None
 
-    def bulk_scrape(self, urls: List[str]) -> List[BaseDataFormat]:
+    def schedule_scraping(self, urls: List[str]):
         """
-            return scraped data from a list of valid URLs
+            Schedule urls to be scraped
             Parameters:
-                + urls : [str] = urls whose data is to be scraped. 
-                                Should be compatible with the provided spider
-            Return:
-                list of dict like object with scraped data
+                + urls : [str] = list of urls to scrape
         """
-
         # if nothing to do, just return an empty list
         if not urls:
-            return []
-
-        # Items accumulator
-        items = []
-
-        # callback function to collect items on the fly
-        def items_scrapped(item, response, spider):
-            items.append({"url": response._url, "data": item})
+            return
 
         # set up urls to scrape
         self.spider.start_urls = urls
 
         # create crawler for this spider, connect signal so we can collect items
-        crawler = self.process.create_crawler(self.spider)
-        crawler.signals.connect(items_scrapped, signal=scrapy.signals.item_scraped)
+        crawler = SpiderManager.process.create_crawler(self.spider)
+        crawler.signals.connect(self._add_items, signal=scrapy.signals.item_scraped)
 
         # start scrapping
-        self.process.crawl(crawler)
-        self.process.start()
+        SpiderManager.process.crawl(crawler)
 
-        # return post processed scrapped objects
-        return items
+    def start_bulk_scrape(self):
+        """
+            Scrape stored urls. Note that if multiple spider managers
+            called schedule_scraping before, all of them will be scraped,
+            not only this one
+        """
+        if SpiderManager.process.crawlers:
+            SpiderManager.process.start()
+
+    def get_scraped_items(self) -> List[ScrapedData]:
+        """
+            Get items scraped by a scraping process, flushing internal list in the 
+            process
+            Return:
+                List of scraped elements 
+        """
+        scraped = self._scraped_items
+        self._scraped_items = []
+        return scraped

@@ -5,6 +5,7 @@
 # Local imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
 from .settings import URL_TO_SCRAPER
 from c4v.scraper.utils import get_domain_from_url, valid_url
 
@@ -45,10 +46,10 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
             A list of items scraped for each url in the original list
     """
 
-    items = []
-    scrapers = {}
+    scrapers: Dict[Type[BaseScraper], List[str]] = {}
+
+    # Classify urls to its according scraper
     for url in urls:
-        # Classify urls to its according scraper
         scraper = _get_scraper_from_url(url)
 
         if not (url_list := scrapers.get(scraper)):
@@ -56,10 +57,23 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
 
         url_list.append(url)
 
-    # Bulk scrape urls
+    # Schedule scraping
+    scrapers_instances: List[BaseScraper] = []
     for (scraper, url_list) in scrapers.items():
         s = scraper()  # Create a new scraper instance
-        items.extend(s.bulk_scrape(url_list))
+        s.schedule_scraping(url_list)
+        scrapers_instances.append(s)
+
+    # TODO: write a cleaner and transparent interface to show that scrapy scrapers only block once
+
+    # start scraping for every scraper
+    for s in scrapers_instances:
+        s.start_bulk_scrape()
+
+    # Retrieve scraped items
+    items = []
+    for s in scrapers_instances:
+        items.extend(s.get_scraped_items())
 
     return items
 

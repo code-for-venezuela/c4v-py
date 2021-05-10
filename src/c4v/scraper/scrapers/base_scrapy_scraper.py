@@ -35,8 +35,8 @@ class BaseScrapyScraper(BaseScraper):
         if self.spider is None:
             raise TypeError(
                 "Spider not defined,"
-                + "perhaps you forgot to override spider"
-                + "attribute in BaseScrapyScraper subclass?"
+                + " perhaps you forgot to override spider"
+                + " attribute in BaseScrapyScraper subclass?"
             )
 
         self._spider_manager = SpiderManager(self.spider)
@@ -47,8 +47,11 @@ class BaseScrapyScraper(BaseScraper):
     def scrape(self, url: str) -> ScrapedData:
         return self._spider_manager.scrape(url).to_scraped_data()
 
-    def bulk_scrape(self, urls: List[str]) -> List[ScrapedData]:
-        output = self._spider_manager.bulk_scrape(urls)
-        output = list(map(lambda o: o.to_scraped_data(), output))
+    def schedule_scraping(self, urls: List[str]):
+        return self._spider_manager.schedule_scraping(urls)
 
-        return output
+    def start_bulk_scrape(self):
+        return self._spider_manager.start_bulk_scrape()
+
+    def get_scraped_items(self) -> List[ScrapedData]:
+        return self._spider_manager.get_scraped_items()
