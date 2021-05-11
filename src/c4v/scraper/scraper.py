@@ -18,7 +18,7 @@ def scrape(url: str) -> ScrapedData:
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
 
-        Params:
+        Parameters:
             + url - str : Url to scrape
         Return:
             A dict object, each describing the data that could be 
@@ -64,7 +64,7 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
         s.schedule_scraping(url_list)
         scrapers_instances.append(s)
 
-    # TODO: write a cleaner and transparent interface to show that scrapy scrapers only block once
+    # TODO: write a cleaner and transparent interface to show that scrapy scrapers only blocks once
 
     # start scraping for every scraper
     for s in scrapers_instances:

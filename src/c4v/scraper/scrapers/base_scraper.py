@@ -4,8 +4,8 @@
         1) Create a new scraper in the "scrapers" directory
         2) Make your scraper a subclass of BaseScraper
         3) Implement missing methods (parse & scrape)
-        4) add an entry in settings.py to the URL_TO_SCRAPER map, maping from 
-           a domain name to your new scraper. Import it if necessary
+        4) add an entry in settings.py to the INSTALLED_SCRAPERS list. 
+            Import it if necessary
 """
 
 # Local imports
