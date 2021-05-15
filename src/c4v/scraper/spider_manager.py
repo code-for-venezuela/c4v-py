@@ -1,9 +1,8 @@
 # external imports
-from signal import signal
-from sys import stderr
 import scrapy
-from scrapy.crawler import CrawlerProcess
 import scrapy.signals
+from scrapy.crawler import CrawlerProcess, CrawlerRunner
+from twisted.internet import reactor
 
 # Project imports
 import c4v.scraper.scrapy_settings as settings
@@ -19,7 +18,7 @@ class SpiderManager:
         Spider classes
     """
 
-    process = CrawlerProcess(settings.CRAWLER_SETTINGS)
+    runner = CrawlerRunner(settings.CRAWLER_SETTINGS)
 
     def __init__(self, spider) -> None:
 
@@ -61,19 +60,19 @@ class SpiderManager:
             Parameters:
                 + urls : [str] = list of urls to scrape
         """
-        # if nothing to do, just return an empty list
-        if not urls:
+        # if nothing to do, just return
+        if not urls: 
             return
 
         # set up urls to scrape
         self.spider.start_urls = urls
 
         # create crawler for this spider, connect signal so we can collect items
-        crawler = SpiderManager.process.create_crawler(self.spider)
+        crawler = SpiderManager.runner.create_crawler(self.spider)
         crawler.signals.connect(self._add_items, signal=scrapy.signals.item_scraped)
 
         # start scrapping
-        SpiderManager.process.crawl(crawler)
+        SpiderManager.runner.crawl(crawler)
 
     def start_bulk_scrape(self):
         """
@@ -81,8 +80,11 @@ class SpiderManager:
             called schedule_scraping before, all of them will be scraped,
             not only this one
         """
-        if SpiderManager.process.crawlers:
-            SpiderManager.process.start()
+        if SpiderManager.runner.crawlers:
+            d = SpiderManager.runner.join()
+            d.addBoth(lambda _: reactor.stop())
+            reactor.run() # blocking here
+
 
     def get_scraped_items(self) -> List[ScrapedData]:
         """

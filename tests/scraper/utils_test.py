@@ -59,3 +59,21 @@ def get_dummy_response():
     body += "<ul><li>arepa</li><li>pernil</li><li>mondongo</li></ul>"
 
     return utils.fake_response_from_str(body, "https://www.dummy.com")
+
+def test_group_by_ok():
+    l1 = [1,1,1,2,3,3,3,4]
+    l1_ans = [[1,1,1], [2], [3,3,3], [4]]
+    l2 = [i for i in range(5)]
+    l2_ans = [[i] for i in range(5)]
+    l3 = []
+    l3_ans = []
+    l4 = [1]
+    l4_ans = [[1]]
+    l5 = [1, 2, 1]
+    l5_ans = [[1], [2], [1]]
+
+    assert list(group_by(l1)) == l1_ans 
+    assert list(group_by(l2)) == l2_ans 
+    assert list(group_by(l3)) == l3_ans 
+    assert list(group_by(l4)) == l4_ans 
+    assert list(group_by(l5)) == l5_ans 

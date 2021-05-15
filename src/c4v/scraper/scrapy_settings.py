@@ -3,4 +3,6 @@
 """
 
 # Settings passed to the crawler
-CRAWLER_SETTINGS = {"LOG_ENABLED": False}
+CRAWLER_SETTINGS = {
+    "LOG_ENABLED": False
+}

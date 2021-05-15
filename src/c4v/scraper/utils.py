@@ -11,7 +11,7 @@ from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 # Python imports
 import re
 from urllib.parse import urlparse
-from typing import List, Type, Any
+from typing import Generator, List, Type, Any, Callable
 import dataclasses
 
 
@@ -98,3 +98,31 @@ def check_scraper_consistency(scraper: Type[BaseScraper]):
     assert scraper.intended_domain != None and isinstance(
         scraper.intended_domain, str
     ), f"Scraper {scraper} does not provide intended_domain"
+
+def group_by(elements : List[Any], key : Callable[[Any], Any] = None) -> Generator[List[Any], None, None]:
+    """
+        Given a list of sorted items by provided key, generates
+        a sequence of lists where every list is a subsequence in the list
+        of elements with the same key.
+
+        Parameters:
+            + elements : [Any] = elements to be grouped
+            + key      : Any -> Any = function used to sort elements and to test equality between them
+        Return:
+            Generator of lists such that every element in that list are equal by the given key.
+            The concatenation of every list results in the input list
+    """
+    # if no key provided, use identity function
+    key = key or (lambda x : x)
+    n_elems = len(elements)
+
+    next = 0
+    while next < n_elems:
+        current = key(elements[next])
+        lower_bound = next
+        while next < n_elems and current == key(elements[next]):
+            next += 1
+        yield elements[lower_bound:next]
+
+
+    return []
