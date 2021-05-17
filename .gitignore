@@ -39,3 +39,5 @@
 # PyTest
 /.pytest_cache
 /.coverage*
+
+angostura_connection.json
