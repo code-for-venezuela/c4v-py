@@ -3,6 +3,7 @@
 """
 
 # Local imports
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
@@ -67,10 +68,12 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
         s.start_bulk_scrape()
 
     # Retrieve scraped items
-    items = []
+    items : List[BaseDataFormat] = []
     for s in scrapers_instances:
         items.extend(s.get_scraped_items())
 
+    for i in range(len(items)):
+        items[i] = items[i].to_scraped_data()
     return items
 
 
