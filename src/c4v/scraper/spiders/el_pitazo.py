@@ -4,7 +4,7 @@ from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 
 # External imports
 import scrapy
-
+from scrapy.http import Response
 # Python imports
 from typing import List, Dict, Any
 
@@ -18,16 +18,16 @@ class ElPitazoSpider(scrapy.Spider):
 
     start_urls = []
 
-    def parse(self, response) -> ElPitazoData:
+    def parse(self, response : Response) -> ElPitazoData:
         """
-            Returns a dict like structure with the following 
-            fields:
-                + title
-                + date
-                + categories
-                + body
-                + author 
-                + tags
+            Returns a data object describing data scrapable for this 
+            scraper
+
+            Parameters:
+                + response : Response = scrapy response object
+            
+            Return:
+                An ElPitazoData instance 
         """
 
         # These are simple properties, just get its text with a valid
@@ -52,7 +52,7 @@ class ElPitazoSpider(scrapy.Spider):
             date=date,
         )
 
-    def _get_body(self, response) -> str:
+    def _get_body(self, response : Response) -> str:
         """
             Get article body as a single string
         """
@@ -64,7 +64,7 @@ class ElPitazoSpider(scrapy.Spider):
 
         return body.strip()
 
-    def _get_tags(self, response) -> List[str]:
+    def _get_tags(self, response : Response) -> List[str]:
         """
             Try to get tags from document if available
         """

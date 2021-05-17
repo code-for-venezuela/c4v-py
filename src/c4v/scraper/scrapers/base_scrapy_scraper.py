@@ -18,7 +18,7 @@ from c4v.scraper.spider_manager import SpiderManager
 from c4v.scraper.scraped_data_classes.base_scraped_data import ScrapedData
 
 # Python imports
-from typing import Type, List, Dict, Any
+from typing import Type, List
 
 
 class BaseScrapyScraper(BaseScraper):
