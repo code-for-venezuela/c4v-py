@@ -16,11 +16,18 @@ from typing import List
 
 @ray.remote
 def _ray_scrape(urls : List[str]):
+    """
+        Create a new task with a scraping function
+    """
     return bulk_scrape(urls)
 
 def ray_scrape(urls : List[str]) -> List[ScrapedData]:
     """
         Scrape a list of urls in ray-based distributed manner
+        Parameters:
+            + urls : [str] = list of urls to scrape
+        Return:
+            Data obtained after scraping
     """
 
     # sort urls by domain
