@@ -14,7 +14,6 @@ class PrimiciaCrawler(BaseCrawler):
     def check_sitemap_url(url: str) -> bool:
         return url.startswith("https://primicia.com.ve/post-sitemap")
 
-    @staticmethod
     def check_page_url(url : str) -> bool:
         primicia = "https://primicia.com.ve/"
         return url.startswith(primicia) and len(url) > len(primicia)
