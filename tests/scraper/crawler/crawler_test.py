@@ -100,30 +100,6 @@ def primicia_sitemap_index():
         </sitemap>\
         </sitemapindex>'
 
-def primicia_sitemap_index():
-    return '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="//primicia.com.ve/wp-content/plugins/wordpress-seo/css/main-sitemap.xsl"?>\
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\
-        <url>\
-                <loc>https://primicia.com.ve/</loc>\
-                <lastmod>2021-05-21T22:04:03+00:00</lastmod>\
-        </url>\
-        <url>\
-                <loc>https://primicia.com.ve/sucesos/un-muerto-y-cuatro-heridos-durante-protestas/</loc>\
-                <lastmod>2019-01-25T15:30:32+00:00</lastmod>\
-                <image:image>\
-                        <image:loc>https://primicia.com.ve/wp-content/uploads/2019/01/protestaas.jpg</image:loc>\
-                        <image:title><![CDATA[protestaas]]></image:title>\
-                </image:image>\
-        </url>\
-        <url>\
-                <loc>https://primicia.com.ve/mas/salud/the-lancet-global-health-aumentan-muertes-infantiles-en-venezuela/</loc>\
-                <lastmod>2019-01-25T15:35:34+00:00</lastmod>\
-                <image:image>\
-                        <image:loc>https://primicia.com.ve/wp-content/uploads/2019/01/hospital.jpg</image:loc>\
-                        <image:title><![CDATA[hospital]]></image:title>\
-                </image:image>\
-        </url>'
-
 def primicia_sitemap_body():
     return '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="//primicia.com.ve/wp-content/plugins/wordpress-seo/css/main-sitemap.xsl"?>\
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\
