@@ -8,6 +8,7 @@ from typing import Any, List, Callable
 import requests
 import bs4
 
+
 class BaseCrawler:
     """
         Inherit this class to create a new crawler.
@@ -16,9 +17,11 @@ class BaseCrawler:
         of pages
     """
 
-    start_sitemap_url : str = None # Override this field to define sitemap to crawl
+    start_sitemap_url: str = None  # Override this field to define sitemap to crawl
 
-    def crawl_urls(self, post_process_data : Callable[[List[str]], Any] = None) -> List[str]:
+    def crawl_urls(
+        self, post_process_data: Callable[[List[str]], Any] = None
+    ) -> List[str]:
         """
             Return a list of urls scraped from the site intended for this scraper.
             Parameters:
@@ -28,7 +31,7 @@ class BaseCrawler:
         """
 
         # Url accumulator
-        urls : List[str] = []
+        urls: List[str] = []
 
         # sitemaps to parse
         sitemaps = self.get_sitemaps_from_index()
@@ -44,7 +47,6 @@ class BaseCrawler:
             # process new urls if post process function exists
             if post_process_data:
                 post_process_data(new_urls)
-
 
         return urls
 
@@ -62,7 +64,7 @@ class BaseCrawler:
 
         return self.parse_sitemaps_urls_from_index(resp.text)
 
-    def parse_sitemaps_urls_from_index(self, sitemap_index : str) -> List[str]:
+    def parse_sitemaps_urls_from_index(self, sitemap_index: str) -> List[str]:
         """
             Get sitemap list from the content of an xml file with the filemap data
             Parameters:
@@ -76,7 +78,7 @@ class BaseCrawler:
 
         return list(urls)
 
-    def get_sitemap_from_url(self, sitemap_url : str) -> str:
+    def get_sitemap_from_url(self, sitemap_url: str) -> str:
         """
             Get sitemap xml content from its corresponding url
             Parameters:
@@ -90,7 +92,7 @@ class BaseCrawler:
 
         return resp.text
 
-    def parse_urls_from_sitemap(self, sitemap : str) -> List[str]:
+    def parse_urls_from_sitemap(self, sitemap: str) -> List[str]:
         """
             Given a sitemap body, parse site urls from it 
             Parameters:
@@ -105,9 +107,9 @@ class BaseCrawler:
         return list(urls)
 
     @staticmethod
-    def check_sitemap_url(url : str) -> bool:
+    def check_sitemap_url(url: str) -> bool:
         """
-            Function to check if a given sitemap sitemap url
+            Function to check if a given sitemap url
             to another sitemap is a desired one
             Parameters:
                 + url : str = url to check
@@ -117,7 +119,7 @@ class BaseCrawler:
         raise NotImplementedError("Implement this abstract method")
 
     @staticmethod
-    def check_page_url(url : str) -> bool:
+    def check_page_url(url: str) -> bool:
         """
             Function to check if an url to a web page in the site is a valid one
             Parameters:
