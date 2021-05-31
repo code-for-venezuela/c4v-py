@@ -1,13 +1,15 @@
+from scrapy import http
 from scrapy.http import Request, Response, HtmlResponse
+import importlib.resources as resources
 
-
-def fake_response_from_file(file: str, url: str) -> Response:
+def fake_response_from_file(path: str, file : str,  url: str) -> Response:
     """
-        Create a new fake scrapy response based on the content of a file
+        Create a new fake scrapy response based on the content of a path
     """
-
-    with open(file, "r") as file:
-        return fake_response_from_str(file.read(), url)
+    
+    with resources.open_text(path, file) as html:
+        return fake_response_from_str(html.read(), url)
+        
 
 
 def fake_response_from_str(body: str, url: str) -> Response:

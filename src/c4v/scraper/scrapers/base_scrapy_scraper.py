@@ -15,9 +15,10 @@ from scrapy import Spider
 # Internal imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.spider_manager import SpiderManager
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat, ScrapedData
 
 # Python imports
-from typing import Type, List, Dict, Any
+from typing import Type, List
 
 
 class BaseScrapyScraper(BaseScraper):
@@ -34,17 +35,23 @@ class BaseScrapyScraper(BaseScraper):
         if self.spider is None:
             raise TypeError(
                 "Spider not defined,"
-                + "perhaps you forgot to override spider"
-                + "attribute in BaseScrapyScraper subclass?"
+                + " perhaps you forgot to override spider"
+                + " attribute in BaseScrapyScraper subclass?"
             )
 
         self._spider_manager = SpiderManager(self.spider)
 
-    def parse(self, response) -> Dict[str, Any]:
+    def parse(self, response) -> BaseDataFormat:
         return self._spider_manager.parse(response)
 
-    def scrape(self, url: str) -> Dict[str, Any]:
+    def scrape(self, url: str) -> BaseDataFormat:
         return self._spider_manager.scrape(url)
 
-    def bulk_scrape(self, urls: List[str]) -> List[Dict[str, Any]]:
-        return self._spider_manager.bulk_scrape(urls)
+    def schedule_scraping(self, urls: List[str]):
+        return self._spider_manager.schedule_scraping(urls)
+
+    def start_bulk_scrape(self):
+        return self._spider_manager.start_bulk_scrape()
+
+    def get_scraped_items(self) -> List[BaseDataFormat]:
+        return self._spider_manager.get_scraped_items()

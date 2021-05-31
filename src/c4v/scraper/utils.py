@@ -4,9 +4,13 @@
 # External imports
 from bs4 import BeautifulSoup
 
+# local imports
+from c4v.scraper.scrapers.base_scraper import BaseScraper
+
 # Python imports
 import re
 from urllib.parse import urlparse
+from typing import List, Type
 
 
 def strip_http_tags(element: str) -> str:
@@ -74,3 +78,21 @@ def get_domain_from_url(url: str) -> str:
     """
 
     return urlparse(url).netloc
+
+
+def check_scrapers_consistency(scrapers: List[Type[BaseScraper]]):
+    """
+        Check consistency for a scraper list
+    """
+    for scraper in scrapers:
+        check_scraper_consistency(scraper)
+
+
+def check_scraper_consistency(scraper: Type[BaseScraper]):
+    """
+        Check consistency for a scraper. This function checks that:
+            + Scraper provides intended domain
+    """
+    assert scraper.intended_domain != None and isinstance(
+        scraper.intended_domain, str
+    ), f"Scraper {scraper} does not provide intended_domain"
