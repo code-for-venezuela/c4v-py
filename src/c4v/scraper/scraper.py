@@ -3,7 +3,10 @@
 """
 
 # Local imports
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scrapers.base_scraper import BaseScraper
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
 from .settings import URL_TO_SCRAPER
 from c4v.scraper.utils import get_domain_from_url, valid_url
 
@@ -11,28 +14,24 @@ from c4v.scraper.utils import get_domain_from_url, valid_url
 from typing import List, Type, Dict, Any
 
 
-def scrape(url: str) -> Dict[str, Any]:
+def scrape(url: str) -> ScrapedData:
     """
         Scrape data for the given url if such url is scrappable,
         Raise ValueError if not. 
 
-        Params:
+        Parameters:
             + url - str : Url to scrape
         Return:
-            A dict object, each describing the data that could be 
+            A ScrapedData object describing the data that could be 
             extracted for this url. Obtained data depends on the url itself, 
-            so available data may change depending on the scrapped url.
-            Dict format:
-             {
-                 "url" : (str) url where the data came from,
-                 "data": (dict) Data scraped for this url
-             }
+            so available data may change depending on the scrapped url, some fields 
+            may be null.
     """
     scraper = _get_scraper_from_url(url)()
     return scraper.scrape(url)
 
 
-def bulk_scrape(urls: List[str]) -> List[Dict[str, Any]]:
+def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
     """
         Performs a bulk scraping over a list of urls.
         Order in the item list it's not guaranteed to be
@@ -44,10 +43,10 @@ def bulk_scrape(urls: List[str]) -> List[Dict[str, Any]]:
             A list of items scraped for each url in the original list
     """
 
-    items = []
-    scrapers = {}
+    scrapers: Dict[Type[BaseScraper], List[str]] = {}
+
+    # Classify urls to its according scraper
     for url in urls:
-        # Classify urls to its according scraper
         scraper = _get_scraper_from_url(url)
 
         if not (url_list := scrapers.get(scraper)):
@@ -55,18 +54,35 @@ def bulk_scrape(urls: List[str]) -> List[Dict[str, Any]]:
 
         url_list.append(url)
 
-    # Bulk scrape urls
+    # Schedule scraping
+    scrapers_instances: List[BaseScraper] = []
     for (scraper, url_list) in scrapers.items():
         s = scraper()  # Create a new scraper instance
-        items.extend(s.bulk_scrape(url_list))
+        s.schedule_scraping(url_list)
+        scrapers_instances.append(s)
 
+    # TODO: write a cleaner and transparent interface to show that scrapy scrapers only blocks once
+
+    # start scraping for every scraper
+    for s in scrapers_instances:
+        s.start_bulk_scrape()
+
+    # Retrieve scraped items
+    items : List[BaseDataFormat] = []
+    for s in scrapers_instances:
+        items.extend(s.get_scraped_items())
+
+    for i in range(len(items)):
+        items[i] = items[i].to_scraped_data()
     return items
 
 
 def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
     """
         Validates if this url is scrapable and returns its 
-        corresponding spider when it is
+        corresponding spider when it is.
+        Raise ValueError if url is not valid or if it's not 
+        scrapable for our supported scrapers
     """
 
     if not valid_url(url):

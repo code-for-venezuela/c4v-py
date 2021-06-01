@@ -1,34 +1,39 @@
 # TODO move tests out of this module when approved.
-from c4v.scraper.tests.utils import fake_response_from_file
+from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
+from tests.scraper.utils import fake_response_from_str
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 from c4v.scraper.settings import ROOT_DIR
 import os
 
 
-def test_parse_ok():
+def test_parse_ok(  el_pitazo_snapshot, 
+                    el_pitazo_expected_body,
+                    el_pitazo_expected_categories,
+                    el_pitazo_expected_author,
+                    el_pitazo_expected_title
+                ):
     """
         Check that ElPitazoScraper parses a valid page as expected
     """
-    url = "tests/html_bodies/el_pitazo_fallas_electricas_carne.html"
-    test_file = os.path.join(ROOT_DIR, url)
-    response = fake_response_from_file(
-        test_file,
+    response = fake_response_from_str(
+        el_pitazo_snapshot,
         "https://elpitazo.net/cronicas/la-fallas-electricas-han-disminuido-la-cantidad-de-carne-que-consume-el-venezolano/",
     )
 
     scraper = ElPitazoScraper()
-    parse_output = scraper.parse(response)
 
-    assert parse_output["body"] == get_body_for_parse_ok(), "body does not match"
+    parse_output : ElPitazoData = scraper.parse(response)
+
+    assert parse_output.body == el_pitazo_expected_body, "body does not match"
     assert (
-        parse_output["title"]
-        == "Las fallas eléctricas han disminuido la cantidad de carne que consume el venezolano"
+        parse_output.title
+        == el_pitazo_expected_title
     ), "title does not match"
-    assert parse_output["author"] == "Redacción El Pitazo", "author does not match"
-    assert parse_output["tags"] == [], "tags does not match"
-    assert set(parse_output["categories"]) == set(
-        ["Crónicas", "Regiones"]
+    assert parse_output.author == el_pitazo_expected_author, "author does not match"
+    assert set(parse_output.categories) == set(
+        el_pitazo_expected_categories
     ), "categorias no coinciden"
+    
 
 
 def get_body_for_parse_ok():
