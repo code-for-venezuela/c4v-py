@@ -10,7 +10,8 @@ class PrimiciaCrawler(BaseCrawler):
     """
 
     start_sitemap_url = "https://primicia.com.ve/sitemap_index.xml"
-
+    name = "primicia"
+    
     @staticmethod
     def check_sitemap_url(url: str) -> bool:
         return url.startswith("https://primicia.com.ve/post-sitemap")

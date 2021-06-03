@@ -18,6 +18,7 @@ class BaseCrawler:
     """
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
+    name: str = None               # Crawler name, required to identify this crawler 
 
     def crawl_urls(
         self, post_process_data: Callable[[List[str]], Any] = None
