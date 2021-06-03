@@ -51,6 +51,7 @@ def scrape(urls : List[str] = None, files : bool = None, output : str = None, ma
 
     # Write output
     if output:
+        # try print content into file if output file was provided 
         try:
             with open(output, "rw+") as file:
                 for data in scraped_data:
