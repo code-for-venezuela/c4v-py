@@ -13,9 +13,13 @@ class PrimiciaCrawler(BaseCrawler):
 
     @staticmethod
     def check_sitemap_url(url: str) -> bool:
+        # Sitemaps about posts will start with this prefix
         return url.startswith("https://primicia.com.ve/post-sitemap")
 
     @staticmethod
     def check_page_url(url: str) -> bool:
+        # Checks if provided url starts with base site 
+        # and if its length is creater to base site (so we avoid crawling main page
+        # by accident)
         primicia = "https://primicia.com.ve/"
         return url.startswith(primicia) and len(url) > len(primicia)
