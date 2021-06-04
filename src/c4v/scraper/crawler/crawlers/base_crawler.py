@@ -102,7 +102,7 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap, "xml")
         urls = map(lambda l: l.get_text(), soup.select("url > loc"))
-        urls = filter(self.check_page_url, urls)
+        urls = filter(self.should_scrape, urls)
 
         return list(urls)
 
@@ -119,7 +119,7 @@ class BaseCrawler:
         raise NotImplementedError("Implement this abstract method")
 
     @staticmethod
-    def check_page_url(url: str) -> bool:
+    def should_scrape(url: str) -> bool:
         """
             Function to check if an url to a web page in the site is a valid one
             Parameters:
