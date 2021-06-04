@@ -74,7 +74,7 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap_index, "xml")
         urls = map(lambda l: l.get_text(), soup.find_all("loc"))
-        urls = filter(self.check_sitemap_url, urls)
+        urls = filter(self.should_crawl, urls)
 
         return list(urls)
 
@@ -107,7 +107,7 @@ class BaseCrawler:
         return list(urls)
 
     @staticmethod
-    def check_sitemap_url(url: str) -> bool:
+    def should_crawl(url: str) -> bool:
         """
             Function to check if a given sitemap url
             to another sitemap is a desired one
