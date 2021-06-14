@@ -21,10 +21,10 @@ def c4v_cli():
     return
 
 @c4v_cli.command()
-@click.option('--files', is_flag=True, help="Interpret url list as files instead of urls, so urls are retrieved from such files")
-@click.option('--output', default=None, help="Output file to store results")
-@click.option('--max-len', default=-1, help="Truncate scraped content's body to a maximum lenght if provided.")
-@click.option('--pretty', is_flag=True, help="Print data formatted as human readable")
+@click.option('--files',    is_flag=True,   help="Interpret url list as files instead of urls, so urls are retrieved from such files. The file is expected to be formatted such that there's one url per line")
+@click.option('--output',   default=None,   help="Output file to store results")
+@click.option('--max-len',  default=-1,     help="Truncate scraped content's body to a maximum lenght if provided.")
+@click.option('--pretty',   is_flag=True,   help="Print data formatted as human readable")
 @click.argument('urls', nargs = -1)
 def scrape(urls : List[str] = None, files : bool = None, output : str = None, max_len : int = -1, pretty : bool = False):
     """
