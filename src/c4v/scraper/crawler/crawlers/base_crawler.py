@@ -15,6 +15,9 @@ class BaseCrawler:
         Probably, the only function you might want to implement is check_sitemap_url,
         that checks if an url in the sitemap index corresponds to an interesting subset 
         of pages
+
+        You might also want to override should_scrape method if you want to add detailed 
+        filtering to over urls to be retrieved 
     """
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
