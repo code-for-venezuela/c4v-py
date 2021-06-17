@@ -8,7 +8,7 @@
 """
 
 # Python imports
-from typing import List
+from typing import List, Callable
 
 # Local imports
 from c4v.scraper.crawler.url_data import UrlData
@@ -18,30 +18,44 @@ class BasePersistencyManager:
         Base class to provide support for persistency management
     """
 
-    def get_known_data_for( self, 
-                            urls : List[str], 
-                            skip_body : bool = False) -> List[UrlData]:
+    def get_matching(self, predicate : Callable[[UrlData], bool] = lambda _: True) -> List[UrlData]:
         """
-        Retrieve data known for a given list of urls. Retrieved 
-        data should be an instance of UrlData and its field should match:
-            -  url field is always present
-            -  Every Given url in the input should be present in the output list 
-            -  last scraped date field should be null when this url is not scraped yet
-            -  if skip_body == True, then all UrlData instances will have its scraped_data field as null
-
-        Parameters:
-            - urls : [str] = list of urls 
-            - skip_body : bool = If should skip scraped_data field of urls (may improve performance for some
-                                 operations where the body is not needed)
-        Return:
-            List of url data matching provided urls
+            Get all UrlData objects that match given predicate
+            Parameters:
+                + predicate : (UrlData) -> bool = predicate to match
+            Return:
+                List of matching UrlData
         """
-        raise NotImplementedError("Implement get_known_data_for abstract method")
+        raise NotImplementedError("Implement get_matching abstract function")
 
+    def filter_scraped_urls(self, urls : List[str]) -> List[str]:
+        """
+            Filter out urls whose data is already known, leaving only the ones to be scraped
+            for first time
+            Parameters: 
+                urls : [str] = List of urls to filter 
+
+            Return:
+                A list of urls such that none of them has been scraped 
+        """
+        raise NotImplementedError("Implement filter_scraped_urls abstract function")
+
+    def was_scraped(self, url : str) -> bool:
+        """
+            Tells if a given url is already scraped (it's related data is already know)
+            Parameters:
+                url : str = url to check if it was already scraped
+            Return:
+                If the given url's related data is already known
+                
+        """
+        raise NotImplementedError("Implement was_scraped abstract function")
 
     def save(self, url_data : List[UrlData]):
         """
-            Save provided data to local storage
+            Save provided data to local storage. 
+            If some some urls are already in local storage, update them with provided new data.
+            If not, delete them.
             Parameters:
                 - data : [UrlData] = data to be saved
         """

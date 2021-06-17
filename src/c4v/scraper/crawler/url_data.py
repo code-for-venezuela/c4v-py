@@ -4,13 +4,15 @@
 """
 
 # Local imports 
+from typing import Dict, Any
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports 
-from dataclasses import dataclass
+import dataclasses
 from datetime import datetime
+import json 
 
-@dataclass()
+@dataclasses.dataclass
 class UrlData:
     """
         Represents an entry in a table holding data
@@ -21,3 +23,13 @@ class UrlData:
     last_scraped : datetime = None
     scraped_data : ScrapedData = None # notice that these two fields are nullable, it's such that you can base logic on it
 
+
+class UrlDataEncoder(json.JSONEncoder):
+    """
+        Encoder to turn this file into json format
+    """
+    def default(self, obj: UrlData) -> Dict[str, Any]:
+        if isinstance(obj, UrlData):
+            return dataclasses.asdict(obj)
+        
+        return json.JSONEncoder.default(self, obj)
