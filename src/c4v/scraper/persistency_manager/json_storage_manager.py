@@ -3,13 +3,10 @@
     using regular files.
 """
 # third party imports
-import dataclasses
 import json
-from json import encoder
 import os
 
 from typing import Any, Callable, Dict, List
-from typing_extensions import Required
 
 # Local imports 
 from c4v.scraper.persistency_manager.base_persistency_manager import BasePersistencyManager
@@ -26,23 +23,20 @@ class JsonManager(BasePersistencyManager):
     """
 
     def __init__(self, file : str, create_file_if_not_exist : bool = False):
-
         self._file = file
 
         # If file does not exist, create it
         if create_file_if_not_exist and not os.path.exists(file):
             with open(file, "w+"):
                 pass
-        
-        # Load file content to class
-        self._load_json_file_content()
 
     def _load_json_file_content(self) -> List[UrlData]:
         """
             Read file to a dict
         """
         with open(self._file, 'r') as json_file:
-            return json.load(json_file, object_hook=_parse_file_data_to_url_data)
+
+            return [_parse_dict_to_url_data(j) for j in json.load(json_file)]
         
     def _save_to_json(self, url_datas : List[UrlData]):
         """
@@ -53,7 +47,8 @@ class JsonManager(BasePersistencyManager):
             json.dump(url_datas, json_file, cls=UrlDataEncoder)    
 
     def save(self, url_data: List[UrlData]):
-
+        # Save given urls to disk. If there's an entry with 
+        # an url matching with one of the instance variables, then save it 
         url_to_data = { url_d.url : url_d for url_d in self._load_json_file_content() }
 
         for url_d in url_data:
@@ -64,7 +59,7 @@ class JsonManager(BasePersistencyManager):
         
 
     def delete(self, urls: List[str]):
-
+        # delete entries whose url is one of the listed ones
         urls_to_data = { url_d.url : url_d for url_d in  self._load_json_file_content()}
 
         for url in urls:
@@ -73,17 +68,28 @@ class JsonManager(BasePersistencyManager):
         self._save_to_json(urls_to_data.values())
 
     def get_matching(self, predicate: Callable[[UrlData], bool]) -> List[UrlData]:
+        # Get instances matching this predicate
         return list(filter(predicate,self._load_json_file_content()))
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
-        return self.get_matching(lambda url_d : url_d.last_scraped == None)
+
+        data = { d.url : d.last_scraped != None for d in self._load_json_file_content()}
+
+        l = [
+            url for url in urls if not data.get(url)
+        ]
+        # Get instances that should be scraped
+        return l
 
     def was_scraped(self, url: str) -> bool:
+        # Check if given url was scraped
         for url_d in self._load_json_file_content():
             if url_d.url == url:
                 return url_d.last_scraped == None
+        
+        return False
 
-def _parse_file_data_to_url_data(obj : Dict[str, Any]) -> UrlData:
+def _parse_dict_to_url_data(obj : Dict[str, Any]) -> UrlData:
     """
     Parse dict object into a new object instance
     """

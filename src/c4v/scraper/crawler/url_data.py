@@ -6,6 +6,7 @@
 # Local imports 
 from typing import Dict, Any
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.settings import DATE_FORMAT
 
 # Python imports 
 import dataclasses
@@ -31,5 +32,7 @@ class UrlDataEncoder(json.JSONEncoder):
     def default(self, obj: UrlData) -> Dict[str, Any]:
         if isinstance(obj, UrlData):
             return dataclasses.asdict(obj)
-        
+        elif isinstance(obj, datetime):
+            return datetime.strftime(obj, DATE_FORMAT)
+
         return json.JSONEncoder.default(self, obj)

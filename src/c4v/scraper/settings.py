@@ -17,6 +17,8 @@ check_scrapers_consistency(INSTALLED_SCRAPERS)
 # Spider
 URL_TO_SCRAPER = {s.intended_domain: s for s in INSTALLED_SCRAPERS}
 
-
 # root dir, so we can get resources from module directories
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Date format for this module:
+DATE_FORMAT = "%Y-%m-%d %H:%:M:%S.%f%z"
