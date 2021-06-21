@@ -92,7 +92,7 @@ class JsonManager(BasePersistencyManager):
         # Check if given url was scraped
         for url_d in self._load_json_file_content():
             if url_d.url == url:
-                return url_d.last_scraped == None
+                return url_d.last_scraped != None
         
         return False
 
