@@ -5,6 +5,7 @@
 # third party imports
 import json
 import os
+import sys
 
 from typing import Any, Callable, Dict, List
 
@@ -34,8 +35,14 @@ class JsonManager(BasePersistencyManager):
         """
             Read file to a dict
         """
-        with open(self._file, 'r') as json_file:
 
+        if os.stat(self._file).st_size == 0:
+            with open(self._file, 'r+') as json_file:
+                print(f"Warning: file  {self._file} is empty, filling it with empty list", file=sys.stderr)
+                print("[]", file=json_file)
+
+
+        with open(self._file, 'r') as json_file:
             return [_parse_dict_to_url_data(j) for j in json.load(json_file)]
         
     def _save_to_json(self, url_datas : List[UrlData]):
@@ -55,7 +62,7 @@ class JsonManager(BasePersistencyManager):
             url_to_data[url_d.url] = url_d
 
         # Save this file to local storage
-        self._save_to_json(url_to_data.values())
+        self._save_to_json(list(url_to_data.values()))
         
 
     def delete(self, urls: List[str]):
