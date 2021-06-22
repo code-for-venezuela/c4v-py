@@ -11,20 +11,20 @@
 from typing import List, Callable
 
 # Local imports
-from c4v.scraper.crawler.url_data import UrlData
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 class BasePersistencyManager:
     """
         Base class to provide support for persistency management
     """
 
-    def get_matching(self, predicate : Callable[[UrlData], bool] = lambda _: True) -> List[UrlData]:
+    def get_matching(self, predicate : Callable[[ScrapedData], bool] = lambda _: True) -> List[ScrapedData]:
         """
-            Get all UrlData objects that match given predicate
+            Get all ScrapedData objects that match given predicate
             Parameters:
-                + predicate : (UrlData) -> bool = predicate to match
+                + predicate : (ScrapedData) -> bool = predicate to match
             Return:
-                List of matching UrlData
+                List of matching ScrapedData
         """
         raise NotImplementedError("Implement get_matching abstract function")
 
@@ -51,13 +51,13 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement was_scraped abstract function")
 
-    def save(self, url_data : List[UrlData]):
+    def save(self, url_data : List[ScrapedData]):
         """
             Save provided data to local storage. 
             If some some urls are already in local storage, update them with provided new data.
             If not, delete them.
             Parameters:
-                - data : [UrlData] = data to be saved
+                - data : [ScrapedData] = data to be saved
         """
         raise NotImplementedError("Implement save abstract method")
 

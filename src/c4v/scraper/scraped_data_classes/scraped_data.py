@@ -1,8 +1,10 @@
-from dataclasses import dataclass
-from typing import List
+# Python imports
+from dataclasses    import dataclass, asdict
+from typing         import List, Dict, Any
+from datetime       import datetime
+import json
 
-
-@dataclass(frozen=True)
+@dataclass()
 class ScrapedData:
     """
         This is a general data format class, 
@@ -15,8 +17,26 @@ class ScrapedData:
         scheme
     """
 
+    url: str
+    last_scraped: datetime = None
     title: str = None
     content: str = None
     author: str = None
     categories: List[str] = None
     date: str = None
+
+
+class ScrapedDataEncoder(json.JSONEncoder):
+    """
+        Encoder to turn this file into json format
+    """
+    def default(self, obj: ScrapedData) -> Dict[str, Any]:
+        if isinstance(obj, ScrapedData):
+            return asdict(obj)
+        elif isinstance(obj, datetime):
+
+            # Local imports
+            from c4v.scraper.settings   import DATE_FORMAT
+            return datetime.strftime(obj, DATE_FORMAT)
+
+        return json.JSONEncoder.default(self, obj)
