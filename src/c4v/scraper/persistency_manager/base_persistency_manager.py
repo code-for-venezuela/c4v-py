@@ -13,12 +13,15 @@ from typing import List, Callable
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
+
 class BasePersistencyManager:
     """
         Base class to provide support for persistency management
     """
 
-    def get_matching(self, predicate : Callable[[ScrapedData], bool] = lambda _: True) -> List[ScrapedData]:
+    def get_matching(
+        self, predicate: Callable[[ScrapedData], bool] = lambda _: True
+    ) -> List[ScrapedData]:
         """
             Get all ScrapedData objects that match given predicate
             Parameters:
@@ -28,7 +31,7 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement get_matching abstract function")
 
-    def filter_scraped_urls(self, urls : List[str]) -> List[str]:
+    def filter_scraped_urls(self, urls: List[str]) -> List[str]:
         """
             Filter out urls whose data is already known, leaving only the ones to be scraped
             for first time
@@ -40,7 +43,7 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement filter_scraped_urls abstract function")
 
-    def was_scraped(self, url : str) -> bool:
+    def was_scraped(self, url: str) -> bool:
         """
             Tells if a given url is already scraped (it's related data is already know)
             Parameters:
@@ -51,7 +54,7 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement was_scraped abstract function")
 
-    def save(self, url_data : List[ScrapedData]):
+    def save(self, url_data: List[ScrapedData]):
         """
             Save provided data to local storage. 
             If some some urls are already in local storage, update them with provided new data.
@@ -61,7 +64,7 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement save abstract method")
 
-    def delete(self, urls : List[str]):
+    def delete(self, urls: List[str]):
         """
             Delete provided urls from persistent storage
             Parameters:

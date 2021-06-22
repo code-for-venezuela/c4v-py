@@ -68,7 +68,7 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
         s.start_bulk_scrape()
 
     # Retrieve scraped items
-    items : List[BaseDataFormat] = []
+    items: List[BaseDataFormat] = []
     for s in scrapers_instances:
         items.extend(s.get_scraped_items())
 
