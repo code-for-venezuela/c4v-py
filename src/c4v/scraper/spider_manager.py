@@ -9,7 +9,7 @@ import c4v.scraper.scrapy_settings as settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
-from typing import List, Dict, Any
+from typing import List
 
 
 class SpiderManager:

@@ -4,7 +4,6 @@
 # Internal imports
 from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
 from c4v.scraper.spiders.primicia import PrimiciaSpider
-from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 
 
 class PrimiciaScraper(BaseScrapyScraper):

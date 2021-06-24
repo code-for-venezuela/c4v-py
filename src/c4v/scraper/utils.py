@@ -6,13 +6,11 @@ from bs4 import BeautifulSoup
 
 # local imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
-from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 
 # Python imports
 import re
 from urllib.parse import urlparse
 from typing import Generator, List, Type, Any, Callable
-import dataclasses
 
 
 def strip_http_tags(element: str) -> str:

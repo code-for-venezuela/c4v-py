@@ -1,4 +1,5 @@
 # TODO move tests out of this module when approved.
+from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 from tests.scraper.utils import fake_response_from_str
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 from c4v.scraper.settings import ROOT_DIR
@@ -21,9 +22,9 @@ def test_parse_ok(  el_pitazo_snapshot,
 
     scraper = ElPitazoScraper()
 
-    parse_output = scraper.parse(response)
+    parse_output : ElPitazoData = scraper.parse(response)
 
-    assert parse_output.content == el_pitazo_expected_body, "body does not match"
+    assert parse_output.body == el_pitazo_expected_body, "body does not match"
     assert (
         parse_output.title
         == el_pitazo_expected_title

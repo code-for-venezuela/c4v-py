@@ -1,6 +1,6 @@
 # External imports
 import scrapy
-
+from scrapy.http import Response
 # Python imports
 from typing import Dict, Any
 
@@ -25,16 +25,13 @@ class PrimiciaSpider(scrapy.Spider):
     TAGS_SELECTOR = ".badge.badge-pill.badge-primicia ::text"
     CATEGORIES_SELECTOR = None
 
-    def parse(self, response, **kwargs) -> Dict[str, Any]:
+    def parse(self, response : Response, **kwargs) -> PrimiciaData:
         """
-        Returns a dict like structure with the following
-        fields:
-            + title
-            + body
-            + date
-            + author
-            + categories
-            + tags
+        Return a PrimiciaData instance, describing data possible scraped for this page
+        Parameters:
+            + response : Response = Scrapy response object
+        Return:
+            Data scraped for this page
         """
 
         title = response.css(self.TITLE_SELECTOR).get() or ""
@@ -57,7 +54,7 @@ class PrimiciaSpider(scrapy.Spider):
             body=body,
         )
 
-    def _get_body(self, response, selector) -> str:
+    def _get_body(self, response : Response, selector) -> str:
         """
         Get article body as a single unicode string
         """

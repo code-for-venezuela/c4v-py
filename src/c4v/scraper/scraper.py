@@ -3,6 +3,7 @@
 """
 
 # Local imports
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
@@ -21,14 +22,10 @@ def scrape(url: str) -> ScrapedData:
         Parameters:
             + url - str : Url to scrape
         Return:
-            A dict object, each describing the data that could be 
+            A ScrapedData object describing the data that could be 
             extracted for this url. Obtained data depends on the url itself, 
-            so available data may change depending on the scrapped url.
-            Dict format:
-             {
-                 "url" : (str) url where the data came from,
-                 "data": (dict) Data scraped for this url
-             }
+            so available data may change depending on the scrapped url, some fields 
+            may be null.
     """
     scraper = _get_scraper_from_url(url)()
     return scraper.scrape(url)
@@ -71,17 +68,21 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
         s.start_bulk_scrape()
 
     # Retrieve scraped items
-    items = []
+    items : List[BaseDataFormat] = []
     for s in scrapers_instances:
         items.extend(s.get_scraped_items())
 
+    for i in range(len(items)):
+        items[i] = items[i].to_scraped_data()
     return items
 
 
 def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
     """
         Validates if this url is scrapable and returns its 
-        corresponding spider when it is
+        corresponding spider when it is.
+        Raise ValueError if url is not valid or if it's not 
+        scrapable for our supported scrapers
     """
 
     if not valid_url(url):

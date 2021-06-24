@@ -7,8 +7,6 @@ from .scraped_data import ScrapedData
 
 # Python imports:
 from dataclasses import dataclass
-from typing import List
-
 
 @dataclass(frozen=True)  # Readonly attributes
 class BaseDataFormat:

@@ -13,7 +13,7 @@ from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
-from typing import List, Dict, Any, Type
+from typing import List
 
 
 class BaseScraper:
@@ -24,7 +24,7 @@ class BaseScraper:
     # domain to be scraped by this scraper
     intended_domain: str = None
 
-    def parse(self, response) -> ScrapedData:
+    def parse(self, response) -> BaseDataFormat:
         """
             return scraped data from a response object 
             Parameters:
@@ -35,7 +35,7 @@ class BaseScraper:
         """
         raise NotImplementedError("Scrapers should implement the parse method")
 
-    def scrape(self, url: str) -> ScrapedData:
+    def scrape(self, url: str) -> BaseDataFormat:
         """
             return scraped data from url.
             Parameters: 
@@ -46,7 +46,7 @@ class BaseScraper:
         """
         raise NotImplementedError("Scrapers should implement the scrape method")
 
-    def bulk_scrape(self, urls: List[str]) -> List[ScrapedData]:
+    def bulk_scrape(self, urls: List[str]) -> List[BaseDataFormat]:
         """
             Return scraped data for a list of urls. Override it 
             if your scraper implementation could handle an optimized
@@ -91,7 +91,7 @@ class BaseScraper:
         del self._to_scrape
         self._scraped_items = items
 
-    def get_scraped_items(self) -> List[ScrapedData]:
+    def get_scraped_items(self) -> List[BaseDataFormat]:
         """
             Return the scraped list of items after a bulk scrape process
         """

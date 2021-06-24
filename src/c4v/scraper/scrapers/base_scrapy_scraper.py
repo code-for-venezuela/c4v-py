@@ -15,10 +15,10 @@ from scrapy import Spider
 # Internal imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.spider_manager import SpiderManager
-from c4v.scraper.scraped_data_classes.base_scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat, ScrapedData
 
 # Python imports
-from typing import Type, List, Dict, Any
+from typing import Type, List
 
 
 class BaseScrapyScraper(BaseScraper):
@@ -41,11 +41,11 @@ class BaseScrapyScraper(BaseScraper):
 
         self._spider_manager = SpiderManager(self.spider)
 
-    def parse(self, response) -> ScrapedData:
-        return self._spider_manager.parse(response).to_scraped_data()
+    def parse(self, response) -> BaseDataFormat:
+        return self._spider_manager.parse(response)
 
-    def scrape(self, url: str) -> ScrapedData:
-        return self._spider_manager.scrape(url).to_scraped_data()
+    def scrape(self, url: str) -> BaseDataFormat:
+        return self._spider_manager.scrape(url)
 
     def schedule_scraping(self, urls: List[str]):
         return self._spider_manager.schedule_scraping(urls)
@@ -53,5 +53,5 @@ class BaseScrapyScraper(BaseScraper):
     def start_bulk_scrape(self):
         return self._spider_manager.start_bulk_scrape()
 
-    def get_scraped_items(self) -> List[ScrapedData]:
+    def get_scraped_items(self) -> List[BaseDataFormat]:
         return self._spider_manager.get_scraped_items()
