@@ -7,8 +7,9 @@ import scrapy
 from scrapy.http import Response
 
 # Python imports
-from typing import List, Dict, Any
-
+from typing     import List, Dict, Any
+from datetime   import datetime
+import pytz
 
 class ElPitazoSpider(scrapy.Spider):
     """
@@ -51,6 +52,8 @@ class ElPitazoSpider(scrapy.Spider):
             title=title,
             author=author,
             date=date,
+            url=response.url,
+            last_scraped=datetime.now()
         )
 
     def _get_body(self, response: Response) -> str:

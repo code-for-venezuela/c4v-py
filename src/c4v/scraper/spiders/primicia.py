@@ -3,8 +3,9 @@ import scrapy
 from scrapy.http import Response
 
 # Python imports
-from typing import Dict, Any
-
+from datetime   import datetime
+from typing     import Dict, Any
+import pytz
 # Local imports
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
 
@@ -53,6 +54,8 @@ class PrimiciaSpider(scrapy.Spider):
             author=author,
             date=date,
             body=body,
+            url=response.url,
+            last_scraped=datetime.now()
         )
 
     def _get_body(self, response: Response, selector) -> str:
