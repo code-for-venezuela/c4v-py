@@ -22,11 +22,25 @@ class BaseCrawler:
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
 
-    def crawl_urls(
-        self, post_process_data: Callable[[List[str]], Any] = None
-    ) -> List[str]:
+    def crawl_urls(self) -> List[str]:
         """
             Return a list of urls scraped from the site intended for this scraper.
+            Return:
+                List of urls from sitemap
+        """
+        items = []
+        def store_items(new_items : List[str]):
+            items.extend(new_items)
+
+        self.crawl_and_process_urls(store_items)
+
+        return items
+
+    def crawl_and_process_urls(
+        self, post_process_data: Callable[[List[str]], Any] = None
+    ):
+        """
+            crawl urls, processing them with the provided function
             Parameters:
                 + post_process_data : ([str]) -> [str] = function to call over the resulting set of urls. May be called in batches
             Return:
