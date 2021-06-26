@@ -37,6 +37,7 @@ google-cloud-bigquery = "1.25.0"
 tensorflow-cpu = "2.3.1"
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
+click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
@@ -47,6 +48,9 @@ pytest-mock = "^3.1.1"
 importlib_metadata = { version = "^1.7.0", python = "~3.6 || ~3.7" }
 zipp = { version = "^3.1.0", python = "~3.6 || ~3.7" }
 pylint = "^2.6.0"
+
+[tool.poetry.scripts]
+c4v = "c4v.c4v_cli:c4v_cli"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
