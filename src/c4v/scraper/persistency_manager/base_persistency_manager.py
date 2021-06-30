@@ -3,8 +3,6 @@
     as simple files or maybe with a more complex scheme, such as databases
     or http requests. This base class provides a contract that
     every persistency manager should match in order to be used with our app.
-
-    Notice that 
 """
 
 # Python imports
@@ -18,18 +16,6 @@ class BasePersistencyManager:
     """
         Base class to provide support for persistency management
     """
-
-    def get_matching(
-        self, predicate: Callable[[ScrapedData], bool] = lambda _: True
-    ) -> List[ScrapedData]:
-        """
-            Get all ScrapedData objects that match given predicate
-            Parameters:
-                + predicate : (ScrapedData) -> bool = predicate to match
-            Return:
-                List of matching ScrapedData
-        """
-        raise NotImplementedError("Implement get_matching abstract function")
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
         """
