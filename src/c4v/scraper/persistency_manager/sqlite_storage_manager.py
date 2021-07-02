@@ -85,6 +85,7 @@ class SqliteManager(BasePersistencyManager):
     
     def get_all(self) -> Iterator[ScrapedData]:
         
+        # Retrieve all data stored 
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
             res = cursor.execute("SELECT * FROM scraped_data;").fetchall()
@@ -128,42 +129,8 @@ class SqliteManager(BasePersistencyManager):
 
                 if not is_there:
                     res.append(url)
-
-        
+ 
         return res
-
-
-    def save(self, url_data: List[ScrapedData]):
-        # Save data into database
-        if not url_data: return
-
-        with sqlite3.connect(self._db_path) as connection:
-            cursor = connection.cursor()
-            for data in url_data:
-                # insert row of data if does not exist, or replace it if it does
-                data_dict = dataclasses.asdict(data)
-                data_dict['scraped_date'] = data.last_scraped
-
-                cursor.execute(
-                    "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)", dataclasses.asdict(data)
-                )
-
-                # insert new categories 
-                for category in data.categories:
-                    cursor.execute("INSERT OR IGNORE INTO category VALUES (?)", [category])
-                    # insert many to many relationship 
-                    cursor.execute("INSERT OR IGNORE INTO category_to_data VALUES (?, ?)", [data.url, category])
-
-            # save changes
-            connection.commit()                
-                
-    def delete(self, urls: List[str]):
-
-        with sqlite3.connect(self._db_path) as connection:
-            cursor = connection.cursor()
-            cursor.executemany("DELETE FROM scraped_data WHERE url=?", [(url,) for url in urls])
-            connection.commit()
-        
 
     def was_scraped(self, url: str) -> bool:
 
@@ -175,6 +142,38 @@ class SqliteManager(BasePersistencyManager):
 
             return obj != None
 
+    def save(self, url_data: List[ScrapedData]):
+        # Save data into database
+        if not url_data: return
+
+        with sqlite3.connect(self._db_path) as connection:
+            cursor = connection.cursor()
+            data_to_insert = [dataclasses.asdict(data) for data in url_data]
+            print(data_to_insert)
+            cursor.executemany(
+                "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)", 
+                data_to_insert
+            )
+
+            for data in url_data:
+                # insert new categories 
+                cursor.executemany("INSERT OR IGNORE INTO category VALUES (?)", [(cat,) for cat in data.categories])
+
+                # insert many to many relationship 
+                cursor.executemany("INSERT OR IGNORE INTO category_to_data VALUES (?, ?)", 
+                                    [(data.url, category) for category in data.categories]
+                )
+
+            # save changes
+            connection.commit()                
+                
+    def delete(self, urls: List[str]):
+
+        # Bulk delete provided urls
+        with sqlite3.connect(self._db_path) as connection:
+            cursor = connection.cursor()
+            cursor.executemany("DELETE FROM scraped_data WHERE url=?", [(url,) for url in urls])
+            connection.commit()
 
 def _parse_dict_to_url_data(obj: Dict[str, Any]) -> ScrapedData:
     """
