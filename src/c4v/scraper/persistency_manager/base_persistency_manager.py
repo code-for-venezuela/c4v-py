@@ -6,7 +6,7 @@
 """
 
 # Python imports
-from typing import List, Callable
+from typing import Iterator, List
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -16,6 +16,14 @@ class BasePersistencyManager:
     """
         Base class to provide support for persistency management
     """
+    def get_all(self) -> Iterator[ScrapedData]:
+        """
+            Return an iterator over the set of stored instances
+
+            Return:
+                Iterator of stored ScrapedData instances
+        """
+        raise NotImplementedError("Implement filter_scraped_urls abstract function")
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
         """

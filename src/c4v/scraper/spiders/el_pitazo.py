@@ -53,7 +53,7 @@ class ElPitazoSpider(scrapy.Spider):
             author=author,
             date=date,
             url=response.url,
-            last_scraped=datetime.now()
+            last_scraped = utils.get_datetime_now()
         )
 
     def _get_body(self, response: Response) -> str:

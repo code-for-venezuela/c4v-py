@@ -7,8 +7,8 @@ from datetime   import datetime
 from typing     import Dict, Any
 import pytz
 # Local imports
+import c4v.scraper.utils as utils
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
-
 
 class PrimiciaSpider(scrapy.Spider):
     """
@@ -55,7 +55,7 @@ class PrimiciaSpider(scrapy.Spider):
             date=date,
             body=body,
             url=response.url,
-            last_scraped=datetime.now()
+            last_scraped=utils.get_datetime_now()
         )
 
     def _get_body(self, response: Response, selector) -> str:

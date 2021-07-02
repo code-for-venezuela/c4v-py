@@ -21,4 +21,4 @@ URL_TO_SCRAPER = {s.intended_domain: s for s in INSTALLED_SCRAPERS}
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Date format for this module:
-DATE_FORMAT = "%Y-%m-%d %H:%:M:%S.%f%z"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f%z"
