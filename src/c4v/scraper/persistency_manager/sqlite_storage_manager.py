@@ -3,10 +3,7 @@
     using regular files.
 """
 # Python
-import json
-import os
 from sqlite3.dbapi2 import connect
-import sys
 import sqlite3
 from typing import Any, Iterator, Dict, List
 import dataclasses
