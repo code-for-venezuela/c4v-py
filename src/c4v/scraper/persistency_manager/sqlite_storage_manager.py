@@ -24,7 +24,6 @@ from c4v.scraper.scraped_data_classes.scraped_data import (
 from c4v.scraper.settings import DATE_FORMAT
 
 
-
 class SqliteManager(BasePersistencyManager):
     """
         Use SQLite based local storage 
@@ -35,46 +34,49 @@ class SqliteManager(BasePersistencyManager):
         self._db_path = db_path
         self._migrate(db_path)
 
-    def _migrate(self, db_path : str):
+    def _migrate(self, db_path: str):
         """
             Perform a database migration, ensuring that tables are as specified in this class,
             use db specified by given path
         """
         with sqlite3.connect(db_path) as connection:
-            cursor = connection.cursor()                        # connect to cursor
-            
-            # All these migations are "if not exists" so no change is performed when they already exist
-            self._create_scraped_data_table(cursor)             # create scraped data table
-            self._create_category_table(cursor)                 # category table (including many to many)
-            connection.commit()                                 # save changes
+            cursor = connection.cursor()  # connect to cursor
 
-    def _create_scraped_data_table(self, cursor : sqlite3.Cursor):
+            # All these migations are "if not exists" so no change is performed when they already exist
+            self._create_scraped_data_table(cursor)  # create scraped data table
+            self._create_category_table(
+                cursor
+            )  # category table (including many to many)
+            connection.commit()  # save changes
+
+    def _create_scraped_data_table(self, cursor: sqlite3.Cursor):
         """
             Create scraped data with the structure as in ScrapedData model, perform changes with 
             provided cursor
         """
         cursor.execute(
-        "CREATE TABLE IF NOT EXISTS  scraped_data(\
+            "CREATE TABLE IF NOT EXISTS  scraped_data(\
             url PRIMARY KEY,\
             last_scraped DATETIME NULL,\
             title TEXT NULL,\
             content TEXT NULL,\
             author TEXT NULL,\
             date DATETIME NULL\
-            );")
-    
-    def _create_category_table(self, cursor : sqlite3.Cursor):
+            );"
+        )
+
+    def _create_category_table(self, cursor: sqlite3.Cursor):
         """
             Create category table, including a many to many relationship between categories.
             Perform changes with provided cursor
         """
         cursor.execute(
-        "CREATE TABLE IF NOT EXISTS category(\
+            "CREATE TABLE IF NOT EXISTS category(\
             name PRIMARY KEY\
         );"
         )
         cursor.execute(
-        "CREATE TABLE IF NOT EXISTS  category_to_data (\
+            "CREATE TABLE IF NOT EXISTS  category_to_data (\
                 scraped_data_url,\
                 category_name,\
                 FOREIGN KEY (scraped_data_url) REFERENCES scraped_data(url) ON DELETE CASCADE,\
@@ -82,10 +84,10 @@ class SqliteManager(BasePersistencyManager):
                 CONSTRAINT uniq UNIQUE (scraped_data_url, category_name)\
             );"
         )
-    
+
     def get_all(self) -> Iterator[ScrapedData]:
-        
-        # Retrieve all data stored 
+
+        # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
             res = cursor.execute("SELECT * FROM scraped_data;").fetchall()
@@ -98,38 +100,43 @@ class SqliteManager(BasePersistencyManager):
                 last_scraped = datetime.datetime.strptime(last_scraped, DATE_FORMAT)
 
                 categories = [
-                        category for (category,) in 
-                        cursor.execute("SELECT category_name FROM category_to_data WHERE scraped_data_url=?;", [url])
-                    ]
+                    category
+                    for (category,) in cursor.execute(
+                        "SELECT category_name FROM category_to_data WHERE scraped_data_url=?;",
+                        [url],
+                    )
+                ]
 
                 yield ScrapedData(
-                            url = url, 
-                            last_scraped = last_scraped, 
-                            title = title,
-                            content = content,
-                            author = author,
-                            date = date,
-                            categories=categories
-                            )
-
+                    url=url,
+                    last_scraped=last_scraped,
+                    title=title,
+                    content=content,
+                    author=author,
+                    date=date,
+                    categories=categories,
+                )
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
-        
-        # connect to db and check for each url if such url was scraped, 
+
+        # connect to db and check for each url if such url was scraped,
         # checking its last_scrape field
 
         res = []
         with sqlite3.connect(self._db_path) as connection:
-            
+
             cursor = connection.cursor()
             for url in urls:
 
-                # if last_scraped is null, then it wasn't scraped 
-                is_there = cursor.execute("SELECT 1 FROM scraped_data WHERE url=? AND last_scraped IS NOT NULL", [url]).fetchone()
+                # if last_scraped is null, then it wasn't scraped
+                is_there = cursor.execute(
+                    "SELECT 1 FROM scraped_data WHERE url=? AND last_scraped IS NOT NULL",
+                    [url],
+                ).fetchone()
 
                 if not is_there:
                     res.append(url)
- 
+
         return res
 
     def was_scraped(self, url: str) -> bool:
@@ -138,42 +145,52 @@ class SqliteManager(BasePersistencyManager):
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
 
-            obj = cursor.execute("SELECT ? FROM scraped_data WHERE last_scraped IS NOT NULL", [url]).fetchone()
+            obj = cursor.execute(
+                "SELECT ? FROM scraped_data WHERE last_scraped IS NOT NULL", [url]
+            ).fetchone()
 
             return obj != None
 
     def save(self, url_data: List[ScrapedData]):
         # Save data into database
-        if not url_data: return
+        if not url_data:
+            return
 
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             print(data_to_insert)
             cursor.executemany(
-                "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)", 
-                data_to_insert
+                "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)",
+                data_to_insert,
             )
 
             for data in url_data:
-                # insert new categories 
-                cursor.executemany("INSERT OR IGNORE INTO category VALUES (?)", [(cat,) for cat in data.categories])
+                # insert new categories
+                cursor.executemany(
+                    "INSERT OR IGNORE INTO category VALUES (?)",
+                    [(cat,) for cat in data.categories],
+                )
 
-                # insert many to many relationship 
-                cursor.executemany("INSERT OR IGNORE INTO category_to_data VALUES (?, ?)", 
-                                    [(data.url, category) for category in data.categories]
+                # insert many to many relationship
+                cursor.executemany(
+                    "INSERT OR IGNORE INTO category_to_data VALUES (?, ?)",
+                    [(data.url, category) for category in data.categories],
                 )
 
             # save changes
-            connection.commit()                
-                
+            connection.commit()
+
     def delete(self, urls: List[str]):
 
         # Bulk delete provided urls
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
-            cursor.executemany("DELETE FROM scraped_data WHERE url=?", [(url,) for url in urls])
+            cursor.executemany(
+                "DELETE FROM scraped_data WHERE url=?", [(url,) for url in urls]
+            )
             connection.commit()
+
 
 def _parse_dict_to_url_data(obj: Dict[str, Any]) -> ScrapedData:
     """
