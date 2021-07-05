@@ -18,7 +18,8 @@ class ElPitazoCrawler(base_crawler.BaseCrawler):
     """
 
     start_sitemap_url = "https://elpitazo.net/sitemap.xml"
-
+    name = "el_pitazo"
+    
     @staticmethod
     def should_crawl(url: str) -> bool:
         return url.startswith("https://elpitazo.net/sitemap-pt-post-")
