@@ -19,7 +19,7 @@ jobs:
       run: |-
         python3 -m pip install --upgrade pip
         python3 -m pip install packaging
-        ls
+        cat requirements.txt
         python3 -m pip install -r ./requirements.txt
         
     - name: Build & publish with Poetry
