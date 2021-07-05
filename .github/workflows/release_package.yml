@@ -10,17 +10,10 @@ jobs:
     name: Build and publish c4v-py package
     runs-on: ubuntu-18.04
     steps:
-    - name: Setup Python
-      uses: actions/setup-python@v2.2.2
-      with:
-        # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-        python-version: 3.8
-    - uses: actions/checkout@master
-    
-    - name: Set up Python 3.8.1
+    - name: Set up Python 3.8.10
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8.1
+        python-version: 3.8.10
         
     - name: Install requirements
       run: >-
