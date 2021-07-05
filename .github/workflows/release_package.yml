@@ -3,7 +3,7 @@ name: Publish Python to PyPi
 on: 
   push:
     branches:
-      -luis/ci-config #CHANGE ME TO MASTER ONCE THIS IS PROPERLY TESTED
+      - luis/ci-config #CHANGE ME TO MASTER ONCE THIS IS PROPERLY TESTED
       
 jobs:
   build-n-publish:
