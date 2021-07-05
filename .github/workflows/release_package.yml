@@ -16,12 +16,12 @@ jobs:
         python-version: 3.8.10
         
     - name: Install requirements
-      run: >-
+      run: |-
         python3 -m pip install --upgrade pip
         python3 -m pip install packaging
         python3 -m pip install -r ./requirements.txt
         
     - name: Build & publish with Poetry
-      run: >- 
+      run: |- 
         poetry build
         poetry publish --username c4v --password ${{ secrets.C4VPY_PYPI_PASSWORD }}
