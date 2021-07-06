@@ -34,7 +34,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install packaging
-          python3 -m pip install -r ./requirements.txt
+          python3 -m pip install -r ./c4v-py/requirements.txt
         
       - name: Build & publish with Poetry
         run: |- 
