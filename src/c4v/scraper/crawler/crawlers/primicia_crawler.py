@@ -19,7 +19,7 @@ class PrimiciaCrawler(BaseCrawler):
 
     @staticmethod
     def should_scrape(url: str) -> bool:
-        # Checks if provided url starts with base site 
+        # Checks if provided url starts with base site
         # and if its length is creater to base site (so we avoid crawling main page
         # by accident)
         primicia = "https://primicia.com.ve/"
