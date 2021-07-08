@@ -34,6 +34,11 @@ jobs:
         # uses: py-actions/py-dependency-install@3c3cdbee1f1761659b685ec4b146e0f4ac59e9b4
         uses: py-actions/py-dependency-install@v2.1.0
 
+      - name: Update version name
+        run: |
+          C4V_CURRENT_VERSION=$(grep "^version =" pyproject.toml | cut -d'"' -f 2)
+          python3 .github/update_dev_version.py $C4V_CURRENT_VERSION
+          
       - name: Build & publish with Poetry
         run: |- 
           poetry build
