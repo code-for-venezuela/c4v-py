@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "c4v-py"
-version = "0.1.0.dev1"
+version = "0.1.0.dev3"
 description = "Code for Venezuela python library."
 authors = ["Edilmo Palencia <edilmo@gmail.com>"]
 license = "Apache-2.0"
@@ -36,7 +36,7 @@ nltk = "^3.5"
 google-cloud-bigquery = "1.25.0"
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
-click = "^8.0.1"
+click = "7.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
