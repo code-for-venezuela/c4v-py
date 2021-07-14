@@ -1,12 +1,14 @@
 # External imports
 import scrapy
 from scrapy.http import Response
+
 # Python imports
-from typing import Dict, Any
-
+from datetime   import datetime
+from typing     import Dict, Any
+import pytz
 # Local imports
+import c4v.scraper.utils as utils
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
-
 
 class PrimiciaSpider(scrapy.Spider):
     """
@@ -25,7 +27,7 @@ class PrimiciaSpider(scrapy.Spider):
     TAGS_SELECTOR = ".badge.badge-pill.badge-primicia ::text"
     CATEGORIES_SELECTOR = None
 
-    def parse(self, response : Response, **kwargs) -> PrimiciaData:
+    def parse(self, response: Response, **kwargs) -> PrimiciaData:
         """
         Return a PrimiciaData instance, describing data possible scraped for this page
         Parameters:
@@ -52,9 +54,11 @@ class PrimiciaSpider(scrapy.Spider):
             author=author,
             date=date,
             body=body,
+            url=response.url,
+            last_scraped=utils.get_datetime_now()
         )
 
-    def _get_body(self, response : Response, selector) -> str:
+    def _get_body(self, response: Response, selector) -> str:
         """
         Get article body as a single unicode string
         """

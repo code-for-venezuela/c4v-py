@@ -21,5 +21,5 @@ class ElPitazoCrawler(base_crawler.BaseCrawler):
     name = "el_pitazo"
     
     @staticmethod
-    def check_sitemap_url(url: str) -> bool:
+    def should_crawl(url: str) -> bool:
         return url.startswith("https://elpitazo.net/sitemap-pt-post-")

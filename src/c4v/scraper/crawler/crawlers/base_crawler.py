@@ -15,16 +15,33 @@ class BaseCrawler:
         Probably, the only function you might want to implement is check_sitemap_url,
         that checks if an url in the sitemap index corresponds to an interesting subset 
         of pages
+
+        You might also want to override should_scrape method if you want to add detailed 
+        filtering to over urls to be retrieved 
     """
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
 
-    def crawl_urls(
-        self, post_process_data: Callable[[List[str]], Any] = None
-    ) -> List[str]:
+    def crawl_urls(self) -> List[str]:
         """
             Return a list of urls scraped from the site intended for this scraper.
+            Return:
+                List of urls from sitemap
+        """
+        items = []
+        def store_items(new_items : List[str]):
+            items.extend(new_items)
+
+        self.crawl_and_process_urls(store_items)
+
+        return items
+
+    def crawl_and_process_urls(
+        self, post_process_data: Callable[[List[str]], Any] = None
+    ):
+        """
+            crawl urls, processing them with the provided function
             Parameters:
                 + post_process_data : ([str]) -> [str] = function to call over the resulting set of urls. May be called in batches
             Return:
@@ -75,7 +92,7 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap_index, "xml")
         urls = map(lambda l: l.get_text(), soup.find_all("loc"))
-        urls = filter(self.check_sitemap_url, urls)
+        urls = filter(self.should_crawl, urls)
 
         return list(urls)
 
@@ -103,12 +120,12 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap, "xml")
         urls = map(lambda l: l.get_text(), soup.select("url > loc"))
-        urls = filter(self.check_page_url, urls)
+        urls = filter(self.should_scrape, urls)
 
         return list(urls)
 
     @staticmethod
-    def check_sitemap_url(url: str) -> bool:
+    def should_crawl(url: str) -> bool:
         """
             Function to check if a given sitemap url
             to another sitemap is a desired one
@@ -120,7 +137,7 @@ class BaseCrawler:
         raise NotImplementedError("Implement this abstract method")
 
     @staticmethod
-    def check_page_url(url: str) -> bool:
+    def should_scrape(url: str) -> bool:
         """
             Function to check if an url to a web page in the site is a valid one
             Parameters:

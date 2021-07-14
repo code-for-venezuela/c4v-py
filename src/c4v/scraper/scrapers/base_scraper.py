@@ -10,7 +10,6 @@
 
 # Local imports
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
 from typing import List
