@@ -45,7 +45,7 @@ black = "^19.10b0"
 coverage = { extras = ["toml"], version = "^5.1" }
 pytest-cov = "^2.10.0"
 pytest-mock = "^3.1.1"
-importlib_metadata = { version = "^1.7.0", python = "~3.6 || ~3.7" }
+importlib-metadata = "^4.6.1"
 zipp = "^3.5.0"
 pylint = "^2.6.0"
 
