@@ -9,8 +9,10 @@ from c4v.scraper.scrapers.base_scraper import BaseScraper
 
 # Python imports
 import re
-from urllib.parse import urlparse
-from typing import List, Type
+import pytz
+from datetime       import datetime
+from urllib.parse   import urlparse
+from typing         import List, Type
 
 
 def strip_http_tags(element: str) -> str:
@@ -96,3 +98,9 @@ def check_scraper_consistency(scraper: Type[BaseScraper]):
     assert scraper.intended_domain != None and isinstance(
         scraper.intended_domain, str
     ), f"Scraper {scraper} does not provide intended_domain"
+
+def get_datetime_now() -> datetime:
+    """
+        Return datetime formated properly
+    """
+    return datetime.now(tz=pytz.UTC)
