@@ -2,7 +2,7 @@ import nox
 
 
 @nox.session(
-    python=["3.8"],
+    python=["3.8", "3.7", "3.6"],
     reuse_venv=True
 )
 def tests(session):
