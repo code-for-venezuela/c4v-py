@@ -6,7 +6,6 @@
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from c4v.scraper.scrapers.base_scrapy_scraper import BaseScrapyScraper
 from .settings import URL_TO_SCRAPER
 from c4v.scraper.utils import get_domain_from_url, valid_url
 
@@ -68,7 +67,7 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
         s.start_bulk_scrape()
 
     # Retrieve scraped items
-    items : List[BaseDataFormat] = []
+    items: List[BaseDataFormat] = []
     for s in scrapers_instances:
         items.extend(s.get_scraped_items())
 

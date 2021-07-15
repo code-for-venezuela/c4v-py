@@ -9,8 +9,10 @@ from c4v.scraper.scrapers.base_scraper import BaseScraper
 
 # Python imports
 import re
-from urllib.parse import urlparse
-from typing import Generator, List, Type, Any, Callable
+import pytz
+from datetime       import datetime
+from urllib.parse   import urlparse
+from typing         import Generator, List, Type, Any, Callable
 
 
 def strip_http_tags(element: str) -> str:
@@ -124,3 +126,8 @@ def group_by(elements : List[Any], key : Callable[[Any], Any] = None) -> Generat
 
 
     return []
+def get_datetime_now() -> datetime:
+    """
+        Return datetime formated properly
+    """
+    return datetime.now(tz=pytz.UTC)

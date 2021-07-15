@@ -25,7 +25,7 @@ include = ["*.html", "*.ini", "*.json",]
 [tool.poetry.dependencies]
 python = "^3.8"
 pip = "^20.0.0"
-tensorflow = "2.3.1"
+tensorflow = "2.5.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
 tensorflow-probability = "0.10.0"
 jupyter = "^1.0.0"
@@ -34,9 +34,9 @@ scikit-multilearn = "0.2.0"
 pandas = "1.0.5"
 nltk = "^3.5"
 google-cloud-bigquery = "1.25.0"
-tensorflow-cpu = "2.3.1"
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
+click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
@@ -47,6 +47,9 @@ pytest-mock = "^3.1.1"
 importlib_metadata = { version = "^1.7.0", python = "~3.6 || ~3.7" }
 zipp = { version = "^3.1.0", python = "~3.6 || ~3.7" }
 pylint = "^2.6.0"
+
+[tool.poetry.scripts]
+c4v = "c4v.c4v_cli:c4v_cli"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
