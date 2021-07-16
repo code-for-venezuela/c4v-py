@@ -44,13 +44,8 @@ class BaseCrawler:
             crawl urls, processing them with the provided function
             Parameters:
                 + post_process_data : ([str]) -> [str] = function to call over the resulting set of urls. May be called in batches
-            Return:
-                List of urls from sitemap
         """
-
-        # Url accumulator
-        urls: List[str] = []
-
+        
         # sitemaps to parse
         sitemaps = self.get_sitemaps_from_index()
 
@@ -60,13 +55,12 @@ class BaseCrawler:
             sitemap_content = self.get_sitemap_from_url(sitemap)
 
             # parse urls for the current sitemap
-            urls.extend(new_urls := self.parse_urls_from_sitemap(sitemap_content))
+            new_urls = self.parse_urls_from_sitemap(sitemap_content)
 
             # process new urls if post process function exists
             if post_process_data:
                 post_process_data(new_urls)
 
-        return urls
 
     def get_sitemaps_from_index(self) -> List[str]:
         """

@@ -4,14 +4,17 @@
 """
 # Third party imports
 import click
+import ray as r
 
 # Python imports
 from typing import List
-import os
 
 # Local imports
-from c4v.scraper.scraper import bulk_scrape
-from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.scraper.scraper    import bulk_scrape
+from c4v.scraper.settings   import INSTALLED_CRAWLERS
+from c4v.ray.ray_crawler    import ray_crawl
+from c4v.ray.ray_scraper    import ray_scrape
+
 
 @click.group()
 def c4v_cli():
@@ -25,8 +28,9 @@ def c4v_cli():
 @click.option('--output',   default=None,   help="Output file to store results")
 @click.option('--max-len',  default=-1,     help="Truncate scraped content's body to a maximum lenght if provided.")
 @click.option('--pretty',   is_flag=True,   help="Print data formatted as human readable")
+@click.option('--ray',      is_flag=True,   help="Use ray to scrape sites urls in a distributed manner")
 @click.argument('urls', nargs = -1)
-def scrape(urls : List[str] = None, files : bool = None, output : str = None, max_len : int = -1, pretty : bool = False):
+def scrape(urls : List[str] = None, files : bool = None, output : str = None, max_len : int = -1, pretty : bool = False, ray : bool = False):
     """
         Use this command to run a scraping process.
         Parameters:
@@ -36,6 +40,8 @@ def scrape(urls : List[str] = None, files : bool = None, output : str = None, ma
             + max_len : int = max body size to print when pretty printing. Defaults to max size possible when not provided
             + pretty : bool = If print should be human readable
     """
+    # Init ray if necessary
+    if ray: r.init()
 
     # Check for errors
     #   check if urls were provided
@@ -57,7 +63,7 @@ def scrape(urls : List[str] = None, files : bool = None, output : str = None, ma
         urls_to_scrape = urls
 
     # scrape urls 
-    scraped_data = bulk_scrape(urls_to_scrape)
+    scraped_data = bulk_scrape(urls_to_scrape) if not ray else ray_scrape(urls_to_scrape)
 
     # Choose print function 
     if pretty:
@@ -81,15 +87,19 @@ def scrape(urls : List[str] = None, files : bool = None, output : str = None, ma
 
 
 @c4v_cli.command()
-@click.option('--list', is_flag=True, help="list available crawlers")
-@click.option('--all', is_flag=True, help="Run all available crawlers")
-@click.option('--all-but', is_flag=True, help="Run all crawlers except listed ones")
-@click.option('--output', default=None, help="Store output in provided file")
+@click.option('--list',     is_flag=True,   help="list available crawlers")
+@click.option('--all',      is_flag=True,   help="Run all available crawlers")
+@click.option('--all-but',  is_flag=True,   help="Run all crawlers except listed ones")
+@click.option('--output',   default=None,   help="Store output in provided file")
+@click.option('--ray',      is_flag = True, help="Perform crawling using ray, may need additional configuration")
 @click.argument('crawlers', nargs=-1)
-def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, all_but : bool = False, output : str = None):
+def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, all_but : bool = False, output : str = None, ray : bool = False):
     """
         Start a crawling process 
     """
+    # Init ray if necessary
+    if ray: r.init()
+
     crawlable_sites = "".join([f"\t{crawl.name}\n" for crawl in INSTALLED_CRAWLERS])
     
     # list available crawlers if requested to 
@@ -120,6 +130,7 @@ def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, al
     format_url_list = lambda list: "".join([f"{s}\n" for s in list])
 
     # if output file provided, crawl 
+
     if output:
         try:
             with open(output, "w+") as file:
@@ -127,10 +138,14 @@ def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, al
                 def process(list : List[str]):
                     print(format_url_list(list), file=file)
                 
-                # crawl urls
+                # crawl urls using ray if requested
+                if ray:
+                    print(format_url_list( ray_crawl() ), file=file) 
+                    return 
+
                 for crawler in crawlers_to_run:
                     c = crawler()
-                    c.crawl_urls(process)
+                    c.crawl_and_process_urls(process)
 
             return
         except IOError as e:
@@ -138,13 +153,17 @@ def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, al
             return
 
     # if output file not specified, just print to stdio
+    if ray:
+        click.echo(format_url_list(ray_crawl()))
+        return
+
     for crawler in crawlers_to_run:
             c = crawler()
 
             def process(list : List[str]):
                 click.echo(format_url_list(list))
 
-            c.crawl_urls(process)
+            c.crawl_and_process_urls(process)
     
 
 if __name__ == "__main__":
