@@ -3,7 +3,6 @@
 """
 
 # External imports
-from numpy.core.numeric import extend_all
 import ray
 
 # Local imports
@@ -15,7 +14,7 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from typing import List
 
 @ray.remote
-def _ray_scrape(urls : List[str]):
+def _ray_scrape(urls : List[str]) -> List[ScrapedData]:
     """
         Create a new task with a scraping function
     """
