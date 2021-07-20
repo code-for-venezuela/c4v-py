@@ -43,6 +43,7 @@ traitlets = "4.3.3"
 ipykernel = "5.5.5"
 ipython = "7.16.1"
 zipp = "^3.5.0"
+importlib-metadata = "^4.6.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
