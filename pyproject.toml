@@ -38,6 +38,7 @@ Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
 click = "7.1.2"
 scipy = "1.5.4"
+nbconvert = "5.6.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
