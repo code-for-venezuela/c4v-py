@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - luis/update-pandas
   pull_request:
     branches:
       - master
@@ -16,6 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: 'Python 3.6'  
+            os: ubuntu-18.04
+            python-version: '3.6'
           - name: 'Python 3.8'
             os: ubuntu-18.04
             python-version: '3.8'
