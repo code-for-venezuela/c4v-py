@@ -37,6 +37,8 @@ google-cloud-bigquery = "1.25.0"
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
 click = "^8.0.1"
+dynaconf = "^3.1.4"
+tabulate = "^0.8.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
