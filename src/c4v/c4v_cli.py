@@ -3,7 +3,6 @@
     so we can test things in the meanwhile
 """
 # Third party imports
-from sys import is_finalizing
 import click
 
 # Python imports
