@@ -104,7 +104,7 @@ class ClassifierExperiment:
         """
             Get dataframe as a pandas dataframe 
         """
-        with resources.open_text("data.raw.tweets", dataset_name or self._test_dataset) as f:
+        with resources.open_text("data.raw.huggingface", dataset_name or self._test_dataset) as f:
             return pd.read_csv(f)
 
     def prepare_dataframe(self) -> Tuple[List[str], List[int]]:
@@ -126,7 +126,7 @@ class ClassifierExperiment:
         df_issue_text = df_elpitazo_pscdd[[*self._columns,"label"]]
         df_issue_text.dropna(inplace=True)
 
-        if len(self._columns == 1):
+        if len(self._columns) == 1:
             x = list(df_issue_text["text"])
         else:
             x = list(zip(*[list(df_issue_text[col]) for col in self._columns]))
