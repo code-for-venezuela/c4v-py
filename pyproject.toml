@@ -45,7 +45,7 @@ ipython = "7.16.1"
 zipp = "^3.5.0"
 importlib-metadata = "^4.6.1"
 importlib-resources = {version = "^5.2.2"}
-dataclasses = {version = "^0.8", python = "3.6.*"}
+dataclasses = {version = "^0.8", python = "~3.6.0"}
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.3"
 black = "^19.10b0"
