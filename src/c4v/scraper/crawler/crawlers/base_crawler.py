@@ -60,7 +60,8 @@ class BaseCrawler:
             sitemap_content = self.get_sitemap_from_url(sitemap)
 
             # parse urls for the current sitemap
-            urls.extend(new_urls := self.parse_urls_from_sitemap(sitemap_content))
+            new_urls = self.parse_urls_from_sitemap(sitemap_content)
+            urls.extend(new_urls)
 
             # process new urls if post process function exists
             if post_process_data:
