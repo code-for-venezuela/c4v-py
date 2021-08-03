@@ -152,7 +152,7 @@ class ClassifierExperiment:
 
         return model, tokenizer
 
-    def transform_dataset(x: List[str], y: List[int], tokenizer) -> Tuple[Dataset, Dataset]:
+    def transform_dataset(self, x: List[str], y: List[int], tokenizer : RobertaTokenizer) -> Tuple[Dataset, Dataset]:
         """
             perform operations needed to post process a dataset separated in input list
             "x" and expected answers list "y", returning a training and a validation datasets,
