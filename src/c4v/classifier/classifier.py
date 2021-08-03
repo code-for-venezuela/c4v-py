@@ -259,7 +259,7 @@ class ClassifierExperiment:
                             output_dir: str = None, 
                             logging_dir: str = None, 
                             path_to_save_checkpoint: str = None, 
-                            train_args : TrainingArguments = None,
+                            train_args : Dict[str, Any] = None,
                             train_dataset : Dataset = None,
                             eval_dataset  : Dataset = None
                             ) -> Trainer:
@@ -278,6 +278,10 @@ class ClassifierExperiment:
                 properly configured trainer instance
 
         """
+        if output_dir: 
+            train_args['output_dir'] = output_dir
+        if logging_dir:
+            train_args['logging_dir'] = logging_dir
 
         args = TrainingArguments(**self._override_train_args(train_args))
 
