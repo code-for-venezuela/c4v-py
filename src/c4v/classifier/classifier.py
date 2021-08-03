@@ -3,21 +3,21 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Python imports
-from typing     import Dict, List, Any, Tuple
-from pathlib    import Path
+from typing import Dict, List, Any, Tuple
+from pathlib import Path
 from pandas.core.frame import DataFrame
 from importlib import resources
 
-# Third Party 
+# Third Party
 from transformers import (
     RobertaTokenizer,
     Trainer,
     TrainingArguments,
-    RobertaForSequenceClassification
+    RobertaForSequenceClassification,
 )
-from sklearn.metrics            import accuracy_score, f1_score, recall_score, precision_score
-from sklearn.model_selection    import train_test_split
-from datasets                   import Dataset
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
+from sklearn.model_selection import train_test_split
+from datasets import Dataset
 import torch
 import pandas as pd
 import numpy as np
@@ -29,7 +29,8 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 print(device)
 
 BASE_C4V_FOLDER = os.path.join(os.environ.get("HOME"), "/.c4v")
-BASE_C4V_EXPERIMENTS_FOLDER = os.path.join(BASE_C4V_FOLDER, "/experiments") 
+BASE_C4V_EXPERIMENTS_FOLDER = os.path.join(BASE_C4V_FOLDER, "/experiments")
+
 
 class ClassifierExperiment:
     """
@@ -38,27 +39,33 @@ class ClassifierExperiment:
         more sophisticated experiments:
 
     """
-    LOGS_FOLDER_NAME : str = "logs"
-    RESULTS_EXPERIMENT_NAME : str = "results" 
-    RELEVANT_LABEL : str = "DENUNCIA FALTA DEL SERVICIO"
+
+    LOGS_FOLDER_NAME: str = "logs"
+    RESULTS_EXPERIMENT_NAME: str = "results"
+    RELEVANT_LABEL: str = "DENUNCIA FALTA DEL SERVICIO"
+
     def __init__(
-                self, 
-                branch_name : str, 
-                experiment_name : str, 
-                test_dataset : str = "elpitazo_positivelabels_devdataset.csv",
-                traning_arguments : TrainingArguments = None, 
-                columns : List[str] = ['text'], 
-                base_path : str = BASE_C4V_EXPERIMENTS_FOLDER,
-                use_cuda : bool = True,
-                model_name : str = "mrm8488/RuPERTa-base",
-                train_args : TrainingArguments = None
-            ):
+        self,
+        branch_name: str,
+        experiment_name: str,
+        test_dataset: str = "elpitazo_positivelabels_devdataset.csv",
+        traning_arguments: TrainingArguments = None,
+        columns: List[str] = ["text"],
+        base_path: str = BASE_C4V_EXPERIMENTS_FOLDER,
+        use_cuda: bool = True,
+        model_name: str = "mrm8488/RuPERTa-base",
+        train_args: TrainingArguments = None,
+    ):
         self._traning_arguments = traning_arguments
         self._columns = columns
         self._branch_name = branch_name
         self._experiment_name = experiment_name
         self._experiments_folder = base_path
-        self._device = torch.device("cuda") if use_cuda and torch.cuda.is_available() else torch.device("cpu")
+        self._device = (
+            torch.device("cuda")
+            if use_cuda and torch.cuda.is_available()
+            else torch.device("cpu")
+        )
         self._test_dataset = test_dataset
         self._model_name = model_name
         self._train_args = train_args
@@ -67,9 +74,11 @@ class ClassifierExperiment:
         """
             Get path to files for this experiment
         """
-        return os.path.join( self._experiments_folder, f"{self._branch_name}/{self._experiment_name}")
+        return os.path.join(
+            self._experiments_folder, f"{self._branch_name}/{self._experiment_name}"
+        )
 
-    def _get_path_to(self, folder : str) -> str:
+    def _get_path_to(self, folder: str) -> str:
         """
             Get path to given folder and create it if doesn't exist
         """
@@ -84,7 +93,9 @@ class ClassifierExperiment:
             Return:
                 path to log folder where we store logs for this experiment
         """
-        return self._get_path_to( os.path.join(self._get_files_path(), f"{self.LOGS_FOLDER_NAME}") )
+        return self._get_path_to(
+            os.path.join(self._get_files_path(), f"{self.LOGS_FOLDER_NAME}")
+        )
 
     def get_results_path(self) -> str:
         """
@@ -92,7 +103,9 @@ class ClassifierExperiment:
             Return:
                 path to results folder where we store results for this experiment
         """
-        return self._get_path_to(os.path.join(self._get_files_path(), f"{self.RESULTS_EXPERIMENT_NAME}"))
+        return self._get_path_to(
+            os.path.join(self._get_files_path(), f"{self.RESULTS_EXPERIMENT_NAME}")
+        )
 
     def get_experiments_path(self) -> str:
         """
@@ -100,11 +113,13 @@ class ClassifierExperiment:
         """
         return self._get_path_to(self._get_files_path())
 
-    def get_dataframe(self, dataset_name : str = None) -> DataFrame:
+    def get_dataframe(self, dataset_name: str = None) -> DataFrame:
         """
             Get dataframe as a pandas dataframe 
         """
-        with resources.open_text("data.raw.huggingface", dataset_name or self._test_dataset) as f:
+        with resources.open_text(
+            "data.raw.huggingface", dataset_name or self._test_dataset
+        ) as f:
             return pd.read_csv(f)
 
     def prepare_dataframe(self) -> Tuple[List[str], List[int]]:
@@ -123,19 +138,21 @@ class ClassifierExperiment:
         ).astype(int)
 
         df_elpitazo_pscdd = df_elpitazo_pscdd.convert_dtypes()
-        df_issue_text = df_elpitazo_pscdd[[*self._columns,"label"]]
+        df_issue_text = df_elpitazo_pscdd[[*self._columns, "label"]]
         df_issue_text.dropna(inplace=True)
 
         if len(self._columns) == 1:
             x = list(df_issue_text["text"])
         else:
             x = list(zip(*[list(df_issue_text[col]) for col in self._columns]))
-            
+
         y = list(df_issue_text["label"])
 
         return x, y
 
-    def load_model_and_tokenizer_from_hub(self) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
+    def load_model_and_tokenizer_from_hub(
+        self,
+    ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
         """
             Create model and tokenizer from model hub, configure them and retrieve it
             Return:
@@ -152,7 +169,9 @@ class ClassifierExperiment:
 
         return model, tokenizer
 
-    def transform_dataset(self, x: List[str], y: List[int], tokenizer : RobertaTokenizer) -> Tuple[Dataset, Dataset]:
+    def transform_dataset(
+        self, x: List[str], y: List[int], tokenizer: RobertaTokenizer
+    ) -> Tuple[Dataset, Dataset]:
         """
             perform operations needed to post process a dataset separated in input list
             "x" and expected answers list "y", returning a training and a validation datasets,
@@ -167,18 +186,12 @@ class ClassifierExperiment:
         X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.2)
 
         X_train_tokenized = tokenizer(
-                                X_train, 
-                                padding=True, 
-                                truncation=True, 
-                                max_length=512
-                            )
+            X_train, padding=True, truncation=True, max_length=512
+        )
 
         X_val_tokenized = tokenizer(
-                                X_val, 
-                                padding=True, 
-                                truncation=True, 
-                                max_length=512
-                            )
+            X_val, padding=True, truncation=True, max_length=512
+        )
 
         # Create torch dataset
         class _Dataset(torch.utils.data.Dataset):
@@ -187,7 +200,9 @@ class ClassifierExperiment:
                 self.labels = labels
 
             def __getitem__(self, idx):
-                item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+                item = {
+                    key: torch.tensor(val[idx]) for key, val in self.encodings.items()
+                }
                 if self.labels:
                     item["labels"] = torch.tensor(self.labels[idx])
                 return item
@@ -201,7 +216,7 @@ class ClassifierExperiment:
         return train_dataset, val_dataset
 
     @staticmethod
-    def compute_metrics(predictions : EvalPrediction) -> Dict[str, Any]:
+    def compute_metrics(predictions: EvalPrediction) -> Dict[str, Any]:
         """
             Use this function to evaluate metrics for a given prediction 
             Parameters:
@@ -216,12 +231,17 @@ class ClassifierExperiment:
         pred, labels = predictions
         pred = np.argmax(pred, axis=1)
 
-        accuracy    = accuracy_score(y_true=labels, y_pred=pred)
-        recall      = recall_score(y_true=labels, y_pred=pred)
-        precision   = precision_score(y_true=labels, y_pred=pred)
-        f1          = f1_score(y_true=labels, y_pred=pred)
+        accuracy = accuracy_score(y_true=labels, y_pred=pred)
+        recall = recall_score(y_true=labels, y_pred=pred)
+        precision = precision_score(y_true=labels, y_pred=pred)
+        f1 = f1_score(y_true=labels, y_pred=pred)
 
-        return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
+        return {
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
 
     def _get_default_train_args(self) -> Dict[str, Any]:
         """
@@ -229,40 +249,39 @@ class ClassifierExperiment:
         """
 
         default = {
-            'output_dir' : self.get_results_path(),
-            'num_train_epochs' : 1,
-            'per_device_train_batch_size':10,
-            'per_device_eval_batch_size':10,
-            'warmup_steps':500,
-            'weight_decay':0.01,
-            'logging_dir': self.get_logs_path(),
+            "output_dir": self.get_results_path(),
+            "num_train_epochs": 1,
+            "per_device_train_batch_size": 10,
+            "per_device_eval_batch_size": 10,
+            "warmup_steps": 500,
+            "weight_decay": 0.01,
+            "logging_dir": self.get_logs_path(),
         }
 
         return default
 
-    def _override_train_args(self, new_args : Dict[str, Any] = {}) -> Dict[str, Any]:
+    def _override_train_args(self, new_args: Dict[str, Any] = {}) -> Dict[str, Any]:
         """
             Return the default args dict, with overriden settings specified as the ones specified in 
             input dict
         """
 
         default = self._get_default_train_args()
-        for (k,v) in new_args.items():
+        for (k, v) in new_args.items():
             default[k] = v
 
         return default
 
-
     def train_and_save_model(
-                            self, 
-                            model : Any, 
-                            output_dir: str = None, 
-                            logging_dir: str = None, 
-                            path_to_save_checkpoint: str = None, 
-                            train_args : Dict[str, Any] = None,
-                            train_dataset : Dataset = None,
-                            eval_dataset  : Dataset = None
-                            ) -> Trainer:
+        self,
+        model: Any,
+        output_dir: str = None,
+        logging_dir: str = None,
+        path_to_save_checkpoint: str = None,
+        train_args: Dict[str, Any] = None,
+        train_dataset: Dataset = None,
+        eval_dataset: Dataset = None,
+    ) -> Trainer:
         """
             Train and save using provided model, using provided args and storing 
             results to "output_dir" and logging additional info to "logging_dir",
@@ -278,10 +297,10 @@ class ClassifierExperiment:
                 properly configured trainer instance
 
         """
-        if output_dir: 
-            train_args['output_dir'] = output_dir
+        if output_dir:
+            train_args["output_dir"] = output_dir
         if logging_dir:
-            train_args['logging_dir'] = logging_dir
+            train_args["logging_dir"] = logging_dir
 
         args = TrainingArguments(**self._override_train_args(train_args))
 
@@ -300,17 +319,19 @@ class ClassifierExperiment:
 
         return trainer
 
-    def load_fine_tuned_model(self, path: str = None) -> RobertaForSequenceClassification:
+    def load_fine_tuned_model(
+        self, path: str = None
+    ) -> RobertaForSequenceClassification:
         """
             load fine tuned model from provided path, defaults to an already trained one 
             in experiment's folder
         """
-        path = path or os.path.join(self.get_experiments_path()) 
+        path = path or os.path.join(self.get_experiments_path())
         model_path = os.path.join(path, "pytorch_model.bin")
         model = RobertaForSequenceClassification.from_pretrained(model_path)
         return model
 
-    def evaluate_metrics(self, trainer : Trainer, val_dataset: Dataset) -> DataFrame:
+    def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> DataFrame:
         """
             Compute metrics as a dataframe for this trainer object using the validation dataset
             Parameters:
@@ -325,8 +346,8 @@ class ClassifierExperiment:
             metrics, orient="index", columns=["metrics_value"]
         )
         return metrics_df
-    
-    def run(self, train_args : Dict[str, Any] = None):
+
+    def run(self, train_args: Dict[str, Any] = None):
 
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe()
@@ -337,18 +358,18 @@ class ClassifierExperiment:
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
-            model                   = model,
-            output_dir              = self.get_results_path(),
-            logging_dir             = self.get_logs_path(),
-            path_to_save_checkpoint = self.get_experiments_path(),
-            train_args              = self._override_train_args(train_args or {}),
-            train_dataset           = train_dataset,
-            eval_dataset            = val_dataset
-        )   
+            model=model,
+            output_dir=self.get_results_path(),
+            logging_dir=self.get_logs_path(),
+            path_to_save_checkpoint=self.get_experiments_path(),
+            train_args=self._override_train_args(train_args or {}),
+            train_dataset=train_dataset,
+            eval_dataset=val_dataset,
+        )
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
-            trainer=fine_tuned_model_trainer,
-            val_dataset=val_dataset)
+            trainer=fine_tuned_model_trainer, val_dataset=val_dataset
+        )
 
         return metrics_df
