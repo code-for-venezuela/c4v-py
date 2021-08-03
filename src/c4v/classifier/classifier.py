@@ -223,6 +223,36 @@ class ClassifierExperiment:
 
         return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
 
+    def _get_default_train_args(self) -> Dict[str, Any]:
+        """
+            Return a default version of training arguments as a dict
+        """
+
+        default = {
+            'output_dir' : self.get_results_path(),
+            'num_train_epochs' : 1,
+            'per_device_train_batch_size':10,
+            'per_device_eval_batch_size':10,
+            'warmup_steps':500,
+            'weight_decay':0.01,
+            'logging_dir': self.get_logs_path(),
+        }
+
+        return default
+
+    def _override_train_args(self, new_args : Dict[str, Any] = {}) -> Dict[str, Any]:
+        """
+            Return the default args dict, with overriden settings specified as the ones specified in 
+            input dict
+        """
+
+        default = self._get_default_train_args()
+        for (k,v) in new_args.items():
+            default[k] = v
+
+        return default
+
+
     def train_and_save_model(
                             self, 
                             model : Any, 
@@ -248,19 +278,12 @@ class ClassifierExperiment:
                 properly configured trainer instance
 
         """
-        args = TrainingArguments(
-            output_dir=output_dir or self.get_results_path(), # output directory
-            num_train_epochs=1,                             # total # of training epochs
-            per_device_train_batch_size=10,                 # batch size per device during training
-            per_device_eval_batch_size=10,                  # batch size for evaluation
-            warmup_steps=500,                               # number of warmup steps for learning rate scheduler
-            weight_decay=0.01,                              # strength of weight decay
-            logging_dir=logging_dir or self.get_logs_path(),# directory for storing logs
-        )
+
+        args = TrainingArguments(**self._override_train_args(train_args))
 
         trainer = Trainer(
             model=model,
-            args=  train_args or self._train_args or  args,
+            args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             compute_metrics=self.__class__.compute_metrics,
@@ -314,7 +337,7 @@ class ClassifierExperiment:
             output_dir              = self.get_results_path(),
             logging_dir             = self.get_logs_path(),
             path_to_save_checkpoint = self.get_experiments_path(),
-            train_args              = TrainingArguments(**train_args) if train_args else None,
+            train_args              = self._override_train_args(train_args or {}),
             train_dataset           = train_dataset,
             eval_dataset            = val_dataset
         )   
