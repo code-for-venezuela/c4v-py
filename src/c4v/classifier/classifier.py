@@ -310,13 +310,13 @@ class ClassifierExperiment:
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
-            model           = model,
-            output_dir      = self.get_results_path(),
-            logging_dir     = self.get_logs_path(),
-            full_path       = self.get_experiments_path(),
-            train_args      = TrainingArguments(**train_args) if train_args else None,
-            train_dataset   = train_dataset,
-            eval_dataset    = val_dataset
+            model                   = model,
+            output_dir              = self.get_results_path(),
+            logging_dir             = self.get_logs_path(),
+            path_to_save_checkpoint = self.get_experiments_path(),
+            train_args              = TrainingArguments(**train_args) if train_args else None,
+            train_dataset           = train_dataset,
+            eval_dataset            = val_dataset
         )   
 
         # Get the metrics from the model
