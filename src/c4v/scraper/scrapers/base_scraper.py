@@ -84,7 +84,8 @@ class BaseScraper:
         items = []
 
         for url in self._to_scrape:
-            if (item := self.scrape(url)) :
+            item = self.scrape(url)
+            if item:
                 items.append(item)
 
         del self._to_scrape

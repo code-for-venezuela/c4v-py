@@ -1,6 +1,6 @@
 from scrapy import http
 from scrapy.http import Request, Response, HtmlResponse
-import importlib.resources as resources
+import importlib_resources as resources
 
 def fake_response_from_file(path: str, file : str,  url: str) -> Response:
     """
