@@ -1,0 +1,46 @@
+name: Publish Python to PyPi
+
+on: 
+  push:
+    branches:
+      - master 
+      
+      
+jobs:
+  build-n-publish:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - name: 'Python 3.8'
+            os: ubuntu-18.04
+            python-version: '3.8'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+      - name: Cache basic dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-${{ runner.python-version }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Python Dependency Installation
+        # You may pin to the exact commit or the version.
+        # uses: py-actions/py-dependency-install@3c3cdbee1f1761659b685ec4b146e0f4ac59e9b4
+        uses: py-actions/py-dependency-install@v2.1.0
+
+      - name: Update version name
+        run: |
+          C4V_CURRENT_VERSION=$(grep "^version =" pyproject.toml | cut -d'"' -f 2)
+          python3 .github/update_dev_version.py $C4V_CURRENT_VERSION
+          
+      - name: Build & publish with Poetry
+        run: |- 
+          poetry build
+          poetry publish --username c4v --password ${{ secrets.C4VPY_PYPI_PASSWORD }}
