@@ -130,7 +130,7 @@ def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, al
                 # crawl urls
                 for crawler in crawlers_to_run:
                     c = crawler()
-                    c.crawl_urls(process)
+                    c.crawl_and_process_urls(process)
 
             return
         except IOError as e:
@@ -144,7 +144,7 @@ def crawl(crawlers : List[str] = [], list : bool = False, all : bool = False, al
             def process(list : List[str]):
                 click.echo(format_url_list(list))
 
-            c.crawl_urls(process)
+            c.crawl_and_process_urls(process)
     
 
 if __name__ == "__main__":
