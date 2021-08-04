@@ -10,8 +10,8 @@ from typing import List
 import os
 
 # Local imports
-from c4v.scraper.scraper import bulk_scrape
-from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.scraper.scraper    import bulk_scrape
+from c4v.scraper.settings   import INSTALLED_CRAWLERS
 
 @click.group()
 def c4v_cli():
