@@ -79,11 +79,12 @@ class SqliteManager(BasePersistencyManager):
             );"
         )
 
-    def get_all(self, limit : int, scraped : bool) -> Iterator[ScrapedData]:
+    def get_all(self, limit : int = -1, scraped : bool = None) -> Iterator[ScrapedData]:
 
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
+            # if scraped = true, take only scraped. If false, take non-scraped. If none, take all
             if scraped:
                 new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",)
             elif scraped==False:
@@ -91,6 +92,7 @@ class SqliteManager(BasePersistencyManager):
             else:
                 new_cur = cursor.execute("SELECT * FROM scraped_data;",)
 
+            # If limit less than 0, then take as much as you can
             if limit < 0:
                 res = new_cur.fetchall()
             else:
