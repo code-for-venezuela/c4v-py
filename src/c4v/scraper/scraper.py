@@ -4,13 +4,12 @@
 
 # Local imports
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
-from c4v.scraper.scrapers.base_scraper import BaseScraper
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from .settings import URL_TO_SCRAPER, INSTALLED_CRAWLERS
-from c4v.scraper.utils import get_domain_from_url, valid_url
-from c4v.scraper.persistency_manager.base_persistency_manager import (
-    BasePersistencyManager,
-)
+from c4v.scraper.scrapers.base_scraper                  import BaseScraper
+from c4v.scraper.scraped_data_classes.scraped_data      import ScrapedData
+from .settings                                          import URL_TO_SCRAPER, INSTALLED_CRAWLERS
+from c4v.scraper.utils                                  import get_domain_from_url, valid_url
+from c4v.scraper.persistency_manager.base_persistency_manager import BasePersistencyManager
+from c4v.scraper.persistency_manager.sqlite_storage_manager   import SqliteManager
 
 # Python imports
 from typing import List, Type, Dict
@@ -99,10 +98,10 @@ def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
 
     return scraper
 
-
 class Scraper:
     """
-        This object automates handling scraping and crawling
+        This object encapsulates shared behavior between our multiple components,
+        allowing easy access to common operations
     """
 
     def __init__(self, persistency_manager: BasePersistencyManager):
@@ -156,7 +155,7 @@ class Scraper:
 
         db.save(scraped)
 
-    def crawl_new_for(self, crawler_names: List[str] = None):
+    def crawl_new_urls_for(self, crawler_names: List[str] = None):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
@@ -200,3 +199,11 @@ class Scraper:
         # crawl for every crawler
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls)
+
+    @classmethod
+    def from_local_sqlite_db(cls, db_path : str):
+        """
+            Create a new instance using an SQLite local db
+        """
+        db = SqliteManager(db_path)
+        return cls(db)
