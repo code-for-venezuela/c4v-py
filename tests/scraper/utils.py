@@ -94,3 +94,23 @@ def util_test_url_filtering(manager : BasePersistencyManager):
     manager.save([sd1, sd2])
 
     assert set(manager.filter_scraped_urls(urls)) == {url1, url3}
+
+def util_test_instance_delete(manager : BasePersistencyManager):
+    """
+        test that you can delete instances by url
+    """
+    url1 = "www.url1.com"
+    url2 = "www.url2.com"
+    url3 = "www.url3.com"
+
+    sd1 = ScrapedData(url=url1)
+    sd2 = ScrapedData(url=url2, last_scraped= datetime.now(tz=utc))
+
+    manager.save([sd1, sd2])
+
+    manager.delete([url1, url3]) # should ignore url3
+
+    currents = set(manager.get_all())
+    assert sd1 not in currents, "first element should be deleted"
+    assert sd2 in currents, "second element should not be deleted, as it wasn't in delete list"
+
