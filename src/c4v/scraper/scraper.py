@@ -14,7 +14,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
 )
 
 # Python imports
-from typing import List, Type, Dict, Any
+from typing import List, Type, Dict
 import sys
 
 
