@@ -1,5 +1,6 @@
 # Python imports
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
+import dataclasses
 from typing import List, Dict, Any
 from datetime import datetime
 import json
@@ -23,7 +24,7 @@ class ScrapedData:
     title: str = None
     content: str = None
     author: str = None
-    categories: List[str] = None
+    categories: List[str] = field(default_factory=list)
     date: str = None
 
     def pretty_print(self, max_content_len: int = -1) -> str:
@@ -44,6 +45,8 @@ class ScrapedData:
 
         return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}content:\n\t{content}"
 
+    def __hash__(self) -> int:
+        return (self.url, self.last_scraped, self.title, self.content, self.author, self.date).__hash__()
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """

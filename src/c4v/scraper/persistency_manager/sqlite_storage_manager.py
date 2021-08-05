@@ -172,6 +172,12 @@ class SqliteManager(BasePersistencyManager):
 
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
+
+            data_to_insert = []
+            for data in url_data:
+                new_data = dataclasses.asdict(data)
+                new_data['last_scraped'] = datetime.datetime.strftime(data.last_scraped, DATE_FORMAT) if data.last_scraped else data.last_scraped
+                
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             cursor.executemany(
                 "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)",
