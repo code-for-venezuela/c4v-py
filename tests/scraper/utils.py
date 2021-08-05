@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from datetime import datetime
 from pytz       import utc
 from scrapy.http import Request, Response, HtmlResponse
@@ -51,7 +52,7 @@ def util_test_save_overrides_for(manager : BasePersistencyManager):
     
 def util_test_filter_scraped_urls(manager : BasePersistencyManager):
     """
-        Check that url listing works ok
+        Check that ScrapedData listing works ok
     """
     sd1 = ScrapedData(url="www.url1.com")
     sd2 = ScrapedData(url="www.url2.com", last_scraped= datetime.now(tz=utc))
@@ -73,6 +74,23 @@ def util_test_filter_scraped_urls(manager : BasePersistencyManager):
     assert set(manager.get_all(scraped=True)) == {sd2}, "scraped = true should retrieve only already scraped elements"
     assert set(manager.get_all(scraped=False)) == {sd1, sd3}, "scraped = false should retrieve only non scraped urls"
 
+def util_test_url_filtering(manager : BasePersistencyManager):
+    """
+        test that url filtering works properly
+    """
+    url1 = "www.url1.com"
+    url2 = "www.url2.com"
+    url3 = "www.url3.com"
 
+    sd1 = ScrapedData(url=url1)
+    sd2 = ScrapedData(url=url2, last_scraped= datetime.now(tz=utc))
 
+    urls = [
+        url1,
+        url2,
+        url3
+    ]
 
+    manager.save([sd1, sd2])
+
+    assert set(manager.filter_scraped_urls(urls)) == {url1, url3}
