@@ -25,14 +25,14 @@ class ScrapedData:
     author: str = None
     categories: List[str] = None
     date: str = None
-      
-    def pretty_print(self, max_content_len : int = -1) -> str:
+
+    def pretty_print(self, max_content_len: int = -1) -> str:
         """
             Return a human-readable representation of this data.
             Truncate content if requested
         """
 
-        # create categories string 
+        # create categories string
         categories = "".join(map(lambda s: f"\t+ {s}\n", self.categories))
 
         max_content_len = max_content_len if max_content_len > 0 else len(self.content)
@@ -41,8 +41,9 @@ class ScrapedData:
         content = self.content
         if max_content_len < len(self.content):
             content = content[:max_content_len] + "..."
-        
+
         return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}content:\n\t{content}"
+
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """

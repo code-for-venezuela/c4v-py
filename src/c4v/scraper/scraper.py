@@ -9,11 +9,14 @@ from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from .settings import URL_TO_SCRAPER, INSTALLED_CRAWLERS
 from c4v.scraper.utils import get_domain_from_url, valid_url
-from c4v.scraper.persistency_manager.base_persistency_manager import BasePersistencyManager
+from c4v.scraper.persistency_manager.base_persistency_manager import (
+    BasePersistencyManager,
+)
 
 # Python imports
 from typing import List, Type, Dict, Any
 import sys
+
 
 def scrape(url: str) -> ScrapedData:
     """
@@ -97,15 +100,16 @@ def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
 
     return scraper
 
+
 class Scraper:
     """
         This object automates handling scraping and crawling
     """
 
-    def __init__(self, persistency_manager : BasePersistencyManager):
+    def __init__(self, persistency_manager: BasePersistencyManager):
         self._persistency_manager = persistency_manager
-    
-    def get_bulk_data_for(self, urls : List[str], should_scrape : bool = True):
+
+    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True):
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
@@ -127,7 +131,7 @@ class Scraper:
         urls = set(urls)
         return [sd for sd in db.get_all() if sd.url in urls]
 
-    def get_data_for(self, url : str, should_scrape : bool = True) -> ScrapedData:
+    def get_data_for(self, url: str, should_scrape: bool = True) -> ScrapedData:
         """
             Get data for this url if stored and scrapable. May return none if could not
             find data for this url
@@ -138,7 +142,7 @@ class Scraper:
         data = self.get_bulk_data_for([url], should_scrape)
         return data[0] if data else None
 
-    def scrape_pending(self, limit : int = -1):
+    def scrape_pending(self, limit: int = -1):
         """
             Update DB by scraping rows with no scraped data, just the url
             Parameters:
@@ -153,7 +157,7 @@ class Scraper:
 
         db.save(scraped)
 
-    def crawl_new_for(self, crawler_names : List[str] = None):
+    def crawl_new_for(self, crawler_names: List[str] = None):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
@@ -163,10 +167,10 @@ class Scraper:
         db = self._persistency_manager
 
         # Function to process urls as they come
-        def save_urls(urls : List[str]):
+        def save_urls(urls: List[str]):
             urls = db.filter_scraped_urls(urls)
             print(urls)
-            datas = [ScrapedData(url = url) for url in urls]
+            datas = [ScrapedData(url=url) for url in urls]
             db.save(datas)
 
         # Names for installed crawlers
@@ -180,21 +184,20 @@ class Scraper:
 
         # Report warning if there's some non registered crawlers
         if not_registered:
-            print("WARNING: some names in given name list don't correspond to any registered crawler.", file=sys.stderr)
-            print("Unregistered crawler names: \n" + "\n".join([f"\t* {name}" for name in not_registered]))
+            print(
+                "WARNING: some names in given name list don't correspond to any registered crawler.",
+                file=sys.stderr,
+            )
+            print(
+                "Unregistered crawler names: \n"
+                + "\n".join([f"\t* {name}" for name in not_registered])
+            )
 
-        # Instantiate crawlers to use 
-        crawlers_to_run = [crawler() for crawler in INSTALLED_CRAWLERS if crawler.name in crawler_names]
+        # Instantiate crawlers to use
+        crawlers_to_run = [
+            crawler() for crawler in INSTALLED_CRAWLERS if crawler.name in crawler_names
+        ]
 
         # crawl for every crawler
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls)
-
-
-
-
-
-        
-
-
-

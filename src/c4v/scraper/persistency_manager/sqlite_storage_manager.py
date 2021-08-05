@@ -79,16 +79,20 @@ class SqliteManager(BasePersistencyManager):
             );"
         )
 
-    def get_all(self, limit : int = -1, scraped : bool = None) -> Iterator[ScrapedData]:
+    def get_all(self, limit: int = -1, scraped: bool = None) -> Iterator[ScrapedData]:
 
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
             # if scraped = true, take only scraped. If false, take non-scraped. If none, take all
             if scraped:
-                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",)
-            elif scraped==False:
-                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NULL;",)
+                new_cur = cursor.execute(
+                    "SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",
+                )
+            elif scraped == False:
+                new_cur = cursor.execute(
+                    "SELECT * FROM scraped_data WHERE last_scraped IS NULL;",
+                )
             else:
                 new_cur = cursor.execute("SELECT * FROM scraped_data;",)
 
@@ -103,7 +107,11 @@ class SqliteManager(BasePersistencyManager):
                 (url, last_scraped, title, content, author, date) = row
 
                 # parse date to datetime:
-                last_scraped = datetime.datetime.strptime(last_scraped, DATE_FORMAT) if last_scraped else last_scraped
+                last_scraped = (
+                    datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                    if last_scraped
+                    else last_scraped
+                )
 
                 categories = [
                     category
@@ -173,7 +181,8 @@ class SqliteManager(BasePersistencyManager):
             for data in url_data:
                 # insert new categories
                 # may have none if category field is set to None
-                if data.categories is None: continue
+                if data.categories is None:
+                    continue
 
                 cursor.executemany(
                     "INSERT OR IGNORE INTO category VALUES (?)",

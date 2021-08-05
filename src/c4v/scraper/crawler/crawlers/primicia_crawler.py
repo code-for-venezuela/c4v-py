@@ -11,7 +11,7 @@ class PrimiciaCrawler(BaseCrawler):
 
     start_sitemap_url = "https://primicia.com.ve/sitemap_index.xml"
     name = "primicia"
-    
+
     @staticmethod
     def should_crawl(url: str) -> bool:
         # Sitemaps about posts will start with this prefix

@@ -21,7 +21,7 @@ class BaseCrawler:
     """
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
-    name: str = None               # Crawler name, required to identify this crawler 
+    name: str = None  # Crawler name, required to identify this crawler
 
     def crawl_urls(self) -> List[str]:
         """
@@ -30,7 +30,8 @@ class BaseCrawler:
                 List of urls from sitemap
         """
         items = []
-        def store_items(new_items : List[str]):
+
+        def store_items(new_items: List[str]):
             items.extend(new_items)
 
         self.crawl_and_process_urls(store_items)
