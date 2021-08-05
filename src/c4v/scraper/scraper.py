@@ -3,7 +3,6 @@
 """
 
 # Local imports
-from dataclasses import asdict
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
