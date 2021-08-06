@@ -3,12 +3,12 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Python imports
-from typing import Dict, List, Any, Tuple
-from pathlib import Path
-from pandas.core.frame import DataFrame
-from importlib import resources
-
+from typing             import Dict, List, Any, Tuple
+from pathlib            import Path
+from importlib          import resources
+from enum               import Enum
 # Third Party
+from pandas.core.frame  import DataFrame
 from transformers import (
     RobertaTokenizer,
     Trainer,
@@ -26,18 +26,19 @@ import os
 from transformers.trainer_utils import EvalPrediction
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-print(device)
 
 BASE_C4V_FOLDER = os.path.join(os.environ.get("HOME"), "/.c4v")
 BASE_C4V_EXPERIMENTS_FOLDER = os.path.join(BASE_C4V_FOLDER, "/experiments")
 
+class Tags(Enum):
+    """
+        Possible tags variants for an article
+    """
+    DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
 
 class ClassifierExperiment:
     """
         This class provides a simple way to run simple experiments.
-        Main functions you may want to override if you want to perform 
-        more sophisticated experiments:
-
     """
 
     LOGS_FOLDER_NAME: str = "logs"
@@ -49,14 +50,12 @@ class ClassifierExperiment:
         branch_name: str,
         experiment_name: str,
         test_dataset: str = "elpitazo_positivelabels_devdataset.csv",
-        traning_arguments: TrainingArguments = None,
         columns: List[str] = ["text"],
         base_path: str = BASE_C4V_EXPERIMENTS_FOLDER,
         use_cuda: bool = True,
         model_name: str = "mrm8488/RuPERTa-base",
         train_args: TrainingArguments = None,
     ):
-        self._traning_arguments = traning_arguments
         self._columns = columns
         self._branch_name = branch_name
         self._experiment_name = experiment_name
@@ -134,7 +133,7 @@ class ClassifierExperiment:
 
         df_elpitazo_pscdd = self.get_dataframe()
         df_elpitazo_pscdd["label"] = (
-            df_elpitazo_pscdd.tipo_de_evento == "DENUNCIA FALTA DEL SERVICIO"
+            df_elpitazo_pscdd.tipo_de_evento == Tags.DENUNCIA_FALTA_DEL_SERVICIO.value
         ).astype(int)
 
         df_elpitazo_pscdd = df_elpitazo_pscdd.convert_dtypes()
@@ -150,24 +149,27 @@ class ClassifierExperiment:
 
         return x, y
 
-    def load_model_and_tokenizer_from_hub(
-        self,
-    ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
+    def load_model_from_hub(self) -> RobertaForSequenceClassification:
         """
-            Create model and tokenizer from model hub, configure them and retrieve it
+            Return the model from hub, already configured
             Return:
-                (RobertaForSequenceClassification, RobertaTokenizer) a tuple with the model and the tokenizer as specified
+                Model itself, already configured and loaded to device
         """
-        # Creating model and tokenizer
-        model = RobertaForSequenceClassification.from_pretrained(
-            self._model_name, num_labels=2
-        )
-        tokenizer = RobertaTokenizer.from_pretrained(self._model_name)
-
-        # Use GPU if available
+        model = RobertaForSequenceClassification.from_pretrained(self._model_name, num_labels=2)
+        # send model to device
         model.to(self._device)
 
-        return model, tokenizer
+        return model
+
+    def load_tokenizer_from_hub(self) -> RobertaTokenizer:
+        """
+            Load and configure tokenizer from hub
+            Return:
+                tokenizer from hub
+        """
+        tokenizer = RobertaTokenizer.from_pretrained(self._model_name)
+
+        return tokenizer
 
     def transform_dataset(
         self, x: List[str], y: List[int], tokenizer: RobertaTokenizer
@@ -347,12 +349,15 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def run(self, train_args: Dict[str, Any] = None):
-
+    def run_experiment(self, train_args: Dict[str, Any] = None):
+        """
+            Run an experiment using the give training args
+        """
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe()
 
-        model, tokenizer = self.load_model_and_tokenizer_from_hub()
+        model = self.load_model_from_hub()
+        tokenizer = self.load_tokenizer_from_hub()
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
 
@@ -373,3 +378,4 @@ class ClassifierExperiment:
         )
 
         return metrics_df
+
