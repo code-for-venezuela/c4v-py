@@ -75,15 +75,7 @@ def scrape(
     if not urls:
         urls_to_scrape = [d.url for d in db_manager.get_all(up_to, scraped=False)]
     elif files:  # if urls are stored in files
-        for file in urls:  # iterate over every file
-            try:
-                with open(file) as urls_file:
-                    content = map(
-                        lambda s: s.strip(), urls_file.readlines()
-                    )  # parse every line as a single url
-                    urls_to_scrape.extend(content)
-            except IOError as e:
-                click.echo(f"Could not open input file: {file}. Error: {e.strerror}")
+        urls_to_scrape = _parse_lines_from_files(urls)
     else:
         urls_to_scrape = urls
 
@@ -206,6 +198,52 @@ def list(
     click.echo(data_to_print)
     print(scraped_only)
 
+@c4v_cli.command()
+@click.option("--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB")
+@click.option("--files", is_flag=True, help="Get urls of news to scrape from list of files")
+@click.argument("urls", nargs = -1)
+def classify(urls : List[str] = [], no_scrape : bool = False, files : bool = False):
+    """
+        Run a classification over a given url or from a file 
+    """
+    scraper = Scraper.from_local_sqlite_db(DEFAULT_DB)
+    # Parse urls to be parsed:
+    if files:
+        urls_to_process = _parse_lines_from_files(urls)
+    else:
+        urls_to_process = urls
+
+    scrapable, non_scrapable = scraper.split_non_scrapable(urls_to_process)
+
+    # Warn the user that some urls won't be scraped
+    if non_scrapable:
+        click.echo("[WARNING] some urls won't be retrieved, as they are not scrapable for now.", err=True)
+        click.echo("Non-scrapable urls:", err=True)
+        click.echo("\n".join([f"* {url}" for url in non_scrapable]), err=True)
+
+    # Now get data for each url
+    data = scraper.get_bulk_data_for(scrapable)
+    for d in data:
+        click.echo("Data to classify: " + str(d))
+
+
+    
+
+def _parse_lines_from_files(files : List[str]) -> List[str]:
+    """
+        Utility function to collect all lines from multiple files
+    """
+    lines = []
+    for file in files:  # iterate over every file
+        try:
+            with open(file) as file_with_lines:
+                content = map(
+                    lambda s: s.strip(), file_with_lines.readlines()
+                )  # parse every line as a single url
+                lines.extend(content)
+        except IOError as e:
+            click.echo(f"Could not open input file: {file}. Error: {e.strerror}", err=True)
+    return lines
 
 if __name__ == "__main__":
     c4v_cli()
