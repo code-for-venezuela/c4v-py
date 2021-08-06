@@ -24,7 +24,7 @@ include = ["*.html", "*.ini", "*.json",]
 
 [tool.poetry.dependencies]
 python = "^3.8 || ~3.6.2"
-pip = "^20.0.0"
+pip = "^21.0.0"
 tensorflow = "2.5.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
 tensorflow-probability = "0.10.0"
