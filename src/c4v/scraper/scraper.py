@@ -12,7 +12,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import BasePersist
 from c4v.scraper.persistency_manager.sqlite_storage_manager   import SqliteManager
 
 # Python imports
-from typing import Callable, Iterable, List, Type, Dict
+from typing import Callable, Iterable, List, Type, Dict, Tuple
 import sys
 
 
@@ -214,6 +214,27 @@ class Scraper:
         # crawl for every crawler
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls)
+
+    def split_non_scrapable(self, urls : List[str]) -> Tuple[List[str], List[str]]:
+        """
+            splits url list in two list, one having a list of scrapable urls, 
+            and another one with only non-scrapable
+            Parameters:
+                urls : [str] = List of urls to be split
+            Return:
+                A tuple with two lists, the first one with only scrapable urls from input list,
+                the second one with non-scrapable ones
+        """
+        scrapable, non_scrapable = [], []
+
+        for url in urls:
+            try:
+                _get_scraper_from_url(url)
+                scrapable.append(url)
+            except ValueError:
+                non_scrapable.append(url)
+
+        return scrapable, non_scrapable
 
     @classmethod
     def from_local_sqlite_db(cls, db_path : str):
