@@ -10,7 +10,7 @@ from typing import List
 import os
 
 # Local imports
-from c4v.scraper.scraper import bulk_scrape
+from c4v.scraper.scraper import bulk_scrape, Scraper
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
@@ -122,7 +122,8 @@ def crawl(
     crawlable_sites = "".join([f"\t{crawl.name}\n" for crawl in INSTALLED_CRAWLERS])
 
     # Create default db manager
-    db_manager = SqliteManager(DEFAULT_DB)
+    scraper = Scraper.from_local_sqlite_db(DEFAULT_DB)
+    #db_manager = SqliteManager(DEFAULT_DB)
 
     # list available crawlers if requested to
     if list:
@@ -144,33 +145,24 @@ def crawl(
 
     # set up crawlers to run
     if all:
-        crawlers_to_run = INSTALLED_CRAWLERS
+        crawlers_to_run = [crawler.name for crawler in INSTALLED_CRAWLERS]
     elif all_but:
         crawlers_to_run = [
-            crawler for crawler in INSTALLED_CRAWLERS if crawler.name not in crawlers
+            crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name not in crawlers
         ]
     else:
         crawlers_to_run = [
-            crawler for crawler in INSTALLED_CRAWLERS if crawler.name in crawlers
+            crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name in crawlers
         ]
 
     # function to format crawled urls list
     format_url_list = lambda list: "".join([f"{s}\n" for s in list])
 
-    # if loud flag is provided, print it tu stdio
-    for crawler in crawlers_to_run:
-        c = crawler()
+    def process(list: List[str]):
+        if loud:
+            click.echo(format_url_list(list))
 
-        def process(list: List[str]):
-            scraped_data = [
-                ScrapedData(url=url) for url in db_manager.filter_scraped_urls(list)
-            ]
-            db_manager.save(scraped_data)
-
-            if loud:
-                click.echo(format_url_list(list))
-
-        c.crawl_and_process_urls(process)
+    scraper.crawl_new_urls_for(crawlers_to_run, process)
 
 
 @c4v_cli.command()

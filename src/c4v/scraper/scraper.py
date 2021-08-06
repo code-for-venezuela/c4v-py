@@ -12,7 +12,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import BasePersist
 from c4v.scraper.persistency_manager.sqlite_storage_manager   import SqliteManager
 
 # Python imports
-from typing import List, Type, Dict
+from typing import Callable, Iterable, List, Type, Dict
 import sys
 
 
@@ -155,21 +155,36 @@ class Scraper:
 
         db.save(scraped)
 
-    def crawl_new_urls_for(self, crawler_names: List[str] = None):
+    def get_all(self, limit : int = -1, scraped : bool = None) -> Iterable[ScrapedData]:
+        """
+            Return all ScrapedData instances available, up to "limit" rows. If scraped = true, then
+            return only scraped instances. If scraped = false, return only non scraped. Otherwise, return anything
+            Parameters:
+                limit : int = max ammount of rows to return. If negative, there's no limit of rows
+                scraped : bool = If instances should be scraped or not. If true, all of them should be scraped. If false, none of 
+                                them should be scraped. If None, there's no restriction
+            Return:
+                An iterator returning available rows
+        """ 
+        return self._persistency_manager.get_all(limit, scraped)
+
+    def crawl_new_urls_for(self, crawler_names: List[str] = None, post_process : Callable[[List[str]], None] = None):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
                 crawler_names : [str] = names of crawlers to be ran when this function is called. If no list is passed, then 
                                         all crawlers will be used
+                post_process : ([str]) -> None = Function to call over new elements as they come
         """
         db = self._persistency_manager
 
         # Function to process urls as they come
         def save_urls(urls: List[str]):
             urls = db.filter_scraped_urls(urls)
-            print(urls)
             datas = [ScrapedData(url=url) for url in urls]
             db.save(datas)
+            if post_process:
+                post_process(urls)
 
         # Names for installed crawlers
         crawlers = [c.name for c in INSTALLED_CRAWLERS]
