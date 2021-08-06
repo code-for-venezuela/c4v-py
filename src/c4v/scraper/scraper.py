@@ -107,7 +107,7 @@ class Scraper:
     def __init__(self, persistency_manager: BasePersistencyManager):
         self._persistency_manager = persistency_manager
 
-    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True):
+    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True) -> ScrapedData:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
