@@ -107,11 +107,23 @@ class SqliteManager(BasePersistencyManager):
                 (url, last_scraped, title, content, author, date) = row
 
                 # parse date to datetime:
-                last_scraped = (
-                    datetime.datetime.strptime(last_scraped, DATE_FORMAT)
-                    if last_scraped
-                    else last_scraped
-                )
+                try:
+                    last_scraped = (
+                        datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                        if last_scraped
+                        else last_scraped
+                    )
+                except ValueError as _: # In case it fails using a format not valid for python3.6
+                    for i in range(len(last_scraped) - 1, -1, -1):
+                        if last_scraped[i] == ":":
+                            last_scraped = last_scraped[:i] + last_scraped[i+1:]
+                            break
+                    last_scraped = (
+                        datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                        if last_scraped
+                        else last_scraped
+                    )
+
 
                 categories = [
                     category
