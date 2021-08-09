@@ -67,8 +67,6 @@ class BaseCrawler:
             if post_process_data:
                 post_process_data(new_urls)
 
-        return urls
-
     def get_sitemaps_from_index(self) -> List[str]:
         """
             Some sites may have its sitemap paginated in more sitemaps.
