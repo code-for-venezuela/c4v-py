@@ -14,9 +14,9 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from config import settings
 
-from c4v.scraper.settings import DATE_FORMAT
-
+DATE_FORMAT = settings.date_format
 
 class SqliteManager(BasePersistencyManager):
     """
