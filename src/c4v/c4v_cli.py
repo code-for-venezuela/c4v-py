@@ -15,6 +15,8 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.utils import data_list_to_table_str
+from c4v.scraper.scraper    import bulk_scrape
+from c4v.scraper.settings   import INSTALLED_CRAWLERS
 
 # Folder to search for local files @TODO debo cambiar esto para escoger correctamente el sitio para el directorio
 DEFAULT_FILES_FOLDER = os.environ.get("HOME") + "/.c4v"
@@ -213,7 +215,6 @@ def list(
 
     click.echo(data_to_print)
     print(scraped_only)
-
 
 if __name__ == "__main__":
     c4v_cli()
