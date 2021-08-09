@@ -59,8 +59,8 @@ class ScrapedDataEncoder(json.JSONEncoder):
         elif isinstance(obj, datetime):
 
             # Local imports
-            from c4v.scraper.settings import DATE_FORMAT
+            from config import settings
 
-            return datetime.strftime(obj, DATE_FORMAT)
+            return datetime.strftime(obj, settings.date_format)
 
         return json.JSONEncoder.default(self, obj)

@@ -15,6 +15,8 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.utils import data_list_to_table_str
+from c4v.scraper.scraper    import bulk_scrape
+from c4v.scraper.settings   import INSTALLED_CRAWLERS
 
 # Folder to search for local files @TODO debo cambiar esto para escoger correctamente el sitio para el directorio
 DEFAULT_FILES_FOLDER = os.environ.get("HOME") + "/.c4v"
@@ -114,8 +116,7 @@ def crawl(
     crawlable_sites = "".join([f"\t{crawl.name}\n" for crawl in INSTALLED_CRAWLERS])
 
     # Create default db manager
-    scraper = Scraper.from_local_sqlite_db(DEFAULT_DB)
-    #db_manager = SqliteManager(DEFAULT_DB)
+    db_manager = SqliteManager(DEFAULT_DB)
 
     # list available crawlers if requested to
     if list:
@@ -150,11 +151,20 @@ def crawl(
     # function to format crawled urls list
     format_url_list = lambda list: "".join([f"{s}\n" for s in list])
 
-    def process(list: List[str]):
-        if loud:
-            click.echo(format_url_list(list))
+    # if loud flag is provided, print it tu stdio
+    for crawler in crawlers_to_run:
+        c = crawler()
 
-    scraper.crawl_new_urls_for(crawlers_to_run, process)
+        def process(list: List[str]):
+            scraped_data = [
+                ScrapedData(url=url) for url in db_manager.filter_scraped_urls(list)
+            ]
+            db_manager.save(scraped_data)
+
+            if loud:
+                click.echo(format_url_list(list))
+
+        c.crawl_and_process_urls(process)
 
 
 @c4v_cli.command()
