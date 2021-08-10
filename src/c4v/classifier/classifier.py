@@ -2,11 +2,16 @@
     This classifier class will perform basic experiments, receiving 
     as arguments the training arguments and the columns to use from the training dataset
 """
+# Local imports
+from c4v.config import settings
+from pytz       import utc
+
 # Python imports
-from typing import Dict, List, Any, Tuple
-from pathlib import Path
-from pandas.core.frame import DataFrame
-from importlib import resources
+from typing             import Dict, List, Any, Tuple
+from pathlib            import Path
+from pandas.core.frame  import DataFrame
+from importlib          import resources
+from datetime           import datetime
 
 # Third Party
 from transformers import (
@@ -17,7 +22,7 @@ from transformers import (
 )
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
 from sklearn.model_selection import train_test_split
-from datasets import Dataset
+from datasets import Dataset, utils
 import torch
 import pandas as pd
 import numpy as np
@@ -25,13 +30,7 @@ import os
 
 from transformers.trainer_utils import EvalPrediction
 
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-print(device)
-
-BASE_C4V_FOLDER = os.path.join(os.environ.get("HOME"), "/.c4v")
-BASE_C4V_EXPERIMENTS_FOLDER = os.path.join(BASE_C4V_FOLDER, "/experiments")
-
-
+BASE_C4V_FOLDER = settings.c4v_folder
 class ClassifierExperiment:
     """
         This class provides a simple way to run simple experiments.
@@ -51,7 +50,7 @@ class ClassifierExperiment:
         test_dataset: str = "elpitazo_positivelabels_devdataset.csv",
         traning_arguments: TrainingArguments = None,
         columns: List[str] = ["text"],
-        base_path: str = BASE_C4V_EXPERIMENTS_FOLDER,
+        experiments_folder: str = None,
         use_cuda: bool = True,
         model_name: str = "mrm8488/RuPERTa-base",
         train_args: TrainingArguments = None,
@@ -60,7 +59,6 @@ class ClassifierExperiment:
         self._columns = columns
         self._branch_name = branch_name
         self._experiment_name = experiment_name
-        self._experiments_folder = base_path
         self._device = (
             torch.device("cuda")
             if use_cuda and torch.cuda.is_available()
@@ -69,6 +67,19 @@ class ClassifierExperiment:
         self._test_dataset = test_dataset
         self._model_name = model_name
         self._train_args = train_args
+
+        # Experiments folder
+        if experiments_folder == None: # default folder
+            # Create folder if not exists
+            folder = BASE_C4V_FOLDER + "/experiments"
+
+            folder_path = Path(folder)
+            if not folder_path.exists():
+                folder_path.mkdir(parents=True)
+
+            self._experiments_folder = folder
+        else:
+            self._experiments_folder = experiments_folder
 
     def _get_files_path(self) -> str:
         """
@@ -256,6 +267,7 @@ class ClassifierExperiment:
             "warmup_steps": 500,
             "weight_decay": 0.01,
             "logging_dir": self.get_logs_path(),
+            "save_total_limit" : 1
         }
 
         return default
@@ -347,7 +359,29 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def run(self, train_args: Dict[str, Any] = None):
+    def _write_summary(self, results : Dict[str, Any]):
+        """
+            Write a summary for the results in given dict
+        """
+        file_to_write = self.get_results_path() + "/summary.txt"
+
+        with open(file_to_write, "w+") as f:
+            s = f"Summary for experiment {self._experiment_name}/{self._branch_name}:\n"
+            date = datetime.strftime(datetime.now(tz=utc), format = settings.date_format)
+            s += f"\t* date = {date}\n"
+
+            s += "\n".join([f"\t* {key} = {val}" for (key, val) in results.items()])
+
+            print(s, file=f)
+            print(s)
+
+
+    def run_experiment(self, train_args: Dict[str, Any] = None, write_summary : bool  = True):
+        """
+            Run an experiment specified by given train_args, and write a summary if requested so
+            Parameters:
+                train_args : Dict[str, Any] = arguments passed to 
+        """
 
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe()
@@ -371,5 +405,8 @@ class ClassifierExperiment:
         metrics_df = self.evaluate_metrics(
             trainer=fine_tuned_model_trainer, val_dataset=val_dataset
         )
+
+        # Write a summary
+        if write_summary: self._write_summary(metrics_df)
 
         return metrics_df

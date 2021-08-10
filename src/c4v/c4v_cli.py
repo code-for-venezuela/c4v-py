@@ -10,17 +10,20 @@ from typing import List
 import os
 
 # Local imports
-from c4v.scraper.scraper import bulk_scrape, Scraper
+from c4v.scraper.scraper import bulk_scrape
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.utils import data_list_to_table_str
 from c4v.scraper.scraper    import bulk_scrape
 from c4v.scraper.settings   import INSTALLED_CRAWLERS
+from c4v.config                 import settings
+from c4v.microscope.manager import Manager
 
-# Folder to search for local files @TODO debo cambiar esto para escoger correctamente el sitio para el directorio
-DEFAULT_FILES_FOLDER = os.environ.get("HOME") + "/.c4v"
-DEFAULT_DB = os.path.join(DEFAULT_FILES_FOLDER, "c4v_db.sqlite")
+
+# Folder to search for local files
+DEFAULT_FILES_FOLDER = settings.c4v_folder
+DEFAULT_DB = settings.local_sqlite_db or os.path.join(settings.c4v_folder, settings.local_sqlite_db_name)
 
 
 @click.group()
@@ -216,7 +219,7 @@ def classify(urls : List[str] = [], no_scrape : bool = False, files : bool = Fal
     """
         Run a classification over a given url or from a file 
     """
-    scraper = Scraper.from_local_sqlite_db(DEFAULT_DB)
+    scraper = Manager.from_local_sqlite_db(DEFAULT_DB)
     # Parse urls to be parsed:
     if files:
         urls_to_process = _parse_lines_from_files(urls)
@@ -229,7 +232,7 @@ def classify(urls : List[str] = [], no_scrape : bool = False, files : bool = Fal
     if non_scrapable:
         click.echo("[WARNING] some urls won't be retrieved, as they are not scrapable for now.", err=True)
         click.echo("Non-scrapable urls:", err=True)
-        click.echo("\n".join([f"* {url}" for url in non_scrapable]), err=True)
+        click.echo("\n".join([f"\t* {url}" for url in non_scrapable]), err=True)
 
     # Now get data for each url
     data = scraper.get_bulk_data_for(scrapable)
