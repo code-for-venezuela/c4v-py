@@ -359,19 +359,27 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def _write_summary(self, results : Dict[str, Any]):
+    def _write_summary(self, results : Dict[str, Any], args : Dict[str, Any]):
         """
             Write a summary for the results in given dict
         """
         file_to_write = self.get_results_path() + "/summary.txt"
 
         with open(file_to_write, "w+") as f:
+            # Add title
             s = f"Summary for experiment {self._experiment_name}/{self._branch_name}:\n"
+
+            # Add date
             date = datetime.strftime(datetime.now(tz=utc), format = settings.date_format)
             s += f"\t* date = {date}\n"
 
-            s += "\n".join([f"\t* {key} = {val}" for (key, val) in results.items()])
+            # Add additional fields
+            s += "\n".join([f"\t* {key} : {val}" for (key, val) in results.items()])
 
+            # Add given args
+            s += "\n=== TRAINING ARGUMENTS ===\n"
+            actual_args = self._override_train_args(args)
+            s += "\n".join([f"\t* {key} : {val} {' [USER]' if args.get(key) else ''}" for (key, val) in actual_args.items()])
             print(s, file=f)
             print(s)
 
@@ -407,6 +415,7 @@ class ClassifierExperiment:
         )
 
         # Write a summary
-        if write_summary: self._write_summary(metrics_df)
+        if write_summary: self._write_summary(metrics_df, train_args)
 
         return metrics_df
+
