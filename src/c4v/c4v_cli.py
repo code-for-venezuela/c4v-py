@@ -3,22 +3,22 @@
     so we can test things in the meanwhile
 """
 # Third party imports
+from datetime import datetime
 import click
 
 # Python imports
-from typing import List
+from typing         import List
+from urllib.error   import HTTPError
 import os
 
 # Local imports
-from c4v.scraper.scraper import bulk_scrape
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.scraper.settings       import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.utils import data_list_to_table_str
-from c4v.scraper.scraper    import bulk_scrape
-from c4v.scraper.settings   import INSTALLED_CRAWLERS
+from c4v.scraper.utils          import data_list_to_table_str
+from c4v.scraper.settings       import INSTALLED_CRAWLERS
 from c4v.config                 import settings
-from c4v.microscope.manager import Manager
+from c4v.microscope.manager     import Manager
 
 
 # Folder to search for local files
@@ -73,22 +73,19 @@ def scrape(
     """
 
     db_manager = SqliteManager(DEFAULT_DB)
-
+    client = CLIClient(Manager(db_manager), urls, files)
     # Read urls
     urls_to_scrape = []
 
     if not urls:
         urls_to_scrape = [d.url for d in db_manager.get_all(up_to, scraped=False)]
     elif files:  # if urls are stored in files
-        urls_to_scrape = _parse_lines_from_files(urls)
+        urls_to_scrape = client.get_urls(urls)
     else:
         urls_to_scrape = urls
 
     # scrape urls
-    scraped_data = bulk_scrape(urls_to_scrape)
-
-    # Write output
-    db_manager.save(scraped_data)
+    scraped_data = client.get_data_for_urls(urls_to_scrape, should_scrape=True)
 
     # Print obtained results if requested
     if loud:
@@ -219,44 +216,130 @@ def classify(urls : List[str] = [], no_scrape : bool = False, files : bool = Fal
     """
         Run a classification over a given url or from a file 
     """
-    scraper = Manager.from_local_sqlite_db(DEFAULT_DB)
-    # Parse urls to be parsed:
-    if files:
-        urls_to_process = _parse_lines_from_files(urls)
-    else:
-        urls_to_process = urls
-
-    scrapable, non_scrapable = scraper.split_non_scrapable(urls_to_process)
-
-    # Warn the user that some urls won't be scraped
-    if non_scrapable:
-        click.echo("[WARNING] some urls won't be retrieved, as they are not scrapable for now.", err=True)
-        click.echo("Non-scrapable urls:", err=True)
-        click.echo("\n".join([f"\t* {url}" for url in non_scrapable]), err=True)
+    manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    client  = CLIClient(manager, urls, files)
 
     # Now get data for each url
-    data = scraper.get_bulk_data_for(scrapable)
+    data = client.get_data_for_urls(should_scrape=not no_scrape)
     for d in data:
         click.echo("Data to classify: " + str(d))
 
+@c4v_cli.command()
+@click.option("--no-scrape", is_flag=True, help="Don't scrape if data is not available locally")
+@click.argument("url", nargs=1)
+def show(url : str, no_scrape : bool = False):
+    """
+        Show the entire data for a given URL
+    """
+    # Create manager object
+    manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    client  = CLIClient(manager, [url]) 
 
+    data = client.get_data_for_urls(should_scrape = not no_scrape)
+
+    # Check if could retrieve desired element 
+    if not data:
+        click.echo("[EMPTY]")
+        return
+    else:
+        element = data[0]
+
+    # Pretty print element:
+    line_len = os.get_terminal_size().columns
+    click.echo("+" + ("=" * (line_len - 2))  + "+")
+    click.echo(f"\turl        : {element.url}")
+    click.echo(f"\ttitle      : {element.title}")
+    click.echo(f"\tauthor     : {element.author}")
+    click.echo(f"\tdate       : {element.date}")
+    click.echo(f"\tcategories : {', '.join(element.categories) if element.categories else '<No Category>'}")
+    click.echo(f"\tScrpaed: {datetime.strftime(element.last_scraped, settings.date_format)}")
+    click.echo("\tContent: ")
+    click.echo("=" * line_len)
+    cleaned_content = "\n".join(
+                                filter( 
+                                    lambda s: s != "", 
+                                    map(
+                                        str.strip, 
+                                        element.content.splitlines()
+                                    )
+                                )
+                            ) 
+    click.echo(cleaned_content)
+    click.echo("+" + ("=" * (line_len - 2))  + "+")
+
+
+class CLIClient:
+    """
+        This class will manage common operations performed by the CLI
+    """
+
+    def __init__(self, manager : Manager, urls : List[str] = [], from_files : bool = False):
+        self._manager = manager
+
+        # If urls are in files, load them from such files
+        if from_files:
+            self._urls = CLIClient._parse_lines_from_files(urls)
+        else:
+            self._urls = urls
     
+    def get_data_for_urls(self, urls : List[str] = None, should_scrape : bool = True) -> List[ScrapedData]:
+        """
+            Return a list of ScrapedData from a list of urls.
+            Parameters:
+                urls : [str] = List of urls whose data is requested. If not provided, defaults to the 
+                                list stored whithin this class
+                should_scrape : bool = If should scrape data for urls that are not currently available
+            Return:
+                List of retrieved urls
+        """
+        urls_to_retrieve = urls or self._urls
 
-def _parse_lines_from_files(files : List[str]) -> List[str]:
-    """
-        Utility function to collect all lines from multiple files
-    """
-    lines = []
-    for file in files:  # iterate over every file
+        # Check scrapable urls:
+        scrapable_urls, non_scrapables = self._manager.split_non_scrapable(urls_to_retrieve)
+        
+        # Warn the user that some urls won't be scraped
+        if non_scrapables:
+            click.echo("[WARNING] some urls won't be retrieved, as they are not scrapable for now.", err=True)
+            click.echo("Non-scrapable urls:", err=True)
+            click.echo("\n".join([f"\t* {url}" for url in non_scrapables]), err=True)
+
+        # check if some http error happens
+        data = []
         try:
-            with open(file) as file_with_lines:
-                content = map(
-                    lambda s: s.strip(), file_with_lines.readlines()
-                )  # parse every line as a single url
-                lines.extend(content)
-        except IOError as e:
-            click.echo(f"Could not open input file: {file}. Error: {e.strerror}", err=True)
-    return lines
+            data = self._manager.get_bulk_data_for(scrapable_urls, should_scrape = should_scrape)
+        except HTTPError as e:
+            click.echo(f"[ERROR] Could not scrape all data due to connection errors: {e}", err=True)
+        
+        # Tell the user if some urls where not retrieved
+        succesfully_retrieved = {d.url for d in data}
+        if any(url not in succesfully_retrieved for url in scrapable_urls):
+            click.echo(f"[WARNING] Some urls couldn't be retrieved: ")
+            click.echo("\n".join([f"\t* {url}" for url in scrapable_urls if url not in succesfully_retrieved]))
+
+        return data
+    
+    def get_urls(self) -> List[str]:
+        """
+            Return stored urls
+        """
+        return self._urls
+    
+    @staticmethod
+    def _parse_lines_from_files(files : List[str]) -> List[str]:
+        """
+            Utility function to collect all lines from multiple files
+        """
+        lines = []
+        for file in files:  # iterate over every file
+            try:
+                with open(file) as file_with_lines:
+                    content = map(
+                        lambda s: s.strip(), file_with_lines.readlines()
+                    )  # parse every line as a single url
+                    lines.extend(content)
+            except IOError as e:
+                click.echo(f"Could not open input file: {file}. Error: {e.strerror}", err=True)
+        return lines
 
 if __name__ == "__main__":
     c4v_cli()
