@@ -2,7 +2,6 @@ from dynaconf import Dynaconf, Validator
 import os
 
 _HOME = os.environ.get("HOME")
-print(_HOME)
 settings = Dynaconf(
     envvar_prefix="DYNACONF",
     settings_files=['./settings.toml', 'config/.secrets.toml'],
