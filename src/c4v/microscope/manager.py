@@ -21,7 +21,7 @@ class Manager:
     def __init__(self, persistency_manager: BasePersistencyManager):
         self._persistency_manager = persistency_manager
 
-    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True) -> ScrapedData:
+    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
