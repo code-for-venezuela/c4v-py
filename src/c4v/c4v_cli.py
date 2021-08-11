@@ -7,7 +7,7 @@ from datetime import datetime
 import click
 
 # Python imports
-from typing         import List
+from typing         import List, Tuple
 from urllib.error   import HTTPError
 import os
 
@@ -210,19 +210,45 @@ def list(
 
 @c4v_cli.command()
 @click.option("--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB")
-@click.option("--files", is_flag=True, help="Get urls of news to scrape from list of files")
-@click.argument("urls", nargs = -1)
-def classify(urls : List[str] = [], no_scrape : bool = False, files : bool = False):
+@click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
+@click.argument("inputs", nargs = -1)
+def classify(inputs : List[str] = [], no_scrape : bool = False, file : bool = False):
     """
         Run a classification over a given url or from a file 
     """
+
+    # Validate input:
+    n_args = len(inputs) 
+    if n_args < 2: # Get at the least 2 args, experiment as branch/experiment and some url
+        click.echo("[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url")
+        return
+
     manager = Manager.from_local_sqlite_db(DEFAULT_DB)
-    client  = CLIClient(manager, urls, files)
+    client  = CLIClient(manager, inputs[1:], file)
+    
+    # validate branch and name
+    parsed_branch_and_name = CLIClient.parse_branch_and_experiment_from(inputs[0])
+    if parsed_branch_and_name == None:
+        return
+    else:
+        branch, experiment = parsed_branch_and_name
 
     # Now get data for each url
     data = client.get_data_for_urls(should_scrape=not no_scrape)
-    for d in data:
-        click.echo("Data to classify: " + str(d))
+    
+    # Try to classify given data
+    try:
+        results = manager.run_classification_from_experiment(branch, experiment, data)
+    except ValueError as e:
+        click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}")
+        return
+    
+    # Pretty print results:
+    for (url, result) in results.items():
+        click.echo(f"\t{url}")
+        for (key, value) in result.items():
+            click.echo(f"\t\t* {key} : {value}")
+    
 
 @c4v_cli.command()
 @click.option("--no-scrape", is_flag=True, help="Don't scrape if data is not available locally")
@@ -247,22 +273,19 @@ def show(url : str, no_scrape : bool = False):
     # Pretty print element:
     line_len = os.get_terminal_size().columns
     click.echo("+" + ("=" * (line_len - 2))  + "+")
-    click.echo(f"\turl        : {element.url}")
-    click.echo(f"\ttitle      : {element.title}")
-    click.echo(f"\tauthor     : {element.author}")
-    click.echo(f"\tdate       : {element.date}")
-    click.echo(f"\tcategories : {', '.join(element.categories) if element.categories else '<No Category>'}")
-    click.echo(f"\tScrpaed: {datetime.strftime(element.last_scraped, settings.date_format)}")
-    click.echo("\tContent: ")
+    click.echo(f"\tUrl        : {element.url}")
+    click.echo(f"\tTitle      : {element.title}")
+    click.echo(f"\tAuthor     : {element.author}")
+    click.echo(f"\tDate       : {element.date}")
+    click.echo(f"\tCategories : {', '.join(element.categories) if element.categories else '<No Category>'}")
+    click.echo(f"\tScraped    : {datetime.strftime(element.last_scraped, settings.date_format)}")
     click.echo("=" * line_len)
     cleaned_content = "\n".join(
-                                filter( 
-                                    lambda s: s != "", 
-                                    map(
-                                        str.strip, 
-                                        element.content.splitlines()
-                                    )
-                                )
+                                [
+                                    s for s in 
+                                    [s.strip() for s in element.content.splitlines()]
+                                    if s != ""
+                                ]
                             ) 
     click.echo(cleaned_content)
     click.echo("+" + ("=" * (line_len - 2))  + "+")
@@ -270,7 +293,7 @@ def show(url : str, no_scrape : bool = False):
 
 class CLIClient:
     """
-        This class will manage common operations performed by the CLI
+        This class will manage common operations performed by the CLI tool
     """
 
     def __init__(self, manager : Manager, urls : List[str] = [], from_files : bool = False):
@@ -323,6 +346,36 @@ class CLIClient:
             Return stored urls
         """
         return self._urls
+
+    @staticmethod
+    def parse_branch_and_experiment_from(line : str) -> Tuple[str, str]:
+        """
+            Return a tuple with branch name and experiment name from a line representing 
+            and experiment name. Report error if not a valid name
+            Parameters:
+                line : str = line to parse as branch name and experiment name. For example:
+                        branch/exp1
+                        branch-exp1
+                    Invalid examples:
+                        branch exp1 
+                        branch\exp1
+            Return:
+                A tuple, with the first member as the branch name ans the second one as the experiment name
+        """
+        separators = ["/", "-"]
+        for separator in separators:
+            branch_and_name = line.split(separator)
+            if len(branch_and_name) == 2:
+                branch, name = branch_and_name
+                return (branch, name)
+
+        click.echo(f"[ERROR] Given experiment name is not valid: {line}. Should be in the form:", err=True)
+        for separator in separators:
+            click.echo(f"\tbranch_name{separator}experiment_name")
+        return None
+        
+        
+
     
     @staticmethod
     def _parse_lines_from_files(files : List[str]) -> List[str]:

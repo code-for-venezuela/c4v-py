@@ -7,9 +7,10 @@ from c4v.scraper.persistency_manager.sqlite_storage_manager     import SqliteMan
 from c4v.scraper.scraped_data_classes.scraped_data              import ScrapedData
 from c4v.scraper.scraper                                        import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings                                       import INSTALLED_CRAWLERS
+from c4v.classifier.classifier                                  import ClassifierExperiment
 
 # Python imports
-from typing import List, Iterable, Callable, Tuple
+from typing import Dict, List, Iterable, Callable, Tuple, Any
 import sys
 
 class Manager:
@@ -157,3 +158,19 @@ class Manager:
         """
         db = SqliteManager(db_path)
         return cls(db)
+
+    def run_classification_from_experiment(self, branch : str, experiment : str, data : List[ScrapedData]) -> Dict[str, Dict[str, Any]]:
+        """
+            Classify given data instance list, returning its metrics
+            Parameters:
+                branch : str = branch of model to use
+                experiment : str = experiment name storing model
+                data : [ScrapedData] = Instance to be classified
+            Return:
+                A dict from urls to classification output
+        """
+        classifier = ClassifierExperiment(branch, experiment)
+        classified = { d.url : classifier.classify(d) for d in data }
+
+        return classified
+        

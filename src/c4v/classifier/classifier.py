@@ -4,7 +4,7 @@
 """
 # Local imports
 from c4v.config import settings
-from pytz       import utc
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
 from typing             import Dict, List, Any, Tuple
@@ -12,21 +12,24 @@ from pathlib            import Path
 from pandas.core.frame  import DataFrame
 from importlib          import resources
 from datetime           import datetime
+from pytz               import utc
+import os
 
 # Third Party
+from transformers.pipelines.text_classification import TextClassificationPipeline
 from transformers import (
     RobertaTokenizer,
     Trainer,
     TrainingArguments,
     RobertaForSequenceClassification,
 )
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-from sklearn.model_selection import train_test_split
-from datasets import Dataset, utils
+
+from sklearn.metrics            import accuracy_score, f1_score, recall_score, precision_score
+from sklearn.model_selection    import train_test_split
+from datasets                   import Dataset
 import torch
 import pandas as pd
 import numpy as np
-import os
 
 from transformers.trainer_utils import EvalPrediction
 
@@ -120,7 +123,8 @@ class ClassifierExperiment:
 
     def get_experiments_path(self) -> str:
         """
-            Get path to experiments folder
+            Get path to experiments folder for this branch and experiment, for example
+                $HOME/.c4v/experiments/<branch_name>/<experiment_name>
         """
         return self._get_path_to(self._get_files_path())
 
@@ -359,7 +363,7 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def _write_summary(self, results : Dict[str, Any], args : Dict[str, Any]):
+    def _write_summary(self, metrics : Dict[str, Any], args : Dict[str, Any]):
         """
             Write a summary for the results in given dict
         """
@@ -367,14 +371,16 @@ class ClassifierExperiment:
 
         with open(file_to_write, "w+") as f:
             # Add title
-            s = f"Summary for experiment {self._experiment_name}/{self._branch_name}:\n"
+            s = f"Summary for experiment {self._branch_name}/{self._experiment_name}:\n"
 
             # Add date
             date = datetime.strftime(datetime.now(tz=utc), format = settings.date_format)
             s += f"\t* date = {date}\n"
 
             # Add additional fields
-            s += "\n".join([f"\t* {key} : {val}" for (key, val) in results.items()])
+            double_tab = '\t\t'
+            nl = '\n'
+            s += f"\t* metrics_value = \n{ nl.join(( f'{double_tab}* {l}' for l in str(metrics.get('metrics_value')).splitlines())) }\n"
 
             # Add given args
             s += "\n=== TRAINING ARGUMENTS ===\n"
@@ -418,4 +424,34 @@ class ClassifierExperiment:
         if write_summary: self._write_summary(metrics_df, train_args)
 
         return metrics_df
+
+    def classify(self, data : ScrapedData, model : str = None) -> Dict[str, Any]: # @TODO should use a bulk version instead
+        """
+            Classify the given data instance, returning classification metrics
+            as a simple dict
+        """
+        # Get model from experiment:
+        if model is None:
+            model = self.get_experiments_path()
+            # Check if there's a config.json in this folder
+            if not Path(model, "config.json").exists():
+                raise ValueError(f"Experiment '{self._experiment_name}' or branch '{self._branch_name}' does not exist yet")
+
+        # TODO tengo que factorizar el diccionario de labels, para pedirlos dinámica o configurablemente
+        roberta_model = RobertaForSequenceClassification.from_pretrained(
+            model, 
+            local_files_only=True, 
+            id2label={ 0 : "DENUNCIA DE FALTA DEL SERVICIO" , 1 : "IRRELEVAMTE"}
+        )
+
+        # TODO tengo que cargar el tokenizador dinámicamente
+        # Tokenize input
+        roberta_tokenizer = RobertaTokenizer.from_pretrained("mrm8488/RuPERTa-base")
+        tokenized_input = roberta_tokenizer([data.content], padding=True, truncation=True, max_length=512, return_tensors = "pt" )
+        
+        raw_output = roberta_model(**tokenized_input)
+        output = torch.nn.functional.softmax( raw_output.logits, dim=-1)
+
+        label_id = torch.argmax(output).item()
+        return {"label" : roberta_model.config.id2label[label_id], "scores" : output.tolist()}
 
