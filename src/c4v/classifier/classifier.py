@@ -3,6 +3,7 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
+from transformers.file_utils import torch_required
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -84,6 +85,10 @@ class ClassifierExperiment:
         else:
             self._experiments_folder = experiments_folder
 
+        # Set memory limit for torch
+        if use_cuda and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
     def _get_files_path(self) -> str:
         """
             Get path to files for this experiment
@@ -156,33 +161,36 @@ class ClassifierExperiment:
         df_issue_text = df_elpitazo_pscdd[[*self._columns, "label"]]
         df_issue_text.dropna(inplace=True)
 
-        if len(self._columns) == 1:
-            x = list(df_issue_text["text"])
-        else:
-            x = list(zip(*[list(df_issue_text[col]) for col in self._columns]))
+        x = ["\n".join(tup) for tup in zip(*[list(df_issue_text[col]) for col in self._columns])]
 
         y = list(df_issue_text["label"])
 
         return x, y
 
-    def load_model_and_tokenizer_from_hub(
+    def load_tokenizer_from_hub(self) -> RobertaTokenizer:
+        """
+            Create & configure tokenizer from hub
+            Return:
+                RobetaTokenizer: tokenizer to retrieve
+        """
+        return RobertaTokenizer.from_pretrained(self._model_name)
+
+    def load_model_from_hub(
         self,
     ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
         """
-            Create model and tokenizer from model hub, configure them and retrieve it
+            Create model from model hub, configure them and retrieve it
             Return:
-                (RobertaForSequenceClassification, RobertaTokenizer) a tuple with the model and the tokenizer as specified
+                RobertaForSequenceClassification : the model as specified
         """
         # Creating model and tokenizer
         model = RobertaForSequenceClassification.from_pretrained(
             self._model_name, num_labels=2
         )
-        tokenizer = RobertaTokenizer.from_pretrained(self._model_name)
-
         # Use GPU if available
         model.to(self._device)
 
-        return model, tokenizer
+        return model
 
     def transform_dataset(
         self, x: List[str], y: List[int], tokenizer: RobertaTokenizer
@@ -363,7 +371,7 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def _write_summary(self, metrics : Dict[str, Any], args : Dict[str, Any]):
+    def _write_summary(self, metrics : Dict[str, Any], args : Dict[str, Any], description : str):
         """
             Write a summary for the results in given dict
         """
@@ -372,6 +380,11 @@ class ClassifierExperiment:
         with open(file_to_write, "w+") as f:
             # Add title
             s = f"Summary for experiment {self._branch_name}/{self._experiment_name}:\n"
+
+            # Add description if available
+            if description:
+                s += f"Description: "
+                s += "\n".join((f"\t{subs}" for subs in description.splitlines())) + '\n'
 
             # Add date
             date = datetime.strftime(datetime.now(tz=utc), format = settings.date_format)
@@ -390,7 +403,7 @@ class ClassifierExperiment:
             print(s)
 
 
-    def run_experiment(self, train_args: Dict[str, Any] = None, write_summary : bool  = True):
+    def run_experiment(self, train_args: Dict[str, Any] = None, write_summary : bool  = True, description : str = None):
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
@@ -400,7 +413,8 @@ class ClassifierExperiment:
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe()
 
-        model, tokenizer = self.load_model_and_tokenizer_from_hub()
+        model = self.load_model_from_hub()
+        tokenizer = self.load_tokenizer_from_hub()
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
 
@@ -421,7 +435,7 @@ class ClassifierExperiment:
         )
 
         # Write a summary
-        if write_summary: self._write_summary(metrics_df, train_args)
+        if write_summary: self._write_summary(metrics_df, train_args, description)
 
         return metrics_df
 
@@ -441,7 +455,7 @@ class ClassifierExperiment:
         roberta_model = RobertaForSequenceClassification.from_pretrained(
             model, 
             local_files_only=True, 
-            id2label={ 0 : "DENUNCIA DE FALTA DEL SERVICIO" , 1 : "IRRELEVAMTE"}
+            id2label={ 1 : "DENUNCIA FALTA DEL SERVICIO" , 0 : "IRRELEVAMTE"}
         )
 
         # TODO tengo que cargar el tokenizador dinámicamente
