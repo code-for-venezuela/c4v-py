@@ -3,6 +3,7 @@
 """
 # Python imports
 from typing import Any, List, Callable
+import sys
 
 # Third party imports
 import requests
@@ -23,27 +24,47 @@ class BaseCrawler:
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
 
-    def crawl_urls(self) -> List[str]:
+    def crawl_urls(self, up_to : int = None) -> List[str]:
         """
             Return a list of urls scraped from the site intended for this scraper.
+            Parameters:
+                up_to : int = Maximum amount of elements to store. Retrieve all if no number is provided, should be positive 
             Return:
                 List of urls from sitemap
         """
+
+        # Set up max size
+        up_to = up_to or sys.maxsize
+
+        # Check for consistency
+        if up_to <= 0:
+            raise ValueError("Max size should be a possitive number")
+
+        # Set up storing function 
         items = []
         def store_items(new_items : List[str]):
-            items.extend(new_items)
+            rem = up_to - len(items)
+            items.extend(new_items[:rem])
 
-        self.crawl_and_process_urls(store_items)
+        # Set up stop function 
+        def should_stop_when() -> bool:
+            return len(items) >= up_to
+
+        # crawl for urls
+        self.crawl_and_process_urls(store_items, should_stop_when)
 
         return items
 
     def crawl_and_process_urls(
-        self, post_process_data: Callable[[List[str]], Any] = None
+        self, 
+        post_process_data: Callable[[List[str]], Any] = None,
+        should_stop: Callable[[], bool] = None
     ):
         """
             crawl urls, processing them with the provided function
             Parameters:
                 + post_process_data : ([str]) -> [str] = function to call over the resulting set of urls. May be called in batches
+                + should_stop : () -> bool = function to every iteration to check if the crawling process should stop
             Return:
                 List of urls from sitemap
         """
@@ -53,6 +74,9 @@ class BaseCrawler:
 
         # sitemaps to parse
         sitemaps = self.get_sitemaps_from_index()
+
+        # Set up stop function
+        should_stop = should_stop or (lambda _: False)
 
         for sitemap in sitemaps:
 
@@ -66,6 +90,9 @@ class BaseCrawler:
             # process new urls if post process function exists
             if post_process_data:
                 post_process_data(new_urls)
+
+            if should_stop():
+                break
 
     def get_sitemaps_from_index(self) -> List[str]:
         """
