@@ -146,7 +146,7 @@ class Manager:
 
         # crawl for every crawler
         for crawler in crawlers_to_run:
-            crawler.crawl_and_process_urls(save_urls)
+            crawler.crawl_and_process_urls(save_urls, should_stop)
 
     def split_non_scrapable(self, urls : List[str]) -> Tuple[List[str], List[str]]:
         """
