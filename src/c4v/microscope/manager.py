@@ -83,23 +83,41 @@ class Manager:
         """ 
         return self._persistency_manager.get_all(limit, scraped)
 
-    def crawl_new_urls_for(self, crawler_names: List[str] = None, post_process : Callable[[List[str]], None] = None):
+    def crawl_new_urls_for(self, crawler_names: List[str] = None, post_process : Callable[[List[str]], None] = None, limit = -1):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
                 crawler_names : [str] = names of crawlers to be ran when this function is called. If no list is passed, then 
                                         all crawlers will be used
                 post_process : ([str]) -> None = Function to call over new elements as they come
+                limit        : int = Max amount of urls to save
         """
         db = self._persistency_manager
+        class Counter:
+            def __init__(self):
+                self.count = 0
+                
+            def add(self, x : int):
+                self.count += x
+
+        counter = Counter()
 
         # Function to process urls as they come
         def save_urls(urls: List[str]):
             urls = db.filter_scraped_urls(urls)
             datas = [ScrapedData(url=url) for url in urls]
             db.save(datas)
+
+            # Update how much elements have beed added so far
+            counter.add(len(datas))
+
+            # Call any callback function 
             if post_process:
                 post_process(urls)
+
+        # Function to tell if the crawling process should stop
+        def should_stop() -> bool:
+            return counter.count >= limit
 
         # Names for installed crawlers
         crawlers = [c.name for c in INSTALLED_CRAWLERS]
