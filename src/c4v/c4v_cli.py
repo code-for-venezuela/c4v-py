@@ -3,6 +3,7 @@
     so we can test things in the meanwhile
 """
 # Third party imports
+import dataclasses
 from datetime import datetime
 import click
 
@@ -11,6 +12,8 @@ from typing         import List, Tuple
 from urllib.error   import HTTPError
 import os
 import sys
+from c4v import microscope
+from c4v.classifier.classifier import Labels
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -276,6 +279,57 @@ def show(url : str, no_scrape : bool = False):
     click.echo(cleaned_content)
     click.echo("+" + ("=" * (line_len - 2))  + "+")
 
+@c4v_cli.command()
+@click.option("--url", is_flag=True, help="Interpret string as URL")
+@click.option("--no-scrape", is_flag=True, help="In case of retrieving data from URL, don't scrape it if not available")
+@click.argument("experiment", nargs=1)
+@click.argument("sentence", nargs=1)
+def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False):
+    """
+        Show explainability for the given string. That is, show how much each word contributes 
+        to each tag in the classifier. The result depends on the experiment, as it will load that 
+        model to explain. The experiment argument follows the <branch_name>/<experiment_name> syntax
+        Arguments:
+            experiment : str = experiment format, following <branch_name>/<experiment_name> format
+            sentence   : str = expression to explain 
+    """
+    microscope_manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    client = CLIClient(microscope_manager)
+
+    # Get text to explain
+    if url:
+        # Get data to classify 
+        datas = client.get_data_for_urls([sentence], not no_scrape)
+
+        if not datas:
+            click.echo("Nothing to explain")
+            return 
+
+        text_to_explain = datas[0].content
+    else:
+        text_to_explain = sentence
+
+    # Parse branch name and experiment
+    branch_and_experiment = client.parse_branch_and_experiment_from(experiment)
+    if branch_and_experiment == None:
+        return
+
+    # unpack branch name and experiment name
+    branch, experiment = branch_and_experiment
+
+    # try to explain
+    try:
+        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain)
+    except ValueError as e:
+        click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
+        return
+
+    # Pretty print results
+    scores = explanation['scores']
+    label = explanation['label']
+    click.echo(f"Label to classify: {label}\nScores:")
+    for (word, score) in scores:
+        click.echo(f"\t* {word} : {score}")
 
 class CLIClient:
     """

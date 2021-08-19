@@ -192,3 +192,17 @@ class Manager:
 
         return classified
         
+    def explain_for_experiment(self, branch : str, experiment : str, sentence : str) -> Dict[str, Any]:
+        """
+            Explain a sentence using the given branch and experiment
+            Parameters:
+                branch : str = branch name of model to use
+                experiment : str = experiment name storing model
+                sentence : str = sentence to explain
+            Return:
+                Dict with explaination data
+        """
+
+        classifier = ClassifierExperiment(branch, experiment)
+
+        return classifier.explain(sentence)

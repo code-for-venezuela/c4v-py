@@ -3,7 +3,6 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
-from transformers.file_utils import torch_required
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -14,17 +13,17 @@ from pandas.core.frame  import DataFrame
 from importlib          import resources
 from datetime           import datetime
 from pytz               import utc
+from enum               import Enum
 import os
 
 # Third Party
-from transformers.pipelines.text_classification import TextClassificationPipeline
 from transformers import (
     RobertaTokenizer,
     Trainer,
     TrainingArguments,
     RobertaForSequenceClassification,
 )
-
+from transformers_interpret import SequenceClassificationExplainer
 from sklearn.metrics            import accuracy_score, f1_score, recall_score, precision_score
 from sklearn.model_selection    import train_test_split
 from datasets                   import Dataset
@@ -35,17 +34,21 @@ import numpy as np
 from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
+
+class Labels(Enum):
+    """
+        Every possible label for each article
+    """
+    DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
+    IRRELEVANTE = "IRRELEVANTE"
+
 class ClassifierExperiment:
     """
         This class provides a simple way to run simple experiments.
-        Main functions you may want to override if you want to perform 
-        more sophisticated experiments:
-
     """
 
     LOGS_FOLDER_NAME: str = "logs"
     RESULTS_EXPERIMENT_NAME: str = "results"
-    RELEVANT_LABEL: str = "DENUNCIA FALTA DEL SERVICIO"
 
     def __init__(
         self,
@@ -58,6 +61,7 @@ class ClassifierExperiment:
         use_cuda: bool = True,
         model_name: str = "mrm8488/RuPERTa-base",
         train_args: TrainingArguments = None,
+
     ):
         self._traning_arguments = traning_arguments
         self._columns = columns
@@ -152,13 +156,13 @@ class ClassifierExperiment:
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_elpitazo_pscdd = self.get_dataframe()
-        df_elpitazo_pscdd["label"] = (
-            df_elpitazo_pscdd.tipo_de_evento == "DENUNCIA FALTA DEL SERVICIO"
+        df_pscdd = self.get_dataframe()
+        df_pscdd["label"] = (
+            df_pscdd.tipo_de_evento == Labels.DENUNCIA_FALTA_DEL_SERVICIO.value
         ).astype(int)
 
-        df_elpitazo_pscdd = df_elpitazo_pscdd.convert_dtypes()
-        df_issue_text = df_elpitazo_pscdd[[*self._columns, "label"]]
+        df_pscdd = df_pscdd.convert_dtypes()
+        df_issue_text = df_pscdd[[*self._columns, "label"]]
         df_issue_text.dropna(inplace=True)
 
         x = ["\n".join(tup) for tup in zip(*[list(df_issue_text[col]) for col in self._columns])]
@@ -171,9 +175,9 @@ class ClassifierExperiment:
         """
             Create & configure tokenizer from hub
             Return:
-                RobetaTokenizer: tokenizer to retrieve
+                RobertaTokenizer: tokenizer to retrieve
         """
-        return RobertaTokenizer.from_pretrained(self._model_name)
+        return RobertaTokenizer.from_pretrained(self._model_name, id2label=self.get_id2label_dict())
 
     def load_model_from_hub(
         self,
@@ -351,8 +355,12 @@ class ClassifierExperiment:
             in experiment's folder
         """
         path = path or os.path.join(self.get_experiments_path())
-        model_path = os.path.join(path, "pytorch_model.bin")
-        model = RobertaForSequenceClassification.from_pretrained(model_path)
+
+        # Check if path is a valid one
+        if not Path(path, "config.json").exists():
+            raise ValueError(f"Experiment does not exists: {path}")
+
+        model = RobertaForSequenceClassification.from_pretrained(path, local_files_only = True, id2label=self.get_id2label_dict())
         return model
 
     def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> DataFrame:
@@ -451,21 +459,69 @@ class ClassifierExperiment:
             if not Path(model, "config.json").exists():
                 raise ValueError(f"Experiment '{self._experiment_name}' or branch '{self._branch_name}' does not exist yet")
 
-        # TODO tengo que factorizar el diccionario de labels, para pedirlos dinámica o configurablemente
-        roberta_model = RobertaForSequenceClassification.from_pretrained(
-            model, 
-            local_files_only=True, 
-            id2label={ 1 : "DENUNCIA FALTA DEL SERVICIO" , 0 : "IRRELEVAMTE"}
-        )
+        roberta_model = self.load_fine_tuned_model(model)
 
-        # TODO tengo que cargar el tokenizador dinámicamente
         # Tokenize input
-        roberta_tokenizer = RobertaTokenizer.from_pretrained("mrm8488/RuPERTa-base")
+        roberta_tokenizer = self.load_tokenizer_from_hub()
         tokenized_input = roberta_tokenizer([data.content], padding=True, truncation=True, max_length=512, return_tensors = "pt" )
         
         raw_output = roberta_model(**tokenized_input)
         output = torch.nn.functional.softmax( raw_output.logits, dim=-1)
 
         label_id = torch.argmax(output).item()
-        return {"label" : roberta_model.config.id2label[label_id], "scores" : output.tolist()}
+        return {"label" : self.index_to_label(label_id), "scores" : output.tolist()}
+
+    def explain(self, sentence : str, html_file : str = None) -> Dict[str , Any]: 
+        """
+            Return a list of words from provided sentence with how much they collaborate to each label 
+            Parameters:
+                sentence : str = text to explain
+                html_file : str = path to some html file to store human readable representation. If no provided, 
+                                    it's ignored
+            Return:
+                Dict with data for this explanation. For example:
+                {   "scores" : 
+                    [   
+                        ('denuncian' , 0.98932),
+                        ('falta'     , 0.78912),
+                        ('de'        , 0.001231),
+                        ('agua'      , 0.863781)
+                    ],
+                    "label" : "DENUNCIA_FALTA_DEL_SERVICIO",
+        """
+        # Load model and tokenizer
+        model       = self.load_fine_tuned_model()
+        tokenizer   = self.load_tokenizer_from_hub()
+
+        # Create explainer
+        explainer = SequenceClassificationExplainer(model,tokenizer)
+        
+        scores = explainer(sentence)
+        label  = explainer.predicted_class_name
+        
+        # write html file
+        if html_file:
+            explainer.visualize(html_file)
+
+        return {
+            'scores' : scores,
+            'label'  : label
+        }
+
+    def get_id2label_dict(self) -> Dict[int, str]:
+        """
+            Return dict mapping from ids to labels
+        """
+        return {
+            1 : Labels.DENUNCIA_FALTA_DEL_SERVICIO.value,
+            0 : Labels.IRRELEVANTE.value            
+        }
+
+    def index_to_label(self, index : int) -> Labels:
+        """
+            Get index for label
+        """
+        d = self.get_id2label_dict()
+
+        return d.get(index, Labels.IRRELEVANTE.value)
 
