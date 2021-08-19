@@ -282,9 +282,10 @@ def show(url : str, no_scrape : bool = False):
 @c4v_cli.command()
 @click.option("--url", is_flag=True, help="Interpret string as URL")
 @click.option("--no-scrape", is_flag=True, help="In case of retrieving data from URL, don't scrape it if not available")
+@click.option("--html", default="./explanation.html", help="Dump results in an human readable format to an html file", nargs=1)
 @click.argument("experiment", nargs=1)
 @click.argument("sentence", nargs=1)
-def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False):
+def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False, html : str = None):
     """
         Show explainability for the given string. That is, show how much each word contributes 
         to each tag in the classifier. The result depends on the experiment, as it will load that 
@@ -319,7 +320,7 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
 
     # try to explain
     try:
-        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain)
+        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain, html_file=html)
     except ValueError as e:
         click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
         return
@@ -327,7 +328,7 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
     # Pretty print results
     scores = explanation['scores']
     label = explanation['label']
-    click.echo(f"Label to classify: {label}\nScores:")
+    click.echo(f"Predicted Label: {label}\nScores:")
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")
 

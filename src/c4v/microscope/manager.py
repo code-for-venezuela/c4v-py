@@ -192,7 +192,7 @@ class Manager:
 
         return classified
         
-    def explain_for_experiment(self, branch : str, experiment : str, sentence : str) -> Dict[str, Any]:
+    def explain_for_experiment(self, branch : str, experiment : str, sentence : str, html_file : str = None) -> Dict[str, Any]:
         """
             Explain a sentence using the given branch and experiment
             Parameters:
@@ -205,4 +205,4 @@ class Manager:
 
         classifier = ClassifierExperiment(branch, experiment)
 
-        return classifier.explain(sentence)
+        return classifier.explain(sentence, html_file)

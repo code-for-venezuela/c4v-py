@@ -59,7 +59,7 @@ class ClassifierExperiment:
         columns: List[str] = ["text"],
         experiments_folder: str = None,
         use_cuda: bool = True,
-        model_name: str = "mrm8488/RuPERTa-base",
+        base_model_name: str = "BSC-TeMU/roberta-base-bne",
         train_args: TrainingArguments = None,
 
     ):
@@ -73,7 +73,7 @@ class ClassifierExperiment:
             else torch.device("cpu")
         )
         self._test_dataset = test_dataset
-        self._model_name = model_name
+        self._base_model_name = base_model_name
         self._train_args = train_args
 
         # Experiments folder
@@ -177,7 +177,7 @@ class ClassifierExperiment:
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        return RobertaTokenizer.from_pretrained(self._model_name, id2label=self.get_id2label_dict())
+        return RobertaTokenizer.from_pretrained(self._base_model_name, id2label=self.get_id2label_dict())
 
     def load_model_from_hub(
         self,
@@ -189,7 +189,7 @@ class ClassifierExperiment:
         """
         # Creating model and tokenizer
         model = RobertaForSequenceClassification.from_pretrained(
-            self._model_name, num_labels=2
+            self._base_model_name, num_labels=2
         )
         # Use GPU if available
         model.to(self._device)
@@ -495,8 +495,8 @@ class ClassifierExperiment:
 
         # Create explainer
         explainer = SequenceClassificationExplainer(model,tokenizer)
-        
-        scores = explainer(sentence)
+
+        scores = explainer(sentence, class_name=Labels.DENUNCIA_FALTA_DEL_SERVICIO.IRRELEVANTE)
         label  = explainer.predicted_class_name
         
         # write html file
