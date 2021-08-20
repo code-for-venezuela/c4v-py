@@ -283,9 +283,12 @@ def show(url : str, no_scrape : bool = False):
 @click.option("--url", is_flag=True, help="Interpret string as URL")
 @click.option("--no-scrape", is_flag=True, help="In case of retrieving data from URL, don't scrape it if not available")
 @click.option("--html", default="./explanation.html", help="Dump results in an human readable format to an html file", nargs=1)
+@click.option("--label", default=None, 
+    help="Label to include in expalantion. If the predicted label is different from this one, then explain how much this label was contributing to its corresponding value"
+    )
 @click.argument("experiment", nargs=1)
 @click.argument("sentence", nargs=1)
-def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False, html : str = None):
+def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False, html : str = None, label : str = None):
     """
         Show explainability for the given string. That is, show how much each word contributes 
         to each tag in the classifier. The result depends on the experiment, as it will load that 
@@ -302,10 +305,12 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
         # Get data to classify 
         datas = client.get_data_for_urls([sentence], not no_scrape)
 
+        # check if there's data retrieved to explain
         if not datas:
             click.echo("Nothing to explain")
             return 
 
+        # Get content from data retrieved
         text_to_explain = datas[0].content
     else:
         text_to_explain = sentence
@@ -318,16 +323,27 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
     # unpack branch name and experiment name
     branch, experiment = branch_and_experiment
 
+    # Check label input
+    possible_labels = microscope_manager.get_classifier_labels()
+    if label and label not in possible_labels:
+        click.echo(f"[WARNING] Provided label not a valid label, ignoring label argument {label}.", err=True)
+        click.echo(f"Possible Labels:", err=True)
+        for l in possible_labels:
+            click.echo(f"\t* {l}", err=True)
+        label = None
+
+
+
     # try to explain
     try:
-        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain, html_file=html)
+        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain, html_file=html, additional_label=label)
     except ValueError as e:
         click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
         return
 
     # Pretty print results
     scores = explanation['scores']
-    label = explanation['label']
+    label  = explanation['label']
     click.echo(f"Predicted Label: {label}\nScores:")
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")

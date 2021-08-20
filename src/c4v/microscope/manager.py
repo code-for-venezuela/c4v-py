@@ -126,19 +126,6 @@ class Manager:
         if crawler_names == None:
             crawler_names = crawlers
 
-        not_registered = [name for name in crawler_names if name not in crawlers]
-
-        # Report warning if there's some non registered crawlers
-        if not_registered:
-            print(
-                "WARNING: some names in given name list don't correspond to any registered crawler.",
-                file=sys.stderr,
-            )
-            print(
-                "Unregistered crawler names: \n"
-                + "\n".join([f"\t* {name}" for name in not_registered])
-            )
-
         # Instantiate crawlers to use
         crawlers_to_run = [
             crawler() for crawler in INSTALLED_CRAWLERS if crawler.name in crawler_names
@@ -192,17 +179,29 @@ class Manager:
 
         return classified
         
-    def explain_for_experiment(self, branch : str, experiment : str, sentence : str, html_file : str = None) -> Dict[str, Any]:
+    def explain_for_experiment(self, branch : str, experiment : str, sentence : str, html_file : str = None, additional_label : str = None) -> Dict[str, Any]:
         """
             Explain a sentence using the given branch and experiment
             Parameters:
                 branch : str = branch name of model to use
                 experiment : str = experiment name storing model
                 sentence : str = sentence to explain
+                additional_label : str = Label to include in expalantion. If the predicted 
+                                         label is different from this one, then explain how 
+                                         much this label was contributing to its corresponding value, 
+                                         ignored if not provided
             Return:
                 Dict with explaination data
         """
 
         classifier = ClassifierExperiment(branch, experiment)
 
-        return classifier.explain(sentence, html_file)
+        return classifier.explain(sentence, html_file, additional_label=additional_label)
+
+    def get_classifier_labels(self) -> List[str]:
+        """
+            Get list of possible labels for classifier
+            Return:
+                List with possible output labels for the classifier
+        """
+        return ClassifierExperiment.get_labels()

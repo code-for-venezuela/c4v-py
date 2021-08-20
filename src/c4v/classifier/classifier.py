@@ -42,6 +42,13 @@ class Labels(Enum):
     DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
     IRRELEVANTE = "IRRELEVANTE"
 
+    @classmethod
+    def labels(cls) -> List[str]:
+        """
+            Get list of labels as strings
+        """
+        return [l.value for l in cls]
+
 class ClassifierExperiment:
     """
         This class provides a simple way to run simple experiments.
@@ -471,13 +478,16 @@ class ClassifierExperiment:
         label_id = torch.argmax(output).item()
         return {"label" : self.index_to_label(label_id), "scores" : output.tolist()}
 
-    def explain(self, sentence : str, html_file : str = None) -> Dict[str , Any]: 
+    def explain(self, sentence : str, html_file : str = None, additional_label : str = None) -> Dict[str , Any]: 
         """
             Return a list of words from provided sentence with how much they collaborate to each label 
             Parameters:
                 sentence : str = text to explain
                 html_file : str = path to some html file to store human readable representation. If no provided, 
                                     it's ignored
+                additional_label : str = Label to include in expalantion. If the predicted label is different 
+                                         from this one, then explain how much this label was contributing to 
+                                         its corresponding value. Ignored if not provided.
             Return:
                 Dict with data for this explanation. For example:
                 {   "scores" : 
@@ -496,7 +506,7 @@ class ClassifierExperiment:
         # Create explainer
         explainer = SequenceClassificationExplainer(model,tokenizer)
 
-        scores = explainer(sentence, class_name=Labels.DENUNCIA_FALTA_DEL_SERVICIO.IRRELEVANTE)
+        scores = explainer(sentence, class_name=additional_label)
         label  = explainer.predicted_class_name
         
         # write html file
@@ -525,3 +535,9 @@ class ClassifierExperiment:
 
         return d.get(index, Labels.IRRELEVANTE.value)
 
+    @staticmethod
+    def get_labels() -> List[str]:
+        """
+            Get list of possible labels outputs
+        """
+        return Labels.labels()
