@@ -3,6 +3,7 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
+from importlib.metadata import files
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -49,7 +50,7 @@ class Labels(Enum):
         """
         return [l.value for l in cls]
 
-class ClassifierExperiment:
+class Classifier:
     """
         This class provides a simple way to run simple experiments.
     """
@@ -59,21 +60,14 @@ class ClassifierExperiment:
 
     def __init__(
         self,
-        branch_name: str,
-        experiment_name: str,
         test_dataset: str = "elpitazo_positivelabels_devdataset.csv",
-        traning_arguments: TrainingArguments = None,
         columns: List[str] = ["text"],
-        experiments_folder: str = None,
         use_cuda: bool = True,
         base_model_name: str = "BSC-TeMU/roberta-base-bne",
         train_args: TrainingArguments = None,
-
+        files_folder: str = None
     ):
-        self._traning_arguments = traning_arguments
         self._columns = columns
-        self._branch_name = branch_name
-        self._experiment_name = experiment_name
         self._device = (
             torch.device("cuda")
             if use_cuda and torch.cuda.is_available()
@@ -83,39 +77,22 @@ class ClassifierExperiment:
         self._base_model_name = base_model_name
         self._train_args = train_args
 
-        # Experiments folder
-        if experiments_folder == None: # default folder
-            # Create folder if not exists
-            folder = BASE_C4V_FOLDER + "/experiments"
+        # Check that folder for internal files does exists
+        if files_folder and not Path(files_folder).exists():
+            raise ValueError(f"Given path does not exists: {files_folder}")
 
-            folder_path = Path(folder)
-            if not folder_path.exists():
-                folder_path.mkdir(parents=True)
+        self._files_folder = files_folder
 
-            self._experiments_folder = folder
-        else:
-            self._experiments_folder = experiments_folder
-
-        # Set memory limit for torch
-        if use_cuda and torch.cuda.is_available():
-            torch.cuda.empty_cache()
-
-    def _get_files_path(self) -> str:
+    @property
+    def files_folder(self) -> str:
         """
-            Get path to files for this experiment
+            Folder to store files for a training process
         """
-        return os.path.join(
-            self._experiments_folder, f"{self._branch_name}/{self._experiment_name}"
-        )
+        return self._files_folder
 
-    def _get_path_to(self, folder: str) -> str:
-        """
-            Get path to given folder and create it if doesn't exist
-        """
-        if not os.path.exists(folder):
-            Path(folder).mkdir(parents=True)
-
-        return folder
+    @files_folder.setter
+    def files_folder(self, value : str):
+        self._files_folder = value
 
     def get_logs_path(self) -> str:
         """
@@ -123,9 +100,19 @@ class ClassifierExperiment:
             Return:
                 path to log folder where we store logs for this experiment
         """
-        return self._get_path_to(
-            os.path.join(self._get_files_path(), f"{self.LOGS_FOLDER_NAME}")
-        )
+        if not self._files_folder:
+            raise ValueError("Could not create logs files, as no files folder is configured for this classifier object")
+
+        p = Path(self._files_folder, f"{self.LOGS_FOLDER_NAME}")
+        
+        # Create folder if does not exists
+        if not p.exists():
+            try:
+                p.mkdir()
+            except IOError as e:
+                raise ValueError(f"Could not create logs folder for path: {str(p)}, error: {e}")
+
+        return str(p)
 
     def get_results_path(self) -> str:
         """
@@ -133,16 +120,19 @@ class ClassifierExperiment:
             Return:
                 path to results folder where we store results for this experiment
         """
-        return self._get_path_to(
-            os.path.join(self._get_files_path(), f"{self.RESULTS_EXPERIMENT_NAME}")
-        )
+        if not self._files_folder:
+            raise ValueError("Could not create results files, as no files folder is configured for this classifier object")
 
-    def get_experiments_path(self) -> str:
-        """
-            Get path to experiments folder for this branch and experiment, for example
-                $HOME/.c4v/experiments/<branch_name>/<experiment_name>
-        """
-        return self._get_path_to(self._get_files_path())
+        p = Path(self._files_folder, f"{self.RESULTS_EXPERIMENT_NAME}")
+        
+        # Create folder if does not exists
+        if not p.exists():
+            try:
+                p.mkdir()
+            except IOError as e:
+                raise ValueError(f"Could not create logs folder for path: {str(p)}, error: {e}")
+
+        return str(p)
 
     def get_dataframe(self, dataset_name: str = None) -> DataFrame:
         """
@@ -204,7 +194,7 @@ class ClassifierExperiment:
         return model
 
     def transform_dataset(
-        self, x: List[str], y: List[int], tokenizer: RobertaTokenizer
+        self, x: List[str], y: List[int], tokenizer: RobertaTokenizer, test_dataset_proportion : float = 0.2
     ) -> Tuple[Dataset, Dataset]:
         """
             perform operations needed to post process a dataset separated in input list
@@ -217,7 +207,7 @@ class ClassifierExperiment:
                 (Dataset, Dataset) = the training and the validation dataset, in such order
         """
         # Train Test Split
-        X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.2)
+        X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=test_dataset_proportion)
 
         X_train_tokenized = tokenizer(
             X_train, padding=True, truncation=True, max_length=512
@@ -361,7 +351,7 @@ class ClassifierExperiment:
             load fine tuned model from provided path, defaults to an already trained one 
             in experiment's folder
         """
-        path = path or os.path.join(self.get_experiments_path())
+        path = path or self._files_folder
 
         # Check if path is a valid one
         if not Path(path, "config.json").exists():
@@ -386,44 +376,18 @@ class ClassifierExperiment:
         )
         return metrics_df
 
-    def _write_summary(self, metrics : Dict[str, Any], args : Dict[str, Any], description : str):
-        """
-            Write a summary for the results in given dict
-        """
-        file_to_write = self.get_results_path() + "/summary.txt"
-
-        with open(file_to_write, "w+") as f:
-            # Add title
-            s = f"Summary for experiment {self._branch_name}/{self._experiment_name}:\n"
-
-            # Add description if available
-            if description:
-                s += f"Description: "
-                s += "\n".join((f"\t{subs}" for subs in description.splitlines())) + '\n'
-
-            # Add date
-            date = datetime.strftime(datetime.now(tz=utc), format = settings.date_format)
-            s += f"\t* date = {date}\n"
-
-            # Add additional fields
-            double_tab = '\t\t'
-            nl = '\n'
-            s += f"\t* metrics_value = \n{ nl.join(( f'{double_tab}* {l}' for l in str(metrics.get('metrics_value')).splitlines())) }\n"
-
-            # Add given args
-            s += "\n=== TRAINING ARGUMENTS ===\n"
-            actual_args = self._override_train_args(args)
-            s += "\n".join([f"\t* {key} : {val} {' [USER]' if args.get(key) else ''}" for (key, val) in actual_args.items()])
-            print(s, file=f)
-            print(s)
-
-
-    def run_experiment(self, train_args: Dict[str, Any] = None, write_summary : bool  = True, description : str = None):
+    def run_train(self, train_args: Dict[str, Any] = None) -> Dict[str, Any]:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
-                train_args : Dict[str, Any] = arguments passed to 
+                train_args : Dict[str, Any] = arguments passed to trainig arguments
+            Return:
+                Classifier metrics
+
         """
+
+        if not self._files_folder:
+            raise ValueError("Can't train in a Classifier without a folder for local data")
 
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe()
@@ -438,7 +402,7 @@ class ClassifierExperiment:
             model=model,
             output_dir=self.get_results_path(),
             logging_dir=self.get_logs_path(),
-            path_to_save_checkpoint=self.get_experiments_path(),
+            path_to_save_checkpoint=self._files_folder,
             train_args=self._override_train_args(train_args or {}),
             train_dataset=train_dataset,
             eval_dataset=val_dataset,
@@ -449,22 +413,24 @@ class ClassifierExperiment:
             trainer=fine_tuned_model_trainer, val_dataset=val_dataset
         )
 
-        # Write a summary
-        if write_summary: self._write_summary(metrics_df, train_args, description)
-
         return metrics_df
 
     def classify(self, data : ScrapedData, model : str = None) -> Dict[str, Any]: # @TODO should use a bulk version instead
         """
             Classify the given data instance, returning classification metrics
-            as a simple dict
+            as a simple dict.
+            Parameters:
+                data : ScrapedData = Data instance to classify
+                model : str = model name of model to load use when classifying 
+            Return:
+                Dict with classification data, predicted label and score for each possible label
         """
         # Get model from experiment:
         if model is None:
-            model = self.get_experiments_path()
+            model = self._files_folder
             # Check if there's a config.json in this folder
             if not Path(model, "config.json").exists():
-                raise ValueError(f"Experiment '{self._experiment_name}' or branch '{self._branch_name}' does not exist yet")
+                raise ValueError(f"path: {model} does not contains valid model to load")
 
         roberta_model = self.load_fine_tuned_model(model)
 

@@ -8,37 +8,37 @@
     when they run.
 """
 # Python imports
-import dataclasses
 import pytz
 import sys
 import shutil
 from pathlib     import Path
 from datetime    import datetime
 from typing      import Type
+from dataclasses import dataclass, field
 
 # Local imports
 from c4v.config import settings
 
-dataclasses.dataclass(frozen=True)
+@dataclass
 class BaseExperimentSummary:
     """
         Provide an output summary describing results for this experiment, 
         and an human readable representation
     """
     # Initialize to date when created
-    date : datetime = dataclasses.field(default_factory=lambda: datetime.now(tz=pytz.utc))
+    date : datetime = field(default_factory=lambda: datetime.now(tz=pytz.utc))
 
     # Optional description
     description : str = None
     
     def __str__(self) -> str:
         # An human readable representation 
-        output =  f"Date: {datetime.strftime( self.date, settings.date_format )}"
-        output += f"Description: {self.description or '<no description>'}"
+        output =  f"Date: {datetime.strftime( self.date, settings.date_format )}\n"
+        output += f"Description: {self.description or '<no description>'}\n"
 
         return output
 
-@dataclasses.dataclass
+@dataclass
 class BaseExperimentArguments:
     """
         Arguments to pass to an experiment run
@@ -142,7 +142,7 @@ class ExperimentManager:
         """
             Write summary to corresponding file and also to stdio
         """
-        file_to_write = self.get_results_path() + "/summary.txt"
+        file_to_write = self._experiments_folder + "/summary.txt"
 
         with open(file_to_write, "w+") as f:
             summary_str = str(summary)
