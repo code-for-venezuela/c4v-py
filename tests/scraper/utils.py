@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from datetime import datetime
 from pytz       import utc
 from scrapy.http import Request, Response, HtmlResponse
@@ -6,7 +5,6 @@ from c4v.scraper.persistency_manager.base_persistency_manager   import BasePersi
 from c4v.scraper.scraped_data_classes.scraped_data              import ScrapedData
 import importlib_resources as resources
 
-from c4v.scraper.settings import DATE_FORMAT
 
 def fake_response_from_file(path: str, file : str,  url: str) -> Response:
     """

@@ -1,5 +1,5 @@
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from tests.scraper.utils import util_test_filter_scraped_urls, util_test_instance_delete, util_test_save_for, util_test_save_overrides_for, util_test_url_filtering
+from .utils import util_test_filter_scraped_urls, util_test_instance_delete, util_test_save_for, util_test_save_overrides_for, util_test_url_filtering
 
 
 def test_save_sqlite_manager(test_sqlite_manager : SqliteManager):
