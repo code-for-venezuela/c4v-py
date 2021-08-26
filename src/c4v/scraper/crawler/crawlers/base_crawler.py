@@ -25,8 +25,9 @@ class BaseCrawler:
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
 
-    def __init__(self, white_list : List[str] = ["*"]) -> None:
-        self._white_list = white_list
+    def __init__(self, white_list : List[str] = None) -> None:
+        
+        self._white_list = white_list or ["*"]
 
     @property
     def white_list_regex(self) -> str:
