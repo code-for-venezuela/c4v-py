@@ -23,7 +23,12 @@ from c4v.config import settings
 class BaseExperimentSummary:
     """
         Provide an output summary describing results for this experiment, 
-        and an human readable representation
+        and an human readable representation.
+        
+        Note that in order to inherit this class, you must provide default 
+        values for every field (required by dataclasses). If you want
+        to mark some fields as mandatory, you can do so in the __post_init__
+        method.
     """
     # Initialize to date when created
     date : datetime = field(default_factory=lambda: datetime.now(tz=pytz.utc))

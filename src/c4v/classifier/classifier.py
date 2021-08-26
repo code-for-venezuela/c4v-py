@@ -60,19 +60,15 @@ class Classifier:
 
     def __init__(
         self,
-        test_dataset: str = "elpitazo_positivelabels_devdataset.csv",
-        columns: List[str] = ["text"],
         use_cuda: bool = True,
         base_model_name: str = "BSC-TeMU/roberta-base-bne",
         files_folder: str = None
     ):
-        self._columns = columns
         self._device = (
             torch.device("cuda")
             if use_cuda and torch.cuda.is_available()
             else torch.device("cpu")
         )
-        self._test_dataset = test_dataset
         self._base_model_name = base_model_name
         self.files_folder = files_folder
 
@@ -130,35 +126,38 @@ class Classifier:
 
         return str(p)
 
-    def get_dataframe(self, dataset_name: str = None) -> DataFrame:
+    def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
-            Get dataframe as a pandas dataframe 
+            Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/raw/huggingface
         """
         with resources.open_text(
-            "data.raw.huggingface", dataset_name or self._test_dataset
+            "data.raw.huggingface", dataset_name
         ) as f:
             return pd.read_csv(f)
 
-    def prepare_dataframe(self) -> Tuple[List[str], List[int]]:
+    def prepare_dataframe(self, columns : List[str], dataset_name : str) -> Tuple[List[str], List[int]]:
         """
             Return the list of text bodies and its corresponding label of whether it is 
             a missing service problem or not, expressed as int
+            Parameters:
+                columns : [str] = List of columns to use as part of the experiment 
+                dataset_name : str = name of the dataset to use
             Return:
                 ([str], [int]) = the i'st position of the first list is the body of a news article, and the 
                                  i'st position of the second list tells whether the article i talks about
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe()
+        df_pscdd = self.get_dataframe(dataset_name)
         df_pscdd["label"] = (
             df_pscdd.tipo_de_evento == Labels.DENUNCIA_FALTA_DEL_SERVICIO.value
         ).astype(int)
 
         df_pscdd = df_pscdd.convert_dtypes()
-        df_issue_text = df_pscdd[[*self._columns, "label"]]
+        df_issue_text = df_pscdd[[*columns, "label"]]
         df_issue_text.dropna(inplace=True)
 
-        x = ["\n".join(tup) for tup in zip(*[list(df_issue_text[col]) for col in self._columns])]
+        x = ["\n".join(tup) for tup in zip(*[list(df_issue_text[col]) for col in columns])]
 
         y = list(df_issue_text["label"])
 
@@ -372,21 +371,26 @@ class Classifier:
         )
         return metrics_df
 
-    def run_train(self, train_args: Dict[str, Any] = None) -> Dict[str, Any]:
+    def run_train(  self, 
+                    train_args: Dict[str, Any] = None, 
+                    columns: List[str] = ["text"], 
+                    dataset : str = "elpitazo_positivelabels_devdataset.csv"
+                ) -> Dict[str, Any]:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
                 train_args : Dict[str, Any] = arguments passed to trainig arguments
+                columns : [str] = columns to use in the dataset
+                dataset : dataset tu use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
             Return:
                 Classifier metrics
-
         """
 
         if not self._files_folder:
             raise ValueError("Can't train in a Classifier without a folder for local data")
 
         # Prepare dataframe and load model + tokenizer
-        x, y = self.prepare_dataframe()
+        x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
         model = self.load_model_from_hub()
         tokenizer = self.load_tokenizer_from_hub()

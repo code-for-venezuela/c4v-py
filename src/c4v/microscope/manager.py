@@ -2,12 +2,14 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports 
+from c4v.classifier.experiment import ExperimentFSManager
 from c4v.scraper.persistency_manager.base_persistency_manager   import BasePersistencyManager
 from c4v.scraper.persistency_manager.sqlite_storage_manager     import SqliteManager
 from c4v.scraper.scraped_data_classes.scraped_data              import ScrapedData
 from c4v.scraper.scraper                                        import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings                                       import INSTALLED_CRAWLERS
-from c4v.classifier.classifier                                  import ClassifierExperiment
+from c4v.classifier.classifier_experiment                       import ClassifierExperiment
+from c4v.classifier.classifier                                  import Classifier
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
@@ -174,8 +176,10 @@ class Manager:
             Return:
                 A dict from urls to classification output
         """
-        classifier = ClassifierExperiment(branch, experiment)
-        classified = { d.url : classifier.classify(d) for d in data }
+
+        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(branch,experiment)
+
+        classified = { d.url : classifier_experiment.classify(d) for d in data }
 
         return classified
         
@@ -194,9 +198,9 @@ class Manager:
                 Dict with explaination data
         """
 
-        classifier = ClassifierExperiment(branch, experiment)
+        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(branch, experiment)
 
-        return classifier.explain(sentence, html_file, additional_label=additional_label)
+        return classifier_experiment.explain(sentence, html_file, additional_label=additional_label)
 
     def get_classifier_labels(self) -> List[str]:
         """
@@ -204,4 +208,4 @@ class Manager:
             Return:
                 List with possible output labels for the classifier
         """
-        return ClassifierExperiment.get_labels()
+        return Classifier.get_labels()
