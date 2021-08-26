@@ -1,8 +1,8 @@
 # Python imports
 from dataclasses import dataclass, asdict, field
-import dataclasses
-from typing import List, Dict, Any
-from datetime import datetime
+from typing      import List, Dict, Any
+from datetime    import datetime
+from c4v.config  import settings
 import json
 
 
@@ -58,9 +58,6 @@ class ScrapedDataEncoder(json.JSONEncoder):
             return asdict(obj)
         elif isinstance(obj, datetime):
 
-            # Local imports
-            from c4v.scraper.settings import DATE_FORMAT
-
-            return datetime.strftime(obj, DATE_FORMAT)
+            return datetime.strftime(obj, settings.date_format)
 
         return json.JSONEncoder.default(self, obj)
