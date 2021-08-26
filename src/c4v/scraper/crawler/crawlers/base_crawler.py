@@ -4,6 +4,7 @@
 # Python imports
 from typing import Any, List, Callable
 import sys
+import re
 
 # Third party imports
 import requests
@@ -23,6 +24,16 @@ class BaseCrawler:
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
+
+    def __init__(self, white_list : List[str] = ["*"]) -> None:
+        self._white_list = white_list
+
+    @property
+    def white_list_regex(self) -> str:
+        """
+            Regex matching every white listed url regex pattern
+        """
+        return "(" + ")|(".join(self._white_list) + ")"
 
     def crawl_urls(self, up_to : int = None) -> List[str]:
         """
@@ -146,9 +157,12 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap, "xml")
         urls = map(lambda l: l.get_text(), soup.select("url > loc"))
-        urls = filter(self.should_scrape, urls)
+        # We request the white_list regex once and use it often because otherwise, such string will be
+        # computed once per url, which is quite inneficient
+        white_list = self.white_list_regex
+        urls = [u for u in urls if self.should_scrape(u) and self.is_white_listed(u, white_list)]
 
-        return list(urls)
+        return urls
 
     @staticmethod
     def should_crawl(url: str) -> bool:
@@ -172,3 +186,9 @@ class BaseCrawler:
                 boolean, telling if this is a valid url
         """
         return True
+
+    def is_white_listed(self, url : str, white_list_regex : str = None) -> bool:
+        """
+            Checks if the given url as string matches list of white listed patterns
+        """
+        return not not re.match(white_list_regex or self.white_list_regex, url)
