@@ -1,5 +1,5 @@
 from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
-from .utils import fake_response_from_str
+from tests.scraper.utils import fake_response_from_str
 from c4v.scraper.scrapers.el_pitazo_scraper import ElPitazoScraper
 
 

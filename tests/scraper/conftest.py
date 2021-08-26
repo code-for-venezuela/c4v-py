@@ -3,7 +3,6 @@ import importlib_resources as resources
 import tempfile
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from typing import List
-from pathlib import Path
 
 # Handy tip: test resources for scrapers are located in resources.tests.scraper
 
