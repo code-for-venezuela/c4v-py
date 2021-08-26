@@ -55,8 +55,8 @@ class Classifier:
         This class provides a simple way to run simple experiments.
     """
 
-    LOGS_FOLDER_NAME: str = "logs"
-    RESULTS_EXPERIMENT_NAME: str = "results"
+    LOGS_FOLDER_NAME = "logs"
+    RESULTS_EXPERIMENT_NAME = "results"
 
     def __init__(
         self,
@@ -64,7 +64,6 @@ class Classifier:
         columns: List[str] = ["text"],
         use_cuda: bool = True,
         base_model_name: str = "BSC-TeMU/roberta-base-bne",
-        train_args: TrainingArguments = None,
         files_folder: str = None
     ):
         self._columns = columns
@@ -75,13 +74,7 @@ class Classifier:
         )
         self._test_dataset = test_dataset
         self._base_model_name = base_model_name
-        self._train_args = train_args
-
-        # Check that folder for internal files does exists
-        if files_folder and not Path(files_folder).exists():
-            raise ValueError(f"Given path does not exists: {files_folder}")
-
-        self._files_folder = files_folder
+        self.files_folder = files_folder
 
     @property
     def files_folder(self) -> str:
@@ -92,6 +85,9 @@ class Classifier:
 
     @files_folder.setter
     def files_folder(self, value : str):
+        # Check that folder for internal files does exists
+        if value and not Path(value).exists():
+            raise ValueError(f"Given path does not exists: {value}")
         self._files_folder = value
 
     def get_logs_path(self) -> str:
@@ -340,7 +336,7 @@ class Classifier:
         # Train pre-trained model
         trainer.train()
 
-        model.save_pretrained(path_to_save_checkpoint or self._get_files_path())
+        model.save_pretrained(path_to_save_checkpoint or self.files_folder)
 
         return trainer
 
@@ -421,7 +417,8 @@ class Classifier:
             as a simple dict.
             Parameters:
                 data : ScrapedData = Data instance to classify
-                model : str = model name of model to load use when classifying 
+                model : str = model name of model to load use when classifying. If no model provided,
+                              use the model configured for this classifier
             Return:
                 Dict with classification data, predicted label and score for each possible label
         """
