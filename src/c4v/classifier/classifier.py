@@ -8,13 +8,13 @@ from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
-from typing             import Dict, List, Any, Tuple
-from pathlib            import Path
-from pandas.core.frame  import DataFrame
-from importlib          import resources
-from datetime           import datetime
-from pytz               import utc
-from enum               import Enum
+from typing import Dict, List, Any, Tuple
+from pathlib import Path
+from pandas.core.frame import DataFrame
+from importlib import resources
+from datetime import datetime
+from pytz import utc
+from enum import Enum
 import os
 
 # Third Party
@@ -25,9 +25,9 @@ from transformers import (
     RobertaForSequenceClassification,
 )
 from transformers_interpret import SequenceClassificationExplainer
-from sklearn.metrics            import accuracy_score, f1_score, recall_score, precision_score
-from sklearn.model_selection    import train_test_split
-from datasets                   import Dataset
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
+from sklearn.model_selection import train_test_split
+from datasets import Dataset
 import torch
 import pandas as pd
 import numpy as np
@@ -36,10 +36,12 @@ from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
 
+
 class Labels(Enum):
     """
         Every possible label for each article
     """
+
     DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
     IRRELEVANTE = "IRRELEVANTE"
 
@@ -49,6 +51,7 @@ class Labels(Enum):
             Get list of labels as strings
         """
         return [l.value for l in cls]
+
 
 class Classifier:
     """
@@ -62,7 +65,7 @@ class Classifier:
         self,
         use_cuda: bool = True,
         base_model_name: str = "BSC-TeMU/roberta-base-bne",
-        files_folder: str = None
+        files_folder: str = None,
     ):
         self._device = (
             torch.device("cuda")
@@ -80,7 +83,7 @@ class Classifier:
         return self._files_folder
 
     @files_folder.setter
-    def files_folder(self, value : str):
+    def files_folder(self, value: str):
         # Check that folder for internal files does exists
         if value and not Path(value).exists():
             raise ValueError(f"Given path does not exists: {value}")
@@ -93,16 +96,20 @@ class Classifier:
                 path to log folder where we store logs for this experiment
         """
         if not self._files_folder:
-            raise ValueError("Could not create logs files, as no files folder is configured for this classifier object")
+            raise ValueError(
+                "Could not create logs files, as no files folder is configured for this classifier object"
+            )
 
         p = Path(self._files_folder, f"{self.LOGS_FOLDER_NAME}")
-        
+
         # Create folder if does not exists
         if not p.exists():
             try:
                 p.mkdir()
             except IOError as e:
-                raise ValueError(f"Could not create logs folder for path: {str(p)}, error: {e}")
+                raise ValueError(
+                    f"Could not create logs folder for path: {str(p)}, error: {e}"
+                )
 
         return str(p)
 
@@ -113,16 +120,20 @@ class Classifier:
                 path to results folder where we store results for this experiment
         """
         if not self._files_folder:
-            raise ValueError("Could not create results files, as no files folder is configured for this classifier object")
+            raise ValueError(
+                "Could not create results files, as no files folder is configured for this classifier object"
+            )
 
         p = Path(self._files_folder, f"{self.RESULTS_EXPERIMENT_NAME}")
-        
+
         # Create folder if does not exists
         if not p.exists():
             try:
                 p.mkdir()
             except IOError as e:
-                raise ValueError(f"Could not create logs folder for path: {str(p)}, error: {e}")
+                raise ValueError(
+                    f"Could not create logs folder for path: {str(p)}, error: {e}"
+                )
 
         return str(p)
 
@@ -130,12 +141,12 @@ class Classifier:
         """
             Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/raw/huggingface
         """
-        with resources.open_text(
-            "data.raw.huggingface", dataset_name
-        ) as f:
+        with resources.open_text("data.raw.huggingface", dataset_name) as f:
             return pd.read_csv(f)
 
-    def prepare_dataframe(self, columns : List[str], dataset_name : str) -> Tuple[List[str], List[int]]:
+    def prepare_dataframe(
+        self, columns: List[str], dataset_name: str
+    ) -> Tuple[List[str], List[int]]:
         """
             Return the list of text bodies and its corresponding label of whether it is 
             a missing service problem or not, expressed as int
@@ -157,7 +168,10 @@ class Classifier:
         df_issue_text = df_pscdd[[*columns, "label"]]
         df_issue_text.dropna(inplace=True)
 
-        x = ["\n".join(tup) for tup in zip(*[list(df_issue_text[col]) for col in columns])]
+        x = [
+            "\n".join(tup)
+            for tup in zip(*[list(df_issue_text[col]) for col in columns])
+        ]
 
         y = list(df_issue_text["label"])
 
@@ -169,7 +183,9 @@ class Classifier:
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        return RobertaTokenizer.from_pretrained(self._base_model_name, id2label=self.get_id2label_dict())
+        return RobertaTokenizer.from_pretrained(
+            self._base_model_name, id2label=self.get_id2label_dict()
+        )
 
     def load_model_from_hub(
         self,
@@ -189,7 +205,11 @@ class Classifier:
         return model
 
     def transform_dataset(
-        self, x: List[str], y: List[int], tokenizer: RobertaTokenizer, test_dataset_proportion : float = 0.2
+        self,
+        x: List[str],
+        y: List[int],
+        tokenizer: RobertaTokenizer,
+        test_dataset_proportion: float = 0.2,
     ) -> Tuple[Dataset, Dataset]:
         """
             perform operations needed to post process a dataset separated in input list
@@ -202,7 +222,9 @@ class Classifier:
                 (Dataset, Dataset) = the training and the validation dataset, in such order
         """
         # Train Test Split
-        X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=test_dataset_proportion)
+        X_train, X_val, y_train, y_val = train_test_split(
+            x, y, test_size=test_dataset_proportion
+        )
 
         X_train_tokenized = tokenizer(
             X_train, padding=True, truncation=True, max_length=512
@@ -275,7 +297,7 @@ class Classifier:
             "warmup_steps": 500,
             "weight_decay": 0.01,
             "logging_dir": self.get_logs_path(),
-            "save_total_limit" : 1
+            "save_total_limit": 1,
         }
 
         return default
@@ -352,7 +374,9 @@ class Classifier:
         if not Path(path, "config.json").exists():
             raise ValueError(f"Experiment does not exists: {path}")
 
-        model = RobertaForSequenceClassification.from_pretrained(path, local_files_only = True, id2label=self.get_id2label_dict())
+        model = RobertaForSequenceClassification.from_pretrained(
+            path, local_files_only=True, id2label=self.get_id2label_dict()
+        )
         return model
 
     def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> DataFrame:
@@ -371,11 +395,12 @@ class Classifier:
         )
         return metrics_df
 
-    def run_train(  self, 
-                    train_args: Dict[str, Any] = None, 
-                    columns: List[str] = ["text"], 
-                    dataset : str = "elpitazo_positivelabels_devdataset.csv"
-                ) -> Dict[str, Any]:
+    def run_train(
+        self,
+        train_args: Dict[str, Any] = None,
+        columns: List[str] = ["text"],
+        dataset: str = "elpitazo_positivelabels_devdataset.csv",
+    ) -> Dict[str, Any]:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
@@ -387,7 +412,9 @@ class Classifier:
         """
 
         if not self._files_folder:
-            raise ValueError("Can't train in a Classifier without a folder for local data")
+            raise ValueError(
+                "Can't train in a Classifier without a folder for local data"
+            )
 
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
@@ -415,7 +442,9 @@ class Classifier:
 
         return metrics_df
 
-    def classify(self, data : ScrapedData, model : str = None) -> Dict[str, Any]: # @TODO should use a bulk version instead
+    def classify(
+        self, data: ScrapedData, model: str = None
+    ) -> Dict[str, Any]:  # @TODO should use a bulk version instead
         """
             Classify the given data instance, returning classification metrics
             as a simple dict.
@@ -437,15 +466,23 @@ class Classifier:
 
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer_from_hub()
-        tokenized_input = roberta_tokenizer([data.content], padding=True, truncation=True, max_length=512, return_tensors = "pt" )
-        
+        tokenized_input = roberta_tokenizer(
+            [data.content],
+            padding=True,
+            truncation=True,
+            max_length=512,
+            return_tensors="pt",
+        )
+
         raw_output = roberta_model(**tokenized_input)
-        output = torch.nn.functional.softmax( raw_output.logits, dim=-1)
+        output = torch.nn.functional.softmax(raw_output.logits, dim=-1)
 
         label_id = torch.argmax(output).item()
-        return {"label" : self.index_to_label(label_id), "scores" : output.tolist()}
+        return {"label": self.index_to_label(label_id), "scores": output.tolist()}
 
-    def explain(self, sentence : str, html_file : str = None, additional_label : str = None) -> Dict[str , Any]: 
+    def explain(
+        self, sentence: str, html_file: str = None, additional_label: str = None
+    ) -> Dict[str, Any]:
         """
             Return a list of words from provided sentence with how much they collaborate to each label 
             Parameters:
@@ -467,34 +504,31 @@ class Classifier:
                     "label" : "DENUNCIA_FALTA_DEL_SERVICIO",
         """
         # Load model and tokenizer
-        model       = self.load_fine_tuned_model()
-        tokenizer   = self.load_tokenizer_from_hub()
+        model = self.load_fine_tuned_model()
+        tokenizer = self.load_tokenizer_from_hub()
 
         # Create explainer
-        explainer = SequenceClassificationExplainer(model,tokenizer)
+        explainer = SequenceClassificationExplainer(model, tokenizer)
 
         scores = explainer(sentence, class_name=additional_label)
-        label  = explainer.predicted_class_name
-        
+        label = explainer.predicted_class_name
+
         # write html file
         if html_file:
             explainer.visualize(html_file)
 
-        return {
-            'scores' : scores,
-            'label'  : label
-        }
+        return {"scores": scores, "label": label}
 
     def get_id2label_dict(self) -> Dict[int, str]:
         """
             Return dict mapping from ids to labels
         """
         return {
-            1 : Labels.DENUNCIA_FALTA_DEL_SERVICIO.value,
-            0 : Labels.IRRELEVANTE.value            
+            1: Labels.DENUNCIA_FALTA_DEL_SERVICIO.value,
+            0: Labels.IRRELEVANTE.value,
         }
 
-    def index_to_label(self, index : int) -> Labels:
+    def index_to_label(self, index: int) -> Labels:
         """
             Get index for label
         """

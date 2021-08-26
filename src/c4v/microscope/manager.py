@@ -1,19 +1,22 @@
 """
     This file exposes the main API for this library, the microscope Manager
 """
-# Local imports 
+# Local imports
 from c4v.classifier.experiment import ExperimentFSManager
-from c4v.scraper.persistency_manager.base_persistency_manager   import BasePersistencyManager
-from c4v.scraper.persistency_manager.sqlite_storage_manager     import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data              import ScrapedData
-from c4v.scraper.scraper                                        import bulk_scrape, _get_scraper_from_url
-from c4v.scraper.settings                                       import INSTALLED_CRAWLERS
-from c4v.classifier.classifier_experiment                       import ClassifierExperiment
-from c4v.classifier.classifier                                  import Classifier
+from c4v.scraper.persistency_manager.base_persistency_manager import (
+    BasePersistencyManager,
+)
+from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
+from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.classifier.classifier_experiment import ClassifierExperiment
+from c4v.classifier.classifier import Classifier
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
 import sys
+
 
 class Manager:
     """
@@ -24,7 +27,9 @@ class Manager:
     def __init__(self, persistency_manager: BasePersistencyManager):
         self._persistency_manager = persistency_manager
 
-    def get_bulk_data_for(self, urls: List[str], should_scrape: bool = True) -> List[ScrapedData]:
+    def get_bulk_data_for(
+        self, urls: List[str], should_scrape: bool = True
+    ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
@@ -72,7 +77,7 @@ class Manager:
 
         db.save(scraped)
 
-    def get_all(self, limit : int = -1, scraped : bool = None) -> Iterable[ScrapedData]:
+    def get_all(self, limit: int = -1, scraped: bool = None) -> Iterable[ScrapedData]:
         """
             Return all ScrapedData instances available, up to "limit" rows. If scraped = true, then
             return only scraped instances. If scraped = false, return only non scraped. Otherwise, return anything
@@ -82,10 +87,15 @@ class Manager:
                                 them should be scraped. If None, there's no restriction
             Return:
                 An iterator returning available rows
-        """ 
+        """
         return self._persistency_manager.get_all(limit, scraped)
 
-    def crawl_new_urls_for(self, crawler_names: List[str] = None, post_process : Callable[[List[str]], None] = None, limit = -1):
+    def crawl_new_urls_for(
+        self,
+        crawler_names: List[str] = None,
+        post_process: Callable[[List[str]], None] = None,
+        limit=-1,
+    ):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
@@ -95,11 +105,12 @@ class Manager:
                 limit        : int = Max amount of urls to save
         """
         db = self._persistency_manager
+
         class Counter:
             def __init__(self):
                 self.count = 0
-                
-            def add(self, x : int):
+
+            def add(self, x: int):
                 self.count += x
 
         counter = Counter()
@@ -113,7 +124,7 @@ class Manager:
             # Update how much elements have beed added so far
             counter.add(len(datas))
 
-            # Call any callback function 
+            # Call any callback function
             if post_process:
                 post_process(urls)
 
@@ -137,7 +148,7 @@ class Manager:
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls, should_stop)
 
-    def split_non_scrapable(self, urls : List[str]) -> Tuple[List[str], List[str]]:
+    def split_non_scrapable(self, urls: List[str]) -> Tuple[List[str], List[str]]:
         """
             splits url list in two list, one having a list of scrapable urls, 
             and another one with only non-scrapable
@@ -159,14 +170,16 @@ class Manager:
         return scrapable, non_scrapable
 
     @classmethod
-    def from_local_sqlite_db(cls, db_path : str):
+    def from_local_sqlite_db(cls, db_path: str):
         """
             Create a new instance using an SQLite local db
         """
         db = SqliteManager(db_path)
         return cls(db)
 
-    def run_classification_from_experiment(self, branch : str, experiment : str, data : List[ScrapedData]) -> Dict[str, Dict[str, Any]]:
+    def run_classification_from_experiment(
+        self, branch: str, experiment: str, data: List[ScrapedData]
+    ) -> Dict[str, Dict[str, Any]]:
         """
             Classify given data instance list, returning its metrics
             Parameters:
@@ -177,13 +190,22 @@ class Manager:
                 A dict from urls to classification output
         """
 
-        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(branch,experiment)
+        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
+            branch, experiment
+        )
 
-        classified = { d.url : classifier_experiment.classify(d) for d in data }
+        classified = {d.url: classifier_experiment.classify(d) for d in data}
 
         return classified
-        
-    def explain_for_experiment(self, branch : str, experiment : str, sentence : str, html_file : str = None, additional_label : str = None) -> Dict[str, Any]:
+
+    def explain_for_experiment(
+        self,
+        branch: str,
+        experiment: str,
+        sentence: str,
+        html_file: str = None,
+        additional_label: str = None,
+    ) -> Dict[str, Any]:
         """
             Explain a sentence using the given branch and experiment
             Parameters:
@@ -198,9 +220,13 @@ class Manager:
                 Dict with explaination data
         """
 
-        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(branch, experiment)
+        classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
+            branch, experiment
+        )
 
-        return classifier_experiment.explain(sentence, html_file, additional_label=additional_label)
+        return classifier_experiment.explain(
+            sentence, html_file, additional_label=additional_label
+        )
 
     def get_classifier_labels(self) -> List[str]:
         """

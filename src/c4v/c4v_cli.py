@@ -8,8 +8,8 @@ from datetime import datetime
 import click
 
 # Python imports
-from typing         import List, Tuple
-from urllib.error   import HTTPError
+from typing import List, Tuple
+from urllib.error import HTTPError
 import os
 import sys
 from c4v import microscope
@@ -17,17 +17,19 @@ from c4v.classifier.classifier import Labels
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from c4v.scraper.settings       import INSTALLED_CRAWLERS
+from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.utils          import data_list_to_table_str
-from c4v.scraper.settings       import INSTALLED_CRAWLERS
-from c4v.config                 import settings
-from c4v.microscope.manager     import Manager
+from c4v.scraper.utils import data_list_to_table_str
+from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.config import settings
+from c4v.microscope.manager import Manager
 
 
 # Folder to search for local files
 DEFAULT_FILES_FOLDER = settings.c4v_folder
-DEFAULT_DB = settings.local_sqlite_db or os.path.join(settings.c4v_folder, settings.local_sqlite_db_name)
+DEFAULT_DB = settings.local_sqlite_db or os.path.join(
+    settings.c4v_folder, settings.local_sqlite_db_name
+)
 
 
 @click.group()
@@ -97,11 +99,11 @@ def scrape(
 
 
 @c4v_cli.command()
-@click.option("--list", is_flag=True,       help="list available crawlers")
-@click.option("--all", is_flag=True,        help="Run all available crawlers")
-@click.option("--all-but", is_flag=True,    help="Run all crawlers except listed ones")
-@click.option("--loud", is_flag=True,       help="Print results to terminal")
-@click.option("--limit", default=-1,        help="Max number of new urls to store")
+@click.option("--list", is_flag=True, help="list available crawlers")
+@click.option("--all", is_flag=True, help="Run all available crawlers")
+@click.option("--all-but", is_flag=True, help="Run all crawlers except listed ones")
+@click.option("--loud", is_flag=True, help="Print results to terminal")
+@click.option("--limit", default=-1, help="Max number of new urls to store")
 @click.argument("crawlers", nargs=-1)
 def crawl(
     crawlers: List[str] = [],
@@ -109,7 +111,7 @@ def crawl(
     all: bool = False,
     all_but: bool = False,
     loud: bool = False,
-    limit: int = -1
+    limit: int = -1,
 ):
     """
         Crawl for new urls, ignoring already scraped ones.\n
@@ -147,7 +149,9 @@ def crawl(
         crawlers_to_run = [crawler.name for crawler in INSTALLED_CRAWLERS]
     elif all_but:
         crawlers_to_run = [
-            crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name not in crawlers
+            crawler.name
+            for crawler in INSTALLED_CRAWLERS
+            if crawler.name not in crawlers
         ]
     else:
         crawlers_to_run = [
@@ -155,6 +159,7 @@ def crawl(
         ]
 
     client.crawl_new_urls_for(crawlers_to_run, limit, loud)
+
 
 @c4v_cli.command()
 @click.option("--urls", is_flag=True, help="Only list urls")
@@ -197,11 +202,14 @@ def list(
     click.echo(data_to_print)
     print(scraped_only)
 
+
 @c4v_cli.command()
-@click.option("--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB")
+@click.option(
+    "--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB"
+)
 @click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
-@click.argument("inputs", nargs = -1)
-def classify(inputs : List[str] = [], no_scrape : bool = False, file : bool = False):
+@click.argument("inputs", nargs=-1)
+def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False):
     """
         Run a classification over a given url or from a file, using the model stored in the provided
         experiment. Usage:
@@ -209,14 +217,18 @@ def classify(inputs : List[str] = [], no_scrape : bool = False, file : bool = Fa
     """
 
     # Validate input:
-    n_args = len(inputs) 
-    if n_args < 2: # Get at the least 2 args, experiment as branch/experiment and some url
-        click.echo("[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url")
+    n_args = len(inputs)
+    if (
+        n_args < 2
+    ):  # Get at the least 2 args, experiment as branch/experiment and some url
+        click.echo(
+            "[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url"
+        )
         return
 
     manager = Manager.from_local_sqlite_db(DEFAULT_DB)
-    client  = CLIClient(manager, inputs[1:], file)
-    
+    client = CLIClient(manager, inputs[1:], file)
+
     # validate branch and name
     parsed_branch_and_name = CLIClient.parse_branch_and_experiment_from(inputs[0])
     if parsed_branch_and_name == None:
@@ -226,35 +238,37 @@ def classify(inputs : List[str] = [], no_scrape : bool = False, file : bool = Fa
 
     # Now get data for each url
     data = client.get_data_for_urls(should_scrape=not no_scrape)
-    
+
     # Try to classify given data
     try:
         results = manager.run_classification_from_experiment(branch, experiment, data)
     except ValueError as e:
         click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}")
         return
-    
+
     # Pretty print results:
     for (url, result) in results.items():
         click.echo(f"\t{url}")
         for (key, value) in result.items():
             click.echo(f"\t\t* {key} : {value}")
-    
+
 
 @c4v_cli.command()
-@click.option("--no-scrape", is_flag=True, help="Don't scrape if data is not available locally")
+@click.option(
+    "--no-scrape", is_flag=True, help="Don't scrape if data is not available locally"
+)
 @click.argument("url", nargs=1)
-def show(url : str, no_scrape : bool = False):
+def show(url: str, no_scrape: bool = False):
     """
         Show the entire data for a given URL
     """
     # Create manager object
     manager = Manager.from_local_sqlite_db(DEFAULT_DB)
-    client  = CLIClient(manager, [url]) 
+    client = CLIClient(manager, [url])
 
-    data = client.get_data_for_urls(should_scrape = not no_scrape)
+    data = client.get_data_for_urls(should_scrape=not no_scrape)
 
-    # Check if could retrieve desired element 
+    # Check if could retrieve desired element
     if not data:
         click.echo("[EMPTY]")
         return
@@ -263,34 +277,53 @@ def show(url : str, no_scrape : bool = False):
 
     # Pretty print element:
     line_len = os.get_terminal_size().columns
-    click.echo("+" + ("=" * (line_len - 2))  + "+")
+    click.echo("+" + ("=" * (line_len - 2)) + "+")
     click.echo(f"\tUrl        : {element.url}")
     click.echo(f"\tTitle      : {element.title}")
     click.echo(f"\tAuthor     : {element.author}")
     click.echo(f"\tDate       : {element.date}")
-    click.echo(f"\tCategories : {', '.join(element.categories) if element.categories else '<No Category>'}")
-    click.echo(f"\tScraped    : {datetime.strftime(element.last_scraped, settings.date_format)}")
+    click.echo(
+        f"\tCategories : {', '.join(element.categories) if element.categories else '<No Category>'}"
+    )
+    click.echo(
+        f"\tScraped    : {datetime.strftime(element.last_scraped, settings.date_format)}"
+    )
     click.echo("=" * line_len)
     cleaned_content = "\n".join(
-                                [
-                                    s for s in 
-                                    [s.strip() for s in element.content.splitlines()]
-                                    if s != ""
-                                ]
-                            ) 
+        [s for s in [s.strip() for s in element.content.splitlines()] if s != ""]
+    )
     click.echo(cleaned_content)
-    click.echo("+" + ("=" * (line_len - 2))  + "+")
+    click.echo("+" + ("=" * (line_len - 2)) + "+")
+
 
 @c4v_cli.command()
 @click.option("--url", is_flag=True, help="Interpret string as URL")
-@click.option("--no-scrape", is_flag=True, help="In case of retrieving data from URL, don't scrape it if not available")
-@click.option("--html", default="./explanation.html", help="Dump results in an human readable format to an html file", nargs=1)
-@click.option("--label", default=None, 
-    help="Label to include in expalantion. If the predicted label is different from this one, then explain how much this label was contributing to its corresponding value"
-    )
+@click.option(
+    "--no-scrape",
+    is_flag=True,
+    help="In case of retrieving data from URL, don't scrape it if not available",
+)
+@click.option(
+    "--html",
+    default="./explanation.html",
+    help="Dump results in an human readable format to an html file",
+    nargs=1,
+)
+@click.option(
+    "--label",
+    default=None,
+    help="Label to include in expalantion. If the predicted label is different from this one, then explain how much this label was contributing to its corresponding value",
+)
 @click.argument("experiment", nargs=1)
 @click.argument("sentence", nargs=1)
-def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bool = False, html : str = None, label : str = None):
+def explain(
+    experiment: str,
+    sentence: str,
+    url: bool = False,
+    no_scrape: bool = False,
+    html: str = None,
+    label: str = None,
+):
     """
         Show explainability for the given string. That is, show how much each word contributes 
         to each tag in the classifier. The result depends on the experiment, as it will load that 
@@ -304,13 +337,13 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
 
     # Get text to explain
     if url:
-        # Get data to classify 
+        # Get data to classify
         datas = client.get_data_for_urls([sentence], not no_scrape)
 
         # check if there's data retrieved to explain
         if not datas:
             click.echo("Nothing to explain")
-            return 
+            return
 
         # Get content from data retrieved
         text_to_explain = datas[0].content
@@ -328,7 +361,10 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
     # Check label input
     possible_labels = microscope_manager.get_classifier_labels()
     if label and label not in possible_labels:
-        click.echo(f"[WARNING] Provided label not a valid label, ignoring label argument {label}.", err=True)
+        click.echo(
+            f"[WARNING] Provided label not a valid label, ignoring label argument {label}.",
+            err=True,
+        )
         click.echo(f"Possible Labels:", err=True)
         for l in possible_labels:
             click.echo(f"\t* {l}", err=True)
@@ -336,24 +372,29 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
 
     # try to explain
     try:
-        explanation = microscope_manager.explain_for_experiment(branch, experiment, text_to_explain, html_file=html, additional_label=label)
+        explanation = microscope_manager.explain_for_experiment(
+            branch, experiment, text_to_explain, html_file=html, additional_label=label
+        )
     except ValueError as e:
         click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
         return
 
     # Pretty print results
-    scores = explanation['scores']
-    label  = explanation['label']
+    scores = explanation["scores"]
+    label = explanation["label"]
     click.echo(f"Predicted Label: {label}\nScores:")
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")
+
 
 class CLIClient:
     """
         This class will manage common operations performed by the CLI tool
     """
 
-    def __init__(self, manager : Manager = None, urls : List[str] = [], from_files : bool = False):
+    def __init__(
+        self, manager: Manager = None, urls: List[str] = [], from_files: bool = False
+    ):
 
         # Default manager
         if not manager:
@@ -366,8 +407,10 @@ class CLIClient:
             self._urls = CLIClient._parse_lines_from_files(urls)
         else:
             self._urls = urls
-    
-    def get_data_for_urls(self, urls : List[str] = None, should_scrape : bool = True) -> List[ScrapedData]:
+
+    def get_data_for_urls(
+        self, urls: List[str] = None, should_scrape: bool = True
+    ) -> List[ScrapedData]:
         """
             Return a list of ScrapedData from a list of urls.
             Parameters:
@@ -380,29 +423,47 @@ class CLIClient:
         urls_to_retrieve = urls or self._urls
 
         # Check scrapable urls:
-        scrapable_urls, non_scrapables = self._manager.split_non_scrapable(urls_to_retrieve)
-        
+        scrapable_urls, non_scrapables = self._manager.split_non_scrapable(
+            urls_to_retrieve
+        )
+
         # Warn the user that some urls won't be scraped
         if non_scrapables:
-            click.echo("[WARNING] some urls won't be retrieved, as they are not scrapable for now.", err=True)
+            click.echo(
+                "[WARNING] some urls won't be retrieved, as they are not scrapable for now.",
+                err=True,
+            )
             click.echo("Non-scrapable urls:", err=True)
             click.echo("\n".join([f"\t* {url}" for url in non_scrapables]), err=True)
 
         # check if some http error happens
         data = []
         try:
-            data = self._manager.get_bulk_data_for(scrapable_urls, should_scrape = should_scrape)
+            data = self._manager.get_bulk_data_for(
+                scrapable_urls, should_scrape=should_scrape
+            )
         except HTTPError as e:
-            click.echo(f"[ERROR] Could not scrape all data due to connection errors: {e}", err=True)
-        
+            click.echo(
+                f"[ERROR] Could not scrape all data due to connection errors: {e}",
+                err=True,
+            )
+
         # Tell the user if some urls where not retrieved
         succesfully_retrieved = {d.url for d in data}
         if any(url not in succesfully_retrieved for url in scrapable_urls):
             click.echo(f"[WARNING] Some urls couldn't be retrieved: ")
-            click.echo("\n".join([f"\t* {url}" for url in scrapable_urls if url not in succesfully_retrieved]))
+            click.echo(
+                "\n".join(
+                    [
+                        f"\t* {url}"
+                        for url in scrapable_urls
+                        if url not in succesfully_retrieved
+                    ]
+                )
+            )
 
         return data
-    
+
     def get_urls(self) -> List[str]:
         """
             Return stored urls
@@ -410,7 +471,7 @@ class CLIClient:
         return self._urls
 
     @staticmethod
-    def parse_branch_and_experiment_from(line : str) -> Tuple[str, str]:
+    def parse_branch_and_experiment_from(line: str) -> Tuple[str, str]:
         """
             Return a tuple with branch name and experiment name from a line representing 
             and experiment name. Report error if not a valid name
@@ -431,12 +492,17 @@ class CLIClient:
                 branch, name = branch_and_name
                 return (branch, name)
 
-        click.echo(f"[ERROR] Given experiment name is not valid: {line}. Should be in the form:", err=True)
+        click.echo(
+            f"[ERROR] Given experiment name is not valid: {line}. Should be in the form:",
+            err=True,
+        )
         for separator in separators:
             click.echo(f"\tbranch_name{separator}experiment_name")
         return None
 
-    def crawl_new_urls_for(self, crawler_names : List[str], limit : int = -1, loud : bool = False):
+    def crawl_new_urls_for(
+        self, crawler_names: List[str], limit: int = -1, loud: bool = False
+    ):
         """
             Crawl URLs for the given crawlers, up to a max number of urls.
             Parameters:
@@ -446,6 +512,7 @@ class CLIClient:
         """
         # function to format crawled urls list
         format_url_list = lambda list: "".join([f"{s}\n" for s in list])
+
         def process(list: List[str]):
             if loud:
                 click.echo(format_url_list(list))
@@ -464,14 +531,15 @@ class CLIClient:
             click.echo(
                 "Unregistered crawler names: \n"
                 + "\n".join([f"\t* {name}" for name in not_registered]),
-                err=True
+                err=True,
             )
 
-        self._manager.crawl_new_urls_for([c for c in crawler_names if c not in not_registered], process, limit=limit)    
-
+        self._manager.crawl_new_urls_for(
+            [c for c in crawler_names if c not in not_registered], process, limit=limit
+        )
 
     @staticmethod
-    def _parse_lines_from_files(files : List[str]) -> List[str]:
+    def _parse_lines_from_files(files: List[str]) -> List[str]:
         """
             Utility function to collect all lines from multiple files
         """
@@ -484,8 +552,11 @@ class CLIClient:
                     )  # parse every line as a single url
                     lines.extend(content)
             except IOError as e:
-                click.echo(f"Could not open input file: {file}. Error: {e.strerror}", err=True)
+                click.echo(
+                    f"Could not open input file: {file}. Error: {e.strerror}", err=True
+                )
         return lines
+
 
 if __name__ == "__main__":
     c4v_cli()

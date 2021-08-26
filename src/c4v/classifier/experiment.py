@@ -11,13 +11,14 @@
 import pytz
 import sys
 import shutil
-from pathlib     import Path
-from datetime    import datetime
-from typing      import Type
+from pathlib import Path
+from datetime import datetime
+from typing import Type
 from dataclasses import dataclass, field
 
 # Local imports
 from c4v.config import settings
+
 
 @dataclass
 class BaseExperimentSummary:
@@ -30,25 +31,29 @@ class BaseExperimentSummary:
         to mark some fields as mandatory, you can do so in the __post_init__
         method.
     """
+
     # Initialize to date when created
-    date : datetime = field(default_factory=lambda: datetime.now(tz=pytz.utc))
+    date: datetime = field(default_factory=lambda: datetime.now(tz=pytz.utc))
 
     # Optional description
-    description : str = None
-    
+    description: str = None
+
     def __str__(self) -> str:
-        # An human readable representation 
-        output =  f"Date: {datetime.strftime( self.date, settings.date_format )}\n"
+        # An human readable representation
+        output = f"Date: {datetime.strftime( self.date, settings.date_format )}\n"
         output += f"Description: {self.description or '<no description>'}\n"
 
         return output
+
 
 @dataclass
 class BaseExperimentArguments:
     """
         Arguments to pass to an experiment run
     """
+
     pass
+
 
 class ExperimentFSManager:
     """
@@ -63,25 +68,24 @@ class ExperimentFSManager:
         experiment is <experiments_folder>/<branch_name>/<experiment_name>
     """
 
-    def __init__(self, 
-                    branch_name         : str, 
-                    experiment_name     : str, 
-                    experiments_folder  : str = None):
+    def __init__(
+        self, branch_name: str, experiment_name: str, experiments_folder: str = None
+    ):
 
-        self._branch_name     = branch_name
+        self._branch_name = branch_name
         self._experiment_name = experiment_name
 
-        # Set up experiments 
+        # Set up experiments
         self._set_up_experiments_folder(experiments_folder)
 
-    def _set_up_experiments_folder(self, custom_folder : str = None):
+    def _set_up_experiments_folder(self, custom_folder: str = None):
         """
             Set up experiment folder, if custom folder is provided, 
             use that folder and assume it does exists, otherwise, 
             create a default one
         """
 
-        # if custom folder provided, just use it assuming it does exist        
+        # if custom folder provided, just use it assuming it does exist
         if custom_folder:
             self._experiments_folder = custom_folder
             return
@@ -93,7 +97,7 @@ class ExperimentFSManager:
         if not experiments_folder_path.exists():
             experiments_folder_path.mkdir(parents=True)
 
-        self._experiments_folder = str(experiments_folder_path)    
+        self._experiments_folder = str(experiments_folder_path)
 
         # Set up experiments path
         experiment_content_path = Path(self.experiment_content_folder)
@@ -114,11 +118,13 @@ class ExperimentFSManager:
         """
             Get path to files for this experiment
         """
-        return str(Path(
-            self._experiments_folder, f"{self._branch_name}/{self._experiment_name}"
-        ))
+        return str(
+            Path(
+                self._experiments_folder, f"{self._branch_name}/{self._experiment_name}"
+            )
+        )
 
-    def write_summary(self, summary : BaseExperimentSummary):
+    def write_summary(self, summary: BaseExperimentSummary):
         """
             Write summary to corresponding file
         """
@@ -127,7 +133,7 @@ class ExperimentFSManager:
         with open(file_to_write, "w+") as f:
             print(f"Writing summary to file: {file_to_write}")
             summary_str = str(summary)
-            print(summary_str, file=f) # Print to desired file
+            print(summary_str, file=f)  # Print to desired file
 
     def delete_experiment_content_folder(self):
         """
@@ -154,7 +160,8 @@ class ExperimentFSManager:
             Path to folder where experiments are stored, for example:
                 $HOME/.c4v/experiments
         """
-        return self._experiments_folder 
+        return self._experiments_folder
+
 
 class BaseExperiment:
     """
@@ -167,7 +174,8 @@ class BaseExperiment:
         functions:
             * experiment_to_run
     """
-    def __init__(self, experiment_fs_manager : ExperimentFSManager) -> None:
+
+    def __init__(self, experiment_fs_manager: ExperimentFSManager) -> None:
         self._experiment_fs_manager = experiment_fs_manager
 
     @property
@@ -177,7 +185,7 @@ class BaseExperiment:
         """
         return self._experiment_fs_manager.experiment_content_folder
 
-    def experiment_to_run(self, args : BaseExperimentArguments) -> BaseExperimentSummary:
+    def experiment_to_run(self, args: BaseExperimentArguments) -> BaseExperimentSummary:
         """
             Experiment to be ran when run_experiment function is called
             Parameters:
@@ -185,9 +193,13 @@ class BaseExperiment:
             Return:
                 BaseExperimentSummary object summarizing results for this experiment run
         """
-        raise NotImplementedError("Should implement experiment_to_ron abstract function")
+        raise NotImplementedError(
+            "Should implement experiment_to_ron abstract function"
+        )
 
-    def run_experiment(self, args : BaseExperimentArguments, delete_after_run : bool = False) -> BaseExperimentSummary:
+    def run_experiment(
+        self, args: BaseExperimentArguments, delete_after_run: bool = False
+    ) -> BaseExperimentSummary:
         """
             Run experiment, givin the given args to the configured experiment, storing its summary
             as a dump in a file in the experiment folder. Delete such folder at the end if requested so.
@@ -212,6 +224,6 @@ class BaseExperiment:
         return summary
 
     @classmethod
-    def from_branch_and_experiment(cls, branch_name : str, experiment_name : str):
+    def from_branch_and_experiment(cls, branch_name: str, experiment_name: str):
         fs_manager = ExperimentFSManager(branch_name, experiment_name)
         return cls(fs_manager)
