@@ -203,7 +203,9 @@ def list(
 @click.argument("inputs", nargs = -1)
 def classify(inputs : List[str] = [], no_scrape : bool = False, file : bool = False):
     """
-        Run a classification over a given url or from a file 
+        Run a classification over a given url or from a file, using the model stored in the provided
+        experiment. Usage:
+            c4v classify <branch_name>/<experiment_name> <url>
     """
 
     # Validate input:
@@ -331,8 +333,6 @@ def explain(experiment : str, sentence : str, url : bool = False, no_scrape : bo
         for l in possible_labels:
             click.echo(f"\t* {l}", err=True)
         label = None
-
-
 
     # try to explain
     try:
