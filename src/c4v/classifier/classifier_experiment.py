@@ -103,7 +103,7 @@ class ClassifierExperiment(BaseExperiment):
 
     def experiment_to_run(self, args: ClassifierArgs) -> ClassifierSummary:
         # Run a training process
-        metrics = self._classifier.run_train(
+        metrics = self._classifier.run_training(
             args.training_args, columns=args.columns, dataset=args.dataset_name
         )
         summary = ClassifierSummary(

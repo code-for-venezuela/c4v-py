@@ -395,7 +395,7 @@ class Classifier:
         )
         return metrics_df
 
-    def run_train(
+    def run_training(
         self,
         train_args: Dict[str, Any] = None,
         columns: List[str] = ["text"],
