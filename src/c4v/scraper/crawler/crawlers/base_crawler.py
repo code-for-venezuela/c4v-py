@@ -24,10 +24,12 @@ class BaseCrawler:
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
+    ALL_URLS = ["*"]
+    IRRELEVANT_URLS = []
 
     def __init__(self, white_list : List[str] = None) -> None:
         
-        self._white_list = white_list or ["*"]
+        self._white_list = white_list or self.ALL_URLS
 
     @property
     def white_list_regex(self) -> str:
@@ -193,3 +195,10 @@ class BaseCrawler:
             Checks if the given url as string matches list of white listed patterns
         """
         return not not re.match(white_list_regex or self.white_list_regex, url)
+    
+    @classmethod
+    def from_irrelevant(cls):
+        """
+            Return a crawler created for filtering only irrelevant urls
+        """
+        return cls(cls.IRRELEVANT_URLS)
