@@ -23,7 +23,7 @@ packages = [
 include = ["*.html", "*.ini", "*.json",]
 
 [tool.poetry.dependencies]
-python = "^3.8 || ~3.6.1"
+python = "^3.8 || ~3.6.2"
 pip = "^20.0.0"
 tensorflow = "2.5.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
@@ -36,6 +36,9 @@ nltk = "^3.5"
 google-cloud-bigquery = "1.26.1."
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
+transformers = "^4.9.0"
+datasets = "^1.10.2"
+torch = "^1.9.0"
 tabulate = "^0.8.9"
 click = "7.1.2"
 scipy = "1.5.4"
