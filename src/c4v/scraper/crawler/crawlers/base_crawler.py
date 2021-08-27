@@ -25,18 +25,33 @@ class BaseCrawler:
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
     ALL_URLS = ["*"]
+    NO_URLS  = ["a^"]
     IRRELEVANT_URLS = []
 
-    def __init__(self, white_list : List[str] = None) -> None:
-        
+    def __init__(self, white_list : List[str] = None, black_list : List[str] = None) -> None:
+        self._black_list = black_list or self.NO_URLS
         self._white_list = white_list or self.ALL_URLS
+
+    @staticmethod
+    def _to_regex(patterns : List[str]) -> str:
+        """
+            Convert given list of regex to a single regex 
+        """ 
+        return "(" + ")|(".join(patterns) + ")"
 
     @property
     def white_list_regex(self) -> str:
         """
             Regex matching every white listed url regex pattern
         """
-        return "(" + ")|(".join(self._white_list) + ")"
+        return self._to_regex(self._white_list)
+
+    @property
+    def black_list_regex(self) -> str:
+        """
+            Regex matching every black listed url regex pattern
+        """
+        return self._to_regex(self._black_list)
 
     def crawl_urls(self, up_to : int = None) -> List[str]:
         """
