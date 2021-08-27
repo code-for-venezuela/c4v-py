@@ -1,10 +1,11 @@
-import dataclasses
 from c4v.scraper.scraped_data_classes.scraped_data  import ScrapedData, ScrapedDataEncoder
-from c4v.scraper.settings                           import DATE_FORMAT
+from config                                         import settings
 import json
 import datetime
 import pytz
 from dataclasses import asdict
+
+DATE_FORMAT = settings.date_format
 
 def test_scraped_data_encoding():
     date = datetime.datetime(2020, 3,30,0,0,0, tzinfo=pytz.UTC)

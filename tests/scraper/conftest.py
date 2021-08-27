@@ -1,5 +1,5 @@
 import pytest
-import importlib.resources as resources
+import importlib_resources as resources
 from typing import List
 # Handy tip: test resources for scrapers are located in resources.tests.scraper
 

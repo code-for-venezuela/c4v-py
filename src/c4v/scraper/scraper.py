@@ -48,7 +48,8 @@ def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
     for url in urls:
         scraper = _get_scraper_from_url(url)
 
-        if not (url_list := scrapers.get(scraper)):
+        url_list = scrapers.get(scraper)
+        if not (url_list):
             url_list = scrapers[scraper] = []
 
         url_list.append(url)
@@ -88,8 +89,8 @@ def _get_scraper_from_url(url: str) -> Type[BaseScraper]:
         raise ValueError(f"This is not a valid url: {url}")
 
     domain = get_domain_from_url(url)
-
-    if not (scraper := URL_TO_SCRAPER.get(domain)):
+    scraper = URL_TO_SCRAPER.get(domain)
+    if not (scraper):
         raise ValueError(f"Unable to scrap this url: {url}")
 
     return scraper

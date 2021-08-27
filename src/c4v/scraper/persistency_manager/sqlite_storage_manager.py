@@ -14,9 +14,9 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from config import settings
 
-from c4v.scraper.settings import DATE_FORMAT
-
+DATE_FORMAT = settings.date_format
 
 class SqliteManager(BasePersistencyManager):
     """
@@ -79,19 +79,29 @@ class SqliteManager(BasePersistencyManager):
             );"
         )
 
-    def get_all(self) -> Iterator[ScrapedData]:
+    def get_all(self, limit : int, scraped : bool) -> Iterator[ScrapedData]:
 
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
-            res = cursor.execute("SELECT * FROM scraped_data;").fetchall()
+            if scraped:
+                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",)
+            elif scraped==False:
+                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NULL;",)
+            else:
+                new_cur = cursor.execute("SELECT * FROM scraped_data;",)
+
+            if limit < 0:
+                res = new_cur.fetchall()
+            else:
+                res = new_cur.fetchmany(limit)
 
             for row in res:
                 # Decompose row
                 (url, last_scraped, title, content, author, date) = row
 
                 # parse date to datetime:
-                last_scraped = datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                last_scraped = datetime.datetime.strptime(last_scraped, DATE_FORMAT) if last_scraped else last_scraped
 
                 categories = [
                     category
@@ -153,7 +163,6 @@ class SqliteManager(BasePersistencyManager):
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
-            print(data_to_insert)
             cursor.executemany(
                 "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)",
                 data_to_insert,
@@ -161,6 +170,9 @@ class SqliteManager(BasePersistencyManager):
 
             for data in url_data:
                 # insert new categories
+                # may have none if category field is set to None
+                if data.categories is None: continue
+
                 cursor.executemany(
                     "INSERT OR IGNORE INTO category VALUES (?)",
                     [(cat,) for cat in data.categories],
