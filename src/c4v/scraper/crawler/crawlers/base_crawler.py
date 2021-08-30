@@ -4,6 +4,7 @@
 # Python imports
 from typing import Any, List, Callable
 import sys
+import re
 
 # Third party imports
 import requests
@@ -23,6 +24,34 @@ class BaseCrawler:
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
+    ALL_URLS = ["*"]
+    NO_URLS  = ["a^"]
+    IRRELEVANT_URLS = []
+
+    def __init__(self, white_list : List[str] = None, black_list : List[str] = None) -> None:
+        self._black_list = black_list or self.NO_URLS
+        self._white_list = white_list or self.ALL_URLS
+
+    @staticmethod
+    def _to_regex(patterns : List[str]) -> str:
+        """
+            Convert given list of regex to a single regex 
+        """ 
+        return "(" + ")|(".join(patterns) + ")"
+
+    @property
+    def white_list_regex(self) -> str:
+        """
+            Regex matching every white listed url regex pattern
+        """
+        return self._to_regex(self._white_list)
+
+    @property
+    def black_list_regex(self) -> str:
+        """
+            Regex matching every black listed url regex pattern
+        """
+        return self._to_regex(self._black_list)
 
     def crawl_urls(self, up_to : int = None) -> List[str]:
         """
@@ -146,9 +175,12 @@ class BaseCrawler:
         """
         soup = bs4.BeautifulSoup(sitemap, "xml")
         urls = map(lambda l: l.get_text(), soup.select("url > loc"))
-        urls = filter(self.should_scrape, urls)
+        # We request the white_list regex once and use it often because otherwise, such string will be
+        # computed once per url, which is quite inneficient
+        white_list = self.white_list_regex
+        urls = [u for u in urls if self.should_scrape(u) and self.is_white_listed(u, white_list)]
 
-        return list(urls)
+        return urls
 
     @staticmethod
     def should_crawl(url: str) -> bool:
@@ -172,3 +204,16 @@ class BaseCrawler:
                 boolean, telling if this is a valid url
         """
         return True
+
+    def is_white_listed(self, url : str, white_list_regex : str = None) -> bool:
+        """
+            Checks if the given url as string matches list of white listed patterns
+        """
+        return not not re.match(white_list_regex or self.white_list_regex, url)
+    
+    @classmethod
+    def from_irrelevant(cls):
+        """
+            Return a crawler created for filtering only irrelevant urls
+        """
+        return cls(cls.IRRELEVANT_URLS)
