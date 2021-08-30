@@ -18,6 +18,7 @@ import datetime
 
 from pandas.core.frame import DataFrame
 
+# Get command line argument
 if len(sys.argv) < 2:
     print("Missing csv filename argument", file=sys.stderr)
     exit(1)
@@ -47,8 +48,9 @@ print(df)
 
 # Set up datetime suffix
 date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S")
-filename = f"primicia_irrelevant_cleaned_{date_suffix}.csv" 
+# TODO cambiar esto por algo independiente de la plataforma
+filename = f"cleaned_{csv_file_name.split('/')[-1]}" 
 
 print(f"Saving cleaned data to: {filename}")
-
-df.to_csv(filename)
+with open(filename, "+w") as f:
+    df.to_csv(f)
