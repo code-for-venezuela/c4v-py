@@ -1,10 +1,11 @@
 """
     Use this script to process output data from the primicia_irrelevant_news_scraping.py script
     The file, in order to match the one used for trainning and provided by the client, should provide the following collumns
-    * Label
+    * label
     * title
-    * text
+    * content
     * date
+    * scraped_Date
     * author
     * url
 
@@ -12,8 +13,8 @@
         csv_file_name : str = name of csv file with corresponding dataframe to use as basis
 """
 import pandas as pd
-import importlib.resources as resources
 import sys
+import datetime
 
 from pandas.core.frame import DataFrame
 
@@ -25,9 +26,29 @@ csv_file_name = sys.argv[1] # name of csv file
 with open(csv_file_name) as file:
     df : DataFrame = pd.read_csv(file)
 
+# Remove empty content
+df.dropna(inplace=True, axis=0)
+df['content'].drop(df[(df.content.str.len() < 1) | (df.title.str.len() < 1) ].index, inplace=True)
+
 # Add label column as irrelevant for every row
 df['label'] = "IRRELEVANTE"
 
-# 
+# Remove extra linejumps
+def strip_extra_linejumps(s : str) -> str:
+    return "\n".join([line for line in s.splitlines() if line.strip() != ""])
 
+df['content'] = df['content'].map(strip_extra_linejumps)
+
+# Remove duplicates if any
+df.drop_duplicates(inplace=True, subset="url")
+
+print("Cleaned Dataset Shape: ")
 print(df)
+
+# Set up datetime suffix
+date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S")
+filename = f"primicia_irrelevant_cleaned_{date_suffix}.csv" 
+
+print(f"Saving cleaned data to: {filename}")
+
+df.to_csv(filename)
