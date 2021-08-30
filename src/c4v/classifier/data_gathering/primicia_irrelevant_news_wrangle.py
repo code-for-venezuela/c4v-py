@@ -32,7 +32,7 @@ df.dropna(inplace=True, axis=0)
 df['content'].drop(df[(df.content.str.len() < 1) | (df.title.str.len() < 1) ].index, inplace=True)
 
 # Add label column as irrelevant for every row
-df['label'] = "IRRELEVANTE"
+df['label'] = [["IRRELEVANTE"]] * len(df)
 
 # Remove extra linejumps
 def strip_extra_linejumps(s : str) -> str:
@@ -43,13 +43,19 @@ df['content'] = df['content'].map(strip_extra_linejumps)
 # Remove duplicates if any
 df.drop_duplicates(inplace=True, subset="url")
 
-print("Cleaned Dataset Shape: ")
-print(df)
+# Remove unnecesary columns
+columns = ["label", "content", "title", "author", "date", "last_scraped", "categories" ,"url"]
+columns_to_remove = [c for c in df.columns if c not in columns]
+print(f"Removing the following columns: {columns_to_remove}")
+df.drop(columns_to_remove, inplace=True, axis=1)
 
 # Set up datetime suffix
 date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S")
 # TODO cambiar esto por algo independiente de la plataforma
 filename = f"cleaned_{csv_file_name.split('/')[-1]}" 
+
+print("Cleaned Dataset Shape: ")
+print(df)
 
 print(f"Saving cleaned data to: {filename}")
 with open(filename, "+w") as f:
