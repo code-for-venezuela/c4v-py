@@ -36,5 +36,5 @@ class PrimiciaData(BaseDataFormat):
             categories=self.tags + self.categories,
             content=self.body,
             url=self.url,
-            last_scraped=self.last_scraped
+            last_scraped=self.last_scraped,
         )

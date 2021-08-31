@@ -14,7 +14,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from config import settings
+from c4v.config import settings
 
 DATE_FORMAT = settings.date_format
 
@@ -79,18 +79,24 @@ class SqliteManager(BasePersistencyManager):
             );"
         )
 
-    def get_all(self, limit : int, scraped : bool) -> Iterator[ScrapedData]:
+    def get_all(self, limit: int = -1, scraped: bool = None) -> Iterator[ScrapedData]:
 
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
+            # if scraped = true, take only scraped. If false, take non-scraped. If none, take all
             if scraped:
-                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",)
-            elif scraped==False:
-                new_cur = cursor.execute("SELECT * FROM scraped_data WHERE last_scraped IS NULL;",)
+                new_cur = cursor.execute(
+                    "SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",
+                )
+            elif scraped == False:
+                new_cur = cursor.execute(
+                    "SELECT * FROM scraped_data WHERE last_scraped IS NULL;",
+                )
             else:
                 new_cur = cursor.execute("SELECT * FROM scraped_data;",)
 
+            # If limit less than 0, then take as much as you can
             if limit < 0:
                 res = new_cur.fetchall()
             else:
@@ -101,7 +107,23 @@ class SqliteManager(BasePersistencyManager):
                 (url, last_scraped, title, content, author, date) = row
 
                 # parse date to datetime:
-                last_scraped = datetime.datetime.strptime(last_scraped, DATE_FORMAT) if last_scraped else last_scraped
+                try:
+                    last_scraped = (
+                        datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                        if last_scraped
+                        else last_scraped
+                    )
+                except ValueError as _: # In case it fails using a format not valid for python3.6
+                    for i in range(len(last_scraped) - 1, -1, -1):
+                        if last_scraped[i] == ":":
+                            last_scraped = last_scraped[:i] + last_scraped[i+1:]
+                            break
+                    last_scraped = (
+                        datetime.datetime.strptime(last_scraped, DATE_FORMAT)
+                        if last_scraped
+                        else last_scraped
+                    )
+
 
                 categories = [
                     category
@@ -162,6 +184,12 @@ class SqliteManager(BasePersistencyManager):
 
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
+
+            data_to_insert = []
+            for data in url_data:
+                new_data = dataclasses.asdict(data)
+                new_data['last_scraped'] = datetime.datetime.strftime(data.last_scraped, DATE_FORMAT) if data.last_scraped else data.last_scraped
+                
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             cursor.executemany(
                 "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)",
@@ -171,7 +199,8 @@ class SqliteManager(BasePersistencyManager):
             for data in url_data:
                 # insert new categories
                 # may have none if category field is set to None
-                if data.categories is None: continue
+                if data.categories is None:
+                    continue
 
                 cursor.executemany(
                     "INSERT OR IGNORE INTO category VALUES (?)",
