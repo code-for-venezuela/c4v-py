@@ -1,0 +1,6 @@
+site_name: Microscope
+site_url: https://microscope.com
+nav:
+  - Home: index.md
+  
+theme: readthedocs
