@@ -3,7 +3,6 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
-from importlib.metadata import files
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -12,10 +11,7 @@ from typing import Dict, List, Any, Tuple
 from pathlib import Path
 from pandas.core.frame import DataFrame
 from importlib import resources
-from datetime import datetime
-from pytz import utc
 from enum import Enum
-import os
 
 # Third Party
 from pandas.core.frame  import DataFrame
@@ -147,7 +143,7 @@ class Classifier:
         """
             Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/raw/huggingface
         """
-        with resources.open_text("data.raw.huggingface", dataset_name) as f:
+        with resources.open_text("data.processed.huggingface", dataset_name) as f:
             return pd.read_csv(f)
 
     def prepare_dataframe(
@@ -167,8 +163,11 @@ class Classifier:
 
         df_pscdd = self.get_dataframe(dataset_name)
         df_pscdd["label"] = (
-            df_pscdd.tipo_de_evento == Labels.DENUNCIA_FALTA_DEL_SERVICIO.value
+            df_pscdd['label'].apply(lambda x: 'IRRELEVANTE' not in x)
         ).astype(int)
+
+        
+        print(df_pscdd)
 
         df_pscdd = df_pscdd.convert_dtypes()
         df_issue_text = df_pscdd[[*columns, "label"]]
@@ -473,7 +472,7 @@ class Classifier:
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer_from_hub()
         tokenized_input = roberta_tokenizer(
-            [data.content],
+            [data.title],
             padding=True,
             truncation=True,
             max_length=512,

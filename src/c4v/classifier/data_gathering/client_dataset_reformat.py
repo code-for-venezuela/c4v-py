@@ -1,5 +1,5 @@
 """
-    Format columns of the client dataset in such a way that they match the ScrapedData format:
+    Format columns of the client dataset in such a way that they match the ScrapedData format, plus a label field:
 
     url
     last_scraped
@@ -8,9 +8,11 @@
     author
     categories
     date
+    label
 """
 # Python imports
 import sys
+import os
 
 # Third party
 import pandas as pd
@@ -58,6 +60,5 @@ for (url, sub_df) in url_to_labels_df:
 # Complete missing columns:
 df["last_scraped"] = None
 
-# Write data @TODO write a platform independent version
-filename = f"cleaned_{csv_file_name.split('/')[-1]}"
+filename = f"cleaned_{os.path.basename(csv_file_name)}"
 df.to_csv(filename)

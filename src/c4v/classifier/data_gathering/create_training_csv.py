@@ -5,8 +5,6 @@
 import pandas as pd
 import sys
 
-from pandas.core.frame import DataFrame
-
 files = sys.argv[1:]
 
 # Check if no files to work with

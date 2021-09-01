@@ -1,11 +1,13 @@
 """
     Use this script to scrape data from primicia with non-relevant information, 
-    and then store it in a csv file in its corresponding folder according to 
-    this cookiecutter template:
-    https://drivendata.github.io/cookiecutter-data-science/
+    and then store it in a csv file in the current working directory
+
+    Script Arguments:
+        limit (position 1) : max ammount of urls to crawl
 """
 # Python imports
 import datetime
+import sys
 
 # Local imports
 from c4v.scraper.crawler.crawlers.primicia_crawler import PrimiciaCrawler
@@ -13,13 +15,22 @@ from c4v.scraper.scraper import bulk_scrape
 
 # Third Party imports
 import pandas as pd
-#TODO I have to refactor this code to use the manager class instead
 
 # Take time:
 start = datetime.datetime.now()
 
+# Set up max ammount of urls to crawl:
+if len(sys.argv) < 2:
+    LIMIT = 10000
+    print(f"[WARNING] No Limit provided, defaulting to {LIMIT}")
+else:
+    try:
+        LIMIT = int(sys.argv[1])
+    except Exception as e:
+        print(f"Invalid limit argument. Are you sure it is a valid number?\n\tError: {e}", file=sys.stderr)    
+        exit(1)
+
 # Crawl & scrape urls
-LIMIT = 10000
 print(f"Scraping up to {LIMIT} urls from primicia")
 
 crawler = PrimiciaCrawler.from_irrelevant()
