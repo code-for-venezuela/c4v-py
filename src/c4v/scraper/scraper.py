@@ -4,13 +4,13 @@
 
 # Local imports
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
-from c4v.scraper.scrapers.base_scraper import BaseScraper
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from .settings import URL_TO_SCRAPER
-from c4v.scraper.utils import get_domain_from_url, valid_url
+from c4v.scraper.scrapers.base_scraper                  import BaseScraper
+from c4v.scraper.scraped_data_classes.scraped_data      import ScrapedData
+from .settings                                          import URL_TO_SCRAPER
+from c4v.scraper.utils                                  import get_domain_from_url, valid_url
 
 # Python imports
-from typing import List, Type, Dict, Any
+from typing import List, Type, Dict
 
 
 def scrape(url: str) -> ScrapedData:

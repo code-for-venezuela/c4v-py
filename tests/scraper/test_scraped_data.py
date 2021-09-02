@@ -1,5 +1,5 @@
 from c4v.scraper.scraped_data_classes.scraped_data  import ScrapedData, ScrapedDataEncoder
-from config                                         import settings
+from c4v.config                                     import settings
 import json
 import datetime
 import pytz
