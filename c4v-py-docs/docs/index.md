@@ -22,8 +22,22 @@ pip install c4v-py
 ```
 
 ## Usage
+The c4v-py package can be used either as a command line tool and as 
+a library.
 
-_TODO_
+### As a command line tool
+You can use the command line tool with the following command:
+
+```
+c4v --help
+```
+
+### As a library
+Import the main interface, the microscope Manager to access a high level api to 
+common operations:
+```python3
+
+```
 
 [Can you help us? Open a new issue in
 minutes!](https://github.com/code-for-venezuela/c4v-py/issues/new/choose)
