@@ -2,7 +2,6 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
-from c4v.classifier.experiment import ExperimentFSManager
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
@@ -15,26 +14,49 @@ from c4v.classifier.classifier import Classifier
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
+import os
 import sys
 
+# Configs
+from c4v.config import settings
+
+DEFAULT_DB = settings.local_sqlite_db or os.path.join(
+    settings.c4v_folder, settings.local_sqlite_db_name
+)
 
 class Manager:
     """
         This object encapsulates shared behavior between our multiple components,
-        allowing easy access to common operations
+        allowing easy access to common operations. Note that this operations are intended to work 
+        with a local db, so most of them will save data to some kind of storage. If no local db is 
+        provided, some operations may not work
     """
 
-    def __init__(self, persistency_manager: BasePersistencyManager):
+    def __init__(self, persistency_manager: BasePersistencyManager = None):
         self._persistency_manager = persistency_manager
 
+    def crawl_and_scrape_for(self, crawler_names : List[str] = None, limit : int = -1, save_to_db = True) -> List[ScrapedData]:
+        """
+            Crawl and scrape data for the given list of crawlers
+            Parameters:
+                crawler_names : [str] = List of crawlers to use, defaults to all crawlers
+                limit : int = Maximum ammount of urls to scrape, set to negative number for no limit (no recommended)
+            Return:
+                List of scraped data    
+        """
+        urls = self.crawl_new_urls_for(crawler_names=crawler_names, limit=limit, save_to_db=save_to_db)
+        data = self.get_bulk_data_for(urls, save_to_db=save_to_db)
+        return data
+
     def get_bulk_data_for(
-        self, urls: List[str], should_scrape: bool = True
+        self, urls: List[str], should_scrape: bool = True, save_to_db = True
     ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
                 urls : [str] = urls whose data is to be retrieved. If not available yet, then scrape it if requested so
                 should_scrape : bool = if should scrape non-existent urls
+                save_to_db : bool = if should save to db
         """
         # just a shortcut
         db = self._persistency_manager
@@ -45,7 +67,8 @@ class Manager:
         # Scrape missing instances if necessary
         if should_scrape and not_scraped:
             items = bulk_scrape(not_scraped)
-            db.save(items)
+            if save_to_db and self._persistency_manager:
+                db.save(items)
 
         # Convert to set to speed up lookup
         urls = set(urls)
@@ -53,7 +76,7 @@ class Manager:
 
     def get_data_for(self, url: str, should_scrape: bool = True) -> ScrapedData:
         """
-            Get data for this url if stored and scrapable. May return none if could not
+            Get data for this url if stored or scrapable. May return none if could not
             find data for this url
             Parameters:
                 url : str = url to be scraped
@@ -68,6 +91,8 @@ class Manager:
             Parameters:
                 limit : int = how much measurements to scrape, set a negative number for no limit
         """
+        if not self._persistency_manager:
+            raise AttributeError("Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function")
 
         db = self._persistency_manager
 
@@ -88,23 +113,31 @@ class Manager:
             Return:
                 An iterator returning available rows
         """
+        if not self._persistency_manager:
+            raise AttributeError("Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function")
+
         return self._persistency_manager.get_all(limit, scraped)
 
-    def crawl_new_urls_for(
+    def crawl_and_process_new_urls_for(
         self,
         crawler_names: List[str] = None,
         post_process: Callable[[List[str]], None] = None,
         limit=-1,
+        save_to_db = True
     ):
         """
             Crawl for new urls using the given crawlers only
             Parameters:
-                crawler_names : [str] = names of crawlers to be ran when this function is called. If no list is passed, then 
+                crawler_names : [str] = names of crawlers to be ran when this function is called. If no list is provided, then 
                                         all crawlers will be used
                 post_process : ([str]) -> None = Function to call over new elements as they come
                 limit        : int = Max amount of urls to save
+                save_to_db : bool = If should save to local
         """
         db = self._persistency_manager
+
+        # set up limit if necessary
+        limit = limit if limit >= 0 else sys.maxsize
 
         class Counter:
             def __init__(self):
@@ -117,12 +150,17 @@ class Manager:
 
         # Function to process urls as they come
         def save_urls(urls: List[str]):
-            urls = db.filter_scraped_urls(urls)
-            datas = [ScrapedData(url=url) for url in urls]
-            db.save(datas)
+
+            urls = urls[:limit - counter.count]
+
+            if db:
+                urls = db.filter_scraped_urls(urls)
+                datas = [ScrapedData(url=url) for url in urls]
+
+                if save_to_db: db.save(datas)
 
             # Update how much elements have beed added so far
-            counter.add(len(datas))
+            counter.add(len(urls))
 
             # Call any callback function
             if post_process:
@@ -132,21 +170,43 @@ class Manager:
         def should_stop() -> bool:
             return counter.count >= limit
 
-        # Names for installed crawlers
-        crawlers = [c.name for c in INSTALLED_CRAWLERS]
-
         # if no list provided, default to every crawler
         if crawler_names == None:
-            crawler_names = crawlers
+            crawler_names = [c.name for c in INSTALLED_CRAWLERS]
 
         # Instantiate crawlers to use
         crawlers_to_run = [
             crawler() for crawler in INSTALLED_CRAWLERS if crawler.name in crawler_names
         ]
 
+        # Warns the user if no crawler could be found
+        if not crawlers_to_run:
+            given_crawler_list = "\n".join([f"\t* {c}" for c in crawler_names] or ["\t<No crawlers>"])
+            actual_crawler_list = "\n".join([f"\t* {c.name}" for c in INSTALLED_CRAWLERS] or ["\t<No crawlers>"])
+            print(f"[Warning] No crawler available to run. Given crawler list: \n{given_crawler_list}\n Available crawlers: \n{actual_crawler_list}", file=sys.stderr)
+
         # crawl for every crawler
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls, should_stop)
+
+    def crawl_new_urls_for( self,
+        crawler_names: List[str] = None,
+        limit=-1,
+        save_to_db : bool = True
+    ):
+        """
+            Crawl new urls for the given list of crawlers:
+            Parameters:
+                crawler_names : [str] = list of names of scrapers to use when crawling
+        """
+        items = []
+        
+        def collect_urls(urls : List[str]):
+            items.extend(urls)
+
+        self.crawl_and_process_new_urls_for(crawler_names=crawler_names, limit=limit, post_process=collect_urls, save_to_db=save_to_db)
+
+        return items
 
     def split_non_scrapable(self, urls: List[str]) -> Tuple[List[str], List[str]]:
         """
@@ -170,7 +230,7 @@ class Manager:
         return scrapable, non_scrapable
 
     @classmethod
-    def from_local_sqlite_db(cls, db_path: str):
+    def from_local_sqlite_db(cls, db_path: str = DEFAULT_DB):
         """
             Create a new instance using an SQLite local db
         """
