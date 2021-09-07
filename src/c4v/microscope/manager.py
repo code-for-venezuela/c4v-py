@@ -8,7 +8,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
-from c4v.scraper.settings import INSTALLED_CRAWLERS
+from c4v.scraper.settings import INSTALLED_CRAWLERS, INSTALLED_SCRAPERS, SUPPORTED_DOMAINS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
 
@@ -57,22 +57,24 @@ class Manager:
                 urls : [str] = urls whose data is to be retrieved. If not available yet, then scrape it if requested so
                 should_scrape : bool = if should scrape non-existent urls
                 save_to_db : bool = if should save to db
+            Return:
+                List of gathered data, 
         """
         # just a shortcut
         db = self._persistency_manager
 
         # Separate scraped urls from non scraped
-        not_scraped = db.filter_scraped_urls(urls)
-
+        not_scraped = db.filter_scraped_urls(urls) if db else urls
+        
         # Scrape missing instances if necessary
+        items = []
         if should_scrape and not_scraped:
             items = bulk_scrape(not_scraped)
-            if save_to_db and self._persistency_manager:
+            if save_to_db and db:
                 db.save(items)
 
-        # Convert to set to speed up lookup
         urls = set(urls)
-        return [sd for sd in db.get_all() if sd.url in urls]
+        return [sd for sd in db.get_all() if sd.url in urls] if db else items
 
     def get_data_for(self, url: str, should_scrape: bool = True) -> ScrapedData:
         """
@@ -295,3 +297,17 @@ class Manager:
                 List with possible output labels for the classifier
         """
         return Classifier.get_labels()
+
+    @classmethod
+    def get_available_crawlers() -> List[str]:
+        """
+            List of usable names of crawlers
+        """
+        return [c.name for c in INSTALLED_CRAWLERS]
+
+    @classmethod
+    def scrapable_domains() -> List[str]:
+        """
+            List of scrapable domains, it may not match with the crawlable sites
+        """
+        return SUPPORTED_DOMAINS
