@@ -3,6 +3,8 @@
 """
 # External imports
 from bs4 import BeautifulSoup
+from tabulate import tabulate
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # local imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
@@ -131,3 +133,27 @@ def get_datetime_now() -> datetime:
         Return datetime formated properly
     """
     return datetime.now(tz=pytz.UTC)
+
+def data_list_to_table_str(data_list : List[ScrapedData], max_cell_len : int = 50) -> str:
+    """
+        Return a string representation of a given data list in a tabular format
+        Parameters:
+            + data_list : [ScrapedData] = list of data instances to list in table
+    """
+
+    cols = [k for k in ScrapedData.__dataclass_fields__.keys()]
+    cols.sort()
+    headers = ['row'] + cols
+
+    truncate = lambda s : s if len(s) <= max_cell_len else s[:max_cell_len] + "..."
+
+    rows    = [
+                [i+1] + [ truncate(str(data.__getattribute__(attr))) for attr in cols] 
+                for (i,data) in enumerate(data_list)
+            ] 
+
+    return tabulate(rows, headers=headers)
+
+    
+
+    
