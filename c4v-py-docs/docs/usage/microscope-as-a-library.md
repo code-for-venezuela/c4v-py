@@ -23,7 +23,7 @@ print(len(d))  # a number <= 10
 
 !!! Note
     You can find which crawler names are available for you to use using `manager.get_available_crawlers()`
-
+---
 ## Examples
 The following are some examples for some common use cases
 
@@ -65,7 +65,7 @@ d = manager.get_bulk_data_for(
 
 print(d) # data for the three given urls
 ```
-
+---
 ## Using Local Storage
 You can provide a database manager to store data scraped with the microscope manager locally, here we will see 
 some examples using an SQLite database
@@ -178,12 +178,26 @@ start = datetime.now()
 d = manager.get_bulk_data_for(urls)
 end = datetime.now()
 
-print("before: ", (end - start).total_seconds()) # 2.155265s
+print("before: ", (end - start).total_seconds()) # 2.155265s, scraped from internet
 
 # Measure time after storing
 start = datetime.now()
 d = manager.get_bulk_data_for(urls)
 end = datetime.now()
 
-print("after: ", (end - start).total_seconds()) #  1.7e-05s
+print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from local storage
 ```
+---
+## Using the Low Level Api   
+If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
+modules:
+
+* `c4v.scraper` : Functions to scrape data from the internet for a given set of urls
+* `c4v.scraper.crawlers` : Classes for crawling and implement a new crawler 
+* `c4v.scraper.persistency_manager` : Classes for storing data locally and implement a new persistency manager
+* `c4v.classifier` : Classes for classifier and its experiments:
+    * Classifier Class
+    * Classifier experiment class
+    * Experiment Base class, if you want to create more experiments that will use the same filesystem as the rest of the experiments
+
+More about this in the next section
