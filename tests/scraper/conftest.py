@@ -1,6 +1,9 @@
 import pytest
 import importlib_resources as resources
+import tempfile
+from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from typing import List
+
 # Handy tip: test resources for scrapers are located in resources.tests.scraper
 
 @pytest.fixture
@@ -46,3 +49,10 @@ def el_pitazo_expected_tags() -> str:
         Expected tags for el pitazo
     """
     return []
+
+@pytest.fixture
+def test_sqlite_manager() -> SqliteManager:
+    """
+        Build a test sqlite manager
+    """
+    return SqliteManager(tempfile.mkstemp()[1])

@@ -12,9 +12,9 @@ from c4v.scraper.scrapers.base_scraper import BaseScraper
 # Python imports
 import re
 import pytz
-from datetime       import datetime
-from urllib.parse   import urlparse
 from typing         import Generator, List, Type, Any, Callable
+from datetime import datetime
+from urllib.parse import urlparse
 
 
 def strip_http_tags(element: str) -> str:
@@ -126,15 +126,15 @@ def group_by(elements : List[Any], key : Callable[[Any], Any] = None) -> Generat
             next += 1
         yield elements[lower_bound:next]
 
-
     return []
+
 def get_datetime_now() -> datetime:
     """
         Return datetime formated properly
     """
     return datetime.now(tz=pytz.UTC)
 
-def data_list_to_table_str(data_list : List[ScrapedData], max_cell_len : int = 50) -> str:
+def data_list_to_table_str(data_list: List[ScrapedData], max_cell_len: int = 50) -> str:
     """
         Return a string representation of a given data list in a tabular format
         Parameters:
@@ -143,17 +143,13 @@ def data_list_to_table_str(data_list : List[ScrapedData], max_cell_len : int = 5
 
     cols = [k for k in ScrapedData.__dataclass_fields__.keys()]
     cols.sort()
-    headers = ['row'] + cols
+    headers = ["row"] + cols
 
-    truncate = lambda s : s if len(s) <= max_cell_len else s[:max_cell_len] + "..."
+    truncate = lambda s: s if len(s) <= max_cell_len else s[:max_cell_len] + "..."
 
-    rows    = [
-                [i+1] + [ truncate(str(data.__getattribute__(attr))) for attr in cols] 
-                for (i,data) in enumerate(data_list)
-            ] 
+    rows = [
+        [i + 1] + [truncate(str(data.__getattribute__(attr))) for attr in cols]
+        for (i, data) in enumerate(data_list)
+    ]
 
     return tabulate(rows, headers=headers)
-
-    
-
-    

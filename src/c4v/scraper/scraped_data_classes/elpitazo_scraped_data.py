@@ -35,6 +35,6 @@ class ElPitazoData(BaseDataFormat):
             title=self.title,
             categories=self.tags + self.categories,
             content=self.body,
-            url= self.url,
-            last_scraped=self.last_scraped
+            url=self.url,
+            last_scraped=self.last_scraped,
         )
