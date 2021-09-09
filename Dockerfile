@@ -11,6 +11,7 @@ ENV PROFILE = "development"
 
 USER root
 
+# Set up python 3.8
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.8 \
     python3-pip \
@@ -25,7 +26,7 @@ WORKDIR /home/ray
 RUN mkdir c4v-py
 
 # Set up pip & copy content 
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip --no-cache-dir
 COPY . c4v-py/
 WORKDIR /home/ray/c4v-py/
 
@@ -38,5 +39,8 @@ RUN poetry config virtualenvs.create false
 RUN pip3 install --no-cache-dir -r requirements.txt 
 RUN poetry install --no-dev --no-interaction --no-ansi
 RUN c4v --help
+
+# remove unnecessary cache
+RUN rm ~/.cache
 
 ENTRYPOINT [ "c4v" ]
