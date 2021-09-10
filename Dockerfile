@@ -41,6 +41,6 @@ RUN poetry install --no-dev --no-interaction --no-ansi
 RUN c4v --help
 
 # remove unnecessary cache
-RUN rm ~/.cache
+RUN rm -rf ~/.cache
 
 ENTRYPOINT [ "c4v" ]
