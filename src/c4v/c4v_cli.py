@@ -62,9 +62,14 @@ def c4v_cli():
     default=-1,
     help="Maximum amount of elements to scrape. Scrape all if no argument given",
 )
+@click.option(
+    "--ray",
+    is_flag=True,
+    help="If should use a distributed scraping or not"
+)
 @click.argument("urls", nargs=-1)
 def scrape(
-    urls: List[str] = None, files: bool = None, loud: bool = False, limit: int = -1
+    urls: List[str] = None, files: bool = None, loud: bool = False, limit: int = -1, ray : bool = False
 ):
     """
         Use this command to run a scraping process. Scraped urls are retrieved from database by default.\n
@@ -95,7 +100,6 @@ def scrape(
     # Print obtained results if requested
     if loud:
         click.echo(data_list_to_table_str(scraped_data))
-
 
 @c4v_cli.command()
 @click.option("--list", is_flag=True, help="list available crawlers")
