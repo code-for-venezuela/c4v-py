@@ -24,7 +24,7 @@ class BaseCrawler:
 
     start_sitemap_url: str = None  # Override this field to define sitemap to crawl
     name: str = None               # Crawler name, required to identify this crawler 
-    ALL_URLS = ["*"]
+    ALL_URLS = [".*"]
     NO_URLS  = ["a^"]
     IRRELEVANT_URLS = []
 
