@@ -20,6 +20,9 @@ from transformers import (
     Trainer,
     TrainingArguments,
     RobertaForSequenceClassification,
+    AutoModelForSequenceClassification,
+    AutoTokenizer, 
+    AutoModelForMaskedLM
 )
 from transformers_interpret import SequenceClassificationExplainer
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
@@ -161,13 +164,11 @@ class Classifier:
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe(dataset_name)
+        df_pscdd = self.get_dataframe(dataset_name).sample(frac=1) # use sample to shuffle rows
+
         df_pscdd["label"] = (
             df_pscdd['label'].apply(lambda x: 'IRRELEVANTE' not in x)
         ).astype(int)
-
-        
-        print(df_pscdd)
 
         df_pscdd = df_pscdd.convert_dtypes()
         df_issue_text = df_pscdd[[*columns, "label"]]
@@ -188,11 +189,11 @@ class Classifier:
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        return RobertaTokenizer.from_pretrained(
+        return AutoTokenizer.from_pretrained(
             self._base_model_name, id2label=self.get_id2label_dict()
         )
 
-    def load_model_from_hub(
+    def load_base_model_from_hub(
         self,
     ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
         """
@@ -201,7 +202,7 @@ class Classifier:
                 RobertaForSequenceClassification : the model as specified
         """
         # Creating model and tokenizer
-        model = RobertaForSequenceClassification.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained(
             self._base_model_name, num_labels=2
         )
         # Use GPU if available
@@ -379,7 +380,7 @@ class Classifier:
         if not Path(path, "config.json").exists():
             raise ValueError(f"Experiment does not exists: {path}")
 
-        model = RobertaForSequenceClassification.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained(
             path, local_files_only=True, id2label=self.get_id2label_dict()
         )
         return model
@@ -424,7 +425,7 @@ class Classifier:
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
-        model = self.load_model_from_hub()
+        model = self.load_base_model_from_hub()
         tokenizer = self.load_tokenizer_from_hub()
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
