@@ -12,7 +12,7 @@ from c4v.scraper.scrapers.base_scraper import BaseScraper
 # Python imports
 import re
 import pytz
-from typing         import Generator, List, Type, Any, Callable
+from typing         import Generator, List, Type, Any, Callable, Iterable
 from datetime import datetime
 from urllib.parse import urlparse
 
@@ -31,13 +31,13 @@ def strip_http_tags(element: str) -> str:
     return soup.get_text()
 
 
-def get_element_text(selector: str, response) -> str:
+def get_element_text(selector: str, response : Any) -> str:
     """
         Return cleaned text from an element selected by "selector".
         May return None if element was not found
         Parameters: 
-            + selector - str : valid css selector used to select html element 
-            + response : response as passed to parse in Spider class
+            selector : str = valid css selector used to select html element 
+            response : Any= response as passed to parse in Spider class
         Return:
             Selected element's content as a cleaned string, or None if such 
             element is not present
@@ -76,7 +76,7 @@ def get_domain_from_url(url: str) -> str:
     """
         Get domain name from  a valid url 
         Parameters:
-            + url : str = url to get domain from
+            url : str = url to get domain from
         Return:
             domain name for the given url
     """
@@ -95,7 +95,7 @@ def check_scrapers_consistency(scrapers: List[Type[BaseScraper]]):
 def check_scraper_consistency(scraper: Type[BaseScraper]):
     """
         Check consistency for a scraper. This function checks that:
-            + Scraper provides intended domain
+            Scraper provides intended domain
     """
     assert scraper.intended_domain != None and isinstance(
         scraper.intended_domain, str
@@ -108,8 +108,8 @@ def group_by(elements : List[Any], key : Callable[[Any], Any] = None) -> Generat
         of elements with the same key.
 
         Parameters:
-            + elements : [Any] = elements to be grouped
-            + key      : Any -> Any = function used to sort elements and to test equality between them
+            elements : [Any] = elements to be grouped
+            key      : Any -> Any = function used to sort elements and to test equality between them
         Return:
             Generator of lists such that every element in that list are equal by the given key.
             The concatenation of every list results in the input list
@@ -138,7 +138,7 @@ def data_list_to_table_str(data_list: List[ScrapedData], max_cell_len: int = 50)
     """
         Return a string representation of a given data list in a tabular format
         Parameters:
-            + data_list : [ScrapedData] = list of data instances to list in table
+            data_list : [ScrapedData] = list of data instances to list in table
     """
 
     cols = [k for k in ScrapedData.__dataclass_fields__.keys()]
@@ -153,3 +153,19 @@ def data_list_to_table_str(data_list: List[ScrapedData], max_cell_len: int = 50)
     ]
 
     return tabulate(rows, headers=headers)
+
+def generate_chunks(items : List[Any], chunk_size : int) -> Iterable[List[Any]]:
+    """
+        Splits a list of elements in multiple lists of the same size, 
+        returning an iterable of lists of elements. The last list may not be the same size as 
+        the previous lists
+        Parameters:
+            items : [Any] = List of anything to be split
+            chunk_size : int = size of every sublist
+        Return:
+            Iterator of lists such that every list has the same size, except for the last one 
+            if len(items) % chunk_size != 0
+    """
+    assert chunk_size > 0, "Can't split a list into non-negative sized lists"
+    for i in range(0, len(items), chunk_size):
+        yield items[i:i+chunk_size]

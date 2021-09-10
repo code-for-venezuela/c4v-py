@@ -77,3 +77,14 @@ def test_group_by_ok():
     assert list(group_by(l3)) == l3_ans 
     assert list(group_by(l4)) == l4_ans 
     assert list(group_by(l5)) == l5_ans 
+
+def test_chunks_generator():
+    l1 = []
+    l2 = [1]
+    l3 = [1,1,1,1,1,1,1,1,1]
+    
+    assert list(generate_chunks(l1, 3))  == []
+    assert list(generate_chunks(l2, 3)) == [[1]]
+    assert list(generate_chunks(l3, 3)) == [[1,1,1], [1,1,1], [1,1,1] ]
+    assert list(generate_chunks(l3, 4)) == [ [1,1,1,1], [1,1,1,1], [1] ]
+    assert list(generate_chunks(l3, 1)) == [ [1] for _ in range(len(l3))]
