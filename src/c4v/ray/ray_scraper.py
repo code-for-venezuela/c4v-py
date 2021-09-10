@@ -20,20 +20,20 @@ def _ray_scrape(urls : List[str]) -> List[ScrapedData]:
     """
     return bulk_scrape(urls)
 
-def ray_scrape(urls : List[str]) -> List[ScrapedData]:
+def ray_scrape(urls : List[str], workers_amount : int = 3) -> List[ScrapedData]:
     """
         Scrape a list of urls in ray-based distributed manner
         Parameters:
-            + urls : [str] = list of urls to scrape
+            urls : [str] = list of urls to scrape
+            workers_amount : int = ammount of workers to use
         Return:
             Data obtained after scraping
     """
-
-    # sort urls by domain
-    urls.sort(key=scrp_utils.get_domain_from_url)
+    # sanity check
+    assert workers_amount > 0, "Should be at the least 1 worker"
     
     # group urls by domain
-    futures = [_ray_scrape.remote(url_list) for url_list in scrp_utils.group_by(urls, scrp_utils.get_domain_from_url)]
+    futures = [_ray_scrape.remote(url_list) for url_list in scrp_utils.generate_chunks(urls, workers_amount)]
     
     # collect output
     output = []
@@ -41,4 +41,3 @@ def ray_scrape(urls : List[str]) -> List[ScrapedData]:
         output.extend(l)
 
     return output
-
