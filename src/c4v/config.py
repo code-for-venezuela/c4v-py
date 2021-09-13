@@ -1,3 +1,7 @@
+"""
+    Use this file for project-wide settings, to add a setting with a default value, 
+    add a validaror instance to the validator list you can fibd below 
+"""
 from dynaconf import Dynaconf, Validator
 import os
 
