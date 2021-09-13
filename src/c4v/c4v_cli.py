@@ -3,7 +3,6 @@
     so we can test things in the meanwhile
 """
 # Third party imports
-import dataclasses
 from datetime import datetime
 import click
 
@@ -11,9 +10,6 @@ import click
 from typing import List, Tuple
 from urllib.error import HTTPError
 import os
-import sys
-from c4v import microscope
-from c4v.classifier.classifier import Labels
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -107,6 +103,7 @@ def scrape(
 @click.option("--all-but", is_flag=True, help="Run all crawlers except listed ones")
 @click.option("--loud", is_flag=True, help="Print results to terminal")
 @click.option("--limit", default=-1, help="Max number of new urls to store")
+@click.option("--ray", is_flag=True, help="Use ray for a distributted scraping, may raise error if ray it's not installed")
 @click.argument("crawlers", nargs=-1)
 def crawl(
     crawlers: List[str] = [],
@@ -115,6 +112,7 @@ def crawl(
     all_but: bool = False,
     loud: bool = False,
     limit: int = -1,
+    ray: bool = False
 ):
     """
         Crawl for new urls, ignoring already scraped ones.\n
@@ -129,7 +127,8 @@ def crawl(
     client = CLIClient()
 
     # list available crawlers if requested to
-    crawlable_sites = "".join([f"\t{crawl.name}\n" for crawl in INSTALLED_CRAWLERS])
+    crawlable_sites = "".join([
+        f"\t{crawl.name}\n" for crawl in INSTALLED_CRAWLERS])
     if list:
         click.echo(f"Crawlable sites: \n{crawlable_sites}")
         if not crawlers and not all:  # if nothing else to do, just end
@@ -138,14 +137,12 @@ def crawl(
     # Check for errors:
     # if no crawlers to use, just end
     if not crawlers and not all:
-        click.echo(f"Not crawlers provided. Available crawlers:\n{crawlable_sites}")
+        CLIClient.echo_error(f"Not crawlers provided. Available crawlers:\n{crawlable_sites}")
         return
 
     # raise a warnning if incompatible flags where provided
     if all_but and all:
-        click.echo(
-            f"[WARNING] --all and --all-but incompatible flags were provided, using only --all"
-        )
+        CLIClient.echo_warning(f"--all and --all-but incompatible flags were provided, using only --all")
 
     # set up crawlers to run
     if all:
@@ -203,7 +200,7 @@ def list(
     )
 
     click.echo(data_to_print)
-    print(scraped_only)
+    click.echo(scraped_only)
 
 
 @c4v_cli.command()
@@ -224,8 +221,8 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     if (
         n_args < 2
     ):  # Get at the least 2 args, experiment as branch/experiment and some url
-        click.echo(
-            "[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url"
+        CLIClient.echo_error(
+            "Should provide at the least 2 arguments, experiment and at the least 1 url"
         )
         return
 
@@ -246,7 +243,7 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     try:
         results = manager.run_classification_from_experiment(branch, experiment, data)
     except ValueError as e:
-        click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}")
+        CLIClient.echo_error(f"Could not classify provided data.\n\tError: {e}")
         return
 
     # Pretty print results:
@@ -273,7 +270,7 @@ def show(url: str, no_scrape: bool = False):
 
     # Check if could retrieve desired element
     if not data:
-        click.echo("[EMPTY]")
+        CLIClient.echo_info("<EMPTY>")
         return
     else:
         element = data[0]
@@ -345,7 +342,7 @@ def explain(
 
         # check if there's data retrieved to explain
         if not datas:
-            click.echo("Nothing to explain")
+            CLIClient.echo_info("Nothing to explain")
             return
 
         # Get content from data retrieved
@@ -364,13 +361,12 @@ def explain(
     # Check label input
     possible_labels = microscope_manager.get_classifier_labels()
     if label and label not in possible_labels:
-        click.echo(
-            f"[WARNING] Provided label not a valid label, ignoring label argument {label}.",
-            err=True,
+
+        possible_labels_str = "\n".join(f"\t* {l}" for l in possible_labels) + "\n"
+        CLIClient.echo_warning(
+            f"Provided label not a valid label, ignoring label argument {label}.\nPossible Labels:\n{possible_labels_str}",
         )
-        click.echo(f"Possible Labels:", err=True)
-        for l in possible_labels:
-            click.echo(f"\t* {l}", err=True)
+        
         label = None
 
     # try to explain
@@ -379,7 +375,7 @@ def explain(
             branch, experiment, text_to_explain, html_file=html, additional_label=label
         )
     except ValueError as e:
-        click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
+        CLIClient.echo_error(f"Could not explain given sentence. Error: {e}")
         return
 
     # Pretty print results
@@ -388,7 +384,6 @@ def explain(
     click.echo(f"Predicted Label: {label}\nScores:")
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")
-
 
 class CLIClient:
     """
@@ -432,12 +427,8 @@ class CLIClient:
 
         # Warn the user that some urls won't be scraped
         if non_scrapables:
-            click.echo(
-                "[WARNING] some urls won't be retrieved, as they are not scrapable for now.",
-                err=True,
-            )
-            click.echo("Non-scrapable urls:", err=True)
-            click.echo("\n".join([f"\t* {url}" for url in non_scrapables]), err=True)
+            non_scrapable_urls = "\n".join([f"\t* {url}" for url in non_scrapables])
+            CLIClient.echo_warning(f"Some urls won't be retrieved, as they are not scrapable for now.\nNon-scrapable urls:\n{non_scrapable_urls}\n")            
 
         # check if some http error happens
         data = []
@@ -446,24 +437,19 @@ class CLIClient:
                 scrapable_urls, should_scrape=should_scrape
             )
         except HTTPError as e:
-            click.echo(
-                f"[ERROR] Could not scrape all data due to connection errors: {e}",
-                err=True,
-            )
+            CLIClient.echo_error(f"Could not scrape all data due to connection errors: {e}")
 
         # Tell the user if some urls where not retrieved
         succesfully_retrieved = {d.url for d in data}
         if any(url not in succesfully_retrieved for url in scrapable_urls):
-            click.echo(f"[WARNING] Some urls couldn't be retrieved: ")
-            click.echo(
-                "\n".join(
+            non_retrieved_urls = "\n".join(
                     [
                         f"\t* {url}"
                         for url in scrapable_urls
                         if url not in succesfully_retrieved
                     ]
                 )
-            )
+            CLIClient.echo_warning(f"Some urls couldn't be retrieved: \n{non_retrieved_urls}\n")
 
         return data
 
@@ -495,16 +481,14 @@ class CLIClient:
                 branch, name = branch_and_name
                 return (branch, name)
 
-        click.echo(
-            f"[ERROR] Given experiment name is not valid: {line}. Should be in the form:",
-            err=True,
+        format_str = "\n".join([f"\ttbranch_name{separator}experiment_name" for separator in separators])
+        CLIClient.echo_error(
+            f"Given experiment name is not valid: {line}. Should be in the form:\n {format_str}",
         )
-        for separator in separators:
-            click.echo(f"\tbranch_name{separator}experiment_name")
         return None
 
     def crawl_new_urls_for(
-        self, crawler_names: List[str], limit: int = -1, loud: bool = False
+        self, crawler_names: List[str], limit: int = -1, loud: bool = False, use_ray: bool = False
     ):
         """
             Crawl URLs for the given crawlers, up to a max number of urls.
@@ -512,6 +496,7 @@ class CLIClient:
                 crawlers : [str] = List of crawlers names to use
                 limit    : int = Max limit of urls to get. 
                 loud     : bool = If should print to terminal obtained scrapers. False by default
+                use_ray  : bool = If should use ray to crawl in a distributed manner
         """
         # function to format crawled urls list
         format_url_list = lambda list: "".join([f"{s}\n" for s in list])
@@ -527,19 +512,20 @@ class CLIClient:
 
         # Report warning if there's some non registered crawlers
         if not_registered:
-            click.echo(
-                "WARNING: some names in given name list don't correspond to any registered crawler.",
-                err=True,
-            )
-            click.echo(
-                "Unregistered crawler names: \n"
-                + "\n".join([f"\t* {name}" for name in not_registered]),
-                err=True,
+            non_registered_urls = "\n".join([f"\t* {name}" for name in not_registered])
+            CLIClient.echo_warning(
+                f"WARNING: some names in given name list don't correspond to any registered crawler.\nUnregistered crawler names:\n{non_registered_urls}"
             )
 
-        self._manager.crawl_new_urls_for(
-            [c for c in crawler_names if c not in not_registered], process, limit=limit
-        )
+        # Crawl urls
+        try:
+            self._manager.crawl_new_urls_for(
+                [c for c in crawler_names if c not in not_registered], process, limit=limit, use_ray=use_ray
+            )
+        except ImportError as e: # Mostly due to ray not being installed
+            
+            CLIClient.echo_error(f"could not crawl urls due to some missing dependency, maybe you installed a profile without ray?\n\t Error: {e}")
+
 
     @staticmethod
     def _parse_lines_from_files(files: List[str]) -> List[str]:
@@ -555,10 +541,50 @@ class CLIClient:
                     )  # parse every line as a single url
                     lines.extend(content)
             except IOError as e:
-                click.echo(
-                    f"Could not open input file: {file}. Error: {e.strerror}", err=True
-                )
+                    CLIClient.echo_error(f"Could not open input file: {file}. Error: {e.strerror}")
         return lines
+
+    @staticmethod
+    def _warning(msg : str) -> str:
+        """
+            Return a message formated as a warning
+        """
+        return f"[WARNING] {msg}"
+
+    @staticmethod
+    def _info(msg : str) -> str:
+        """
+            Return a message formated as a info
+        """
+        return f"[INFO] {msg}"
+    
+    @staticmethod
+    def _error(msg : str) -> str:
+        """
+            Return a message formated as an error
+        """
+        return f"[ERROR] {msg}"
+
+    @staticmethod
+    def echo_warning(msg : str):
+        """
+            Echo the given warning message
+        """
+        click.echo(CLIClient._warning(msg), err=True)
+            
+    @staticmethod
+    def echo_info(msg : str):
+        """
+            Echo the given info message
+        """
+        click.echo(CLIClient._info(msg))
+        
+    @staticmethod
+    def echo_error(msg : str):
+        """
+            Echo the given error message
+        """
+        click.echo(CLIClient._error(msg), err=True)
 
 
 if __name__ == "__main__":

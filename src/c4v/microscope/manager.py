@@ -2,7 +2,6 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
-from c4v.ray.ray_crawler import ray_crawl_and_process_urls
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
@@ -15,8 +14,6 @@ from c4v.classifier.classifier                              import Classifier
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
-import sys
-
 
 class Manager:
     """
@@ -51,10 +48,10 @@ class Manager:
             if use_ray:
                 # import ray here as it may not be installed in development profiles
                 try:
-                    from c4v.ray.ray_scraper import ray_scrape
+                    from c4v.ray.ray_scraper import ray_bulk_scrape
                 except ImportError as e:
                     raise ImportError(f"Could not import ray implementations, maybe you installed the wrong profile?. Error: {e}")
-                items = ray_scrape(not_scraped)
+                items = ray_bulk_scrape(not_scraped)
             else:
                 items = bulk_scrape(not_scraped)
             db.save(items)
@@ -63,29 +60,38 @@ class Manager:
         urls = set(urls)
         return [sd for sd in db.get_all() if sd.url in urls]
 
-    def get_data_for(self, url: str, should_scrape: bool = True) -> ScrapedData:
+    def get_data_for(self, url: str, should_scrape: bool = True, use_ray : bool = False) -> ScrapedData:
         """
             Get data for this url if stored and scrapable. May return none if could not
             find data for this url
             Parameters:
                 url : str = url to be scraped
                 should_scrape : bool = if should scrape this url if not available in db
+            Return:
+                Data scraped for the given url
         """
-        data = self.get_bulk_data_for([url], should_scrape)
+        data = self.get_bulk_data_for([url], should_scrape, use_ray=use_ray)
         return data[0] if data else None
 
-    def scrape_pending(self, limit: int = -1):
+    def scrape_pending(self, limit: int = -1, use_ray: bool = False):
         """
             Update DB by scraping rows with no scraped data, just the url
             Parameters:
                 limit : int = how much measurements to scrape, set a negative number for no limit
+                use_ray : bool = if should use ray to scrape in a distributed manner
         """
-
         db = self._persistency_manager
 
         scrape_urls = [d.url for d in db.get_all(limit=limit, scraped=False)]
 
-        scraped = bulk_scrape(scrape_urls)
+        if use_ray:
+            try:
+                from c4v.ray.ray_scraper import ray_bulk_scrape
+            except ImportError as e:
+                raise ImportError(f"Could not import ray implementations, maybe you installed the wrong profile?. Error: {e}")
+            scraped = ray_bulk_scrape(scrape_urls)
+        else:
+            scraped = bulk_scrape(scrape_urls)
 
         db.save(scraped)
 
@@ -156,12 +162,12 @@ class Manager:
         if use_ray:
             # import ray here as it may not be installed in development profiles
             try:
-                from c4v.ray.ray_crawler import ray_crawl
+                from c4v.ray.ray_crawler import ray_crawl_and_process_urls
             except ImportError as e:
                 raise ImportError(f"Could not import ray implementations, maybe you installed the wrong profile?. Error: {e}")
 
             ray_crawl_and_process_urls(crawler_names, save_urls, should_stop)
-
+            return
 
         # Instantiate crawlers to use
         crawlers_to_run = [

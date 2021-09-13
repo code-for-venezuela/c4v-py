@@ -12,10 +12,14 @@ from c4v.scraper.crawler.crawlers.base_crawler import BaseCrawler
 # Python imports
 from typing import Callable, Any, List
 
-@ray.init()
+ray.init()
 
 @ray.remote
-def _ray_crawl_and_process_urls( crawler : BaseCrawler, post_process_function : Callable[[List[str]], Any], should_stop : Callable[[], bool]):
+def _ray_crawl_and_process_urls(    
+    crawler : BaseCrawler, 
+    post_process_data: Callable[[List[str]], Any] = None,
+    should_stop: Callable[[], bool] = None
+    ):
     """
         Crawl urls using crawler 'crawler', and then process them using the 'post_process_function'
         function
@@ -23,7 +27,7 @@ def _ray_crawl_and_process_urls( crawler : BaseCrawler, post_process_function : 
             crawler : BaseCrawler = Crawler instance to use to crawl for urls
             post_process_function : [str] -> Any = Function to call over each batch of urls once it's scraped
     """
-    crawler.crawl_and_process_urls(post_process_function, should_stop=should_stop)
+    crawler.crawl_and_process_urls(post_process_data=post_process_data, should_stop=should_stop)
 
 @ray.remote
 def _ray_crawl(crawler : BaseCrawler) -> List[str]:

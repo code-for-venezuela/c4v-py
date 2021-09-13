@@ -3,7 +3,6 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
-from importlib.metadata import files
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -12,10 +11,7 @@ from typing import Dict, List, Any, Tuple
 from pathlib import Path
 from pandas.core.frame import DataFrame
 from importlib import resources
-from datetime import datetime
-from pytz import utc
 from enum import Enum
-import os
 
 # Third Party
 from transformers import (

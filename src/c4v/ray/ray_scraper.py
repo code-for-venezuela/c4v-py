@@ -13,6 +13,8 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 # Python imports
 from typing import List
 
+ray.init()
+
 @ray.remote
 def _ray_scrape(urls : List[str]) -> List[ScrapedData]:
     """
@@ -20,7 +22,7 @@ def _ray_scrape(urls : List[str]) -> List[ScrapedData]:
     """
     return bulk_scrape(urls)
 
-def ray_scrape(urls : List[str], workers_amount : int = 3) -> List[ScrapedData]:
+def ray_bulk_scrape(urls : List[str], workers_amount : int = 3) -> List[ScrapedData]:
     """
         Scrape a list of urls in ray-based distributed manner
         Parameters:
