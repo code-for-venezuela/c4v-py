@@ -2,16 +2,16 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
-from c4v.classifier.experiment import ExperimentFSManager
+from c4v.ray.ray_crawler import ray_crawl_and_process_urls
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
-from c4v.scraper.settings import INSTALLED_CRAWLERS
-from c4v.classifier.classifier_experiment import ClassifierExperiment
-from c4v.classifier.classifier import Classifier
+from c4v.scraper.scraped_data_classes.scraped_data          import ScrapedData
+from c4v.scraper.scraper                                    import bulk_scrape, _get_scraper_from_url
+from c4v.scraper.settings                                   import INSTALLED_CRAWLERS
+from c4v.classifier.classifier_experiment                   import ClassifierExperiment
+from c4v.classifier.classifier                              import Classifier
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
@@ -28,13 +28,17 @@ class Manager:
         self._persistency_manager = persistency_manager
 
     def get_bulk_data_for(
-        self, urls: List[str], should_scrape: bool = True
+        self, urls: List[str], should_scrape: bool = True,
+        use_ray : bool = False
     ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
                 urls : [str] = urls whose data is to be retrieved. If not available yet, then scrape it if requested so
                 should_scrape : bool = if should scrape non-existent urls
+                use_ray : bool = If should use ray to scrape in a distributed manner
+            Return:
+                List of scraped data instances
         """
         # just a shortcut
         db = self._persistency_manager
@@ -44,7 +48,15 @@ class Manager:
 
         # Scrape missing instances if necessary
         if should_scrape and not_scraped:
-            items = bulk_scrape(not_scraped)
+            if use_ray:
+                # import ray here as it may not be installed in development profiles
+                try:
+                    from c4v.ray.ray_scraper import ray_scrape
+                except ImportError as e:
+                    raise ImportError(f"Could not import ray implementations, maybe you installed the wrong profile?. Error: {e}")
+                items = ray_scrape(not_scraped)
+            else:
+                items = bulk_scrape(not_scraped)
             db.save(items)
 
         # Convert to set to speed up lookup
@@ -94,7 +106,8 @@ class Manager:
         self,
         crawler_names: List[str] = None,
         post_process: Callable[[List[str]], None] = None,
-        limit=-1,
+        limit : int =-1,
+        use_ray : bool = False
     ):
         """
             Crawl for new urls using the given crawlers only
@@ -139,13 +152,26 @@ class Manager:
         if crawler_names == None:
             crawler_names = crawlers
 
+        # if use ray, then:
+        if use_ray:
+            # import ray here as it may not be installed in development profiles
+            try:
+                from c4v.ray.ray_crawler import ray_crawl
+            except ImportError as e:
+                raise ImportError(f"Could not import ray implementations, maybe you installed the wrong profile?. Error: {e}")
+
+            ray_crawl_and_process_urls(crawler_names, save_urls, should_stop)
+
+
         # Instantiate crawlers to use
         crawlers_to_run = [
-            crawler() for crawler in INSTALLED_CRAWLERS if crawler.name in crawler_names
+            crawler_class for crawler_class in INSTALLED_CRAWLERS if crawler_class.name in crawler_names
         ]
 
         # crawl for every crawler
-        for crawler in crawlers_to_run:
+        for crawler_class in crawlers_to_run:
+            crawler = crawler_class()
+
             crawler.crawl_and_process_urls(save_urls, should_stop)
 
     def split_non_scrapable(self, urls: List[str]) -> Tuple[List[str], List[str]]:
