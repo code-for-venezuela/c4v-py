@@ -18,6 +18,7 @@ from enum import Enum
 import os
 
 # Third Party
+from pandas.core.frame  import DataFrame
 from transformers import (
     RobertaTokenizer,
     Trainer,
@@ -36,7 +37,6 @@ from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
 
-
 class Labels(Enum):
     """
         Every possible label for each article
@@ -52,6 +52,11 @@ class Labels(Enum):
         """
         return [l.value for l in cls]
 
+class Tags(Enum):
+    """
+        Possible tags variants for an article
+    """
+    DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
 
 class Classifier:
     """
