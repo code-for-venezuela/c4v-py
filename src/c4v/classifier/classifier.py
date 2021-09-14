@@ -3,7 +3,6 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
-from importlib.metadata import files
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
@@ -12,10 +11,7 @@ from typing import Dict, List, Any, Tuple
 from pathlib import Path
 from pandas.core.frame import DataFrame
 from importlib import resources
-from datetime import datetime
-from pytz import utc
 from enum import Enum
-import os
 
 # Third Party
 from pandas.core.frame  import DataFrame
@@ -24,6 +20,9 @@ from transformers import (
     Trainer,
     TrainingArguments,
     RobertaForSequenceClassification,
+    AutoModelForSequenceClassification,
+    AutoTokenizer, 
+    AutoModelForMaskedLM
 )
 from transformers_interpret import SequenceClassificationExplainer
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
@@ -146,7 +145,7 @@ class Classifier:
         """
             Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/raw/huggingface
         """
-        with resources.open_text("data.raw.huggingface", dataset_name) as f:
+        with resources.open_text("data.processed.huggingface", dataset_name) as f:
             return pd.read_csv(f)
 
     def prepare_dataframe(
@@ -164,9 +163,10 @@ class Classifier:
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe(dataset_name)
+        df_pscdd = self.get_dataframe(dataset_name).sample(frac=1) # use sample to shuffle rows
+
         df_pscdd["label"] = (
-            df_pscdd.tipo_de_evento == Labels.DENUNCIA_FALTA_DEL_SERVICIO.value
+            df_pscdd['label'].apply(lambda x: 'IRRELEVANTE' not in x)
         ).astype(int)
 
         df_pscdd = df_pscdd.convert_dtypes()
@@ -188,11 +188,11 @@ class Classifier:
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        return RobertaTokenizer.from_pretrained(
+        return AutoTokenizer.from_pretrained(
             self._base_model_name, id2label=self.get_id2label_dict()
         )
 
-    def load_model_from_hub(
+    def load_base_model_from_hub(
         self,
     ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
         """
@@ -201,7 +201,7 @@ class Classifier:
                 RobertaForSequenceClassification : the model as specified
         """
         # Creating model and tokenizer
-        model = RobertaForSequenceClassification.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained(
             self._base_model_name, num_labels=2
         )
         # Use GPU if available
@@ -379,7 +379,7 @@ class Classifier:
         if not Path(path, "config.json").exists():
             raise ValueError(f"Experiment does not exists: {path}")
 
-        model = RobertaForSequenceClassification.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained(
             path, local_files_only=True, id2label=self.get_id2label_dict()
         )
         return model
@@ -424,7 +424,7 @@ class Classifier:
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
-        model = self.load_model_from_hub()
+        model = self.load_base_model_from_hub()
         tokenizer = self.load_tokenizer_from_hub()
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
@@ -472,7 +472,7 @@ class Classifier:
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer_from_hub()
         tokenized_input = roberta_tokenizer(
-            [data.content],
+            [data.title],
             padding=True,
             truncation=True,
             max_length=512,

@@ -11,6 +11,18 @@ class PrimiciaCrawler(BaseCrawler):
 
     start_sitemap_url = "https://primicia.com.ve/sitemap_index.xml"
     name = "primicia"
+    
+    # URL patterns for non relevant urls (news that have nothing to do with public services)
+    IRRELEVANT_URLS = [ 
+        ".*primicia.com.ve/mundo/.*",
+        ".*primicia.com.ve/deportes/.*",
+        ".*primicia.com.ve/placeres/.*",
+        ".*primicia.com.ve/mas/virales/.*",
+        ".*primicia.com.ve/mas/ciencia-y-tecnologia/.*",
+        ".*primicia.com.ve/sucesos/.*",
+        ".*primicia.com.ve/politica/.*"
+
+    ]
 
     @staticmethod
     def should_crawl(url: str) -> bool:
