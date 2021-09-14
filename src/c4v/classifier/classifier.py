@@ -36,7 +36,6 @@ from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
 
-
 class Labels(Enum):
     """
         Every possible label for each article
