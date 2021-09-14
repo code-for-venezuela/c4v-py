@@ -91,7 +91,7 @@ def scrape(
         urls_to_scrape = urls
 
     # scrape urls
-    scraped_data = client.get_data_for_urls(urls_to_scrape, should_scrape=True)
+    scraped_data = client.get_data_for_urls(urls_to_scrape, should_scrape=True, use_ray=ray)
 
     # Print obtained results if requested
     if loud:
@@ -158,7 +158,7 @@ def crawl(
             crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name in crawlers
         ]
 
-    client.crawl_new_urls_for(crawlers_to_run, limit, loud)
+    client.crawl_new_urls_for(crawlers_to_run, limit, loud, use_ray=ray)
 
 
 @c4v_cli.command()
@@ -407,7 +407,7 @@ class CLIClient:
             self._urls = urls
 
     def get_data_for_urls(
-        self, urls: List[str] = None, should_scrape: bool = True
+        self, urls: List[str] = None, should_scrape: bool = True, use_ray : bool = False
     ) -> List[ScrapedData]:
         """
             Return a list of ScrapedData from a list of urls.
@@ -415,6 +415,7 @@ class CLIClient:
                 urls : [str] = List of urls whose data is requested. If not provided, defaults to the 
                                 list stored whithin this class
                 should_scrape : bool = If should scrape data for urls that are not currently available
+                use_ray : bool = if should use ray scrape backend
             Return:
                 List of retrieved urls
         """
@@ -434,7 +435,7 @@ class CLIClient:
         data = []
         try:
             data = self._manager.get_bulk_data_for(
-                scrapable_urls, should_scrape=should_scrape
+                scrapable_urls, should_scrape=should_scrape, use_ray=use_ray
             )
         except HTTPError as e:
             CLIClient.echo_error(f"Could not scrape all data due to connection errors: {e}")
