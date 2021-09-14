@@ -129,7 +129,7 @@ trainer = Trainer(
     args=args,
     model=model,
     eval_dataset=dataset,
-    compute_metrics=compute_metrics
+    compute_metrics=compute_metrics # Si comentas esta línea, deja de dar out of memory
 )
 
 print(trainer.evaluate())
