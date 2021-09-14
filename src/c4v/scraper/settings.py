@@ -15,9 +15,12 @@ from typing import Type, List
 
 INSTALLED_SCRAPERS: List[Type[BaseScraper]] = [ElPitazoScraper, PrimiciaScraper]
 
-INSTALLED_CRAWLERS: List[Type[BaseCrawler]] = [primicia_crawler.PrimiciaCrawler, el_pitazo_crawler.ElPitazoCrawler]
+INSTALLED_CRAWLERS: List[Type[BaseCrawler]] = [
+    primicia_crawler.PrimiciaCrawler,
+    el_pitazo_crawler.ElPitazoCrawler,
+]
 
-SUPPORTED_DOMAINS  = [s.intended_domain for s in INSTALLED_SCRAPERS]
+SUPPORTED_DOMAINS = [s.intended_domain for s in INSTALLED_SCRAPERS]
 
 # Check for scraper consistency
 check_scrapers_consistency(INSTALLED_SCRAPERS)
