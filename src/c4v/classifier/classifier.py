@@ -21,8 +21,7 @@ from transformers import (
     TrainingArguments,
     RobertaForSequenceClassification,
     AutoModelForSequenceClassification,
-    AutoTokenizer, 
-    AutoModelForMaskedLM
+    AutoTokenizer
 )
 from transformers_interpret import SequenceClassificationExplainer
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
@@ -416,6 +415,7 @@ class Classifier:
                 Classifier metrics
         """
 
+        # check that you have a folder where to store results
         if not self._files_folder:
             raise ValueError(
                 "Can't train in a Classifier without a folder for local data"
