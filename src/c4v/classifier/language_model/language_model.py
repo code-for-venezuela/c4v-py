@@ -67,7 +67,7 @@ class LanguageModel:
         tokenizer = tokenizer or AutoTokenizer.from_pretrained(self._base_model_name)        
 
         # Tokenize text
-        tokenized_text = tokenizer(data, max_length=512, padding="max_length", truncation=True) # TODO deberíamos 
+        tokenized_text = tokenizer(text, max_length=512, padding="max_length", truncation=True) # TODO deberíamos 
 
         # Valid answers & attention mask 
         labels = torch.tensor(tokenized_text['input_ids'])
@@ -87,4 +87,28 @@ class LanguageModel:
 
             masked_tokens_array = masked_tokens_array * (input_ids != tokenizer.vocab[tk_value])
 
+        # Convert selected tokens to mask 
+        for i in range(input_ids.shape[0]):
+            # get indices of mask positions from mask array
+            selection = torch.flatten(masked_tokens_array[i].nonzero()).tolist()
+            input_ids[i, selection] = tokenizer.vocab[tokenizer.mask_token] # Token <mask> id
 
+        encodings = {
+            "input_ids" : input_ids, 
+            "attention_mask" : mask,
+            "labels" : labels
+        }
+
+        # Create our custom dataset class
+        class _Dataset(Dataset):
+            def __init__(self, encodings):
+                self.encodings = encodings
+            def __len__(self):
+                return self.encodings['input_ids'].shape[0]
+            def __getitem__(self, i):
+                # return dictionary of input_ids, attention_mask, and labels for index i
+                return {key: tensor[i] for key, tensor in self.encodings.items()}
+
+        dataset = _Dataset(encodings)
+
+        return dataset
