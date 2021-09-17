@@ -5,34 +5,34 @@
     necessary
 """
 # Third party imports
-from posixpath import basename
-from torch.utils.data import Dataset
-from transformers import EvalPrediction, AutoTokenizer
+from torch.utils.data import Dataset, DataLoader
+from transformers import EvalPrediction, AutoTokenizer, AutoModelForMaskedLM, TrainingArguments, Trainer, BatchEncoding, AdamW
+from transformers.optimization import Adafactor
+from tqdm import tqdm
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
 import torch
+import numpy as np
+import GPUtil
 
 # Python imports 
-from typing import Iterable, List, Any
+from typing import Callable, Iterable, List, Any, Dict
 import dataclasses as dc
+import tempfile 
+from pathlib import Path
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.classifier.base_model import BaseModel
 from c4v.config import settings
 
-class LanguageModel:
+class LanguageModel(BaseModel):
     """
         This is the base model that gets trained for the classifier downstream 
         task. Use this class to evaluate accuracy for a base language model, and 
         retrain its embeddings layer if needed
     """
 
-    def __init__(self, base_model_name : str = settings.default_base_language_model) -> None:
-        self._base_model_name = base_model_name
-        pass
-
-    def eval_accuracy(dataset : Dataset) -> EvalPrediction:
-        pass
-
-    def create_dataset_from_scraped_data(self, data : Iterable[ScrapedData], fields : List[str] = ["content"], tokenizer : Any = None) -> Dataset:
+    def create_dataset_from_scraped_data(self, data : Iterable[ScrapedData], fields : List[str] = ["content"], tokenizer : Any = None) -> BatchEncoding:
         """
             Creates a dataset from ScrapedData instances, ready to be used for training or 
             evaluation, containing both the masked version and its corresponding actual answer.
@@ -55,7 +55,7 @@ class LanguageModel:
 
         # Raise error if can't use any field
         if not fields_to_use:
-            raise ValueError(f"No valid field provided in 'field' field of 'LanguageModel.create_dataset_from_scraped_data' function, provided list: {fields}. Valid fields: {list(valid_fields)}")
+            raise ValueError(f"No valid field provided in 'fields' field of 'LanguageModel.create_dataset_from_scraped_data' function, provided list: {fields}. Valid fields: {list(valid_fields)}")
 
         # Extract text to be used
         text = [ '\n'.join([ str(d.__getattribute__(attr)) for attr in fields_to_use]) for d in data ]
@@ -67,11 +67,10 @@ class LanguageModel:
         tokenizer = tokenizer or AutoTokenizer.from_pretrained(self._base_model_name)        
 
         # Tokenize text
-        tokenized_text = tokenizer(text, max_length=512, padding="max_length", truncation=True) # TODO deberíamos 
+        tokenized_text = tokenizer(text, max_length=512, padding="max_length", truncation=True, return_tensors="pt") # TODO deberíamos configurar esto con argumentos en la funcion
 
         # Valid answers & attention mask 
         labels = torch.tensor(tokenized_text['input_ids'])
-        mask = torch.tensor(tokenized_text['attention_mask'])
 
         # Input ids: fed to the model as the masked version
         input_ids = labels.detach().clone()
@@ -93,22 +92,104 @@ class LanguageModel:
             selection = torch.flatten(masked_tokens_array[i].nonzero()).tolist()
             input_ids[i, selection] = tokenizer.vocab[tokenizer.mask_token] # Token <mask> id
 
-        encodings = {
-            "input_ids" : input_ids, 
-            "attention_mask" : mask,
-            "labels" : labels
-        }
+        tokenized_text['labels'] = labels
+        tokenized_text['input_ids'] = input_ids
 
-        # Create our custom dataset class
+        return tokenized_text # type = transformers.tokenization_utils_base.BatchEncoding
+
+    @staticmethod
+    def _to_pt_dataset(batch : BatchEncoding) -> Dataset:
+        """
+            Turn batch enconding (as the one created by create_dataset_from_scraped_data) into a pytorch dataset
+        """
         class _Dataset(Dataset):
             def __init__(self, encodings):
                 self.encodings = encodings
+            def __getitem__(self, idx):
+                return {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
             def __len__(self):
-                return self.encodings['input_ids'].shape[0]
-            def __getitem__(self, i):
-                # return dictionary of input_ids, attention_mask, and labels for index i
-                return {key: tensor[i] for key, tensor in self.encodings.items()}
+                return len(self.encodings.input_ids)
+        
+        return _Dataset(batch)
 
-        dataset = _Dataset(encodings)
+    def eval_accuracy(self, dataset : BatchEncoding, model : Any = None) -> torch.Tensor:
+        """
+            Try to eval accuracy of this language model for the given dataset.
+            Parameters:
+                dataset : BatchEnconding = dataset with data to use for evaluation, should contain the 
+                                    input ids vector to classify, with masked words
+                model : Any = Huggingface model for masked language modeling, be default we use the model refered
+                              by the configured model name, you can override it by providing this field
+            Return:
+                A tensor representing the loss when evaluating the model with the given data
+        """
+        # Send data to corresponding device
+        dataset.to(self._device)
+    
+        # set up model
+        model = model or AutoModelForMaskedLM.from_pretrained(self._base_model_name)       
 
-        return dataset
+        # Load model
+        model.to(self._device)
+
+        # Evaluate model 
+        outputs = model(**dataset)
+        return outputs.loss
+
+    def train_model(self, train_dataset : Dataset, eval_dataset : Dataset, model : Any = None, batch_size : int = 16, learning_rate : float = 5e-5, epochs : int = 3):
+        """
+            Train a given model, or the one for the provided model 
+            Parameters: 
+                dataset : Dataset = training data with input_ids and labels
+                model : Any = model to train, provide this field to override the configured model
+        """
+        # Estamos probando con un training loop custom (y no con el objeto Trainer) para ver si esto nos 
+        # concede mejor control sobre la memoria, estamos teniendo muchos problemas de out of memory
+
+        # Create a data loader
+        loader = DataLoader(train_dataset, batch_size, shuffle=True)
+
+        # Set up model
+        model_to_train = model or AutoModelForMaskedLM.from_pretrained(self._base_model_name)
+        model_to_train.to(self._device)
+        model_to_train.train() # Go to train mode
+
+        # Create an optimizer 
+        #optim  = AdamW(model_to_train.parameters(), lr = learning_rate)
+        optim = Adafactor(model_to_train.parameters(), scale_parameter=True, relative_step=True, warmup_init=True, lr=None)
+
+        for epoch in range(epochs):
+            loop = tqdm(loader, leave=True)
+            for batch in loop:
+                # initialize calculated gradients (from prev step)
+                optim.zero_grad()
+                # pull all tensor batches required for training
+                # get size of each batch
+                input_ids = batch['input_ids'].to(self._device)
+                attention_mask = batch['attention_mask'].to(self._device)
+                labels = batch['labels'].to(self._device)
+
+                # process
+                outputs = model_to_train(input_ids, attention_mask=attention_mask, labels=labels)
+
+                del outputs.logits
+
+                # extract loss
+                loss = outputs.loss
+
+                # calculate loss for every parameter that needs grad update
+                loss.backward()
+
+                # update parameters
+                optim.step()
+            
+                # print relevant info to progress bar
+                loop.set_description(f'Epoch {epoch}')
+                loop.set_postfix(loss=loss.item())
+
+        # Evaluation
+        model_to_train.eval()                       # go to eval mode
+        outputs = model(**eval_dataset.encodings)   # eval for dataset
+
+
+
