@@ -73,7 +73,9 @@ class ClassifierSummary(BaseExperimentSummary):
 
 class ClassifierExperiment(BaseExperiment):
     """
-        Use this experiment to run a classifier training
+        Use this experiment to run a classifier training. 
+        You can check valid training arguments here:
+        https://huggingface.co/transformers/main_classes/trainer.html#transformers.TrainingArguments
     """
 
     def __init__(
@@ -81,7 +83,7 @@ class ClassifierExperiment(BaseExperiment):
         experiment_fs_manager: ExperimentFSManager,
         classifier_instance: Classifier = None,
     ):
-        # Initialize as super class
+        # Initialize super class
         super().__init__(experiment_fs_manager=experiment_fs_manager)
 
         # Set up default values
@@ -92,6 +94,7 @@ class ClassifierExperiment(BaseExperiment):
         classifier_instance.files_folder = (
             experiment_fs_manager.experiment_content_folder
         )
+        
         self._classifier = classifier_instance
 
     @property
@@ -162,5 +165,5 @@ class ClassifierExperiment(BaseExperiment):
                 classifier_instance : Classifier = optional classifier instance, will be defaulted if none was provided
         """
         fs_manager = ExperimentFSManager(branch_name, experiment_name)
-        classifier_instance = classifier_instance or Classifier()
+        classifier_instance = classifier_instance or Classifier(fs_manager.experiment_content_folder)
         return cls(fs_manager, classifier_instance)

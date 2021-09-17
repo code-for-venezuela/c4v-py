@@ -5,6 +5,7 @@
 # Local imports
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.classifier.base_model import BaseModel, C4vDataLoader
 
 # Python imports
 from typing import Dict, List, Any, Tuple
@@ -34,6 +35,7 @@ import numpy as np
 from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
+BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
 class Labels(Enum):
     """
@@ -56,96 +58,16 @@ class Tags(Enum):
     """
     DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
 
-class Classifier:
+class Classifier(BaseModel):
     """
         This class provides a simple way to run simple experiments.
     """
 
-    LOGS_FOLDER_NAME = "logs"
-    RESULTS_EXPERIMENT_NAME = "results"
-
-    def __init__(
-        self,
-        use_cuda: bool = True,
-        base_model_name: str = "BSC-TeMU/roberta-base-bne",
-        files_folder: str = None,
-    ):
-        self._device = (
-            torch.device("cuda")
-            if use_cuda and torch.cuda.is_available()
-            else torch.device("cpu")
-        )
-        self._base_model_name = base_model_name
-        self.files_folder = files_folder
-
-    @property
-    def files_folder(self) -> str:
-        """
-            Folder to store files for a training process
-        """
-        return self._files_folder
-
-    @files_folder.setter
-    def files_folder(self, value: str):
-        # Check that folder for internal files does exists
-        if value and not Path(value).exists():
-            raise ValueError(f"Given path does not exists: {value}")
-        self._files_folder = value
-
-    def get_logs_path(self) -> str:
-        """
-            Get path to logs for this experiment
-            Return:
-                path to log folder where we store logs for this experiment
-        """
-        if not self._files_folder:
-            raise ValueError(
-                "Could not create logs files, as no files folder is configured for this classifier object"
-            )
-
-        p = Path(self._files_folder, f"{self.LOGS_FOLDER_NAME}")
-
-        # Create folder if does not exists
-        if not p.exists():
-            try:
-                p.mkdir()
-            except IOError as e:
-                raise ValueError(
-                    f"Could not create logs folder for path: {str(p)}, error: {e}"
-                )
-
-        return str(p)
-
-    def get_results_path(self) -> str:
-        """
-            Get path to results for this experiment
-            Return:
-                path to results folder where we store results for this experiment
-        """
-        if not self._files_folder:
-            raise ValueError(
-                "Could not create results files, as no files folder is configured for this classifier object"
-            )
-
-        p = Path(self._files_folder, f"{self.RESULTS_EXPERIMENT_NAME}")
-
-        # Create folder if does not exists
-        if not p.exists():
-            try:
-                p.mkdir()
-            except IOError as e:
-                raise ValueError(
-                    f"Could not create logs folder for path: {str(p)}, error: {e}"
-                )
-
-        return str(p)
-
     def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
-            Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/raw/huggingface
+            Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/processed/huggingface
         """
-        with resources.open_text("data.processed.huggingface", dataset_name) as f:
-            return pd.read_csv(f)
+        return C4vDataLoader.get_from_processed(dataset_name)
 
     def prepare_dataframe(
         self, columns: List[str], dataset_name: str
@@ -355,7 +277,7 @@ class Classifier:
             args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
-            compute_metrics=self.__class__.compute_metrics,
+            compute_metrics=self.__class__.compute_metrics
         )
 
         # Train pre-trained model
@@ -416,7 +338,7 @@ class Classifier:
         """
 
         # check that you have a folder where to store results
-        if not self._files_folder:
+        if not self.files_folder_path:
             raise ValueError(
                 "Can't train in a Classifier without a folder for local data"
             )
