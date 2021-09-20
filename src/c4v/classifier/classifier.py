@@ -216,13 +216,13 @@ class Classifier(BaseModel):
         """
 
         default = {
-            "output_dir": self.get_results_path(),
+            "output_dir": self.results_path,
             "num_train_epochs": 1,
             "per_device_train_batch_size": 10,
             "per_device_eval_batch_size": 10,
             "warmup_steps": 500,
             "weight_decay": 0.01,
-            "logging_dir": self.get_logs_path(),
+            "logging_dir": self.logs_path,
             "save_total_limit": 1,
         }
 
@@ -283,7 +283,7 @@ class Classifier(BaseModel):
         # Train pre-trained model
         trainer.train()
 
-        model.save_pretrained(path_to_save_checkpoint or self.files_folder)
+        model.save_pretrained(path_to_save_checkpoint or self.files_folder_path)
 
         return trainer
 
@@ -324,9 +324,9 @@ class Classifier(BaseModel):
     def run_training(
         self,
         train_args: Dict[str, Any] = None,
-        columns: List[str] = ["text"],
-        dataset: str = "elpitazo_positivelabels_devdataset.csv",
-    ) -> Dict[str, Any]:
+        columns: List[str] = ["content"],
+        dataset: str = "training_dataset.csv",
+    ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
@@ -346,16 +346,16 @@ class Classifier(BaseModel):
         # Prepare dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
-        model = self.load_base_model_from_hub()
-        tokenizer = self.load_tokenizer_from_hub()
+        model = self.load_base_model_from_hub()     # TODO Should be changed to allow custom model loading and training
+        tokenizer = self.load_tokenizer_from_hub()  # Same here
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
             model=model,
-            output_dir=self.get_results_path(),
-            logging_dir=self.get_logs_path(),
+            output_dir=self.results_path,
+            logging_dir=self.logs_path,
             path_to_save_checkpoint=self._files_folder,
             train_args=self._override_train_args(train_args or {}),
             train_dataset=train_dataset,

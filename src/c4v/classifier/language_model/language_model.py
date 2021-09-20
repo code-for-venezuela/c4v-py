@@ -5,20 +5,18 @@
     necessary
 """
 # Third party imports
-from torch.utils.data import Dataset, DataLoader
-from transformers import EvalPrediction, AutoTokenizer, AutoModelForMaskedLM, TrainingArguments, Trainer, BatchEncoding, AdamW
-from transformers.optimization import Adafactor
-from tqdm import tqdm
+from pandas.core.frame import DataFrame
+from torch.utils.data import Dataset
+from transformers import EvalPrediction, AutoTokenizer, AutoModelForMaskedLM, TrainingArguments, Trainer, BatchEncoding, PreTrainedModel
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-import torch
 import numpy as np
-import GPUtil
+import pandas as pd
+import torch
 
 # Python imports 
 from typing import Callable, Iterable, List, Any, Dict
 import dataclasses as dc
-import tempfile 
-from pathlib import Path
+import tempfile
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -98,7 +96,7 @@ class LanguageModel(BaseModel):
         return tokenized_text # type = transformers.tokenization_utils_base.BatchEncoding
 
     @staticmethod
-    def _to_pt_dataset(batch : BatchEncoding) -> Dataset:
+    def to_pt_dataset(batch : BatchEncoding) -> Dataset:
         """
             Turn batch enconding (as the one created by create_dataset_from_scraped_data) into a pytorch dataset
         """
@@ -112,7 +110,7 @@ class LanguageModel(BaseModel):
         
         return _Dataset(batch)
 
-    def eval_accuracy(self, dataset : BatchEncoding, model : Any = None) -> torch.Tensor:
+    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1) -> torch.Tensor:
         """
             Try to eval accuracy of this language model for the given dataset.
             Parameters:
@@ -120,76 +118,171 @@ class LanguageModel(BaseModel):
                                     input ids vector to classify, with masked words
                 model : Any = Huggingface model for masked language modeling, be default we use the model refered
                               by the configured model name, you can override it by providing this field
+
+                batch_size : int = 
             Return:
                 A tensor representing the loss when evaluating the model with the given data
         """
-        # Send data to corresponding device
-        dataset.to(self._device)
-    
+        
         # set up model
-        model = model or AutoModelForMaskedLM.from_pretrained(self._base_model_name)       
+        model = model or self.model       
 
         # Load model
         model.to(self._device)
 
-        # Evaluate model 
-        outputs = model(**dataset)
-        return outputs.loss
+        with tempfile.TemporaryDirectory() as temp_dir:
+            args = TrainingArguments(per_device_eval_batch_size=batch_size, output_dir=temp_dir)
+            trainer = Trainer(
+                    args = args,
+                    model = model,
+                    eval_dataset = dataset
+                    )
+            # Evaluate model 
+            outputs = trainer.evaluate()
 
-    def train_model(self, train_dataset : Dataset, eval_dataset : Dataset, model : Any = None, batch_size : int = 16, learning_rate : float = 5e-5, epochs : int = 3):
+        # TODO Should use custom metrics (maybe argument function?)
+        return outputs['eval_loss']
+
+    @property
+    def _default_train_args(self) -> Dict[str, Any]:
+        """
+            A default version of training arguments as a dict
+        """
+
+        default = {
+            "output_dir": self.results_path,
+            "num_train_epochs": 1,
+            "per_device_train_batch_size": 10,
+            "per_device_eval_batch_size": 10,
+            "warmup_steps": 10000,
+            "weight_decay": 0.01,
+            "logging_dir": self.logs_path,
+            "save_total_limit": 1,
+        }
+
+        return default
+
+    @property
+    def model(self) -> PreTrainedModel:
+        """
+            Internal model object. It's lazy-loaded, so it will be loaded once when it's called for the first time
+        """
+        if self._model == None:
+            self._model = AutoModelForMaskedLM.from_pretrained(self._base_model_name) # using specific desired model
+        
+        return self._model
+
+    def _override_train_args(self, new_args: Dict[str, Any] = {}) -> Dict[str, Any]:
+        """
+            Return the default args dict, with overriden settings specified as the ones specified in 
+            input dict
+        """
+
+        default = self._default_train_args
+        for (k, v) in new_args.items():
+            default[k] = v
+
+        return default
+
+    def train_and_save_model(self, 
+                    train_dataset : Dataset, 
+                    eval_dataset : Dataset, 
+                    train_args : Dict[str, Any], 
+                    output_dir_path : str = None, 
+                    logging_dir_path : str = None, 
+                    path_to_save_checkpoint: str = None,
+                    compute_metrics : Callable[[EvalPrediction], Dict[str, Any]] = None,
+                    model : Any = None
+        ) -> Trainer:
         """
             Train a given model, or the one for the provided model 
             Parameters: 
                 dataset : Dataset = training data with input_ids and labels
                 model : Any = model to train, provide this field to override the configured model
+            Return:
+                Trainer object with the fine tuned model 
         """
-        # Estamos probando con un training loop custom (y no con el objeto Trainer) para ver si esto nos 
-        # concede mejor control sobre la memoria, estamos teniendo muchos problemas de out of memory
+        
+        if output_dir_path:
+            train_args["output_dir"] = output_dir_path
+        if logging_dir_path:
+            train_args["logging_dir"] = logging_dir_path
 
-        # Create a data loader
-        loader = DataLoader(train_dataset, batch_size, shuffle=True)
+        args = TrainingArguments(**self._override_train_args(train_args))
 
-        # Set up model
-        model_to_train = model or AutoModelForMaskedLM.from_pretrained(self._base_model_name)
-        model_to_train.to(self._device)
-        model_to_train.train() # Go to train mode
+        trainer = Trainer(
+            model=model,
+            args=args,
+            train_dataset=train_dataset,
+            eval_dataset=eval_dataset,
+            compute_metrics=compute_metrics
+        )
 
-        # Create an optimizer 
-        #optim  = AdamW(model_to_train.parameters(), lr = learning_rate)
-        optim = Adafactor(model_to_train.parameters(), scale_parameter=True, relative_step=True, warmup_init=True, lr=None)
+        trainer.train()
 
-        for epoch in range(epochs):
-            loop = tqdm(loader, leave=True)
-            for batch in loop:
-                # initialize calculated gradients (from prev step)
-                optim.zero_grad()
-                # pull all tensor batches required for training
-                # get size of each batch
-                input_ids = batch['input_ids'].to(self._device)
-                attention_mask = batch['attention_mask'].to(self._device)
-                labels = batch['labels'].to(self._device)
+        trainer.model.save_pretrained(path_to_save_checkpoint or self.files_folder_path)
 
-                # process
-                outputs = model_to_train(input_ids, attention_mask=attention_mask, labels=labels)
+        return trainer
 
-                del outputs.logits
+    def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> pd.DataFrame:
+        """
+            Compute metrics as a dataframe for this trainer object using the validation dataset
+            Parameters:
+                trainer : Trainer = trainer object already trained and ready to test
+                val_dataset : Dataset = data used for validation
+            Return:
+                A dataframe with output of a validation
+        """
+        ## Evaluate Metrics
+        metrics = trainer.evaluate(val_dataset)
+        metrics_df = pd.DataFrame.from_dict(
+            metrics, orient="index", columns=["metrics_value"]
+        )
+        return metrics_df
 
-                # extract loss
-                loss = outputs.loss
+    def run_training(
+        self,
+        train_dataset : Dataset,
+        eval_dataset : Dataset,
+        train_args: Dict[str, Any] = None,
+        model_name : str = None
+    ) -> pd.DataFrame:
+        """
+            Run an experiment specified by given train_args, and write a summary if requested so
+            Parameters:
+                train_args : Dict[str, Any] = arguments passed to trainig arguments
+                columns : [str] = columns to use in the dataset
+                dataset : dataset tu use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
+            Return:
+                Classifier metrics
+        """
 
-                # calculate loss for every parameter that needs grad update
-                loss.backward()
+        # check that you have a folder where to store results
+        if not self.files_folder_path:
+            raise ValueError(
+                "Can't train in a Classifier without a folder for local data"
+            )
 
-                # update parameters
-                optim.step()
-            
-                # print relevant info to progress bar
-                loop.set_description(f'Epoch {epoch}')
-                loop.set_postfix(loss=loss.item())
+        # Prepare dataframe and load model
+        assert model_name or self._base_model_name, "Model to train not provided"
+        model = AutoModelForMaskedLM.from_pretrained(model_name) if model_name else self.model     # TODO Should be changed to allow custom model loading and training
 
-        # Evaluation
-        model_to_train.eval()                       # go to eval mode
-        outputs = model(**eval_dataset.encodings)   # eval for dataset
+        # Fine tune the model
+        fine_tuned_model_trainer = self.train_and_save_model(
+            model=model,
+            output_dir_path=self.results_path,
+            logging_dir_path=self.logs_path,
+            path_to_save_checkpoint=self.files_folder_path,
+            train_args=self._override_train_args(train_args or {}),
+            train_dataset=train_dataset,
+            eval_dataset=eval_dataset,
+        )
 
+        # Get the metrics from the model
+        metrics_df = self.evaluate_metrics(
+            trainer=fine_tuned_model_trainer, 
+            val_dataset=eval_dataset
+        )
 
+        return metrics_df
 

@@ -10,6 +10,8 @@ import pandas as pd
 
 # Third party imports
 import torch
+from transformers import PreTrainedTokenizer, AutoTokenizer, PreTrainedModel
+from transformers.utils.dummy_pt_objects import AutoModel
 
 # Local imports
 from c4v.config import settings
@@ -17,7 +19,7 @@ from c4v.config import settings
 class BaseModel:
     """
         Represents a model and contains useful utilities for models, such
-        as managing files folders and loading datasets from the data folder
+        as managing files folders and loading datasets from the data folder.
     """
 
     RESULTS_EXPERIMENT_NAME = "results"
@@ -35,6 +37,10 @@ class BaseModel:
         # Set up base model and files folder path
         self._base_model_name = base_model_name
         self.files_folder_path = files_folder_path
+
+        # Init lazy tokenizer and model variables:
+        self._model = None
+        self._tokenizer = None
         
     @property
     def device(self):
@@ -57,7 +63,8 @@ class BaseModel:
             raise ValueError(f"Given path does not exists: {value}")
         self._files_folder = value
 
-    def get_logs_path(self) -> str:
+    @property
+    def logs_path(self) -> str:
         """
             Get path to logs for this experiment
             Return:
@@ -81,7 +88,8 @@ class BaseModel:
 
         return str(p)
 
-    def get_results_path(self) -> str:
+    @property
+    def results_path(self) -> str:
         """
             Get path to results for this experiment
             Return:
@@ -104,6 +112,30 @@ class BaseModel:
                 )
 
         return str(p)
+
+    @property 
+    def tokenizer(self) -> PreTrainedTokenizer:
+        """
+            Internal tokenizer object. It's lazy-loaded, so it will
+            be loaded once when it's called for the first time
+        """
+        if self._tokenizer == None:
+            self._tokenizer = AutoTokenizer.from_pretrained(self._base_model_name)
+        
+        return self._tokenizer
+
+    @property
+    def model(self) -> PreTrainedModel:
+        """
+            Internal model object. It's lazy-loaded, so it will be loaded once when it's called for the first time
+        """
+        if self._model == None:
+            self._model = AutoModel.from_pretrained(self._base_model_name)
+        
+        return self._model
+        
+    
+
 
 class C4vDataLoader:
     """
