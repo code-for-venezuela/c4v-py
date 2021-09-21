@@ -12,7 +12,7 @@ from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
-
+from c4v.classifier.language_model.language_model import LanguageModel
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
 import sys
@@ -235,3 +235,14 @@ class Manager:
                 List with possible output labels for the classifier
         """
         return Classifier.get_labels()
+
+    def should_retrain_base_lang_model(self, lang_model : LanguageModel) -> bool:
+        """
+            If should retrain a base language model based on its accuracy, you can provide your own accuracy 
+            function
+        """
+        
+
+
+
+
