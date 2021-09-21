@@ -110,7 +110,15 @@ class LanguageModel(BaseModel):
         
         return _Dataset(batch)
 
-    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1) -> torch.Tensor:
+    def compute_eval_accuracy_metrics(self, pred : EvalPrediction) ->  Dict[str, Any]:
+        """
+            Generate a compute metrics function using the optional argument function to 
+            additionally check if, based on the results, the model should be retrained
+        """
+        return dict(pred)
+        
+
+    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1, should_retrain_fn : Callable[[EvalPrediction], bool] = None) -> torch.Tensor:
         """
             Try to eval accuracy of this language model for the given dataset.
             Parameters:
@@ -119,11 +127,18 @@ class LanguageModel(BaseModel):
                 model : Any = Huggingface model for masked language modeling, be default we use the model refered
                               by the configured model name, you can override it by providing this field
 
-                batch_size : int = 
+                batch_size : int = batch size to send to gpu for evaluation
             Return:
                 A tensor representing the loss when evaluating the model with the given data
         """
-        
+        if should_retrain_fn:
+            def compute_metrics_fn(pred : EvalPrediction) -> Dict[str, Any]:
+                d = self.compute_eval_accuracy_metrics(pred)
+                d['should_retrain'] = should_retrain_fn(pred)
+                return d
+        else:
+            compute_metrics_fn = self.compute_eval_accuracy_metrics
+
         # set up model
         model = model or self.model       
 
@@ -135,7 +150,8 @@ class LanguageModel(BaseModel):
             trainer = Trainer(
                     args = args,
                     model = model,
-                    eval_dataset = dataset
+                    eval_dataset = dataset,
+                    compute_metrics=compute_metrics_fn
                     )
             # Evaluate model 
             outputs = trainer.evaluate()

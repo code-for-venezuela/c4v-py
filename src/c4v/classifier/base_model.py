@@ -134,10 +134,8 @@ class BaseModel:
         
         return self._model
         
-    
 
-
-class C4vDataLoader:
+class C4vDataFrameLoader:
     """
         Use this object to get data from the data folder as pandas dataframes
     """

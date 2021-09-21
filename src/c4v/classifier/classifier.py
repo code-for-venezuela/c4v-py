@@ -5,7 +5,7 @@
 # Local imports
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-from c4v.classifier.base_model import BaseModel, C4vDataLoader
+from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
 from typing import Dict, List, Any, Tuple
@@ -67,7 +67,7 @@ class Classifier(BaseModel):
         """
             Get dataframe as a pandas dataframe, using a csv file stored in <project_root>/data/processed/huggingface
         """
-        return C4vDataLoader.get_from_processed(dataset_name)
+        return C4vDataFrameLoader.get_from_processed(dataset_name)
 
     def prepare_dataframe(
         self, columns: List[str], dataset_name: str

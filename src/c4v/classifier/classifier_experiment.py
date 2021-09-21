@@ -165,5 +165,9 @@ class ClassifierExperiment(BaseExperiment):
                 classifier_instance : Classifier = optional classifier instance, will be defaulted if none was provided
         """
         fs_manager = ExperimentFSManager(branch_name, experiment_name)
+
+        if classifier_instance:
+            classifier_instance.files_folder_path = fs_manager.experiment_content_folder    
+
         classifier_instance = classifier_instance or Classifier(fs_manager.experiment_content_folder)
         return cls(fs_manager, classifier_instance)

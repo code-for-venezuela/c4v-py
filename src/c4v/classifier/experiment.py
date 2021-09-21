@@ -16,6 +16,7 @@ from datetime import datetime
 from typing import Type
 from dataclasses import dataclass, field
 
+
 # Local imports
 from c4v.config import settings
 
@@ -227,3 +228,5 @@ class BaseExperiment:
     def from_branch_and_experiment(cls, branch_name: str, experiment_name: str):
         fs_manager = ExperimentFSManager(branch_name, experiment_name)
         return cls(fs_manager)
+
+    
