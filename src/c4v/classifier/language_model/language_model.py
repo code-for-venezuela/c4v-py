@@ -115,7 +115,9 @@ class LanguageModel(BaseModel):
             Generate a compute metrics function using the optional argument function to 
             additionally check if, based on the results, the model should be retrained
         """
-        return dict(pred)
+        d = dict(pred)
+        del pred
+        return d
         
 
     def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1, should_retrain_fn : Callable[[EvalPrediction], bool] = None) -> torch.Tensor:
@@ -135,6 +137,8 @@ class LanguageModel(BaseModel):
             def compute_metrics_fn(pred : EvalPrediction) -> Dict[str, Any]:
                 d = self.compute_eval_accuracy_metrics(pred)
                 d['should_retrain'] = should_retrain_fn(pred)
+
+                del pred
                 return d
         else:
             compute_metrics_fn = self.compute_eval_accuracy_metrics
@@ -146,7 +150,12 @@ class LanguageModel(BaseModel):
         model.to(self._device)
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            args = TrainingArguments(per_device_eval_batch_size=batch_size, output_dir=temp_dir)
+            args = TrainingArguments(
+                per_device_eval_batch_size=batch_size, 
+                output_dir=temp_dir, 
+                per_device_train_batch_size=1,
+                eval_accumulation_steps=1
+                )
             trainer = Trainer(
                     args = args,
                     model = model,
