@@ -279,10 +279,10 @@ class Manager:
         # Set up dataset
         ds = LanguageModel.to_pt_dataset(lang_model.create_dataset_from_scraped_data(scraped_data, fields))
         del scraped_data
-                
+
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
-
+        print(loss)
         return should_retrain_fn(loss)
 
 
