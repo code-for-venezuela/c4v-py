@@ -2,7 +2,6 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
-from c4v.classifier.experiment import ExperimentFSManager
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
@@ -13,10 +12,13 @@ from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
+from c4v.config import settings
+
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any
-import sys
 
+# Third party imports
+from torch.utils.data import Dataset
 
 class Manager:
     """
@@ -236,12 +238,53 @@ class Manager:
         """
         return Classifier.get_labels()
 
-    def should_retrain_base_lang_model(self, lang_model : LanguageModel) -> bool:
+    def should_retrain_base_lang_model( self, 
+                                        lang_model : LanguageModel, 
+                                        db_manager : BasePersistencyManager = None,
+                                        eval_dataset_size : int = 250,   
+                                        min_loss : float = settings.default_lang_model_min_loss,
+                                        should_retrain_fn : Callable[[float], bool] = None,
+                                        fields : List[str] = ["title"]
+                                        ) -> bool:
         """
-            If should retrain a base language model based on its accuracy, you can provide your own accuracy 
-            function
+            If should retrain a base language model based on its loss on the given dataset. If a persistency manager is provided, 
+            use it instead of the configured one
+            Parameters:
+                lang_model : LanguageModel = Language Model to reevaluate
+                db_manager : BasePersistency manager = (optional) Persistency manager object to retrieve data to use when evaluating
+                eval_dataset_size : int = (optional) Size of the dataset to use when evaluating the model
+                min_loss : float = (optional) Minimum acceptable loss, if the computed loss is greater than this treshold, returns true. Otherwise returns false
+                should_retrain_fn : (float) -> bool = (optional) Function to check if, based on the loss of the model, it should be retrained. 
+                                                    Should receive the loss and return a boolean telling if it should be retrained. 
+                                                    Providing this argument will override min_loss argument
+                fields : [str] = (optional) fields from scraped data instances to use during evaluation
+            Return:
+                If the given model should be retrained
         """
-        
+        # Sanity check
+        assert eval_dataset_size > 0, "Eval dataset size should be a possitive number"
+        assert min_loss >= 0, "min loss should be non negative"
+
+        # set up retrain function
+        should_retrain_fn = should_retrain_fn or (lambda x: x > min_loss)
+
+        # Set up db_manager
+        db_manager = db_manager or self._persistency_manager
+
+        # TODO should order by newer
+        scraped_data = list(db_manager.get_all(limit = eval_dataset_size, scraped=True))
+        if not scraped_data:
+            raise ValueError("No ScrapedData available for evaluation. You can get more data by using the `c4v scrawl` and `c4v scrape` functions, or using the microscope.Manager object")
+
+        # Set up dataset
+        ds = LanguageModel.to_pt_dataset(lang_model.create_dataset_from_scraped_data(scraped_data, fields))
+        del scraped_data
+                
+        # Compute loss
+        loss = lang_model.eval_accuracy(ds)
+
+        return should_retrain_fn(loss)
+
 
 
 

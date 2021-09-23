@@ -230,7 +230,7 @@ class LanguageModel(BaseModel):
             args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
-            compute_metrics=compute_metrics
+            compute_metrics=compute_metrics,
         )
 
         trainer.train()
@@ -292,6 +292,9 @@ class LanguageModel(BaseModel):
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
         )
+
+        # Save tokenizer too
+        self.tokenizer.save_pretrained(self.results_path)
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
