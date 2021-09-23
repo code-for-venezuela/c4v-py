@@ -103,7 +103,7 @@ class Classifier(BaseModel):
 
         return x, y
 
-    def load_tokenizer_from_hub(self) -> RobertaTokenizer:
+    def load_tokenizer(self) -> RobertaTokenizer:
         """
             Create & configure tokenizer from hub
             Return:
@@ -347,7 +347,7 @@ class Classifier(BaseModel):
         x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
         model = self.load_base_model_from_hub()     # TODO Should be changed to allow custom model loading and training
-        tokenizer = self.load_tokenizer_from_hub()  # Same here
+        tokenizer = self.load_tokenizer()  # Same here
 
         train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
 
@@ -356,11 +356,14 @@ class Classifier(BaseModel):
             model=model,
             output_dir=self.results_path,
             logging_dir=self.logs_path,
-            path_to_save_checkpoint=self._files_folder,
+            path_to_save_checkpoint=self.files_folder_path,
             train_args=self._override_train_args(train_args or {}),
             train_dataset=train_dataset,
             eval_dataset=val_dataset,
         )
+
+        # Save tokenizer too
+        tokenizer.save_pretrained(self.files_folder_path)
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
@@ -392,7 +395,7 @@ class Classifier(BaseModel):
         roberta_model = self.load_fine_tuned_model(model)
 
         # Tokenize input
-        roberta_tokenizer = self.load_tokenizer_from_hub()
+        roberta_tokenizer = self.load_tokenizer()
         tokenized_input = roberta_tokenizer(
             [data.title],
             padding=True,
@@ -432,7 +435,7 @@ class Classifier(BaseModel):
         """
         # Load model and tokenizer
         model = self.load_fine_tuned_model()
-        tokenizer = self.load_tokenizer_from_hub()
+        tokenizer = self.load_tokenizer()
 
         # Create explainer
         explainer = SequenceClassificationExplainer(model, tokenizer)

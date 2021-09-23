@@ -294,7 +294,7 @@ class LanguageModel(BaseModel):
         )
 
         # Save tokenizer too
-        self.tokenizer.save_pretrained(self.results_path)
+        self.tokenizer.save_pretrained(self.files_folder_path)
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
