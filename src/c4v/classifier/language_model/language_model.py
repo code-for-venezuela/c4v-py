@@ -120,29 +120,19 @@ class LanguageModel(BaseModel):
         return d
         
 
-    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1, should_retrain_fn : Callable[[EvalPrediction], bool] = None) -> torch.Tensor:
+    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1) -> float:
         """
             Try to eval accuracy of this language model for the given dataset.
             Parameters:
                 dataset : BatchEnconding = dataset with data to use for evaluation, should contain the 
-                                    input ids vector to classify, with masked words
+                                            input ids vector to unmask, with masked words. Shoud provide the attention_mask,
+                                            inputs_ids, and labels fields
                 model : Any = Huggingface model for masked language modeling, be default we use the model refered
                               by the configured model name, you can override it by providing this field
-
                 batch_size : int = batch size to send to gpu for evaluation
             Return:
-                A tensor representing the loss when evaluating the model with the given data
+                The loss for the given dataset
         """
-        if should_retrain_fn:
-            def compute_metrics_fn(pred : EvalPrediction) -> Dict[str, Any]:
-                d = self.compute_eval_accuracy_metrics(pred)
-                d['should_retrain'] = should_retrain_fn(pred)
-
-                del pred
-                return d
-        else:
-            compute_metrics_fn = self.compute_eval_accuracy_metrics
-
         # set up model
         model = model or self.model       
 
@@ -154,18 +144,18 @@ class LanguageModel(BaseModel):
                 per_device_eval_batch_size=batch_size, 
                 output_dir=temp_dir, 
                 per_device_train_batch_size=1,
-                eval_accumulation_steps=1
+                eval_accumulation_steps=1,
+                do_train=False,
+                prediction_loss_only=True
                 )
             trainer = Trainer(
                     args = args,
                     model = model,
-                    eval_dataset = dataset,
-                    compute_metrics=compute_metrics_fn
+                    eval_dataset = dataset
                     )
             # Evaluate model 
             outputs = trainer.evaluate()
 
-        # TODO Should use custom metrics (maybe argument function?)
         return outputs['eval_loss']
 
     @property
