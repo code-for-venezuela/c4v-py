@@ -1,5 +1,5 @@
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from tests.scraper.utils import util_test_filter_scraped_urls, util_test_instance_delete, util_test_save_for, util_test_save_overrides_for, util_test_url_filtering
+from tests.scraper.utils import util_test_filter_scraped_urls, util_test_get_in_order, util_test_instance_delete, util_test_order_parsing, util_test_save_for, util_test_save_overrides_for, util_test_url_filtering
 
 
 def test_save_sqlite_manager(test_sqlite_manager : SqliteManager):
@@ -31,3 +31,15 @@ def test_delete_row(test_sqlite_manager : SqliteManager):
         Check that deletion works properly
     """
     util_test_instance_delete(test_sqlite_manager)
+
+def test_get_in_order(test_sqlite_manager : SqliteManager):
+    """
+        Check that ordering works properly in get_all function
+    """
+    util_test_get_in_order(test_sqlite_manager)
+
+def test_order_parsing(test_sqlite_manager : SqliteManager):
+    """
+        Check that invalid formats for ordering are handled with ValueError Exceptions
+    """
+    util_test_order_parsing(test_sqlite_manager)

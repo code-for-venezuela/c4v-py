@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz       import utc
 from scrapy.http import Request, Response, HtmlResponse
 from c4v.scraper.persistency_manager.base_persistency_manager   import BasePersistencyManager
@@ -112,3 +112,61 @@ def util_test_instance_delete(manager : BasePersistencyManager):
     assert sd1 not in currents, "first element should be deleted"
     assert sd2 in currents, "second element should not be deleted, as it wasn't in delete list"
 
+def util_test_get_in_order(manager : BasePersistencyManager):
+    """
+        Test that get_all works properly when requesting ordering 
+    """
+    one_minute = timedelta(seconds=60)
+    now = datetime.now(tz=utc)
+    sd1 = ScrapedData(url="www.a.com", last_scraped=now)
+    sd2 = ScrapedData(url="www.b.com", last_scraped=now - one_minute)
+    sd3 = ScrapedData(url="www.c.com", last_scraped=now + one_minute)
+    sd4 = ScrapedData(url="www.d.com", last_scraped=now)
+
+    manager.save([sd1,sd2,sd3,sd4])
+
+    urls_in_order = [d.url for d in manager.get_all(order_by=["-last_scraped", "+url"])]
+    assert [ "www.c.com" ,"www.a.com", "www.d.com", "www.b.com" ] == urls_in_order, "Ordering not working properly"
+    
+    urls_in_order = [d.url for d in manager.get_all(order_by=["-last_scraped", "-url"])]
+    assert [ "www.c.com" , "www.d.com", "www.a.com", "www.b.com" ] == urls_in_order, "Ordering not working properly"
+
+    urls_in_order = [d.url for d in manager.get_all(order_by=["-url"])]
+    assert [ "www.d.com" , "www.c.com", "www.b.com", "www.a.com" ] == urls_in_order, "Ordering not working properly"
+
+    urls_in_order = [d.url for d in manager.get_all(order_by=["+url"])]
+    assert [ "www.a.com" , "www.b.com", "www.c.com", "www.d.com" ] == urls_in_order, "Ordering not working properly"
+
+def util_test_order_parsing(manager : BasePersistencyManager):
+    one_minute = timedelta(seconds=60)
+    now = datetime.now(tz=utc)
+    sd1 = ScrapedData(url="www.a.com", last_scraped=now)
+    sd2 = ScrapedData(url="www.b.com", last_scraped=now - one_minute)
+    sd3 = ScrapedData(url="www.c.com", last_scraped=now + one_minute)
+    sd4 = ScrapedData(url="www.d.com", last_scraped=now)
+
+    manager.save([sd1,sd2,sd3,sd4])
+
+    try:
+        list(manager.get_all(order_by=["+"]))
+        assert False, "invalid formats for ordering should be handled as ValueError exceptions"
+    except ValueError:
+        pass
+
+    try:
+        list(manager.get_all(order_by=["url"]))
+        assert False, "invalid formats for ordering should be handled as ValueError exceptions"
+    except ValueError:
+        pass
+
+    try:
+        list(manager.get_all(order_by=["+whats_up_doc"]))
+        assert False, "invalid formats for ordering should be handled as ValueError exceptions"
+    except ValueError:
+        pass
+
+    try:
+        list(manager.get_all(order_by=[""]))
+        assert False, "invalid formats for ordering should be handled as ValueError exceptions"
+    except ValueError:
+        pass
