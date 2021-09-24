@@ -472,3 +472,5 @@ class Classifier(BaseModel):
             Get list of possible labels outputs
         """
         return Labels.labels()
+
+    

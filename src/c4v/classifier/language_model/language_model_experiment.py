@@ -28,7 +28,9 @@ class LanguageModelExperimentArguments(BaseExperimentArguments):
     train_dataset   : Dataset = None
     eval_dataset    : Dataset  = None
     train_args      : Dict[str, Any] = dataclasses.field(default_factory=dict)
+    description     : str = None
 
+@dataclasses.dataclass
 class LanguageModelExperimentSummary(BaseExperimentSummary):
     """
         Language model experiment summary
@@ -36,6 +38,23 @@ class LanguageModelExperimentSummary(BaseExperimentSummary):
     user_args : LanguageModelExperimentArguments = LanguageModelExperimentArguments()
     result : pd.DataFrame = None
 
+    def __str__(self) -> str:
+        s = super().__str__().rstrip() + "\n"
+
+        # User arguments 
+        s += "USER ARGS:\n"
+        s += f"\tmodel_name : {self.user_args.model_name}\n"
+        s += f"\tuse_cuda : {self.user_args.use_cuda}\n"
+        s += "\ttrain_args : {\n"
+        for (k, v) in self.user_args.train_args.items():
+            s += f"\t\t{k} : {v}\n"
+        s += "\t}\n"
+
+        # Result:
+        s += "RESULTS:\n"
+        s += str(self.result)
+
+        return s
 
 class LanguageModelExperiment(BaseExperiment):
     """
@@ -53,7 +72,7 @@ class LanguageModelExperiment(BaseExperiment):
             eval_dataset=args.eval_dataset,
             train_args=args.train_args,
         )
-
-        return metrics_df
+        summary = LanguageModelExperimentSummary(description=args.description, result=metrics_df, user_args=args)
+        return summary
 
     
