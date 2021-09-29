@@ -3,7 +3,6 @@
     using regular files.
 """
 # Python
-from sqlite3.dbapi2 import connect
 import sqlite3
 from typing import Any, Iterator, Dict, List, Tuple
 import dataclasses
