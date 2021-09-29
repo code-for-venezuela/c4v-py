@@ -5,7 +5,6 @@
     necessary
 """
 # Third party imports
-from pandas.core.frame import DataFrame
 from torch.utils.data import Dataset
 from transformers import (
     EvalPrediction,
@@ -16,8 +15,6 @@ from transformers import (
     BatchEncoding,
     PreTrainedModel,
 )
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-import numpy as np
 import pandas as pd
 import torch
 
