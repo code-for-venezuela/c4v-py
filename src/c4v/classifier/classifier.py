@@ -3,6 +3,7 @@
     as arguments the training arguments and the columns to use from the training dataset
 """
 # Local imports
+import dataclasses
 from c4v.config import settings
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
@@ -113,7 +114,7 @@ class Classifier(BaseModel):
             self._base_model_name, id2label=self.get_id2label_dict()
         )
 
-    def load_base_model_from_hub(
+    def load_base_model(
         self,
     ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
         """
@@ -135,8 +136,7 @@ class Classifier(BaseModel):
         x: List[str],
         y: List[int],
         tokenizer: RobertaTokenizer,
-        test_dataset_proportion: float = 0.2,
-    ) -> Tuple[Dataset, Dataset]:
+    ) -> Dataset:
         """
             perform operations needed to post process a dataset separated in input list
             "x" and expected answers list "y", returning a training and a validation datasets,
@@ -147,17 +147,9 @@ class Classifier(BaseModel):
             Return:
                 (Dataset, Dataset) = the training and the validation dataset, in such order
         """
-        # Train Test Split
-        X_train, X_val, y_train, y_val = train_test_split(
-            x, y, test_size=test_dataset_proportion
-        )
 
-        X_train_tokenized = tokenizer(
-            X_train, padding=True, truncation=True, max_length=512
-        )
-
-        X_val_tokenized = tokenizer(
-            X_val, padding=True, truncation=True, max_length=512
+        X_tokenized = tokenizer(
+            x, padding=True, truncation=True, max_length=512
         )
 
         # Create torch dataset
@@ -177,10 +169,9 @@ class Classifier(BaseModel):
             def __len__(self):
                 return len(self.encodings["input_ids"])
 
-        train_dataset = _Dataset(X_train_tokenized, y_train)
-        val_dataset = _Dataset(X_val_tokenized, y_val)
+        dataset = _Dataset(X_tokenized, y)
 
-        return train_dataset, val_dataset
+        return dataset
 
     @staticmethod
     def compute_metrics(predictions: EvalPrediction) -> Dict[str, Any]:
@@ -325,17 +316,24 @@ class Classifier(BaseModel):
         self,
         train_args: Dict[str, Any] = None,
         columns: List[str] = ["content"],
-        dataset: str = "training_dataset.csv",
+        training_dataset: str = "classifier_training_dataset.csv",
+        confirmation_dataset: str = "classifier_confirmation_dataset.csv",
+        val_test_proportion: float = 0.2
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
                 train_args : Dict[str, Any] = arguments passed to trainig arguments
                 columns : [str] = columns to use in the dataset
-                dataset : dataset tu use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
+                training_dataset : str = dataset name to use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
+                confirmation_dataset : str = dataset name to use after training as confirmation dataset
             Return:
                 Classifier metrics
         """
+
+        # Sanity checks
+        assert 0.0 < val_test_proportion < 1.0, "val_test_proportion should be in range (0,1)"
+        assert all(c in [f.name for f in dataclasses.fields(ScrapedData) ] for c in columns), "columns should be valid ScrapedData fields"
 
         # check that you have a folder where to store results
         if not self.files_folder_path:
@@ -343,13 +341,25 @@ class Classifier(BaseModel):
                 "Can't train in a Classifier without a folder for local data"
             )
 
-        # Prepare dataframe and load model + tokenizer
-        x, y = self.prepare_dataframe(columns=columns, dataset_name=dataset)
 
-        model = self.load_base_model_from_hub()     # TODO Should be changed to allow custom model loading and training
-        tokenizer = self.load_tokenizer()  # Same here
+        # Prepare training dataframe and load model + tokenizer
+        x, y = self.prepare_dataframe(columns=columns, dataset_name=training_dataset)
 
-        train_dataset, val_dataset = self.transform_dataset(x, y, tokenizer)
+
+        # Split dataset into training and validation
+        X_train, X_val, y_train, y_val = train_test_split(
+            x, y, test_size=val_test_proportion
+        )
+
+        # Load model and tokenizer
+        model = self.load_base_model()     
+        tokenizer = self.load_tokenizer()  
+
+        # transform data into datasets
+        train_dataset = self.transform_dataset(X_train, y_train, tokenizer)
+        val_dataset   = self.transform_dataset(X_val, y_val, tokenizer)
+        del X_train, X_val, y_train, y_val
+
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
@@ -362,12 +372,18 @@ class Classifier(BaseModel):
             eval_dataset=val_dataset,
         )
 
+        del train_dataset, val_dataset
+
         # Save tokenizer too
         tokenizer.save_pretrained(self.files_folder_path)
 
+        # Prepare confirmation dataframe
+        x_confirmation, y_confirmation = self.prepare_dataframe(columns=columns, dataset_name=confirmation_dataset)
+        confirmation_dataset = self.transform_dataset(x_confirmation, y_confirmation, tokenizer)
+
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
-            trainer=fine_tuned_model_trainer, val_dataset=val_dataset
+            trainer=fine_tuned_model_trainer, val_dataset=confirmation_dataset 
         )
 
         return metrics_df

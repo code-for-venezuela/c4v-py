@@ -23,10 +23,12 @@ class ClassifierArgs(BaseExperimentArguments):
         Arguments passed to the model during training
     """
 
-    training_args: Dict[str, Any] = dataclasses.field(default_factory=dict)
-    columns: List[str] = dataclasses.field(default_factory=lambda: ["text"])
-    dataset_name: str = "elpitazo_positivelabels_devdataset.csv"
-    description: str = None
+    training_args: Dict[str, Any] = dataclasses.field(default_factory=dict)     # training arguments passed to the trained object during training  
+    columns: List[str] = dataclasses.field(default_factory=lambda: ["text"])    # fields from ScrapedData to use
+    train_dataset_name: str = "classifier_training_dataset.csv"                 # name of the training dataset stored in data.processed.huggingface
+    confirmation_dataset_name: str = "classifier_confirmation_dataset.csv"      # name of the confirmation dataset stored in data.processed.huggingface
+    description: str = None                                                     # Optional description for this experiment
+    val_test_proportion: float = 0.2                                            # How much in proportion for the training dataset take as eval dataset
 
 
 @dataclasses.dataclass
@@ -59,7 +61,7 @@ class ClassifierSummary(BaseExperimentSummary):
             else "\t\t<No Columns Provided>"
         )
         super_str += "\n"
-        super_str += f"\tTest Dataset: {self.user_args.dataset_name}\n"
+        super_str += f"\tTest Dataset: {self.user_args.train_dataset_name}\n"
         super_str += "\tTraining Arguments:\n"
         super_str += (
             "\n".join(
@@ -107,7 +109,8 @@ class ClassifierExperiment(BaseExperiment):
     def experiment_to_run(self, args: ClassifierArgs) -> ClassifierSummary:
         # Run a training process
         metrics = self._classifier.run_training(
-            args.training_args, columns=args.columns, dataset=args.dataset_name
+            args.training_args, columns=args.columns, training_dataset=args.train_dataset_name,
+            confirmation_dataset=args.confirmation_dataset_name, val_test_proportion=args.val_test_proportion
         )
         summary = ClassifierSummary(
             eval_metrics=metrics, description=args.description, user_args=args
