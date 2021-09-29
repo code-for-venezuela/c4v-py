@@ -13,7 +13,8 @@
 # Python imports
 import sys
 import os
-
+import datetime
+import pytz
 # Third party
 import pandas as pd
 from pandas.core.indexing import is_nested_tuple
@@ -28,11 +29,15 @@ with open(csv_file_name) as file:
     df : pd.DataFrame = pd.read_csv(file)
 
 # Rename columns
+print("Columnds are: ", df.columns)
+
 df.rename(
     {
         "text" : "content",
         "tipo_de_evento" : "label",
-        "tags" : "categories" 
+        "tags" : "categories",
+        "Link de la noticia " : "url",
+        "tipo de evento" : "label",
     }, 
     axis=1
     ,inplace=True)
@@ -58,7 +63,7 @@ for (url, sub_df) in url_to_labels_df:
     df.loc[df.url == url, "label"] = [labels] 
 
 # Complete missing columns:
-df["last_scraped"] = None
+df["last_scraped"] = datetime.datetime.now(tz=pytz.utc)
 
 filename = f"cleaned_{os.path.basename(csv_file_name)}"
 df.to_csv(filename)
