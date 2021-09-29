@@ -104,27 +104,31 @@ class Classifier(BaseModel):
 
         return x, y
 
-    def load_tokenizer(self) -> RobertaTokenizer:
+    def load_tokenizer(self, model_name : str = None) -> RobertaTokenizer:
         """
             Create & configure tokenizer from hub
+            Parameters:
+                model_name : str = (optional) name of the model whose tokenizer will be loaded, defaults to internally configured one
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
         return AutoTokenizer.from_pretrained(
-            self._base_model_name, id2label=self.get_id2label_dict()
+            model_name or self._base_model_name, id2label=self.get_id2label_dict()
         )
 
     def load_base_model(
-        self,
-    ) -> Tuple[RobertaForSequenceClassification, RobertaTokenizer]:
+        self, model_name : str = None
+    ) -> RobertaForSequenceClassification:
         """
             Create model from model hub, configure them and retrieve it
+            Parameters:
+                model_name : str = (optional) name of the model to load
             Return:
                 RobertaForSequenceClassification : the model as specified
         """
         # Creating model and tokenizer
         model = AutoModelForSequenceClassification.from_pretrained(
-            self._base_model_name, num_labels=2
+            model_name or self._base_model_name, num_labels=2
         )
         # Use GPU if available
         model.to(self._device)
@@ -318,15 +322,18 @@ class Classifier(BaseModel):
         columns: List[str] = ["content"],
         training_dataset: str = "classifier_training_dataset.csv",
         confirmation_dataset: str = "classifier_confirmation_dataset.csv",
-        val_test_proportion: float = 0.2
+        val_test_proportion: float = 0.2,
+        base_model_name: str = None
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
-                train_args : Dict[str, Any] = arguments passed to trainig arguments
-                columns : [str] = columns to use in the dataset
-                training_dataset : str = dataset name to use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
-                confirmation_dataset : str = dataset name to use after training as confirmation dataset
+                train_args : Dict[str, Any] = (optional) arguments passed to trainig arguments
+                columns : [str] = (optional) columns to use in the dataset
+                training_dataset : str = (optional) dataset name to use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
+                confirmation_dataset : str = (optional) dataset name to use after training as confirmation dataset
+                val_test_proportion : float = (optional) how much proportion of the training dataset to use as validation dataset
+                base_model_name : str = (optional) Name of the model to use as a base for this experiment, defaults to the stored one if not provided
             Return:
                 Classifier metrics
         """
@@ -352,8 +359,8 @@ class Classifier(BaseModel):
         )
 
         # Load model and tokenizer
-        model = self.load_base_model()     
-        tokenizer = self.load_tokenizer()  
+        model = self.load_base_model(model_name=base_model_name)     
+        tokenizer = self.load_tokenizer(model_name=base_model_name)  
 
         # transform data into datasets
         train_dataset = self.transform_dataset(X_train, y_train, tokenizer)

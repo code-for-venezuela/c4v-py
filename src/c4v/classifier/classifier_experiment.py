@@ -15,7 +15,7 @@ from c4v.classifier.experiment import (
 )
 from c4v.classifier.classifier import Classifier
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
-
+from c4v.config import settings
 
 @dataclasses.dataclass
 class ClassifierArgs(BaseExperimentArguments):
@@ -28,8 +28,8 @@ class ClassifierArgs(BaseExperimentArguments):
     train_dataset_name: str = "classifier_training_dataset.csv"                 # name of the training dataset stored in data.processed.huggingface
     confirmation_dataset_name: str = "classifier_confirmation_dataset.csv"      # name of the confirmation dataset stored in data.processed.huggingface
     description: str = None                                                     # Optional description for this experiment
-    val_test_proportion: float = 0.2                                            # How much in proportion for the training dataset take as eval dataset
-
+    val_dataset_proportion: float = 0.2                                            # How much in proportion for the training dataset take as eval dataset
+    base_model_name: str = settings.default_base_language_model
 
 @dataclasses.dataclass
 class ClassifierSummary(BaseExperimentSummary):
@@ -61,7 +61,10 @@ class ClassifierSummary(BaseExperimentSummary):
             else "\t\t<No Columns Provided>"
         )
         super_str += "\n"
-        super_str += f"\tTest Dataset: {self.user_args.train_dataset_name}\n"
+        super_str += f"\tTrain Dataset: {self.user_args.train_dataset_name}\n"
+        super_str += f"\tConfirmation Dataset: {self.user_args.confirmation_dataset_name}\n"
+        super_str += f"\tValidation Dataset Proportion: {self.user_args.val_dataset_proportion}\n"
+        super_str += f"\tBase Model Name: {self.user_args.base_model_name}\n"
         super_str += "\tTraining Arguments:\n"
         super_str += (
             "\n".join(
@@ -110,7 +113,7 @@ class ClassifierExperiment(BaseExperiment):
         # Run a training process
         metrics = self._classifier.run_training(
             args.training_args, columns=args.columns, training_dataset=args.train_dataset_name,
-            confirmation_dataset=args.confirmation_dataset_name, val_test_proportion=args.val_test_proportion
+            confirmation_dataset=args.confirmation_dataset_name, val_test_proportion=args.val_dataset_proportion, base_model_name=args.base_model_name
         )
         summary = ClassifierSummary(
             eval_metrics=metrics, description=args.description, user_args=args
