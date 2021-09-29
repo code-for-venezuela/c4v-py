@@ -15,6 +15,7 @@ import sys
 import os
 import datetime
 import pytz
+
 # Third party
 import pandas as pd
 from pandas.core.indexing import is_nested_tuple
@@ -24,23 +25,24 @@ if len(sys.argv) < 2:
     print("Missing csv filename argument", file=sys.stderr)
     exit(1)
 
-csv_file_name = sys.argv[1] # name of csv file
+csv_file_name = sys.argv[1]  # name of csv file
 with open(csv_file_name) as file:
-    df : pd.DataFrame = pd.read_csv(file)
+    df: pd.DataFrame = pd.read_csv(file)
 
 # Rename columns
 print("Columnds are: ", df.columns)
 
 df.rename(
     {
-        "text" : "content",
-        "tipo_de_evento" : "label",
-        "tags" : "categories",
-        "Link de la noticia " : "url",
-        "tipo de evento" : "label",
-    }, 
-    axis=1
-    ,inplace=True)
+        "text": "content",
+        "tipo_de_evento": "label",
+        "tags": "categories",
+        "Link de la noticia ": "url",
+        "tipo de evento": "label",
+    },
+    axis=1,
+    inplace=True,
+)
 
 # Valid columns
 columns = ["url", "title", "content", "author", "categories", "date", "label"]
@@ -60,7 +62,7 @@ df.drop_duplicates(inplace=True, ignore_index=True, subset=["url"])
 # Try to edit label field
 for (url, sub_df) in url_to_labels_df:
     labels = list(set(sub_df.label))
-    df.loc[df.url == url, "label"] = [labels] 
+    df.loc[df.url == url, "label"] = [labels]
 
 # Complete missing columns:
 df["last_scraped"] = datetime.datetime.now(tz=pytz.utc)

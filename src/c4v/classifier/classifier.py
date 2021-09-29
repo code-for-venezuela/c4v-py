@@ -16,14 +16,14 @@ from importlib import resources
 from enum import Enum
 
 # Third Party
-from pandas.core.frame  import DataFrame
+from pandas.core.frame import DataFrame
 from transformers import (
     RobertaTokenizer,
     Trainer,
     TrainingArguments,
     RobertaForSequenceClassification,
     AutoModelForSequenceClassification,
-    AutoTokenizer
+    AutoTokenizer,
 )
 from transformers_interpret import SequenceClassificationExplainer
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
@@ -37,6 +37,7 @@ from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
+
 
 class Labels(Enum):
     """
@@ -53,11 +54,14 @@ class Labels(Enum):
         """
         return [l.value for l in cls]
 
+
 class Tags(Enum):
     """
         Possible tags variants for an article
     """
+
     DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
+
 
 class Classifier(BaseModel):
     """
@@ -85,10 +89,12 @@ class Classifier(BaseModel):
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe(dataset_name).sample(frac=1) # use sample to shuffle rows
+        df_pscdd = self.get_dataframe(dataset_name).sample(
+            frac=1
+        )  # use sample to shuffle rows
 
         df_pscdd["label"] = (
-            df_pscdd['label'].apply(lambda x: 'IRRELEVANTE' not in x)
+            df_pscdd["label"].apply(lambda x: "IRRELEVANTE" not in x)
         ).astype(int)
 
         df_pscdd = df_pscdd.convert_dtypes()
@@ -104,7 +110,7 @@ class Classifier(BaseModel):
 
         return x, y
 
-    def load_tokenizer(self, model_name : str = None) -> RobertaTokenizer:
+    def load_tokenizer(self, model_name: str = None) -> RobertaTokenizer:
         """
             Create & configure tokenizer from hub
             Parameters:
@@ -117,7 +123,7 @@ class Classifier(BaseModel):
         )
 
     def load_base_model(
-        self, model_name : str = None
+        self, model_name: str = None
     ) -> RobertaForSequenceClassification:
         """
             Create model from model hub, configure them and retrieve it
@@ -136,10 +142,7 @@ class Classifier(BaseModel):
         return model
 
     def transform_dataset(
-        self,
-        x: List[str],
-        y: List[int],
-        tokenizer: RobertaTokenizer,
+        self, x: List[str], y: List[int], tokenizer: RobertaTokenizer,
     ) -> Dataset:
         """
             perform operations needed to post process a dataset separated in input list
@@ -152,9 +155,7 @@ class Classifier(BaseModel):
                 (Dataset, Dataset) = the training and the validation dataset, in such order
         """
 
-        X_tokenized = tokenizer(
-            x, padding=True, truncation=True, max_length=512
-        )
+        X_tokenized = tokenizer(x, padding=True, truncation=True, max_length=512)
 
         # Create torch dataset
         class _Dataset(torch.utils.data.Dataset):
@@ -272,7 +273,7 @@ class Classifier(BaseModel):
             args=args,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
-            compute_metrics=self.__class__.compute_metrics
+            compute_metrics=self.__class__.compute_metrics,
         )
 
         # Train pre-trained model
@@ -323,7 +324,7 @@ class Classifier(BaseModel):
         training_dataset: str = "classifier_training_dataset.csv",
         confirmation_dataset: str = "classifier_confirmation_dataset.csv",
         val_test_proportion: float = 0.2,
-        base_model_name: str = None
+        base_model_name: str = None,
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
@@ -339,8 +340,12 @@ class Classifier(BaseModel):
         """
 
         # Sanity checks
-        assert 0.0 < val_test_proportion < 1.0, "val_test_proportion should be in range (0,1)"
-        assert all(c in [f.name for f in dataclasses.fields(ScrapedData) ] for c in columns), "columns should be valid ScrapedData fields"
+        assert (
+            0.0 < val_test_proportion < 1.0
+        ), "val_test_proportion should be in range (0,1)"
+        assert all(
+            c in [f.name for f in dataclasses.fields(ScrapedData)] for c in columns
+        ), "columns should be valid ScrapedData fields"
 
         # check that you have a folder where to store results
         if not self.files_folder_path:
@@ -348,10 +353,8 @@ class Classifier(BaseModel):
                 "Can't train in a Classifier without a folder for local data"
             )
 
-
         # Prepare training dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(columns=columns, dataset_name=training_dataset)
-
 
         # Split dataset into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
@@ -359,14 +362,13 @@ class Classifier(BaseModel):
         )
 
         # Load model and tokenizer
-        model = self.load_base_model(model_name=base_model_name)     
-        tokenizer = self.load_tokenizer(model_name=base_model_name)  
+        model = self.load_base_model(model_name=base_model_name)
+        tokenizer = self.load_tokenizer(model_name=base_model_name)
 
         # transform data into datasets
         train_dataset = self.transform_dataset(X_train, y_train, tokenizer)
-        val_dataset   = self.transform_dataset(X_val, y_val, tokenizer)
+        val_dataset = self.transform_dataset(X_val, y_val, tokenizer)
         del X_train, X_val, y_train, y_val
-
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
@@ -385,12 +387,16 @@ class Classifier(BaseModel):
         tokenizer.save_pretrained(self.files_folder_path)
 
         # Prepare confirmation dataframe
-        x_confirmation, y_confirmation = self.prepare_dataframe(columns=columns, dataset_name=confirmation_dataset)
-        confirmation_dataset = self.transform_dataset(x_confirmation, y_confirmation, tokenizer)
+        x_confirmation, y_confirmation = self.prepare_dataframe(
+            columns=columns, dataset_name=confirmation_dataset
+        )
+        confirmation_dataset = self.transform_dataset(
+            x_confirmation, y_confirmation, tokenizer
+        )
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
-            trainer=fine_tuned_model_trainer, val_dataset=confirmation_dataset 
+            trainer=fine_tuned_model_trainer, val_dataset=confirmation_dataset
         )
 
         return metrics_df
@@ -495,5 +501,3 @@ class Classifier(BaseModel):
             Get list of possible labels outputs
         """
         return Labels.labels()
-
-    

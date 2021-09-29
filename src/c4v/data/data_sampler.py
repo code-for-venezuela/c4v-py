@@ -8,11 +8,16 @@ import argparse
 
 
 class DataSampler:
-
-    def __init__(self, tweets_dataset_path: str, sample_n: int,
-                 random_state: int, text_col: str, annotator_name: str,
-                 save_taken: bool, out_folder: str
-                 ):
+    def __init__(
+        self,
+        tweets_dataset_path: str,
+        sample_n: int,
+        random_state: int,
+        text_col: str,
+        annotator_name: str,
+        save_taken: bool,
+        out_folder: str,
+    ):
         """
         Creates a Data Sampler
         :param tweets_dataset_path: path of the tweets source
@@ -35,7 +40,7 @@ class DataSampler:
         # name of the .csv that contains all the tweets (output of sql in bigQuery)
         self.input_file = os.path.basename(tweets_dataset_path)
         # name of the .csv that contains the ids of annotated tweets
-        self.tweets_annotated_ids = self.input_file.split('.')[0] + '-annotated_ids.csv'
+        self.tweets_annotated_ids = self.input_file.split(".")[0] + "-annotated_ids.csv"
         self.taken_ids = self.__setup_file_of_annotated_ids()
 
         self.save_taken = save_taken
@@ -45,7 +50,9 @@ class DataSampler:
         self.text_col = text_col
         self.annotator_name = annotator_name
         self.filename = None
-        self.annotator_folder = os.path.dirname(f'{out_folder}{self.annotator_name}/')  # output folder
+        self.annotator_folder = os.path.dirname(
+            f"{out_folder}{self.annotator_name}/"
+        )  # output folder
 
         self.get_sample()
 
@@ -55,7 +62,9 @@ class DataSampler:
         """
         if not os.path.exists(basedir):
             os.makedirs(basedir)
-            print(f'\n\t* A folder for "{self.annotator_name}" has been created in path: {basedir}/ ')
+            print(
+                f'\n\t* A folder for "{self.annotator_name}" has been created in path: {basedir}/ '
+            )
 
     def __setup_file_of_annotated_ids(self) -> pd.DataFrame:
         """
@@ -65,7 +74,7 @@ class DataSampler:
         file_with_annotated_ids = os.path.join(self.file_dir, self.tweets_annotated_ids)
 
         if not os.path.isfile(file_with_annotated_ids):
-            return pd.DataFrame({'id': []})
+            return pd.DataFrame({"id": []})
 
         return pd.read_csv(file_with_annotated_ids)
 
@@ -78,9 +87,10 @@ class DataSampler:
             # if there are no existing ids, store this ones as new ones
             annotated_ids = new_annotated_ids
 
-        annotated_ids.to_csv(f'{self.file_dir}/{self.tweets_annotated_ids}',
-                             index=False)
-        print(f'File Updated: {self.file_dir}/{self.tweets_annotated_ids}')
+        annotated_ids.to_csv(
+            f"{self.file_dir}/{self.tweets_annotated_ids}", index=False
+        )
+        print(f"File Updated: {self.file_dir}/{self.tweets_annotated_ids}")
 
     def __process_and_sample(self) -> pd.DataFrame:
         """
@@ -94,41 +104,52 @@ class DataSampler:
         original_tweets = pd.read_csv(self.tweets_dataset_path)
 
         # make sure the ids are of type integer and not interpreted as a float/scientific notation
-        original_tweets['id'] = original_tweets['id'].astype(int)
+        original_tweets["id"] = original_tweets["id"].astype(int)
 
         # drop the ids from the original_df, so when we sample we do not repeat an already tagged tweet
-        available_tweets = original_tweets[~original_tweets['id'].isin(self.taken_ids['id'].values)]
+        available_tweets = original_tweets[
+            ~original_tweets["id"].isin(self.taken_ids["id"].values)
+        ]
 
-        sampled_df = available_tweets.sample(random_state=self.random_state,
-                                             n=self.sample_n)[['id', self.text_col]]
+        sampled_df = available_tweets.sample(
+            random_state=self.random_state, n=self.sample_n
+        )[["id", self.text_col]]
 
         # Reports the number of total tweets, the ones taken, the ones available and tha ones sampled
-        print(f'Size of original file with tweets: {original_tweets.shape}')
-        print(f'Size of the tweet IDs that have been taken: {self.taken_ids.shape}')
-        print(f'Size of the available tweets: {available_tweets.shape}')
-        print(f'Size of the sampled tweets {sampled_df.shape}')
+        print(f"Size of original file with tweets: {original_tweets.shape}")
+        print(f"Size of the tweet IDs that have been taken: {self.taken_ids.shape}")
+        print(f"Size of the available tweets: {available_tweets.shape}")
+        print(f"Size of the sampled tweets {sampled_df.shape}")
         # print(f'sampled: {sampled_df}')
 
         if self.save_taken:
-            self.__save_annotated_ids(sampled_df['id'])
+            self.__save_annotated_ids(sampled_df["id"])
         else:
             # prompts the user to mark the tweets as tagged
-            user_response = str(input(f'''
+            user_response = str(
+                input(
+                    f"""
             Do you wish to set these sampled data as tagged?
             If you select <n> or any other key, you are at risk of extracting data that you have already worked on.
-            Answer (y/n): '''))
+            Answer (y/n): """
+                )
+            )
 
-            if user_response == 'y':
-                self.__save_annotated_ids(sampled_df['id'])
-                print(f'''
+            if user_response == "y":
+                self.__save_annotated_ids(sampled_df["id"])
+                print(
+                    f"""
                 File has been updated, and next time you require new data, we guarantee
                 you will not have repeated data.
-                ''')
+                """
+                )
             else:
-                print(f'''
+                print(
+                    f"""
                 You are at risk of extracting data that you have already worked on.  
                 To avoid this, we recommend to tag the sampled data.
-                ''')
+                """
+                )
 
         return sampled_df
 
@@ -205,51 +226,59 @@ class DataSampler:
 
         original_df = self.cleaner(df=original_df)
 
-        original_df = original_df[self.text_col].str.replace('\n', '')
+        original_df = original_df[self.text_col].str.replace("\n", "")
 
-        original_df = original_df.apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
+        original_df = original_df.apply(
+            lambda x: x.encode("ascii", "ignore").decode("ascii")
+        )
 
         # Returns csv with annotator's name (e.g. Juanito perez) and with timestamp
 
         timestamp = datetime.now()
-        formatted_timestamp = timestamp.strftime('%Y-%m-%d_%H%M%S')
-        self.filename = f'{self.annotator_name}-sample_{self.sample_n}-randstate_{self.random_state}-{formatted_timestamp}.txt'
+        formatted_timestamp = timestamp.strftime("%Y-%m-%d_%H%M%S")
+        self.filename = f"{self.annotator_name}-sample_{self.sample_n}-randstate_{self.random_state}-{formatted_timestamp}.txt"
 
         try:
             # saves the tweets in txt
-            original_df.to_csv(f'{self.annotator_folder}/{self.filename}',
-                               sep=' ',
-                               header=False,
-                               index=False,
-                               line_terminator='\n\n',
-                               quoting=csv.QUOTE_NONE,
-                               escapechar=' ')
+            original_df.to_csv(
+                f"{self.annotator_folder}/{self.filename}",
+                sep=" ",
+                header=False,
+                index=False,
+                line_terminator="\n\n",
+                quoting=csv.QUOTE_NONE,
+                escapechar=" ",
+            )
 
             # creates an empty .ann to use for annotations in brat
-            open(f'{self.annotator_folder}/{self.filename.split(".")[0]}.ann', 'a').close()
+            open(
+                f'{self.annotator_folder}/{self.filename.split(".")[0]}.ann', "a"
+            ).close()
 
-            print(f'''
+            print(
+                f"""
     Success!
 
     Data was saved at {self.annotator_folder}/{self.filename}
 
-    '''
-                  )
+    """
+            )
             # !self.brat_data_path/bash ann_creator.sh
         except FileNotFoundError:
-            print(f'''
+            print(
+                f"""
     Error!
 
     There was an error with {self.annotator_folder}/{self.filename}.
     Please check that the folder in which we are saving the data does exist.
     Name of the folder: {self.annotator_folder.split('/')[-1]}
 
-    '''
-                  )
+    """
+            )
 
 
-if __name__ == '__main__':
-    '''
+if __name__ == "__main__":
+    """
     Example:
 
 (1)
@@ -265,8 +294,7 @@ to the command (1) or (2) above.
 
 For more information python data_sampler.py -h 
 
-    '''
-
+    """
 
     def annotator_folder_exists(arg_value):
         """
@@ -275,12 +303,11 @@ For more information python data_sampler.py -h
         of the folder in which the samples will be stored.
         :return: the string, if no errors are thrown
         """
-        if not os.path.isdir(f'{OUTPUT_FOLDER}/{arg_value}'):
+        if not os.path.isdir(f"{OUTPUT_FOLDER}/{arg_value}"):
             msg = f'The folder of annotator "{arg_value}" has not been created. Please do.'
             raise argparse.ArgumentTypeError(msg)
 
         return arg_value
-
 
     def source_file_exists(arg_value):
         """
@@ -294,54 +321,64 @@ For more information python data_sampler.py -h
 
         return arg_value
 
-
     def check_input():
-        parser = argparse.ArgumentParser(description='''
+        parser = argparse.ArgumentParser(
+            description="""
         Sample tweets dataframe for annotations in Brat.
 
         Example:
             python data_sampler.py --path ../data_analysis/tagging-set-original_for_jupyter_tagging.csv --sample_size 30 --rand_state 19 --text_col full_text --annotator_name diego
-        ''')
-        parser.add_argument('-p', '--path',
-                            type=source_file_exists,
-                            help='Path to csv file where tweets are located.')
+        """
+        )
+        parser.add_argument(
+            "-p",
+            "--path",
+            type=source_file_exists,
+            help="Path to csv file where tweets are located.",
+        )
 
-        parser.add_argument('-t', '--taken',
-                            action="store_true",
-                            default=False,
-                            help='Determines whether to mark the sample of tweets obtained as tagged, so future '
-                                 'annotators do not repeat annotating tweets that have already been taken.')
+        parser.add_argument(
+            "-t",
+            "--taken",
+            action="store_true",
+            default=False,
+            help="Determines whether to mark the sample of tweets obtained as tagged, so future "
+            "annotators do not repeat annotating tweets that have already been taken.",
+        )
 
-        parser.add_argument('-s', '--sample_size',
-                            type=int,
-                            help='Sample size to extract.')
+        parser.add_argument(
+            "-s", "--sample_size", type=int, help="Sample size to extract."
+        )
 
-        parser.add_argument('-r', '--rand_state',
-                            type=int,
-                            help='Random State to used in the models.')
+        parser.add_argument(
+            "-r", "--rand_state", type=int, help="Random State to used in the models."
+        )
 
-        parser.add_argument('-tc', '--text_col',
-                            type=str,
-                            help='Column that contains rwe tweets text.')
+        parser.add_argument(
+            "-tc", "--text_col", type=str, help="Column that contains rwe tweets text."
+        )
 
-        parser.add_argument('--annotator_name',
-                            type=annotator_folder_exists,
-                            help='Name of the person that is annotating.  Also the name of the folder where '
-                                 'to save the sampled data.')
+        parser.add_argument(
+            "--annotator_name",
+            type=annotator_folder_exists,
+            help="Name of the person that is annotating.  Also the name of the folder where "
+            "to save the sampled data.",
+        )
 
         return vars(parser.parse_args())
 
-
     # folder where all annotations will lay.
-    OUTPUT_FOLDER = '../data/data_to_annotate/'
+    OUTPUT_FOLDER = "../data/data_to_annotate/"
 
     args = check_input()
     # print(args)
 
-    sample = DataSampler(tweets_dataset_path=args['path'],
-                         sample_n=args['sample_size'],
-                         random_state=args['rand_state'],
-                         text_col=args['text_col'],
-                         annotator_name=args['annotator_name'],
-                         save_taken=args['taken'], out_folder=OUTPUT_FOLDER)
-
+    sample = DataSampler(
+        tweets_dataset_path=args["path"],
+        sample_n=args["sample_size"],
+        random_state=args["rand_state"],
+        text_col=args["text_col"],
+        annotator_name=args["annotator_name"],
+        save_taken=args["taken"],
+        out_folder=OUTPUT_FOLDER,
+    )

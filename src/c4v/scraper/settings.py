@@ -32,7 +32,8 @@ URL_TO_SCRAPER = {s.intended_domain: s for s in INSTALLED_SCRAPERS}
 # root dir, so we can get resources from module directories
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def is_scrapable(url : str) -> bool:
+
+def is_scrapable(url: str) -> bool:
     """
         Utility function to check if a giver url as str is scrapable
         Parameters:

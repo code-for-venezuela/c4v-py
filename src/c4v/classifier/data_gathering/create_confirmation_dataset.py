@@ -17,7 +17,7 @@ from c4v.scraper.crawler.crawlers.primicia_crawler import PrimiciaCrawler
 
 # Third party imports
 import pandas as pd
-import sys 
+import sys
 
 # Ammount of arguments for this script
 _N_ARGS = 2
@@ -28,13 +28,13 @@ if len(sys.argv) < (_N_ARGS + 1):
 
 # Read arguments from command line
 # Read positive labels dataset
-valid_dataset_filename : str = sys.argv[1]
+valid_dataset_filename: str = sys.argv[1]
 print(f"Reading positive labels dataset: {valid_dataset_filename}...")
 valid_dataset_df = pd.read_csv(valid_dataset_filename)
 valid_dataset_df.dropna(axis=0, inplace=True, subset=["url"])
 
-# Read training dataset 
-train_dataset_filename : str = sys.argv[2]
+# Read training dataset
+train_dataset_filename: str = sys.argv[2]
 print(f"Reading training  dataset: {train_dataset_filename}...")
 train_dataset_df = pd.read_csv(train_dataset_filename)
 
@@ -42,69 +42,98 @@ train_dataset_df = pd.read_csv(train_dataset_filename)
 db_name = sys.argv[3] if len(sys.argv) > (_N_ARGS + 1) else settings.local_sqlite_db
 
 # Read how much irrelevant rows to use
-n_irrelevant_rows : int = int(sys.argv[3]) if len(sys.argv) > (_N_ARGS + 1) else 10000
-print(f"Will try to retrieve {n_irrelevant_rows} irrelevant rows from database {db_name}...")
+n_irrelevant_rows: int = int(sys.argv[3]) if len(sys.argv) > (_N_ARGS + 1) else 10000
+print(
+    f"Will try to retrieve {n_irrelevant_rows} irrelevant rows from database {db_name}..."
+)
 
 # Set up manager
-m : Manager = Manager.from_local_sqlite_db(db_name)
+m: Manager = Manager.from_local_sqlite_db(db_name)
 
 # -- Collecting urls to scrape -----------------------------------
 
 # Get urls to scrape as problems
-positive_urls_to_scrape, non_scrapable = m.split_non_scrapable(list(valid_dataset_df['url'])) 
+positive_urls_to_scrape, non_scrapable = m.split_non_scrapable(
+    list(valid_dataset_df["url"])
+)
 
-if non_scrapable: # warn about non-scrapable urls 
-    print(f"[WARNING] {len(non_scrapable)} urls from {len(valid_dataset_df)} won't be scraped, as they're not scrapable", file=sys.stderr)
+if non_scrapable:  # warn about non-scrapable urls
+    print(
+        f"[WARNING] {len(non_scrapable)} urls from {len(valid_dataset_df)} won't be scraped, as they're not scrapable",
+        file=sys.stderr,
+    )
     del non_scrapable
 
 # Get data not in training dataset
-not_valid_urls = set(train_dataset_df['url']).union(positive_urls_to_scrape)
+not_valid_urls = set(train_dataset_df["url"]).union(positive_urls_to_scrape)
 del train_dataset_df
 
 print(f"Crawling irrelevant data...")
 # Crawl data for primicia
 primicia_crawler = PrimiciaCrawler.from_irrelevant()
 # crawled urls
-irrelevant_urls : List[str] = []
+irrelevant_urls: List[str] = []
 
-def collect(crawled_urls : List[str]):
+
+def collect(crawled_urls: List[str]):
     irrelevant_urls.extend(url for url in crawled_urls if url not in not_valid_urls)
     print(f"Collected items: {len(irrelevant_urls)} / {n_irrelevant_rows}")
+
 
 def should_stop() -> bool:
     return len(irrelevant_urls) >= n_irrelevant_rows
 
+
 irrelevant_urls = irrelevant_urls[:n_irrelevant_rows]
 
 # Crawl items
-primicia_crawler.crawl_and_process_urls(post_process_data=collect, should_stop=should_stop)
+primicia_crawler.crawl_and_process_urls(
+    post_process_data=collect, should_stop=should_stop
+)
 
 print(f"Collected irrelevant articles: {len(irrelevant_urls)}")
 
 # Scrape crawled items
 
 # -- Scraping urls -------------------------------
-# Create positive dataframe 
+# Create positive dataframe
 print(f"Scraping collected items...")
-scraped_data = m.get_bulk_data_for(positive_urls_to_scrape + irrelevant_urls)     # get data
-scraped_positive_data_df = pd.DataFrame(x for x in scraped_data if x.url in positive_urls_to_scrape)           # turn into dataset 
+scraped_data = m.get_bulk_data_for(
+    positive_urls_to_scrape + irrelevant_urls
+)  # get data
+scraped_positive_data_df = pd.DataFrame(
+    x for x in scraped_data if x.url in positive_urls_to_scrape
+)  # turn into dataset
 # remove unnecesary rows:
-valid_dataset_df.drop([c for c in valid_dataset_df.columns if c != "label" and c != "url"], inplace=True, axis=1)
-scraped_positive_data_df = pd.merge(    # join dataframes to get corresponding labels
-                scraped_positive_data_df, 
-                valid_dataset_df, 
-                "inner", 
-                on= "url"
-            )
+valid_dataset_df.drop(
+    [c for c in valid_dataset_df.columns if c != "label" and c != "url"],
+    inplace=True,
+    axis=1,
+)
+scraped_positive_data_df = pd.merge(  # join dataframes to get corresponding labels
+    scraped_positive_data_df, valid_dataset_df, "inner", on="url"
+)
 
 # Create Irrelevant dataframe
-irrelevant_scraped_df = pd.DataFrame(x for x in scraped_data if x.url in irrelevant_urls)
+irrelevant_scraped_df = pd.DataFrame(
+    x for x in scraped_data if x.url in irrelevant_urls
+)
 
 # Remove irrelevant cols
-irrelevant_scraped_df.drop([c for c in irrelevant_scraped_df.columns if c not in scraped_positive_data_df.columns], inplace=True, axis=1)
-irrelevant_scraped_df['label'] = [["IRRELEVANTE"]] * len(irrelevant_scraped_df)
+irrelevant_scraped_df.drop(
+    [
+        c
+        for c in irrelevant_scraped_df.columns
+        if c not in scraped_positive_data_df.columns
+    ],
+    inplace=True,
+    axis=1,
+)
+irrelevant_scraped_df["label"] = [["IRRELEVANTE"]] * len(irrelevant_scraped_df)
 
-full_df = pd.concat([scraped_positive_data_df, irrelevant_scraped_df], ignore_index=True)
+full_df = pd.concat(
+    [scraped_positive_data_df, irrelevant_scraped_df], ignore_index=True
+)
 full_df = full_df.sample(frac=1.0)
 print(full_df)
 print("Creating final dataset...")

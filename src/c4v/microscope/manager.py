@@ -20,6 +20,7 @@ from typing import Dict, List, Iterable, Callable, Tuple, Any
 # Third party imports
 from torch.utils.data import Dataset
 
+
 class Manager:
     """
         This object encapsulates shared behavior between our multiple components,
@@ -30,7 +31,7 @@ class Manager:
         self._persistency_manager = persistency_manager
 
     def get_bulk_data_for(
-        self, urls: List[str], should_scrape: bool = True, save : bool = True
+        self, urls: List[str], should_scrape: bool = True, save: bool = True
     ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
@@ -48,7 +49,8 @@ class Manager:
         # Scrape missing instances if necessary
         if should_scrape and not_scraped:
             items = bulk_scrape(not_scraped)
-            if save: db.save(items) # save if requested to 
+            if save:
+                db.save(items)  # save if requested to
 
         # Convert to set to speed up lookup
         urls = set(urls)
@@ -239,14 +241,15 @@ class Manager:
         """
         return Classifier.get_labels()
 
-    def should_retrain_base_lang_model( self, 
-                                        lang_model : LanguageModel, 
-                                        db_manager : BasePersistencyManager = None,
-                                        eval_dataset_size : int = 250,   
-                                        min_loss : float = settings.default_lang_model_min_loss,
-                                        should_retrain_fn : Callable[[float], bool] = None,
-                                        fields : List[str] = ["title"]
-                                        ) -> bool:
+    def should_retrain_base_lang_model(
+        self,
+        lang_model: LanguageModel,
+        db_manager: BasePersistencyManager = None,
+        eval_dataset_size: int = 250,
+        min_loss: float = settings.default_lang_model_min_loss,
+        should_retrain_fn: Callable[[float], bool] = None,
+        fields: List[str] = ["title"],
+    ) -> bool:
         """
             If should retrain a base language model based on its loss on the given dataset. If a persistency manager is provided, 
             use it instead of the configured one
@@ -272,21 +275,20 @@ class Manager:
         # Set up db_manager
         db_manager = db_manager or self._persistency_manager
 
-        # TODO should order by newer, but can't do it right now as we can't ensure 
+        # TODO should order by newer, but can't do it right now as we can't ensure
         # news dates can be parsed into datetime objects
-        scraped_data = list(db_manager.get_all(limit = eval_dataset_size, scraped=True))
+        scraped_data = list(db_manager.get_all(limit=eval_dataset_size, scraped=True))
         if not scraped_data:
-            raise ValueError("No ScrapedData available for evaluation. You can get more data by using the `c4v scrawl` and `c4v scrape` functions, or using the microscope.Manager object")
+            raise ValueError(
+                "No ScrapedData available for evaluation. You can get more data by using the `c4v scrawl` and `c4v scrape` functions, or using the microscope.Manager object"
+            )
 
         # Set up dataset
-        ds = LanguageModel.to_pt_dataset(lang_model.create_dataset_from_scraped_data(scraped_data, fields))
+        ds = LanguageModel.to_pt_dataset(
+            lang_model.create_dataset_from_scraped_data(scraped_data, fields)
+        )
         del scraped_data
 
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
-
-
-
-
-

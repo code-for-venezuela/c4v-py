@@ -16,6 +16,7 @@ from transformers.utils.dummy_pt_objects import AutoModel
 # Local imports
 from c4v.config import settings
 
+
 class BaseModel:
     """
         Represents a model and contains useful utilities for models, such
@@ -25,7 +26,12 @@ class BaseModel:
     RESULTS_EXPERIMENT_NAME = "results"
     LOGS_FOLDER_NAME = "logs"
 
-    def __init__(self,  files_folder_path : str = None, base_model_name : str = settings.default_base_language_model, use_cuda : bool = True) -> None:
+    def __init__(
+        self,
+        files_folder_path: str = None,
+        base_model_name: str = settings.default_base_language_model,
+        use_cuda: bool = True,
+    ) -> None:
 
         # Set up cuda
         self._device = (
@@ -41,12 +47,12 @@ class BaseModel:
         # Init lazy tokenizer and model variables:
         self._model = None
         self._tokenizer = None
-        
+
     @property
     def device(self):
         """
             Device used when evaluating the model
-        """ 
+        """
         self._device
 
     @property
@@ -113,7 +119,7 @@ class BaseModel:
 
         return str(p)
 
-    @property 
+    @property
     def tokenizer(self) -> PreTrainedTokenizer:
         """
             Internal tokenizer object. It's lazy-loaded, so it will
@@ -121,7 +127,7 @@ class BaseModel:
         """
         if self._tokenizer == None:
             self._tokenizer = AutoTokenizer.from_pretrained(self._base_model_name)
-        
+
         return self._tokenizer
 
     @property
@@ -131,9 +137,9 @@ class BaseModel:
         """
         if self._model == None:
             self._model = AutoModel.from_pretrained(self._base_model_name)
-        
+
         return self._model
-        
+
 
 class C4vDataFrameLoader:
     """

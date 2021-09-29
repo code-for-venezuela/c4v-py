@@ -1,8 +1,8 @@
 # Python imports
 from dataclasses import dataclass, asdict, field
-from typing      import List, Dict, Any
-from datetime    import datetime
-from c4v.config  import settings
+from typing import List, Dict, Any
+from datetime import datetime
+from c4v.config import settings
 import json
 
 
@@ -46,7 +46,15 @@ class ScrapedData:
         return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}content:\n\t{content}"
 
     def __hash__(self) -> int:
-        return (self.url, self.last_scraped, self.title, self.content, self.author, self.date).__hash__()
+        return (
+            self.url,
+            self.last_scraped,
+            self.title,
+            self.content,
+            self.author,
+            self.date,
+        ).__hash__()
+
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """

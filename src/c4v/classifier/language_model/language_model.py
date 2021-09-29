@@ -7,13 +7,21 @@
 # Third party imports
 from pandas.core.frame import DataFrame
 from torch.utils.data import Dataset
-from transformers import EvalPrediction, AutoTokenizer, AutoModelForMaskedLM, TrainingArguments, Trainer, BatchEncoding, PreTrainedModel
+from transformers import (
+    EvalPrediction,
+    AutoTokenizer,
+    AutoModelForMaskedLM,
+    TrainingArguments,
+    Trainer,
+    BatchEncoding,
+    PreTrainedModel,
+)
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
 import numpy as np
 import pandas as pd
 import torch
 
-# Python imports 
+# Python imports
 from typing import Callable, Iterable, List, Any, Dict
 import dataclasses as dc
 import tempfile
@@ -23,6 +31,7 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.classifier.base_model import BaseModel
 from c4v.config import settings
 
+
 class LanguageModel(BaseModel):
     """
         This is the base model that gets trained for the classifier downstream 
@@ -30,7 +39,12 @@ class LanguageModel(BaseModel):
         retrain its embeddings layer if needed
     """
 
-    def create_dataset_from_scraped_data(self, data : Iterable[ScrapedData], fields : List[str] = ["content"], tokenizer : Any = None) -> BatchEncoding:
+    def create_dataset_from_scraped_data(
+        self,
+        data: Iterable[ScrapedData],
+        fields: List[str] = ["content"],
+        tokenizer: Any = None,
+    ) -> BatchEncoding:
         """
             Creates a dataset from ScrapedData instances, ready to be used for training or 
             evaluation, containing both the masked version and its corresponding actual answer.
@@ -47,70 +61,97 @@ class LanguageModel(BaseModel):
         # Sanity check: provided fields are valid fields
         valid_fields = set(f.name for f in dc.fields(ScrapedData))
         fields_set = set(fields)
-        
+
         # Use only fields that are both in the provided list and the valid fields list
         fields_to_use = valid_fields.intersection(fields_set)
 
         # Raise error if can't use any field
         if not fields_to_use:
-            raise ValueError(f"No valid field provided in 'fields' field of 'LanguageModel.create_dataset_from_scraped_data' function, provided list: {fields}. Valid fields: {list(valid_fields)}")
+            raise ValueError(
+                f"No valid field provided in 'fields' field of 'LanguageModel.create_dataset_from_scraped_data' function, provided list: {fields}. Valid fields: {list(valid_fields)}"
+            )
 
         # Extract text to be used
-        text = [ '\n'.join([ str(d.__getattribute__(attr)) for attr in fields_to_use]) for d in data ]
+        text = [
+            "\n".join([str(d.__getattribute__(attr)) for attr in fields_to_use])
+            for d in data
+        ]
 
         # Clean text
-        text = [ "\n".join( [ s for s in [s.strip() for s in d.split("\n")] if s != ""]).replace("\n", ". ") for d in text]
+        text = [
+            "\n".join(
+                [s for s in [s.strip() for s in d.split("\n")] if s != ""]
+            ).replace("\n", ". ")
+            for d in text
+        ]
 
         # Set up tokenizer:
-        tokenizer = tokenizer or AutoTokenizer.from_pretrained(self._base_model_name)        
+        tokenizer = tokenizer or AutoTokenizer.from_pretrained(self._base_model_name)
 
         # Tokenize text
-        tokenized_text = tokenizer(text, max_length=512, padding="max_length", truncation=True, return_tensors="pt") # TODO deberíamos configurar esto con argumentos en la funcion
+        tokenized_text = tokenizer(
+            text,
+            max_length=512,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt",
+        )  # TODO deberíamos configurar esto con argumentos en la funcion
 
-        # Valid answers & attention mask 
-        labels = torch.tensor(tokenized_text['input_ids'])
+        # Valid answers & attention mask
+        labels = torch.tensor(tokenized_text["input_ids"])
 
         # Input ids: fed to the model as the masked version
         input_ids = labels.detach().clone()
 
-        # generate matrix of the same size of random numbers, we're going to use it 
+        # generate matrix of the same size of random numbers, we're going to use it
         # to mask some words for the model
         rand = torch.rand(input_ids.shape)
 
         # Create mask array
-        masked_tokens_array = rand < .15
+        masked_tokens_array = rand < 0.15
 
         for (_, tk_value) in tokenizer.special_tokens_map.items():
 
-            masked_tokens_array = masked_tokens_array * (input_ids != tokenizer.vocab[tk_value])
+            masked_tokens_array = masked_tokens_array * (
+                input_ids != tokenizer.vocab[tk_value]
+            )
 
-        # Convert selected tokens to mask 
+        # Convert selected tokens to mask
         for i in range(input_ids.shape[0]):
             # get indices of mask positions from mask array
             selection = torch.flatten(masked_tokens_array[i].nonzero()).tolist()
-            input_ids[i, selection] = tokenizer.vocab[tokenizer.mask_token] # Token <mask> id
+            input_ids[i, selection] = tokenizer.vocab[
+                tokenizer.mask_token
+            ]  # Token <mask> id
 
-        tokenized_text['labels'] = labels
-        tokenized_text['input_ids'] = input_ids
+        tokenized_text["labels"] = labels
+        tokenized_text["input_ids"] = input_ids
 
-        return tokenized_text # type = transformers.tokenization_utils_base.BatchEncoding
+        return (
+            tokenized_text  # type = transformers.tokenization_utils_base.BatchEncoding
+        )
 
     @staticmethod
-    def to_pt_dataset(batch : BatchEncoding) -> Dataset:
+    def to_pt_dataset(batch: BatchEncoding) -> Dataset:
         """
             Turn batch enconding (as the one created by create_dataset_from_scraped_data) into a pytorch dataset
         """
+
         class _Dataset(Dataset):
             def __init__(self, encodings):
                 self.encodings = encodings
+
             def __getitem__(self, idx):
-                return {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+                return {
+                    key: torch.tensor(val[idx]) for key, val in self.encodings.items()
+                }
+
             def __len__(self):
                 return len(self.encodings.input_ids)
-        
+
         return _Dataset(batch)
 
-    def compute_eval_accuracy_metrics(self, pred : EvalPrediction) ->  Dict[str, Any]:
+    def compute_eval_accuracy_metrics(self, pred: EvalPrediction) -> Dict[str, Any]:
         """
             Generate a compute metrics function using the optional argument function to 
             additionally check if, based on the results, the model should be retrained
@@ -118,9 +159,10 @@ class LanguageModel(BaseModel):
         d = dict(pred)
         del pred
         return d
-        
 
-    def eval_accuracy(self, dataset : Dataset, model : Any = None, batch_size : int = 1) -> float:
+    def eval_accuracy(
+        self, dataset: Dataset, model: Any = None, batch_size: int = 1
+    ) -> float:
         """
             Try to eval accuracy of this language model for the given dataset.
             Parameters:
@@ -134,29 +176,25 @@ class LanguageModel(BaseModel):
                 The loss for the given dataset
         """
         # set up model
-        model = model or self.model       
+        model = model or self.model
 
         # Load model
         model.to(self._device)
 
         with tempfile.TemporaryDirectory() as temp_dir:
             args = TrainingArguments(
-                per_device_eval_batch_size=batch_size, 
-                output_dir=temp_dir, 
+                per_device_eval_batch_size=batch_size,
+                output_dir=temp_dir,
                 per_device_train_batch_size=1,
                 eval_accumulation_steps=1,
                 do_train=False,
-                prediction_loss_only=True
-                )
-            trainer = Trainer(
-                    args = args,
-                    model = model,
-                    eval_dataset = dataset
-                    )
-            # Evaluate model 
+                prediction_loss_only=True,
+            )
+            trainer = Trainer(args=args, model=model, eval_dataset=dataset)
+            # Evaluate model
             outputs = trainer.evaluate()
 
-        return outputs['eval_loss']
+        return outputs["eval_loss"]
 
     @property
     def _default_train_args(self) -> Dict[str, Any]:
@@ -183,8 +221,10 @@ class LanguageModel(BaseModel):
             Internal model object. It's lazy-loaded, so it will be loaded once when it's called for the first time
         """
         if self._model == None:
-            self._model = AutoModelForMaskedLM.from_pretrained(self._base_model_name) # using specific desired model
-        
+            self._model = AutoModelForMaskedLM.from_pretrained(
+                self._base_model_name
+            )  # using specific desired model
+
         return self._model
 
     def _override_train_args(self, new_args: Dict[str, Any] = {}) -> Dict[str, Any]:
@@ -199,16 +239,17 @@ class LanguageModel(BaseModel):
 
         return default
 
-    def train_and_save_model(self, 
-                    train_dataset : Dataset, 
-                    eval_dataset : Dataset, 
-                    train_args : Dict[str, Any], 
-                    output_dir_path : str = None, 
-                    logging_dir_path : str = None, 
-                    path_to_save_checkpoint: str = None,
-                    compute_metrics : Callable[[EvalPrediction], Dict[str, Any]] = None,
-                    model : Any = None
-        ) -> Trainer:
+    def train_and_save_model(
+        self,
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
+        train_args: Dict[str, Any],
+        output_dir_path: str = None,
+        logging_dir_path: str = None,
+        path_to_save_checkpoint: str = None,
+        compute_metrics: Callable[[EvalPrediction], Dict[str, Any]] = None,
+        model: Any = None,
+    ) -> Trainer:
         """
             Train a given model, or the one for the provided model 
             Parameters: 
@@ -217,7 +258,7 @@ class LanguageModel(BaseModel):
             Return:
                 Trainer object with the fine tuned model 
         """
-        
+
         if output_dir_path:
             train_args["output_dir"] = output_dir_path
         if logging_dir_path:
@@ -257,10 +298,10 @@ class LanguageModel(BaseModel):
 
     def run_training(
         self,
-        train_dataset : Dataset,
-        eval_dataset : Dataset,
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
         train_args: Dict[str, Any] = None,
-        model_name : str = None
+        model_name: str = None,
     ) -> pd.DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
@@ -280,7 +321,11 @@ class LanguageModel(BaseModel):
 
         # Prepare dataframe and load model
         assert model_name or self._base_model_name, "Model to train not provided"
-        model = AutoModelForMaskedLM.from_pretrained(model_name) if model_name else self.model     # TODO Should be changed to allow custom model loading and training
+        model = (
+            AutoModelForMaskedLM.from_pretrained(model_name)
+            if model_name
+            else self.model
+        )  # TODO Should be changed to allow custom model loading and training
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
@@ -298,9 +343,7 @@ class LanguageModel(BaseModel):
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
-            trainer=fine_tuned_model_trainer, 
-            val_dataset=eval_dataset
+            trainer=fine_tuned_model_trainer, val_dataset=eval_dataset
         )
 
         return metrics_df
-

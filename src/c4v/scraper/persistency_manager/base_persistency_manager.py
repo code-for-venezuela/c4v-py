@@ -17,7 +17,9 @@ class BasePersistencyManager:
         Base class to provide support for persistency management
     """
 
-    def get_all(self, limit: int, scraped: bool, order_by : List[str] = None) -> Iterator[ScrapedData]:
+    def get_all(
+        self, limit: int, scraped: bool, order_by: List[str] = None
+    ) -> Iterator[ScrapedData]:
         """
             Return an iterator over the set of stored instances
             Parameters:
