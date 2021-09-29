@@ -84,7 +84,6 @@ class SqliteManager(BasePersistencyManager):
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
-            print("in get all")
             # Order
             if order_by:
                 parsed_orders = " ORDER BY " +\
@@ -96,7 +95,6 @@ class SqliteManager(BasePersistencyManager):
                                                 (self._parse_order_and_field_from_order_by_str(order_by=ord) for ord in order_by)
                                         ]
                                     )
-                print("parsing order: ", parsed_orders)
             else:
                 parsed_orders = ""
             

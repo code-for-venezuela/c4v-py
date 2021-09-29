@@ -30,13 +30,14 @@ class Manager:
         self._persistency_manager = persistency_manager
 
     def get_bulk_data_for(
-        self, urls: List[str], should_scrape: bool = True
+        self, urls: List[str], should_scrape: bool = True, save : bool = True
     ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
             Parameters:
                 urls : [str] = urls whose data is to be retrieved. If not available yet, then scrape it if requested so
-                should_scrape : bool = if should scrape non-existent urls
+                should_scrape : bool = (optional) if should scrape non-existent urls
+                save : bool = (optional) if should save new data when scraped for the first time
         """
         # just a shortcut
         db = self._persistency_manager
@@ -47,7 +48,7 @@ class Manager:
         # Scrape missing instances if necessary
         if should_scrape and not_scraped:
             items = bulk_scrape(not_scraped)
-            db.save(items)
+            if save: db.save(items) # save if requested to 
 
         # Convert to set to speed up lookup
         urls = set(urls)
@@ -271,7 +272,8 @@ class Manager:
         # Set up db_manager
         db_manager = db_manager or self._persistency_manager
 
-        # TODO should order by newer
+        # TODO should order by newer, but can't do it right now as we can't ensure 
+        # news dates can be parsed into datetime objects
         scraped_data = list(db_manager.get_all(limit = eval_dataset_size, scraped=True))
         if not scraped_data:
             raise ValueError("No ScrapedData available for evaluation. You can get more data by using the `c4v scrawl` and `c4v scrape` functions, or using the microscope.Manager object")
@@ -282,7 +284,6 @@ class Manager:
 
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
-        print(loss)
         return should_retrain_fn(loss)
 
 

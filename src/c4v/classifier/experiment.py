@@ -46,7 +46,6 @@ class BaseExperimentSummary:
 
         return output
 
-
 @dataclass
 class BaseExperimentArguments:
     """
@@ -54,7 +53,6 @@ class BaseExperimentArguments:
     """
 
     pass
-
 
 class ExperimentFSManager:
     """
