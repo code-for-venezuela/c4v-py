@@ -102,7 +102,7 @@ irrelevant_scraped_df = pd.DataFrame(x for x in scraped_data if x.url in irrelev
 
 # Remove irrelevant cols
 irrelevant_scraped_df.drop([c for c in irrelevant_scraped_df.columns if c not in scraped_positive_data_df.columns], inplace=True, axis=1)
-irrelevant_scraped_df['label'] = "IRRELEVANTE"
+irrelevant_scraped_df['label'] = [["IRRELEVANTE"]] * len(irrelevant_scraped_df)
 
 full_df = pd.concat([scraped_positive_data_df, irrelevant_scraped_df], ignore_index=True)
 full_df = full_df.sample(frac=1.0)
