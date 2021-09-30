@@ -47,7 +47,8 @@ class Metadata:
             Parameters:
                 json_path : str = path to file to load, may raise FileNotFound error if file does not exists
         """
-        return cls(**json.load(json_path))
+        with open(json_path) as f:
+            return cls(**json.load(f))
 
 class _MetadataJSONEncoder(json.JSONEncoder):
     """
