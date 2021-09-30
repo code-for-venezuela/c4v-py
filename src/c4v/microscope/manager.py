@@ -13,22 +13,33 @@ from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
 from c4v.config import settings
+from c4v.microscope.metadata import Metadata
 
 # Python imports
-from typing import Dict, List, Iterable, Callable, Tuple, Any
-
-# Third party imports
-from torch.utils.data import Dataset
-
+from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
+from pathlib import Path
 
 class Manager:
     """
         This object encapsulates shared behavior between our multiple components,
-        allowing easy access to common operations
+        allowing easy access to common operations.
+        Parameters:
+            persistency_manager : BasePersistencyManager = persistency manager object to use when accessing persistent data storage
+            metadata : Metadata = Persistent configuration data
     """
 
-    def __init__(self, persistency_manager: BasePersistencyManager):
+    def __init__(self, persistency_manager: BasePersistencyManager, metadata : Metadata, local_files_path : str = settings.c4v_folder):
         self._persistency_manager = persistency_manager
+        self._metadata = metadata
+        self._local_files_path = local_files_path
+
+    @property
+    def local_files_path(self) -> str:
+        return self._local_files_path 
+
+    @local_files_path.setter
+    def local_files_path(self, new_path : str):
+        self._local_files_path = new_path
 
     def get_bulk_data_for(
         self, urls: List[str], should_scrape: bool = True, save: bool = True
@@ -175,12 +186,43 @@ class Manager:
         return scrapable, non_scrapable
 
     @classmethod
-    def from_local_sqlite_db(cls, db_path: str):
+    def from_local_sqlite_db(cls, db_path: str, metadata : Union[str, Metadata]):
         """
             Create a new instance using an SQLite local db
+            metadata : str | Metadata = Path to file with metadata or metadata instance itself
         """
+        if isinstance(metadata, Metadata):
+            pass # Everything ok, just keep going
+        elif isinstance(metadata, str):
+            # If string is provided, interpret it as a filepath
+            metadata = Metadata.from_json(metadata)
+        else:
+            raise TypeError(f"metadata field should be path to metadata files or metadata instance. Provided object's type: {type(metadata)}")
+        
         db = SqliteManager(db_path)
-        return cls(db)
+        return cls(db, metadata)
+
+    @classmethod
+    def from_default(cls, db_path : str = None, metadata : str = None, local_files_path : str = None):
+        """
+            Create a Manager instance using files from the default `C4V_FOLDER`
+        """
+        # Set up db
+        db = SqliteManager( 
+                            db_path or \
+                            str(
+                                Path(
+                                    local_files_path or settings.c4v_folder, 
+                                    settings.local_sqlite_db_name
+                                )
+                            )
+                        )
+
+        # Set up metadata
+        metadata =  Metadata.from_json(metadata) if metadata else Metadata()
+        
+        return cls(db, metadata, local_files_path or settings.c4v_folder)
+            
 
     def run_classification_from_experiment(
         self, branch: str, experiment: str, data: List[ScrapedData]
@@ -292,3 +334,4 @@ class Manager:
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
+
