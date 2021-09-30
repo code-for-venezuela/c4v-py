@@ -30,12 +30,13 @@ class LanguageModelExperimentArguments(BaseExperimentArguments):
                  
     """
 
-    model_name: str = None
-    use_cuda: bool = True
-    train_dataset: Dataset = None
-    eval_dataset: Dataset = None
-    train_args: Dict[str, Any] = dataclasses.field(default_factory=dict)
-    description: str = None
+    model_name: str = None                  # Base model name to load
+    use_cuda: bool = True                   # If should use cuda when available. Ignored when not available
+    train_dataset: Dataset = None           # Training dataset
+    eval_dataset: Dataset = None            # Evaluation dataset (used during training)
+    confirmation_dataset: Dataset = None    # Confirmation dataset (not used during training, used afterwards to validate training)
+    train_args: Dict[str, Any] = dataclasses.field(default_factory=dict) # Training arguments passed to the Trainer object
+    description: str = None                 # Optional description 
 
 
 @dataclasses.dataclass
@@ -84,6 +85,7 @@ class LanguageModelExperiment(BaseExperiment):
             train_dataset=args.train_dataset,
             eval_dataset=args.eval_dataset,
             train_args=args.train_args,
+            confirmation_dataset=args.confirmation_dataset
         )
         summary = LanguageModelExperimentSummary(
             description=args.description, result=metrics_df, user_args=args

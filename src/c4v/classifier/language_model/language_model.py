@@ -26,7 +26,6 @@ import tempfile
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.classifier.base_model import BaseModel
-from c4v.config import settings
 
 
 class LanguageModel(BaseModel):
@@ -147,15 +146,6 @@ class LanguageModel(BaseModel):
                 return len(self.encodings.input_ids)
 
         return _Dataset(batch)
-
-    def compute_eval_accuracy_metrics(self, pred: EvalPrediction) -> Dict[str, Any]:
-        """
-            Generate a compute metrics function using the optional argument function to 
-            additionally check if, based on the results, the model should be retrained
-        """
-        d = dict(pred)
-        del pred
-        return d
 
     def eval_accuracy(
         self, dataset: Dataset, model: Any = None, batch_size: int = 1
@@ -297,17 +287,20 @@ class LanguageModel(BaseModel):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
+        confirmation_dataset: Dataset,
         train_args: Dict[str, Any] = None,
         model_name: str = None,
     ) -> pd.DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
             Parameters:
+                train_dataset : Dataset = dataset to use during training
+                eval_dataset : Dataset = dataset to use during training, when evaluating a model
+                confirmation_dataset : Dataset = dataset to use after training, when validating a model
                 train_args : Dict[str, Any] = arguments passed to trainig arguments
-                columns : [str] = columns to use in the dataset
-                dataset : dataset tu use during training, should be a name of a dataset under <project_root>/data/raw/huggingface
+                model_name : str = Base model name for selecting next model to use
             Return:
-                Classifier metrics
+                Classifier metrics as a Dataframe
         """
 
         # check that you have a folder where to store results
@@ -322,7 +315,7 @@ class LanguageModel(BaseModel):
             AutoModelForMaskedLM.from_pretrained(model_name)
             if model_name
             else self.model
-        )  # TODO Should be changed to allow custom model loading and training
+        )
 
         # Fine tune the model
         fine_tuned_model_trainer = self.train_and_save_model(
@@ -340,7 +333,7 @@ class LanguageModel(BaseModel):
 
         # Get the metrics from the model
         metrics_df = self.evaluate_metrics(
-            trainer=fine_tuned_model_trainer, val_dataset=eval_dataset
+            trainer=fine_tuned_model_trainer, val_dataset=confirmation_dataset
         )
 
         return metrics_df
