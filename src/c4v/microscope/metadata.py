@@ -30,7 +30,7 @@ class Metadata:
         """
             Create instance from json-formated string
         """
-        return cls(json.loads(json_str))
+        return cls(**json.loads(json_str))
 
     def to_json(self, filename : str, pretty : bool = False) -> str:
         """
@@ -44,8 +44,10 @@ class Metadata:
     def from_json(cls, json_path : str):
         """
             Create an instance from a json file
+            Parameters:
+                json_path : str = path to file to load, may raise FileNotFound error if file does not exists
         """
-        return cls(json.load(json_path))
+        return cls(**json.load(json_path))
 
 class _MetadataJSONEncoder(json.JSONEncoder):
     """
