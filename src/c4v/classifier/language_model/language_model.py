@@ -47,8 +47,8 @@ class LanguageModel(BaseModel):
 
             Parameters:
                 data : Iterable[ScrapedData] = Data to use in the dataset 
-                fields : [str] = names of fields in each instance to use when extracting text
-                tokenizer : Any = A huggingface tokenizer used to tokenize text into input ids, use the 
+                fields : [str] = (optional) names of fields in each instance to use when extracting text
+                tokenizer : Any = (optional) A huggingface tokenizer used to tokenize text into input ids, use the 
                                   configured model's tokenizer by default, provide this field to override it
             Return:
                 A dataset with masked and correct answer based on the given data as rows
@@ -297,8 +297,8 @@ class LanguageModel(BaseModel):
                 train_dataset : Dataset = dataset to use during training
                 eval_dataset : Dataset = dataset to use during training, when evaluating a model
                 confirmation_dataset : Dataset = dataset to use after training, when validating a model
-                train_args : Dict[str, Any] = arguments passed to trainig arguments
-                model_name : str = Base model name for selecting next model to use
+                train_args : Dict[str, Any] = (optional) arguments passed to trainig arguments
+                model_name : str = (optional) Base model name for selecting next model to use
             Return:
                 Classifier metrics as a Dataframe
         """
