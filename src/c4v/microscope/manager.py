@@ -6,11 +6,11 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
-from c4v.classifier.classifier import Classifier
+from c4v.classifier.classifier import Classifier, Labels
 from c4v.classifier.language_model.language_model import LanguageModel
 from c4v.config import settings
 from c4v.microscope.metadata import Metadata
@@ -18,6 +18,8 @@ from c4v.microscope.metadata import Metadata
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
 from pathlib import Path
+import sys
+
 
 class Manager:
     """
@@ -35,11 +37,18 @@ class Manager:
 
     @property
     def local_files_path(self) -> str:
+        """
+            Path where files (.c4v folder) will be saved
+        """
         return self._local_files_path 
 
     @local_files_path.setter
     def local_files_path(self, new_path : str):
         self._local_files_path = new_path
+
+    @property
+    def persistency_manager(self) -> BasePersistencyManager:
+        return self._persistency_manager
 
     def get_bulk_data_for(
         self, urls: List[str], should_scrape: bool = True, save: bool = True
@@ -118,9 +127,10 @@ class Manager:
                 crawler_names : [str] = names of crawlers to be ran when this function is called. If no list is passed, then 
                                         all crawlers will be used
                 post_process : ([str]) -> None = Function to call over new elements as they come
-                limit        : int = Max amount of urls to save
+                limit        : int = Max amount of urls to save, -1 when no limit 
         """
         db = self._persistency_manager
+        limit = limit if limit >=0 else sys.maxsize
 
         class Counter:
             def __init__(self):
@@ -133,8 +143,9 @@ class Manager:
 
         # Function to process urls as they come
         def save_urls(urls: List[str]):
-            urls = db.filter_scraped_urls(urls)
-            datas = [ScrapedData(url=url) for url in urls]
+            # Filter already known urls and take at the must the necessary ones to fill the required size
+            urls = db.filter_known_urls(urls)[:limit - counter.count]
+            datas = [ScrapedData(url=url, source=Sources.SCRAPING) for url in urls]
             db.save(datas)
 
             # Update how much elements have beed added so far

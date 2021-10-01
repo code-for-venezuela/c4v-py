@@ -78,13 +78,14 @@ def scrape(
             + loud : bool = if should print scraped data once a scraping is finished\n
     """
 
-    db_manager = SqliteManager(DEFAULT_DB)
-    client = CLIClient(Manager(db_manager), urls, files)
+    manager = Manager.from_default()
+    client = CLIClient(manager, urls, files)
+
     # Read urls
     urls_to_scrape = []
 
     if not urls:
-        urls_to_scrape = [d.url for d in db_manager.get_all(limit, scraped=False)]
+        urls_to_scrape = [d.url for d in manager.get_all(limit, scraped=False)]
     elif files:  # if urls are stored in files
         urls_to_scrape = client.get_urls(urls)
     else:
@@ -158,6 +159,7 @@ def crawl(
             crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name in crawlers
         ]
 
+    print("limit is: ", limit)
     client.crawl_new_urls_for(crawlers_to_run, limit, loud)
 
 
@@ -165,13 +167,14 @@ def crawl(
 @click.option("--urls", is_flag=True, help="Only list urls")
 @click.option("--limit", default=100, help='List only up to "limit" rows')
 @click.option("--col-len", default=50, help="Columns max length")
+@click.option("--count", is_flag=True, help="Print only count of selected data")
 @click.option(
     "--scraped-only",
     default=None,
     help="Retrieve only complete rows, those with its scraped data",
 )
 def list(
-    urls: bool = False, limit: int = 100, col_len: int = 50, scraped_only: bool = None
+    urls: bool = False, limit: int = 100, col_len: int = 50, count : bool = False, scraped_only: bool = None
 ):
     """
     List requested info as specified by arguments.\n
@@ -184,7 +187,7 @@ def list(
 
     scraped_only = (
         scraped_only == "true" or scraped_only == "True" or scraped_only == "1"
-    )
+    ) if scraped_only else None
 
     db_manager = SqliteManager(DEFAULT_DB)
 
@@ -194,13 +197,18 @@ def list(
             click.echo(data.url)
         return
 
+    data = [d for d in db_manager.get_all(limit, scraped_only)]
+
+    if count:
+        click.echo(len(data))
+        return
+
     # Get printable version of retrieved data
     data_to_print = data_list_to_table_str(
-        [d for d in db_manager.get_all(limit, scraped_only)], max_cell_len=col_len
+        data, max_cell_len=col_len
     )
 
     click.echo(data_to_print)
-    print(scraped_only)
 
 
 @c4v_cli.command()
@@ -226,7 +234,7 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         )
         return
 
-    manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    manager = Manager.from_default()
     client = CLIClient(manager, inputs[1:], file)
 
     # validate branch and name
@@ -263,7 +271,7 @@ def show(url: str, no_scrape: bool = False):
         Show the entire data for a given URL
     """
     # Create manager object
-    manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    manager = Manager.from_default()
     client = CLIClient(manager, [url])
 
     data = client.get_data_for_urls(should_scrape=not no_scrape)
@@ -332,7 +340,7 @@ def explain(
             experiment : str = experiment format, following <branch_name>/<experiment_name> format
             sentence   : str = expression to explain 
     """
-    microscope_manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+    microscope_manager = Manager.from_default()
     client = CLIClient(microscope_manager)
 
     # Get text to explain
@@ -398,7 +406,7 @@ class CLIClient:
 
         # Default manager
         if not manager:
-            manager = Manager.from_local_sqlite_db(DEFAULT_DB)
+            manager = Manager.from_default()
 
         self._manager = manager
 

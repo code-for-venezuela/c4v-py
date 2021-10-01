@@ -33,6 +33,13 @@ class BasePersistencyManager:
         """
         raise NotImplementedError("Implement filter_scraped_urls abstract function")
 
+    def filter_known_urls(self, urls: List[str]) -> List[str]:
+        """
+            Filter out urls that are already known to the database, leaving only 
+            the ones that are new 
+        """
+        raise NotImplementedError("Implement filter_known_urls abstract function")
+
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
         """
             Filter out urls whose data is already known, leaving only the ones to be scraped
