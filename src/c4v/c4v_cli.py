@@ -11,9 +11,7 @@ import click
 from typing import List, Tuple
 from urllib.error import HTTPError
 import os
-import sys
-from c4v import microscope
-from c4v.classifier.classifier import Labels
+from pathlib import Path
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -38,14 +36,17 @@ def c4v_cli():
         Command entry point 
     """
     # init files if necessary:
-    if not os.path.isdir(DEFAULT_FILES_FOLDER):
+    path = Path(DEFAULT_FILES_FOLDER)
+    if not path.exists():
         click.echo(
-            f"[INFO] Creating local files folder at: {DEFAULT_FILES_FOLDER}", err=True
+            f"[INFO] Creating local files folder at: {DEFAULT_FILES_FOLDER}"
         )
         try:
-            os.mkdir(DEFAULT_FILES_FOLDER)
+            path.mkdir(parents=True)
         except Exception as e:
-            print(e)
+            print(f"[ERROR] Could not create '{path}' folder: {e}", err=True)
+    elif not path.is_dir():
+        click.echo(f"[ERROR] Files folder '{path}' already exists but it's not a file.", err=True)
 
 
 @c4v_cli.command()
@@ -159,7 +160,6 @@ def crawl(
             crawler.name for crawler in INSTALLED_CRAWLERS if crawler.name in crawlers
         ]
 
-    print("limit is: ", limit)
     client.crawl_new_urls_for(crawlers_to_run, limit, loud)
 
 
@@ -394,6 +394,86 @@ def explain(
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")
 
+@c4v_cli.group()
+def experiment():
+    """
+        Experiment Management. You can get info about experiments with this command, such as 
+        listing, and removing them if no longer necessary
+    """
+    path = Path(settings.experiments_dir)
+    if not path.exists():
+        click.echo(f"[INFO] Creating experiments folder in: {path}")
+        try:
+            path.mkdir()
+        except Exception as e:
+            click.echo(f"[ERROR] Could not create folder due to the following error: {e}", err=True)
+
+    elif not path.is_dir():
+        click.echo(f"[ERROR] Could not create folder {path}. File already exists but is not a folder", err=True)
+
+@experiment.command()
+@click.argument("branch", nargs = 1, required=False)
+def ls( branch : str = None):
+    """
+        List branches if no argument is provided. If a branch name is specified, then list experiments within that branch.
+        Examples:
+            c4v experiment ls
+                branch1
+                branch2
+                branch3
+            c4v experiment ls branch1
+                experiment1
+                experiment2
+    """
+    #TODO tal vez mover esta lógica al ExperimentFSManager?
+    if not branch:
+        click.echo(f"[INFO] Listing from {settings.experiments_dir}")
+        files = CLIClient._ls_files(settings.experiments_dir)
+        click.echo("\n".join(files))
+        return
+
+    # Check if branch exists
+    path = Path(settings.experiments_dir, branch)
+    if not path.exists():
+        click.echo(f"[ERROR] This is not a valid branch name: {branch} in {path}. You can see available branches using the command:\n\tc4v experiment ls", err=True)
+        return
+    elif not path.is_dir():
+        click.echo(f"[ERROR] Invalid Branch path: {path}. The branch name '{branch}' does not refers to an actual branch's directory")
+
+    # As everything is ok, just list files 
+    click.echo(f"[INFO] Listing from {path}")
+    files = CLIClient._ls_files(path=str(path))
+    click.echo("\n".join(files))
+
+@experiment.command()
+@click.argument("experiment", nargs=1)
+def summary(experiment : str):
+    """
+        Print summary for an existent experiment given its name with branch and experiment name\n
+        Example:\n
+            `c4v experiment summary branch_name/experiment_name`
+    """
+    
+    # Parse branch and experiment name
+    branch_and_experiment = CLIClient.parse_branch_and_experiment_from(experiment)
+    if not branch_and_experiment: return
+
+    # as everything went ok, parse branch name and experimet
+    branch_name, experiment_name = branch_and_experiment
+
+    path = Path(settings.experiments_dir, branch_name, experiment_name, "summary.txt")
+    # Check if file exists
+    if not path.exists():
+        click.echo(f"[ERROR] Summary for experiment {experiment} not found in {path}", err=True)
+        return
+    elif not path.is_file():
+        click.echo(f"[ERROR] Sumamry for experiment {experiment} in {path} is not a valid file", err=True)
+        return
+
+    # As everything went ok, print file content 
+    click.echo(f"[INFO] Reading summary from: {path}")
+    click.echo(path.read_text())
+
 
 class CLIClient:
     """
@@ -406,7 +486,7 @@ class CLIClient:
 
         # Default manager
         if not manager:
-            manager = Manager.from_default()
+            manager = Manager.from_default(local_files_path=settings.c4v_folder)
 
         self._manager = manager
 
@@ -431,6 +511,7 @@ class CLIClient:
         urls_to_retrieve = urls or self._urls
 
         # Check scrapable urls:
+
         scrapable_urls, non_scrapables = self._manager.split_non_scrapable(
             urls_to_retrieve
         )
@@ -501,7 +582,7 @@ class CLIClient:
                 return (branch, name)
 
         click.echo(
-            f"[ERROR] Given experiment name is not valid: {line}. Should be in the form:",
+            f"[ERROR] Given experiment name is not valid: {line}. Should be of the form:",
             err=True,
         )
         for separator in separators:
@@ -564,6 +645,13 @@ class CLIClient:
                     f"Could not open input file: {file}. Error: {e.strerror}", err=True
                 )
         return lines
+
+    @staticmethod 
+    def _ls_files(path : str) -> List[str]:
+        """
+            Returns a list of file names within a given directory 
+        """
+        return [str(x.name) for x in Path(path).glob("*")]
 
 
 if __name__ == "__main__":
