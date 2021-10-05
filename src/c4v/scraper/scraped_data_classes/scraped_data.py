@@ -4,6 +4,7 @@
 
 # Python imports
 from dataclasses import dataclass, asdict, field
+
 from typing import List, Dict, Any
 from datetime import datetime
 import json
@@ -17,7 +18,15 @@ class Labels(enum.Enum):
         Every possible label
     """
     IRRELEVANTE: str = "IRRELEVANTE"
-    DENUNCIA_FALTA_DEL_SERVICIO: str = "DENUNCIA_FALTA_DEL_SERVICIO"
+    DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
+
+    @classmethod
+    def labels(cls) -> List[str]:
+        """
+            Get list of labels as strings
+        """
+        return [l.value for l in cls]
+
 
 class Sources(enum.Enum):
     """

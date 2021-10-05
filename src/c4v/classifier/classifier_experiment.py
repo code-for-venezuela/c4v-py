@@ -133,7 +133,7 @@ class ClassifierExperiment(BaseExperiment):
         print(summary)
         return summary
 
-    def classify(self, data: ScrapedData) -> Dict[str, Any]:
+    def classify(self, data: List[ScrapedData]) -> List[Dict[str, Any]]:
         """
             Classify this sentence using configured experiment
             Parameters:

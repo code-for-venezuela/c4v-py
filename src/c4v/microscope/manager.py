@@ -245,16 +245,15 @@ class Manager:
                 experiment : str = experiment name storing model
                 data : [ScrapedData] = Instance to be classified
             Return:
-                A dict from urls to classification output
+                A List of dicts with the resulting scraped data correctly labelled
+                and its corresponding scores tensor for each possible label
         """
 
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
             branch, experiment
         )
 
-        classified = {d.url: classifier_experiment.classify(d) for d in data}
-
-        return classified
+        return  classifier_experiment.classify(data)
 
     def explain_for_experiment(
         self,

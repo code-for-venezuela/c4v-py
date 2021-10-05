@@ -5,6 +5,7 @@
 # Third party imports
 import dataclasses
 from datetime import datetime
+import re
 import click
 
 # Python imports
@@ -255,10 +256,13 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         return
 
     # Pretty print results:
-    for (url, result) in results.items():
-        click.echo(f"\t{url}")
-        for (key, value) in result.items():
-            click.echo(f"\t\t* {key} : {value}")
+    for result in results:
+        click.echo("\n")
+        data : ScrapedData = result["data"]
+        scores = result['scores']
+        click.echo(f"\t {data.title if data.title else '<no title>'} ({data.url})")
+        click.echo(f"\t\t{scores}")
+
 
 
 @c4v_cli.command()

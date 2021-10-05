@@ -5,7 +5,7 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Labels
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
@@ -37,31 +37,6 @@ from transformers.trainer_utils import EvalPrediction
 
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
-
-
-class Labels(Enum):
-    """
-        Every possible label for each article
-    """
-
-    DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
-    IRRELEVANTE = "IRRELEVANTE"
-
-    @classmethod
-    def labels(cls) -> List[str]:
-        """
-            Get list of labels as strings
-        """
-        return [l.value for l in cls]
-
-
-class Tags(Enum):
-    """
-        Possible tags variants for an article
-    """
-
-    DENUNCIA_FALTA_DEL_SERVICIO = "DENUNCIA FALTA DEL SERVICIO"
-
 
 class Classifier(BaseModel):
     """
@@ -401,9 +376,15 @@ class Classifier(BaseModel):
 
         return metrics_df
 
+    def _get_text_from_scrapeddata(self, data : ScrapedData) -> str:
+        """
+            Returns a string constructed from a scraped data instance
+        """
+        return data.title
+
     def classify(
-        self, data: ScrapedData, model: str = None
-    ) -> Dict[str, Any]:  # @TODO should use a bulk version instead
+        self, data: List[ScrapedData], model: str = None
+    ) -> List[Dict[str, Any]]:  # @TODO should use a bulk version instead
         """
             Classify the given data instance, returning classification metrics
             as a simple dict.
@@ -426,7 +407,7 @@ class Classifier(BaseModel):
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer()
         tokenized_input = roberta_tokenizer(
-            [data.title],
+            [self._get_text_from_scrapeddata(d) for d in data],
             padding=True,
             truncation=True,
             max_length=512,
@@ -434,10 +415,14 @@ class Classifier(BaseModel):
         )
 
         raw_output = roberta_model(**tokenized_input)
-        output = torch.nn.functional.softmax(raw_output.logits, dim=-1)
+        output : torch.Tensor = torch.nn.functional.softmax(raw_output.logits, dim=-1)
+        
+        result = []
+        for (x, d) in zip(output, data):
+            d.label = self.index_to_label(torch.argmax(x).item())
+            result.append({ "data" : d, "scores" : x })
 
-        label_id = torch.argmax(output).item()
-        return {"label": self.index_to_label(label_id), "scores": output.tolist()}
+        return result
 
     def explain(
         self, sentence: str, html_file: str = None, additional_label: str = None
