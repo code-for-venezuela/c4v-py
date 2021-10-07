@@ -124,6 +124,18 @@ class SqliteManager(BasePersistencyManager):
                 # Decompose row
                 (url, last_scraped, title, content, author, date, label, source) = row
 
+                if label:
+                    try:
+                        label = Labels(label)
+                    except: # not a known label
+                        label = Labels.UNKNOWN
+
+                if source:
+                    try:
+                        source = Sources(source)
+                    except: # unknown source
+                        source = Sources.UNKOWN
+
                 # parse date to datetime:
                 try:
                     last_scraped = (
@@ -239,7 +251,7 @@ class SqliteManager(BasePersistencyManager):
             for data in data_to_insert:
                 label : Labels = data["label"]
                 data["label"] = label.value if label else label
-
+                print(data['label'], type(data['label']))
                 source : Sources = data["source"]
                 data["source"] = source.value if source else source
 

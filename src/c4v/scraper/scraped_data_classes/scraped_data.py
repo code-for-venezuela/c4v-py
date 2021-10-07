@@ -19,6 +19,7 @@ class Labels(enum.Enum):
     """
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
+    UNKNOWN: str = "UNKNOWN" 
 
     @classmethod
     def labels(cls) -> List[str]:

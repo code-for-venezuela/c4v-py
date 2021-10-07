@@ -227,16 +227,18 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
 
     # Validate input:
     n_args = len(inputs)
-    if (
-        n_args < 2
-    ):  # Get at the least 2 args, experiment as branch/experiment and some url
+    if n_args < 2:  # Get at the least 2 args, experiment as branch/experiment and some url
         click.echo(
             "[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url"
         )
         return
+    
+    # check if we have to classify pending data
+    classify_pending = n_args == 2 and inputs[1] == "pending"
 
+    # Create manager object
     manager = Manager.from_default()
-    client = CLIClient(manager, inputs[1:], file)
+    client = CLIClient(manager, file)
 
     # validate branch and name
     parsed_branch_and_name = CLIClient.parse_branch_and_experiment_from(inputs[0])
@@ -246,7 +248,16 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         branch, experiment = parsed_branch_and_name
 
     # Now get data for each url
-    data = client.get_data_for_urls(should_scrape=not no_scrape)
+    if classify_pending:
+        # TODO should provide a limit for batch sizing
+        data = [d for d in manager.get_all(limit=-1, scraped=True) if not d.label]
+    else:
+        data = client.get_data_for_urls(urls=inputs[1:],  should_scrape=not no_scrape)
+
+    # Do nothing if not necessary:
+    if not data:
+        click.echo("[INFO] Nothing to classify")
+        return
 
     # Try to classify given data
     try:
@@ -255,12 +266,18 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}")
         return
 
+    if classify_pending:
+        manager.persistency_manager.save((r['data'] for r in results))
+        click.echo(f"[INFO] Classified {len(results)} instances")
+        return 
+
     # Pretty print results:
     for result in results:
         click.echo("\n")
         data : ScrapedData = result["data"]
         scores = result['scores']
-        click.echo(f"\t {data.title if data.title else '<no title>'} ({data.url})")
+        click.echo(f"\t{data.title if data.title else '<no title>'} ({data.url})")
+        click.echo(f"\t\t{data.label}")
         click.echo(f"\t\t{scores}")
 
 

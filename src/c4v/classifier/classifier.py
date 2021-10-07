@@ -419,7 +419,7 @@ class Classifier(BaseModel):
         
         result = []
         for (x, d) in zip(output, data):
-            d.label = self.index_to_label(torch.argmax(x).item())
+            d.label = Labels( self.index_to_label(torch.argmax(x).item()) )
             result.append({ "data" : d, "scores" : x })
 
         return result
