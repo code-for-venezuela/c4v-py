@@ -251,7 +251,6 @@ class SqliteManager(BasePersistencyManager):
             for data in data_to_insert:
                 label : Labels = data["label"]
                 data["label"] = label.value if label else label
-                print(data['label'], type(data['label']))
                 source : Sources = data["source"]
                 data["source"] = source.value if source else source
 
