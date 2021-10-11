@@ -3,9 +3,7 @@
     so we can test things in the meanwhile
 """
 # Third party imports
-import dataclasses
 from datetime import datetime
-import re
 import click
 
 # Python imports
@@ -13,6 +11,7 @@ from typing import List, Tuple
 from urllib.error import HTTPError
 import os
 from pathlib import Path
+import sys
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -217,13 +216,16 @@ def list(
     "--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB"
 )
 @click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
+@click.option("--limit", is_flag=False, help="Limit how much instances to classify in this run. Specially usefull when classifying pending data, if less than 0, then select as much as you can (default). Otherwise, classify at the most the given number", type=int)
 @click.argument("inputs", nargs=-1)
-def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False):
+def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False, limit: int = -1):
     """
         Run a classification over a given url or from a file, using the model stored in the provided
         experiment. Usage:
             c4v classify <branch_name>/<experiment_name> <url>
     """
+    # Parse limit
+    limit = limit if limit > 0 else sys.maxsize
 
     # Validate input:
     n_args = len(inputs)
@@ -250,7 +252,7 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     # Now get data for each url
     if classify_pending:
         # TODO should provide a limit for batch sizing
-        data = [d for d in manager.get_all(limit=-1, scraped=True) if not d.label]
+        data = [d for d in manager.get_all(limit=-1, scraped=True) if not d.label][:limit]
     else:
         data = client.get_data_for_urls(urls=inputs[1:],  should_scrape=not no_scrape)
 
