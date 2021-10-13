@@ -237,16 +237,18 @@ class Manager:
 
     def run_classification_from_experiment(
         self, branch: str, experiment: str, data: List[ScrapedData]
-    ) -> Dict[str, Dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
             Classify given data instance list, returning its metrics
             Parameters:
-                branch : str = branch of model to use
+                branch : str = branch name of model to use
                 experiment : str = experiment name storing model
                 data : [ScrapedData] = Instance to be classified
             Return:
                 A List of dicts with the resulting scraped data correctly labelled
-                and its corresponding scores tensor for each possible label
+                and its corresponding scores tensor for each possible label. Available fields:
+                    + data : ScrapedData = resulting data instance after classification
+                    + scores : torch.Tensor = Scores for each label returned by the classifier
         """
 
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
@@ -254,6 +256,32 @@ class Manager:
         )
 
         return  classifier_experiment.classify(data)
+
+    def run_pending_classification_from_experiment(
+        self, branch: str, experiment: str, save: bool = True, limit: int = -1
+    ) -> List[Dict[str, Any]]:
+        """
+            Classify data pending for classification in local db, returning the obtained results and saving it 
+            to database. 
+            Parameters:
+                branch : str = 
+        """
+        # Parse limit
+        limit = limit if limit >= 0 else sys.maxsize
+
+        # Request at the most "limit" instances
+        data = list(x for x in self.persistency_manager.get_all(scraped=True) if not x.label)[:limit]
+
+        # classify
+        results = self.run_classification_from_experiment(branch, experiment, data)
+
+        # Save if requested so
+        if save:
+            self.persistency_manager.save((x['data'] for x in results))
+
+        return results
+
+
 
     def explain_for_experiment(
         self,

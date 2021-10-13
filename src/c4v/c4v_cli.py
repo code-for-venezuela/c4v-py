@@ -224,9 +224,6 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         experiment. Usage:
             c4v classify <branch_name>/<experiment_name> <url>
     """
-    # Parse limit
-    limit = limit if limit > 0 else sys.maxsize
-
     # Validate input:
     n_args = len(inputs)
     if n_args < 2:  # Get at the least 2 args, experiment as branch/experiment and some url
@@ -235,8 +232,6 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
         )
         return
     
-    # check if we have to classify pending data
-    classify_pending = n_args == 2 and inputs[1] == "pending"
 
     # Create manager object
     manager = Manager.from_default()
@@ -249,12 +244,14 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     else:
         branch, experiment = parsed_branch_and_name
 
-    # Now get data for each url
+    # check if we have to classify pending data
+    classify_pending = n_args == 2 and inputs[1] == "pending"
     if classify_pending:
-        # TODO should provide a limit for batch sizing
-        data = [d for d in manager.get_all(limit=-1, scraped=True) if not d.label][:limit]
-    else:
-        data = client.get_data_for_urls(urls=inputs[1:],  should_scrape=not no_scrape)
+        res = manager.run_pending_classification_from_experiment(branch, experiment, save=True, limit=limit)
+        click.echo(f"[INFO] {len(res)} classified rows")
+        return 
+
+    data = client.get_data_for_urls(urls=inputs[1:],  should_scrape=not no_scrape)
 
     # Do nothing if not necessary:
     if not data:
@@ -267,11 +264,6 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     except ValueError as e:
         click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}")
         return
-
-    if classify_pending:
-        manager.persistency_manager.save((r['data'] for r in results))
-        click.echo(f"[INFO] Classified {len(results)} instances")
-        return 
 
     # Pretty print results:
     for result in results:

@@ -384,7 +384,7 @@ class Classifier(BaseModel):
 
     def classify(
         self, data: List[ScrapedData], model: str = None
-    ) -> List[Dict[str, Any]]:  # @TODO should use a bulk version instead
+    ) -> List[Dict[str, Any]]: 
         """
             Classify the given data instance, returning classification metrics
             as a simple dict.
@@ -393,7 +393,10 @@ class Classifier(BaseModel):
                 model : str = model name of model to load use when classifying. If no model provided,
                               use the model configured for this classifier
             Return:
-                Dict with classification data, predicted label and score for each possible label
+                A List of dicts with the resulting scraped data correctly labelled
+                and its corresponding scores tensor for each possible label. Available fields:
+                    + data : ScrapedData = resulting data instance after classification
+                    + scores : torch.Tensor = Scores for each label returned by the classifier
         """
         # Get model from experiment:
         if model is None:
