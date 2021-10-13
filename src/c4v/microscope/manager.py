@@ -264,7 +264,15 @@ class Manager:
             Classify data pending for classification in local db, returning the obtained results and saving it 
             to database. 
             Parameters:
-                branch : str = 
+                branch : str = branch name
+                experiment : str = experiment name
+                save : bool = if should store results in db
+                limit : maximum number of rows to classify
+            Return:
+                A List of dicts with the resulting scraped data correctly labelled
+                and its corresponding scores tensor for each possible label. Available fields:
+                    + data : ScrapedData = resulting data instance after classification
+                    + scores : torch.Tensor = Scores for each label returned by the classifier
         """
         # Parse limit
         limit = limit if limit >= 0 else sys.maxsize
@@ -280,7 +288,6 @@ class Manager:
             self.persistency_manager.save((x['data'] for x in results))
 
         return results
-
 
 
     def explain_for_experiment(
