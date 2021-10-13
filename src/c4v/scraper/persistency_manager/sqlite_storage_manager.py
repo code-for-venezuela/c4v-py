@@ -127,13 +127,13 @@ class SqliteManager(BasePersistencyManager):
                 if label:
                     try:
                         label = Labels(label)
-                    except: # not a known label
+                    except:  # not a known label
                         label = Labels.UNKNOWN
 
                 if source:
                     try:
                         source = Sources(source)
-                    except: # unknown source
+                    except:  # unknown source
                         source = Sources.UNKOWN
 
                 # parse date to datetime:
@@ -171,7 +171,7 @@ class SqliteManager(BasePersistencyManager):
                     date=date,
                     categories=categories,
                     label=label,
-                    source=source
+                    source=source,
                 )
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
@@ -209,8 +209,7 @@ class SqliteManager(BasePersistencyManager):
 
                 # if last_scraped is null, then it wasn't scraped
                 is_there = cursor.execute(
-                    "SELECT 1 FROM scraped_data WHERE url=?",
-                    [url],
+                    "SELECT 1 FROM scraped_data WHERE url=?", [url],
                 ).fetchone()
 
                 if not is_there:
@@ -249,9 +248,9 @@ class SqliteManager(BasePersistencyManager):
 
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             for data in data_to_insert:
-                label : Labels = data["label"]
+                label: Labels = data["label"]
                 data["label"] = label.value if label else label
-                source : Sources = data["source"]
+                source: Sources = data["source"]
                 data["source"] = source.value if source else source
 
             cursor.executemany(

@@ -38,6 +38,7 @@ from transformers.trainer_utils import EvalPrediction
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
+
 class Classifier(BaseModel):
     """
         This class provides a simple way to run simple experiments.
@@ -376,7 +377,7 @@ class Classifier(BaseModel):
 
         return metrics_df
 
-    def _get_text_from_scrapeddata(self, data : ScrapedData) -> str:
+    def _get_text_from_scrapeddata(self, data: ScrapedData) -> str:
         """
             Returns a string constructed from a scraped data instance
         """
@@ -384,7 +385,7 @@ class Classifier(BaseModel):
 
     def classify(
         self, data: List[ScrapedData], model: str = None
-    ) -> List[Dict[str, Any]]: 
+    ) -> List[Dict[str, Any]]:
         """
             Classify the given data instance, returning classification metrics
             as a simple dict.
@@ -418,12 +419,12 @@ class Classifier(BaseModel):
         )
 
         raw_output = roberta_model(**tokenized_input)
-        output : torch.Tensor = torch.nn.functional.softmax(raw_output.logits, dim=-1)
-        
+        output: torch.Tensor = torch.nn.functional.softmax(raw_output.logits, dim=-1)
+
         result = []
         for (x, d) in zip(output, data):
-            d.label = Labels( self.index_to_label(torch.argmax(x).item()) )
-            result.append({ "data" : d, "scores" : x })
+            d.label = Labels(self.index_to_label(torch.argmax(x).item()))
+            result.append({"data": d, "scores": x})
 
         return result
 

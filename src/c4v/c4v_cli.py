@@ -38,15 +38,16 @@ def c4v_cli():
     # init files if necessary:
     path = Path(DEFAULT_FILES_FOLDER)
     if not path.exists():
-        click.echo(
-            f"[INFO] Creating local files folder at: {DEFAULT_FILES_FOLDER}"
-        )
+        click.echo(f"[INFO] Creating local files folder at: {DEFAULT_FILES_FOLDER}")
         try:
             path.mkdir(parents=True)
         except Exception as e:
             print(f"[ERROR] Could not create '{path}' folder: {e}", err=True)
     elif not path.is_dir():
-        click.echo(f"[ERROR] Files folder '{path}' already exists but it's not a file.", err=True)
+        click.echo(
+            f"[ERROR] Files folder '{path}' already exists but it's not a file.",
+            err=True,
+        )
 
 
 @c4v_cli.command()
@@ -174,7 +175,11 @@ def crawl(
     help="Retrieve only complete rows, those with its scraped data",
 )
 def list(
-    urls: bool = False, limit: int = 100, col_len: int = 50, count : bool = False, scraped_only: bool = None
+    urls: bool = False,
+    limit: int = 100,
+    col_len: int = 50,
+    count: bool = False,
+    scraped_only: bool = None,
 ):
     """
     List requested info as specified by arguments.\n
@@ -186,8 +191,10 @@ def list(
     """
 
     scraped_only = (
-        scraped_only == "true" or scraped_only == "True" or scraped_only == "1"
-    ) if scraped_only else None
+        (scraped_only == "true" or scraped_only == "True" or scraped_only == "1")
+        if scraped_only
+        else None
+    )
 
     db_manager = SqliteManager(DEFAULT_DB)
 
@@ -204,9 +211,7 @@ def list(
         return
 
     # Get printable version of retrieved data
-    data_to_print = data_list_to_table_str(
-        data, max_cell_len=col_len
-    )
+    data_to_print = data_list_to_table_str(data, max_cell_len=col_len)
 
     click.echo(data_to_print)
 
@@ -216,9 +221,16 @@ def list(
     "--no-scrape", is_flag=True, help="Don't scrape if url is not found in DB"
 )
 @click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
-@click.option("--limit", is_flag=False, help="Limit how much instances to classify in this run. Specially usefull when classifying pending data, if less than 0, then select as much as you can (default). Otherwise, classify at the most the given number", type=int)
+@click.option(
+    "--limit",
+    is_flag=False,
+    help="Limit how much instances to classify in this run. Specially usefull when classifying pending data, if less than 0, then select as much as you can (default). Otherwise, classify at the most the given number",
+    type=int,
+)
 @click.argument("inputs", nargs=-1)
-def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False, limit: int = -1):
+def classify(
+    inputs: List[str] = [], no_scrape: bool = False, file: bool = False, limit: int = -1
+):
     """
         Run a classification over a given url or from a file, using the model stored in the provided
         experiment. Usage:
@@ -226,12 +238,13 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     """
     # Validate input:
     n_args = len(inputs)
-    if n_args < 2:  # Get at the least 2 args, experiment as branch/experiment and some url
+    if (
+        n_args < 2
+    ):  # Get at the least 2 args, experiment as branch/experiment and some url
         click.echo(
             "[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url"
         )
         return
-    
 
     # Create manager object
     manager = Manager.from_default()
@@ -247,11 +260,13 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     # check if we have to classify pending data
     classify_pending = n_args == 2 and inputs[1] == "pending"
     if classify_pending:
-        res = manager.run_pending_classification_from_experiment(branch, experiment, save=True, limit=limit)
+        res = manager.run_pending_classification_from_experiment(
+            branch, experiment, save=True, limit=limit
+        )
         click.echo(f"[INFO] {len(res)} classified rows")
-        return 
+        return
 
-    data = client.get_data_for_urls(urls=inputs[1:],  should_scrape=not no_scrape)
+    data = client.get_data_for_urls(urls=inputs[1:], should_scrape=not no_scrape)
 
     # Do nothing if not necessary:
     if not data:
@@ -268,12 +283,11 @@ def classify(inputs: List[str] = [], no_scrape: bool = False, file: bool = False
     # Pretty print results:
     for result in results:
         click.echo("\n")
-        data : ScrapedData = result["data"]
-        scores = result['scores']
+        data: ScrapedData = result["data"]
+        scores = result["scores"]
         click.echo(f"\t{data.title if data.title else '<no title>'} ({data.url})")
         click.echo(f"\t\t{data.label}")
         click.echo(f"\t\t{scores}")
-
 
 
 @c4v_cli.command()
@@ -409,6 +423,7 @@ def explain(
     for (word, score) in scores:
         click.echo(f"\t* {word} : {score}")
 
+
 @c4v_cli.group()
 def experiment():
     """
@@ -421,14 +436,21 @@ def experiment():
         try:
             path.mkdir()
         except Exception as e:
-            click.echo(f"[ERROR] Could not create folder due to the following error: {e}", err=True)
+            click.echo(
+                f"[ERROR] Could not create folder due to the following error: {e}",
+                err=True,
+            )
 
     elif not path.is_dir():
-        click.echo(f"[ERROR] Could not create folder {path}. File already exists but is not a folder", err=True)
+        click.echo(
+            f"[ERROR] Could not create folder {path}. File already exists but is not a folder",
+            err=True,
+        )
+
 
 @experiment.command()
-@click.argument("branch", nargs = 1, required=False)
-def ls( branch : str = None):
+@click.argument("branch", nargs=1, required=False)
+def ls(branch: str = None):
     """
         List branches if no argument is provided. If a branch name is specified, then list experiments within that branch.
         Examples:
@@ -440,7 +462,7 @@ def ls( branch : str = None):
                 experiment1
                 experiment2
     """
-    #TODO tal vez mover esta lógica al ExperimentFSManager?
+    # TODO tal vez mover esta lógica al ExperimentFSManager?
     if not branch:
         click.echo(f"[INFO] Listing from {settings.experiments_dir}")
         files = CLIClient._ls_files(settings.experiments_dir)
@@ -450,28 +472,35 @@ def ls( branch : str = None):
     # Check if branch exists
     path = Path(settings.experiments_dir, branch)
     if not path.exists():
-        click.echo(f"[ERROR] This is not a valid branch name: {branch} in {path}. You can see available branches using the command:\n\tc4v experiment ls", err=True)
+        click.echo(
+            f"[ERROR] This is not a valid branch name: {branch} in {path}. You can see available branches using the command:\n\tc4v experiment ls",
+            err=True,
+        )
         return
     elif not path.is_dir():
-        click.echo(f"[ERROR] Invalid Branch path: {path}. The branch name '{branch}' does not refers to an actual branch's directory")
+        click.echo(
+            f"[ERROR] Invalid Branch path: {path}. The branch name '{branch}' does not refers to an actual branch's directory"
+        )
 
-    # As everything is ok, just list files 
+    # As everything is ok, just list files
     click.echo(f"[INFO] Listing from {path}")
     files = CLIClient._ls_files(path=str(path))
     click.echo("\n".join(files))
 
+
 @experiment.command()
 @click.argument("experiment", nargs=1)
-def summary(experiment : str):
+def summary(experiment: str):
     """
         Print summary for an existent experiment given its name with branch and experiment name\n
         Example:\n
             `c4v experiment summary branch_name/experiment_name`
     """
-    
+
     # Parse branch and experiment name
     branch_and_experiment = CLIClient.parse_branch_and_experiment_from(experiment)
-    if not branch_and_experiment: return
+    if not branch_and_experiment:
+        return
 
     # as everything went ok, parse branch name and experimet
     branch_name, experiment_name = branch_and_experiment
@@ -479,13 +508,18 @@ def summary(experiment : str):
     path = Path(settings.experiments_dir, branch_name, experiment_name, "summary.txt")
     # Check if file exists
     if not path.exists():
-        click.echo(f"[ERROR] Summary for experiment {experiment} not found in {path}", err=True)
+        click.echo(
+            f"[ERROR] Summary for experiment {experiment} not found in {path}", err=True
+        )
         return
     elif not path.is_file():
-        click.echo(f"[ERROR] Sumamry for experiment {experiment} in {path} is not a valid file", err=True)
+        click.echo(
+            f"[ERROR] Sumamry for experiment {experiment} in {path} is not a valid file",
+            err=True,
+        )
         return
 
-    # As everything went ok, print file content 
+    # As everything went ok, print file content
     click.echo(f"[INFO] Reading summary from: {path}")
     click.echo(path.read_text())
 
@@ -661,8 +695,8 @@ class CLIClient:
                 )
         return lines
 
-    @staticmethod 
-    def _ls_files(path : str) -> List[str]:
+    @staticmethod
+    def _ls_files(path: str) -> List[str]:
         """
             Returns a list of file names within a given directory 
         """

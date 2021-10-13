@@ -13,13 +13,15 @@ import enum
 # Local imports
 from c4v.config import settings
 
+
 class Labels(enum.Enum):
     """
         Every possible label
     """
+
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
-    UNKNOWN: str = "UNKNOWN" 
+    UNKNOWN: str = "UNKNOWN"
 
     @classmethod
     def labels(cls) -> List[str]:
@@ -33,6 +35,7 @@ class Sources(enum.Enum):
     """
         Every possible source
     """
+
     UNKOWN: str = "UNKNOWN"
     SCRAPING: str = "SCRAPING"
     CLIENT: str = "CLIENT"
@@ -53,12 +56,12 @@ class ScrapedData:
 
     url: str
     last_scraped: datetime = None
-    title:   str    = None
-    content: str    = None
-    author:  str    = None
+    title: str = None
+    content: str = None
+    author: str = None
     categories: List[str] = field(default_factory=list)
-    date:   str = None
-    label:  Labels = None
+    date: str = None
+    label: Labels = None
     source: Sources = None
 
     def pretty_print(self, max_content_len: int = -1) -> str:

@@ -37,5 +37,5 @@ class ElPitazoData(BaseDataFormat):
             content=self.body,
             url=self.url,
             last_scraped=self.last_scraped,
-            source=Sources.SCRAPING
+            source=Sources.SCRAPING,
         )

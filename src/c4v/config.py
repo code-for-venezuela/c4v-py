@@ -18,9 +18,9 @@ settings = Dynaconf(
         Validator(
             "DEFAULT_LANG_MODEL_MIN_LOSS", default=0.15
         ),  # Minimum acceptable loss for base language model, if the loss is greater, a new training is required
-        Validator (
-        "EXPERIMENTS_DIR", default = os.path.join(_HOME, ".c4v/experiments/")
-        )   # Default name for experiments folder 
+        Validator(
+            "EXPERIMENTS_DIR", default=os.path.join(_HOME, ".c4v/experiments/")
+        ),  # Default name for experiments folder
     ],
 )
 

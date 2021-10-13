@@ -30,7 +30,12 @@ class Manager:
             metadata : Metadata = Persistent configuration data
     """
 
-    def __init__(self, persistency_manager: BasePersistencyManager, metadata : Metadata, local_files_path : str = settings.c4v_folder):
+    def __init__(
+        self,
+        persistency_manager: BasePersistencyManager,
+        metadata: Metadata,
+        local_files_path: str = settings.c4v_folder,
+    ):
         self._persistency_manager = persistency_manager
         self._metadata = metadata
         self._local_files_path = local_files_path
@@ -40,10 +45,10 @@ class Manager:
         """
             Path where files (.c4v folder) will be saved
         """
-        return self._local_files_path 
+        return self._local_files_path
 
     @local_files_path.setter
-    def local_files_path(self, new_path : str):
+    def local_files_path(self, new_path: str):
         self._local_files_path = new_path
 
     @property
@@ -130,7 +135,7 @@ class Manager:
                 limit        : int = Max amount of urls to save, -1 when no limit 
         """
         db = self._persistency_manager
-        limit = limit if limit >=0 else sys.maxsize
+        limit = limit if limit >= 0 else sys.maxsize
 
         class Counter:
             def __init__(self):
@@ -144,7 +149,7 @@ class Manager:
         # Function to process urls as they come
         def save_urls(urls: List[str]):
             # Filter already known urls and take at the must the necessary ones to fill the required size
-            urls = db.filter_known_urls(urls)[:limit - counter.count]
+            urls = db.filter_known_urls(urls)[: limit - counter.count]
             datas = [ScrapedData(url=url, source=Sources.SCRAPING) for url in urls]
             db.save(datas)
 
@@ -197,43 +202,46 @@ class Manager:
         return scrapable, non_scrapable
 
     @classmethod
-    def from_local_sqlite_db(cls, db_path: str, metadata : Union[str, Metadata]):
+    def from_local_sqlite_db(cls, db_path: str, metadata: Union[str, Metadata]):
         """
             Create a new instance using an SQLite local db
             metadata : str | Metadata = Path to file with metadata or metadata instance itself
         """
         if isinstance(metadata, Metadata):
-            pass # Everything ok, just keep going
+            pass  # Everything ok, just keep going
         elif isinstance(metadata, str):
             # If string is provided, interpret it as a filepath
             metadata = Metadata.from_json(metadata)
         else:
-            raise TypeError(f"metadata field should be path to metadata files or metadata instance. Provided object's type: {type(metadata)}")
-        
+            raise TypeError(
+                f"metadata field should be path to metadata files or metadata instance. Provided object's type: {type(metadata)}"
+            )
+
         db = SqliteManager(db_path)
         return cls(db, metadata)
 
     @classmethod
-    def from_default(cls, db_path : str = None, metadata : str = None, local_files_path : str = None):
+    def from_default(
+        cls, db_path: str = None, metadata: str = None, local_files_path: str = None
+    ):
         """
             Create a Manager instance using files from the default `C4V_FOLDER`
         """
         # Set up db
-        db = SqliteManager( 
-                            db_path or \
-                            str(
-                                Path(
-                                    local_files_path or settings.c4v_folder, 
-                                    settings.local_sqlite_db_name
-                                )
-                            )
-                        )
+        db = SqliteManager(
+            db_path
+            or str(
+                Path(
+                    local_files_path or settings.c4v_folder,
+                    settings.local_sqlite_db_name,
+                )
+            )
+        )
 
         # Set up metadata
-        metadata =  Metadata.from_json(metadata) if metadata else Metadata()
-        
+        metadata = Metadata.from_json(metadata) if metadata else Metadata()
+
         return cls(db, metadata, local_files_path or settings.c4v_folder)
-            
 
     def run_classification_from_experiment(
         self, branch: str, experiment: str, data: List[ScrapedData]
@@ -255,7 +263,7 @@ class Manager:
             branch, experiment
         )
 
-        return  classifier_experiment.classify(data)
+        return classifier_experiment.classify(data)
 
     def run_pending_classification_from_experiment(
         self, branch: str, experiment: str, save: bool = True, limit: int = -1
@@ -278,17 +286,18 @@ class Manager:
         limit = limit if limit >= 0 else sys.maxsize
 
         # Request at the most "limit" instances
-        data = list(x for x in self.persistency_manager.get_all(scraped=True) if not x.label)[:limit]
+        data = list(
+            x for x in self.persistency_manager.get_all(scraped=True) if not x.label
+        )[:limit]
 
         # classify
         results = self.run_classification_from_experiment(branch, experiment, data)
 
         # Save if requested so
         if save:
-            self.persistency_manager.save((x['data'] for x in results))
+            self.persistency_manager.save((x["data"] for x in results))
 
         return results
-
 
     def explain_for_experiment(
         self,
@@ -379,4 +388,3 @@ class Manager:
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
-
