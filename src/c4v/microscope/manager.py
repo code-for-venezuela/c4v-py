@@ -10,7 +10,7 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
-from c4v.classifier.classifier import Classifier, Labels
+from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
 from c4v.config import settings
 from c4v.microscope.metadata import Metadata
