@@ -27,7 +27,10 @@ else:
     try:
         LIMIT = int(sys.argv[1])
     except Exception as e:
-        print(f"Invalid limit argument. Are you sure it is a valid number?\n\tError: {e}", file=sys.stderr)    
+        print(
+            f"Invalid limit argument. Are you sure it is a valid number?\n\tError: {e}",
+            file=sys.stderr,
+        )
         exit(1)
 
 # Crawl & scrape urls
@@ -48,7 +51,7 @@ df = pd.DataFrame(data)
 
 # Set up datetime suffix
 date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S")
-filename = f"primicia_irrelevant_{date_suffix}.csv" 
+filename = f"primicia_irrelevant_{date_suffix}.csv"
 
 with open(filename, "w+") as file:
     df.to_csv(file)

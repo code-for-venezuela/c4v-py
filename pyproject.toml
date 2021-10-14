@@ -23,7 +23,7 @@ packages = [
 include = ["*.html", "*.ini", "*.json",]
 
 [tool.poetry.dependencies]
-python = "^3.8 || ~3.6.2"
+python = "^3.8 || ~3.6.2 || ~3.7.0"
 pip = "^21.0.0"
 tensorflow = "2.5.0"
 tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
@@ -49,11 +49,12 @@ importlib-resources = {version = "^5.2.2"}
 dataclasses = {version = "^0.8.0", python = ">=3.6.1, <3.7"}
 transformers = "^4.9.0"
 datasets = "^1.10.2"
-torch = "^1.7.0"
+torch = "~1.9.0"
 dynaconf = "^3.1.4"
 transformers-interpret = "^0.5.2"
 
 [tool.poetry.dev-dependencies]
+GPUtil = "^1.4.0"
 pytest = "^5.4.3"
 black = "^19.10b0"
 coverage = { extras = ["toml"], version = "^5.1" }

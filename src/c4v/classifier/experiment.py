@@ -13,8 +13,9 @@ import sys
 import shutil
 from pathlib import Path
 from datetime import datetime
-from typing import Type
+from typing import List, Type
 from dataclasses import dataclass, field
+
 
 # Local imports
 from c4v.config import settings
@@ -67,6 +68,8 @@ class ExperimentFSManager:
         Every Experiment has a branch name and an experiment name, the folder provided to every 
         experiment is <experiments_folder>/<branch_name>/<experiment_name>
     """
+
+    _experiments_folder = settings.experiments_dir
 
     def __init__(
         self, branch_name: str, experiment_name: str, experiments_folder: str = None
