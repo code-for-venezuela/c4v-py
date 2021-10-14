@@ -12,7 +12,7 @@ from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
-from c4v.config import settings
+from c4v.config import PersistencyManagers, settings
 from c4v.microscope.metadata import Metadata
 
 # Python imports
@@ -227,16 +227,21 @@ class Manager:
         """
             Create a Manager instance using files from the default `C4V_FOLDER`
         """
+
         # Set up db
-        db = SqliteManager(
-            db_path
-            or str(
-                Path(
-                    local_files_path or settings.c4v_folder,
-                    settings.local_sqlite_db_name,
+        print(f"persistency manager is {settings.persistency_manager}")
+        if settings.persistency_manager == PersistencyManagers.SQLITE.value:
+            db = SqliteManager(
+                db_path
+                or str(
+                    Path(
+                        local_files_path or settings.c4v_folder,
+                        settings.local_sqlite_db_name,
+                    )
                 )
             )
-        )
+        else:
+            raise NotImplementedError(f"Not implemented default db creation for db type: {settings.persistency_manager}")
 
         # Set up metadata
         metadata = Metadata.from_json(metadata) if metadata else Metadata()
