@@ -7,7 +7,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
-from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
+from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
 from c4v.scraper.settings import INSTALLED_CRAWLERS, INSTALLED_SCRAPERS, SUPPORTED_DOMAINS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
@@ -17,7 +17,7 @@ from c4v.microscope.metadata import Metadata
 
 # Python imports
 import os
-from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
+from typing import Dict, List, Iterable, Callable, Tuple, Any, Type, Union
 from pathlib import Path
 import sys
 
@@ -60,6 +60,19 @@ class Manager:
     @property
     def persistency_manager(self) -> BasePersistencyManager:
         return self._persistency_manager
+
+    def scrape(self, urls : Union[List[str], str] ) -> Union[List[ScrapedData], ScrapedData]:
+        """
+            Scrape the given url or set of urls and return its results
+        """
+        if not urls: # if nothing to process, return None
+            return None 
+        elif isinstance(urls, list) and urls and isinstance(urls[0], str):
+            return bulk_scrape(urls)
+        elif isinstance(urls, str):
+            return scrape(urls)
+        
+        raise TypeError(f"Expected argument should be a list of urls as strings or a single string url. Given {type(urls)}")
 
     def crawl_and_scrape_for(self, crawler_names : List[str] = None, limit : int = -1, save_to_db = True) -> List[ScrapedData]:
         """
@@ -407,6 +420,7 @@ class Manager:
             List of scrapable domains, it may not match with the crawlable sites
         """
         return SUPPORTED_DOMAINS
+
     def should_retrain_base_lang_model(
         self,
         lang_model: LanguageModel,

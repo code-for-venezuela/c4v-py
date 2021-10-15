@@ -64,7 +64,7 @@ class ScrapedData:
     label: Labels = None
     source: Sources = None
 
-    def pretty_print(self, max_content_len: int = -1) -> str:
+    def pretty_repr(self, max_content_len: int = -1) -> str:
         """
             Return a human-readable representation of this data.
             Truncate content if requested

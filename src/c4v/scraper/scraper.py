@@ -10,7 +10,7 @@ from c4v.scraper.settings                               import URL_TO_SCRAPER
 from c4v.scraper.utils                                  import get_domain_from_url, valid_url
 
 # Python imports
-from typing import List, Type, Dict
+from typing import Iterable, List, Type, Dict
 
 
 def scrape(url: str) -> ScrapedData:
@@ -26,11 +26,10 @@ def scrape(url: str) -> ScrapedData:
             so available data may change depending on the scrapped url, some fields 
             may be null.
     """
-    scraper = _get_scraper_from_url(url)()
-    return scraper.scrape(url)
+    return bulk_scrape([url])[0]
 
 
-def bulk_scrape(urls: List[str]) -> List[ScrapedData]:
+def bulk_scrape(urls: Iterable[str]) -> List[ScrapedData]:
     """
         Performs a bulk scraping over a list of urls.
         Order in the item list it's not guaranteed to be
