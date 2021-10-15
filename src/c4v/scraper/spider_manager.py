@@ -17,7 +17,16 @@ class SpiderManager:
         Spider classes
     """
 
-    process = CrawlerProcess(settings.CRAWLER_SETTINGS)
+    _process = None
+
+    @classmethod
+    def process(cls) -> CrawlerProcess:
+        """
+            retrieves process object
+        """
+        if not cls._process:
+            cls._process = CrawlerProcess(settings.CRAWLER_SETTINGS)
+        return cls._process
 
     def __init__(self, spider) -> None:
 
@@ -67,11 +76,11 @@ class SpiderManager:
         self.spider.start_urls = urls
 
         # create crawler for this spider, connect signal so we can collect items
-        crawler = SpiderManager.process.create_crawler(self.spider)
+        crawler = SpiderManager.process().create_crawler(self.spider)
         crawler.signals.connect(self._add_items, signal=scrapy.signals.item_scraped)
 
         # start scrapping
-        SpiderManager.process.crawl(crawler)
+        SpiderManager.process().crawl(crawler)
 
     def start_bulk_scrape(self):
         """
@@ -79,8 +88,8 @@ class SpiderManager:
             called schedule_scraping before, all of them will be scraped,
             not only this one
         """
-        if SpiderManager.process.crawlers:
-            SpiderManager.process.start()
+        if SpiderManager.process().crawlers:
+            SpiderManager.process().start()
 
     def get_scraped_items(self) -> List[ScrapedData]:
         """

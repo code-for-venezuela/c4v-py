@@ -8,7 +8,7 @@
 """
 # Local imports
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
 
 # Python imports
 from dataclasses import dataclass
@@ -37,4 +37,5 @@ class ElPitazoData(BaseDataFormat):
             content=self.body,
             url=self.url,
             last_scraped=self.last_scraped,
+            source=Sources.SCRAPING,
         )
