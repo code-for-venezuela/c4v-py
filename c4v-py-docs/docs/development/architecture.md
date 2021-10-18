@@ -62,11 +62,32 @@ print(result.pretty_repr(max_content_len = 100))
 ```
 
 ### Removing non-scrapable urls
+Here we can see how to separate scrapable urls from non-scrapable ones. It may be helpful to know which urls can be processed
+```
+import c4v.microscope as ms
 
+m = ms.Manager.from_default()
+
+urls = [
+    "https://primicia.com.ve",
+    "https://elpitazo.net",
+    "https://supernotscrapable.com"
+]
+
+assert m.split_non_scrapable(urls) == (urls[:2], urls[2:])
+```
+### TODO
+add more useful examples
+## Creation 
+You can create a new scraper in order to support scraping for new sites. More details about this in ["creating a scraper"](./creating-a-scraper.md)
 # Crawler
 TODO
+## Creation
+You can create a new crawler in order to support exploring new urls for new sites. More details about this in ["creating a crawler"](./creating-a-crawler.md)
 # Persistency Manager
 TODO
+## Creation
+You can create a new `Persistency Manager` object in order to support new ways of storing data. More details about this in ["creating a persistency manager"](./creating-a-persistency-manager.md)
 # Experiment
 TODO
 # ExperimentFSManager
