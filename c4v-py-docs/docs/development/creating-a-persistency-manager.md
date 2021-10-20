@@ -63,10 +63,14 @@ class DictManager(BasePersistencyManager):
     # __init__...
 
     def get_all(self, limit: int, scraped: bool, order_by: List[str] = None) -> Iterator[ScrapedData]:
-            # Remember to do some sanity check
-            valid_fields = {f.name for f in fields(ScrapedData)}
-            for order in order_by:
-                assert order and order[0] in ["-", "+"] and order[1:] in  valid_fields, "not valid order provided: " + order
+        # Remember to do some sanity check
+        valid_fields = {f.name for f in fields(ScrapedData)}
+
+        order_by = order_by or [] 
+        for order in order_by:
+            if not (order and order[0] in ["-", "+"] and order[1:] in  valid_fields):
+                raise ValueError("not valid order provided: " + order) 
+        
 ```
 
 Now we retrieve and filter the stored data:
@@ -94,7 +98,7 @@ class DictManager(BasePersistencyManager):
         data = [d for d in self._stored_data.values() if goes_in(d)]
         # Now sort it as requested
         order_by = order_by or []
-        for field in order_by:
+        for field in reversed(order_by): # order in inverse key order so you preserve multi sorting
             asc = field[0] == "+" 
             data.sort(key=lambda d: d.__getattribute__(field[1:]), reverse=not asc)
 ```
@@ -117,7 +121,8 @@ class DictManager(BasePersistencyManager):
 
         # Set up limit 
         # All elements by default
-        limit = limit if limit > 0 else len(data)
+        n_elems = len(data)
+        limit = min(limit, n_elems) if limit > 0 else n_elems
 
         for i in range(limit):
             yield data[i]
@@ -135,7 +140,8 @@ From the function description:
 from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
-from dataclasses import fields
+from dat
+aclasses import fields
 
 class DictManager(BasePersistencyManager):
     """
@@ -286,10 +292,103 @@ class DictManager(BasePersistencyManager):
 # Testing 
 Last but not least, if you are working on the library source code, don't forget to test your brand new `PersistencyManager` object. There's plenty of useful utility functions to easily add testing for a new manager object, but don't forget to add more tests for your specific implementation if it requires it.
 
+## Creating your test object using conftest
+You can create an instance in a custom way per function if you like, but this is probably an inneficient way to 
+configure the object to use during testing, specially for the type of object we're trying to test (a database abstraction). 
+For this reason, we encourage you to create the object in the conftest file, allowing you to centralize object configuration
+in a single function or set of functions that will be reused by your tests.
+
+1. Go to the `tests/scraper/conftest.py` file 
+2. Import your new class, in our case:
+```python
+from c4v.scraper.persistency_manager.example_dict_manager import DictManager
+```
+3. Add the following code at the end of the file:
+```python
+@pytest.fixture
+def test_example_manager() -> DictManager:
+    """
+        Build a test sqlite manager
+    """
+    return DictManager() # Replace with your own manager
+```
+
 ## Creating a testing file
 Go to the `tests/scraper/persistency_manager/` folder from the project root and create a new file for your new persistency manager
-class, let's say `test_example_manager.py`   
+class,  `test_example_manager.py`  in our case.
 !!! Warning
     Remember to start every test file with the **"test_"** prefix to every test file.
 
-## 
+## Importing the relevant code
+As you might expect, we have to import our new class to test it properly. Besides that, we should import 
+the utility functions that you can use to easily test most essential operations in a persistency manager
+```python
+from c4v.scraper.persistency_manager.example_dict_manager import DictManager # Replace here with your new class
+
+# These are the functions you will use to to 
+# test your new class. Of course, you can and should add
+# more tests and test functions if your new class requires it.
+# These are the bare minimum testing functions. 
+from tests.scraper.utils import (
+    util_test_filter_scraped_urls, 
+    util_test_get_in_order, 
+    util_test_instance_delete, 
+    util_test_order_parsing, 
+    util_test_save_for, 
+    util_test_save_overrides_for, 
+    util_test_url_filtering
+    )
+```
+
+## Using these functions
+Using the imported functions to create the test cases is as easy as just call them in your test case:
+```python
+# imports...
+def test_save_example_manager(test_example_manager : DictManager):
+    """
+        Test if save operation creates a new instance when that one does not exists
+    """
+    util_test_save_for(test_example_manager)
+
+def test_overrides_example_manager(test_example_manager : DictManager):
+    """
+        Test if save an ScrapedData instance overrides existent ones
+    """
+    util_test_save_overrides_for(test_example_manager)
+
+def test_list_example_manager(test_example_manager : DictManager):
+    """
+        Test listing of ScrapedData instances
+    """
+    util_test_filter_scraped_urls(test_example_manager)
+
+def test_filter_url_lists(test_example_manager : DictManager):
+    """
+        Test filtering of ScrapedData instances
+    """
+    util_test_url_filtering(test_example_manager)
+
+def test_delete_row(test_example_manager : DictManager):
+    """
+        Check that deletion works properly
+    """
+    util_test_instance_delete(test_example_manager)
+
+def test_get_in_order(test_example_manager : DictManager):
+    """
+        Check that ordering works properly in get_all function
+    """
+    util_test_get_in_order(test_example_manager)
+
+def test_order_parsing(test_example_manager : DictManager):
+    """
+        Check that invalid formats for ordering are handled with ValueError Exceptions
+    """
+    util_test_order_parsing(test_example_manager)
+```
+As this is a lot of boilerplate, feel free to copy and paste and replace the `example_manager` part to fit your case.   
+And that's it! You have a new persistency manager object ready to go. You can find this entire example in the following files: 
+
+* `src/c4v/scraper/persistency_manager/example_dict_manager.py` : Example class implementation.
+* `tests/scraper/persistency_manager/test_example_manager.py` : Example class testing suite.
+* `tests/scraper/conftest.py` : Where to find the configured example object
