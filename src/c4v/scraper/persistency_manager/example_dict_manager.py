@@ -20,10 +20,12 @@ class DictManager(BasePersistencyManager):
 
         # Remember to do some sanity check
         valid_fields = {f.name for f in fields(ScrapedData)}
-        if order_by:
-            for order in order_by:
-                assert order and order[0] in ["-", "+"] and order[1:] in  valid_fields, "not valid order provided: " + order
 
+        order_by = order_by or [] 
+        for order in order_by:
+            if not (order and order[0] in ["-", "+"] and order[1:] in  valid_fields):
+                raise ValueError("not valid order provided: " + order) 
+        
         # Get actual data, filtering by scraped or not
         # This lambda is checking if the data instance should be included in the query.
         # We assume that an instance is not scraped when its last_scraped field is not provided
@@ -33,15 +35,15 @@ class DictManager(BasePersistencyManager):
                             (not x.last_scraped and not scraped) 
         data = [d for d in self._stored_data.values() if goes_in(d)]
 
-        # Now sort it as requested
-        order_by = order_by or []
-        for field in order_by:
+        # Now sort it as requested    
+        for field in reversed(order_by): # order in inverse key order so you preserve multi sorting
             asc = field[0] == "+" 
             data.sort(key=lambda d: d.__getattribute__(field[1:]), reverse=not asc)
         
         # Set up limit 
         # All elements by default
-        limit = limit if limit > 0 else len(data)
+        n_elems = len(data)
+        limit = min(limit, n_elems) if limit > 0 else n_elems
 
         for i in range(limit):
             yield data[i]
