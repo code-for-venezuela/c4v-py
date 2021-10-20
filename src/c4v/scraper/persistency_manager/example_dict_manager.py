@@ -3,6 +3,7 @@ from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
 from dataclasses import fields
+import sys
 
 class DictManager(BasePersistencyManager):
     """
@@ -11,6 +12,8 @@ class DictManager(BasePersistencyManager):
 
     def __init__(self):
         super().__init__() # Don't forget to call the parent class constructor
+        # We will store ScrapedData instances in a dict, using its 
+        # url as a key
         self._stored_data : Dict[str, ScrapedData] = {}
 
     def get_all(self, limit: int = -1, scraped: bool = None, order_by: List[str] = None) -> Iterator[ScrapedData]:        
@@ -35,11 +38,40 @@ class DictManager(BasePersistencyManager):
         for field in order_by:
             asc = field[0] == "+" 
             data.sort(key=lambda d: d.__getattribute__(field[1:]), reverse=not asc)
-        print(data)
+        
+        # Set up limit 
+        # All elements by default
+        limit = limit if limit > 0 else len(data)
+
+        for i in range(limit):
+            yield data[i]
+
+    def filter_known_urls(self, urls: List[str]) -> List[str]:
+        # Just return the ones that are not stored in our dict
+        return [url for url in urls if not self._stored_data.get(url)]
+
+    def filter_scraped_urls(self, urls: List[str]) -> List[str]:
+        # Just return the ones that are either not stored, or stored but not yet scraped
+        return [
+            url for url in urls 
+                if not self._stored_data.get(url) or\
+                not self._stored_data[url].last_scraped
+            ]
+
+    def was_scraped(self, url: str) -> bool:
+        # Return true if it's stored in DB and it was scraped at some point
+        return bool(self._stored_data.get(url) and self._stored_data[url].last_scraped)
 
     def save(self, url_data: List[ScrapedData]):
+        # Add data instance to dict, use its url as key
         for d in url_data:
             self._stored_data[d.url] = d
+
+    def delete(self, urls: List[str]):
+        # Just remove these urls from storage dict
+        for url in urls:
+            if self._stored_data.get(url):
+                del self._stored_data[url]
 
 ### TEST ZONE, DELETE LATER
 import datetime
@@ -49,5 +81,6 @@ datas = [
 ]
 dm = DictManager()
 dm.save(datas)
-dm.get_all( order_by=["-url"])
-
+print(list(dm.get_all()))
+dm.delete(["www.hl3confirmed.com"])
+print(list(dm.get_all()))
