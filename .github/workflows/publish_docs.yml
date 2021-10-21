@@ -1,0 +1,36 @@
+# This workflow will update the online documentation so that it matches the one we have written in mkdocs, it 
+# will be triggered by pushes to master. 
+# It will publish everything by pushing the new site to the gh-pages branch.
+
+name: c4v-py-docs
+
+on:
+  push:
+    branches:
+      - luis/docs # for testing, change to master when this work is ready to PR
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.6'
+          architecture: 'x64'
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r ./requirements.txt
+
+
