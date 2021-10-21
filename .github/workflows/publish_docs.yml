@@ -1,0 +1,4 @@
+# This workflow will update the online documentation so that it matches the one we have written in mkdocs, it 
+# will be triggered by pushes to master. 
+# It will publish everything by pushing the new site to the gh-pages branch.
+
