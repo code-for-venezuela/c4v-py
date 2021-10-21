@@ -1,1 +1,0 @@
-# Microscope as a CLI
