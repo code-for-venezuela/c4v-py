@@ -14,6 +14,7 @@ from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
 from c4v.config import PersistencyManagers, settings
 from c4v.microscope.metadata import Metadata
+import c4v.microscope.utils as utils
 
 # Python imports
 from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
@@ -229,7 +230,6 @@ class Manager:
         """
 
         # Set up db
-        print(f"persistency manager is {settings.persistency_manager}")
         if settings.persistency_manager == PersistencyManagers.SQLITE.value:
             db = SqliteManager(
                 db_path
@@ -239,6 +239,16 @@ class Manager:
                         settings.local_sqlite_db_name,
                     )
                 )
+            )
+        elif settings.persistency_manager == PersistencyManagers.USER.value:
+            if not settings.user_persistency_manager_module:
+                raise ValueError(f"Requested to create persistency manager from user defined class, but its module name wasn't provided")
+            elif not settings.user_persistency_manager_path:
+                raise ValueError(f"Requested to create persistency manager from user defined class, but its path wasn't provided")
+
+            db = utils._load_user_manager(
+                settings.user_persistency_manager_module, 
+                settings.user_persistency_manager_path
             )
         else:
             raise NotImplementedError(f"Not implemented default db creation for db type: {settings.persistency_manager}")
@@ -393,3 +403,4 @@ class Manager:
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
+
