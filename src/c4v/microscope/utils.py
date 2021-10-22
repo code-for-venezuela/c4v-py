@@ -3,6 +3,7 @@
 """
 # Local imports
 import pathlib
+from typing import Type
 from c4v.scraper.persistency_manager.base_persistency_manager import BasePersistencyManager
 
 # Python imports
@@ -17,7 +18,8 @@ def _load_user_manager(module_name : str, path : str) -> BasePersistencyManager:
             - path : `str` = path to python file containing module to import
         # Raises
             - `FileNotFoundError` on file not existing
-            - 
+            - `AttributeError` on `get_persistency_manager` function not found
+            - `TypeError` when the returned persistency manager is not a valid implementation of the `BasePersistencyManager` class
 
     """
 
@@ -38,6 +40,10 @@ def _load_user_manager(module_name : str, path : str) -> BasePersistencyManager:
                                 f"\n\tError: {e}"
                             )
     
+    # Some static checking for the new persistency manager object
+    if not isinstance(persistency_manager, BasePersistencyManager):
+        raise TypeError(f"Object returned by the `get_persistency_manager` doesn't seems to be a valid persistency manager implementation")
+
     # Return obtained manager
     return persistency_manager
         
