@@ -66,7 +66,7 @@ pylint = "^2.6.0"
 [tool.poetry.extras]
 tensorflow = ["tensorflow", "tensorflow_hub", "tensorflow-probability"]
 jupyter = ["jupyter", "ipykernel", "ipython"]
-
+all = ["jupyter", "ipykernel", "ipython", "tensorflow", "tensorflow_hub", "tensorflow-probability"]
 
 [tool.poetry.scripts]
 c4v = "c4v.c4v_cli:c4v_cli"
