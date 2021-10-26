@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://microscope.com/usage/microscope-as-a-library/">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Microscope as a Library - Microscope</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Microscope as a Library";
+    var mkdocs_page_input_path = "usage/microscope-as-a-library.md";
+    var mkdocs_page_url = "/usage/microscope-as-a-library/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Microscope</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Using Microscope</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Microscope as a Library</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#using-the-high-level-api">Using the high level Api</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#scraping-and-crawling-at-the-same-time">Scraping and crawling at the same time</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-data-for-known-urls">Get data for known urls</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-local-storage">Using Local Storage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-data-for-known-urls_1">Get data for known urls</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#retrieving-data-from-a-local-db">Retrieving data from a local db</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-your-own-database-implementation">Using your own database implementation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-the-low-level-api">Using the Low Level Api</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../primary-components/">Primary Components</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../microscope-as-cli/">Microscope as a command line tool</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Development</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../development/architecture/">Architecture</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../development/creating-a-scraper/">Creating a Scraper</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../development/creating-a-crawler/">Creating a Crawler</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../development/creating-a-persistency-manager/">Creating a Persistency Manager</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Microscope</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Using Microscope &raquo;</li>
+        
+      
+    
+    <li>Microscope as a Library</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="microscope-as-a-library">Microscope as a Library</h1>
+<p>You can use Microscope as a library in many ways using buth its API and its core components. </p>
+<h2 id="using-the-high-level-api">Using the high level Api</h2>
+<p>The main object you can use to access common operations for the Microscope library is the <code>microscope.Manager</code>
+object. For example, here you can use it to crawl for urls in some known site:</p>
+<pre><code class="language-py">import c4v.microscope as ms
+
+# creates a manager object 
+manager = ms.Manager() 
+
+# crawl new urls from the internet
+d = manager.crawl_new_urls_for(
+    [&quot;primicia&quot;],               # Name of crawlers to use when crawling
+    limit=10                    # Maximum ammount of urls to crawl
+)
+
+print(d)       # A (possibly empty) list of urls as string
+print(len(d))  # a number &lt;= 10
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can find which crawler names are available for you to use using <code>manager.get_available_crawlers()</code></p>
+</div>
+<hr />
+<h2 id="examples">Examples</h2>
+<p>The following are some examples for some common use cases</p>
+<h3 id="scraping-and-crawling-at-the-same-time">Scraping and crawling at the same time</h3>
+<p>The following code will crawl and scrape 10 urls from primicia's website </p>
+<pre><code class="language-py">import c4v.microscope as ms
+
+# creates a manager object 
+manager = ms.Manager() 
+
+# crawl new urls from the internet
+d = manager.crawl_and_scrape_for(
+    [&quot;primicia&quot;],                   # scrape for primicia
+    limit=10                        # up to ten urls
+)
+
+print(d)            # bunch of text probably, instances of ScrapedData class
+print(len(d))       # amount of scraped data instances, &lt;= 10 as we requested limit = 10
+</code></pre>
+<h3 id="get-data-for-known-urls">Get data for known urls</h3>
+<p>This is probably the most common operation you may want to perform, retrieving data for urls you 
+want to process using this library</p>
+<pre><code class="language-py">import c4v.microscope as ms
+
+# creates a manager object 
+manager = ms.Manager() 
+
+# Try to get data for this urls
+d = manager.get_bulk_data_for(
+    [
+        &quot;https://primicia.com.ve/deportes/emiliano-martinez-y-buendia-dejan-la-seleccion-argentina/&quot;,
+        &quot;https://primicia.com.ve/deportes/odubel-remolco-la-de-ganar-en-el-decimo/&quot;,
+        &quot;https://primicia.com.ve/deportes/valtteri-bottas-le-dice-adios-a-mercedes-e-ira-a-alfa-romeo/&quot;
+    ]
+)
+
+print(d) # data for the three given urls
+</code></pre>
+<hr />
+<h2 id="using-local-storage">Using Local Storage</h2>
+<p>You can provide a database manager to store data scraped with the microscope manager locally, here we will see 
+some examples using an SQLite database</p>
+<h3 id="get-data-for-known-urls_1">Get data for known urls</h3>
+<p>This example is the same as before, but now we will store the results directly in the database, so we can use that
+data afterwards without having to scrape them.</p>
+<pre><code class="language-py">import c4v.microscope as ms
+from datetime import datetime
+
+# creates a manager object
+manager = ms.Manager.from_local_sqlite_db(&quot;test_db.sqlite&quot;) # will create a file to store retrieved data
+
+# Measure time before storing
+start = datetime.now()
+d = manager.get_bulk_data_for(
+    [
+        &quot;https://primicia.com.ve/deportes/emiliano-martinez-y-buendia-dejan-la-seleccion-argentina/&quot;,
+        &quot;https://primicia.com.ve/deportes/odubel-remolco-la-de-ganar-en-el-decimo/&quot;,
+        &quot;https://primicia.com.ve/deportes/valtteri-bottas-le-dice-adios-a-mercedes-e-ira-a-alfa-romeo/&quot;
+    ]
+)
+end = datetime.now()
+
+print(&quot;before: &quot;, (end - start).total_seconds()) # 2.137678, May vary depending on your internet connection
+
+# Measure time after storing
+start = datetime.now()
+d = manager.get_bulk_data_for(
+    [
+        &quot;https://primicia.com.ve/deportes/emiliano-martinez-y-buendia-dejan-la-seleccion-argentina/&quot;,
+        &quot;https://primicia.com.ve/deportes/odubel-remolco-la-de-ganar-en-el-decimo/&quot;,
+        &quot;https://primicia.com.ve/deportes/valtteri-bottas-le-dice-adios-a-mercedes-e-ira-a-alfa-romeo/&quot;
+    ]
+)
+end = datetime.now()
+
+print(&quot;after: &quot;, (end - start).total_seconds()) #  0.000406
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don't provide any db name, calling the manager constructor as <code>Manager.from_local_sqlite_db()</code> you can use 
+the library db, where data required by the CLI tool is stored by default, this way you can browse data and process
+it using code</p>
+</div>
+<h3 id="retrieving-data-from-a-local-db">Retrieving data from a local db</h3>
+<p>Once you have scraped &amp; stored data using the local SQLite manager, you may want to retrieve for further processing. 
+You can do so by using the <code>get_all</code> function that returns all stored ScrapedData instances:</p>
+<pre><code class="language-py">import c4v.microscope as ms
+
+# creates a manager object
+manager = ms.Manager.from_local_sqlite_db(&quot;test_db.sqlite&quot;)
+
+for d in manager.get_all():
+    print(d) # prints the three instances scraped in the previous example
+</code></pre>
+<h3 id="using-your-own-database-implementation">Using your own database implementation</h3>
+<p>You might be interested in using your own persistency management strategy, you can do so by 
+implementing the <code>BasePersistencyManager</code> class. For example, let's say this is our implementation:</p>
+<pre><code class="language-py">class MyDBManager(BasePersistencyManager):
+    &quot;&quot;&quot;
+        Store data in the class itself 
+    &quot;&quot;&quot;
+    data = set()
+    def get_all(self, limit = 100, scraped = None):
+        limit = 10000 if limit &lt; 0 else limit # very high number when negative number is provided
+
+        def goes_in(scraped_data):
+            was_scraped = self.was_scraped(scraped_data.url)
+            return (scraped and was_scraped) or (scraped == False and not was_scraped) or (scraped == None)
+
+        return (d for d in list(MyDBManager.data)[:limit] if goes_in(d))
+
+    def was_scraped(self, url):
+        return any(d.last_scraped != None and d.url == url for d in MyDBManager.data)
+
+    def save(self, url_data):
+        MyDBManager.data = MyDBManager.data.union(url_data)
+
+    def filter_scraped_urls(self, urls):
+        scraped_urls = { d.url for d in MyDBManager.data if self.was_scraped(d.url) }
+        return [url for url in urls if url not in scraped_urls]
+</code></pre>
+<p>This is a partial implementation, with the minimum code to save and retrieve data, let's use it as a storage backend 
+for the manager class. We will use the same example as before, but with our new backend:</p>
+<pre><code class="language-py">
+import c4v.microscope as ms
+from datetime import datetime
+
+# creates a manager object
+manager = ms.Manager(MyDBManager())
+
+urls =  [
+            &quot;https://primicia.com.ve/deportes/emiliano-martinez-y-buendia-dejan-la-seleccion-argentina/&quot;,
+            &quot;https://primicia.com.ve/deportes/odubel-remolco-la-de-ganar-en-el-decimo/&quot;,
+            &quot;https://primicia.com.ve/deportes/valtteri-bottas-le-dice-adios-a-mercedes-e-ira-a-alfa-romeo/&quot;
+        ]
+
+# Measure time before storing
+start = datetime.now()
+d = manager.get_bulk_data_for(urls)
+end = datetime.now()
+
+print(&quot;before: &quot;, (end - start).total_seconds()) # 2.155265s, scraped from internet
+
+# Measure time after storing
+start = datetime.now()
+d = manager.get_bulk_data_for(urls)
+end = datetime.now()
+
+print(&quot;after: &quot;, (end - start).total_seconds()) #  1.7e-05s, retrieved from local storage
+</code></pre>
+<hr />
+<h2 id="using-the-low-level-api">Using the Low Level Api</h2>
+<p>If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
+modules:</p>
+<ul>
+<li><code>c4v.scraper</code> : Functions to scrape data from the internet for a given set of urls</li>
+<li><code>c4v.scraper.crawlers</code> : Classes for crawling and implement a new crawler </li>
+<li><code>c4v.scraper.persistency_manager</code> : Classes for storing data locally and implement a new persistency manager</li>
+<li><code>c4v.classifier</code> : Classes for classifier and its experiments:<ul>
+<li>Classifier Class</li>
+<li>Classifier experiment class</li>
+<li>Experiment Base class, if you want to create more experiments that will use the same filesystem as the rest of the experiments</li>
+</ul>
+</li>
+</ul>
+<p>More about this in the next section</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../primary-components/" class="btn btn-neutral float-right" title="Primary Components">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../.." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../primary-components/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
