@@ -49,7 +49,7 @@ jobs:
             personal_token: ${{ secrets.DOCS_ACCESS_TOKEN }}
             publish_dir: ./docs/site
             publish_branch: docs 
-            commit_message: "Update from commit: $GITHUB_SHA - ${{ github.event.head_commit.message }}"
+            commit_message: "Update from commit: ${{ github.sha }} - ${{ github.event.head_commit.message }}"
             allow_empty_commit: false
             user_name: devops-c4v
             user_email: ldiazn@gmail.com
