@@ -187,6 +187,10 @@ end = datetime.now()
 
 print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from local storage
 ```
+!!! Warning 
+    Please not that **this is not a full implementation**, and thus, **it can't be used with the `microscope.Manager` object**
+    as a database backend. If you need to do so, follow the instructions in [this](../development/creating-a-persistency-manager.md) page.
+
 ---
 ## Using the Low Level Api   
 If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
