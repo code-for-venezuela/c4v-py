@@ -304,6 +304,11 @@ end = datetime.now()
 
 print(&quot;after: &quot;, (end - start).total_seconds()) #  1.7e-05s, retrieved from local storage
 </code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please not that <strong>this is not a full implementation</strong>, and thus, <strong>it can't be used with the <code>microscope.Manager</code> object</strong>
+as a database backend. If you need to do so, follow the instructions in <a href="../../development/creating-a-persistency-manager/">this</a> page.</p>
+</div>
 <hr />
 <h2 id="using-the-low-level-api">Using the Low Level Api</h2>
 <p>If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
