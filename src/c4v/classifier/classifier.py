@@ -484,3 +484,6 @@ class Classifier(BaseModel):
             Get list of possible labels outputs
         """
         return Labels.labels()
+
+    def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
+        return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])

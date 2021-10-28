@@ -22,7 +22,7 @@ print(len(d))  # a number <= 10
 ```
 
 !!! Note
-    You can find which crawler names are available for you to use using `manager.get_available_crawlers()`
+    You can find which crawler names are available for you to use using `ms.Manager.get_available_crawlers()`
 ---
 ## Examples
 The following are some examples for some common use cases
@@ -115,7 +115,7 @@ print("after: ", (end - start).total_seconds()) #  0.000406
 
 ### Retrieving data from a local db
 Once you have scraped & stored data using the local SQLite manager, you may want to retrieve for further processing. 
-You can do so by using the `get_all` function that returns all stored ScrapedData instances:
+You can do so by using the `get_all` function that returns all stored `ScrapedData` instances:
 
 ```py
 import c4v.microscope as ms
@@ -194,6 +194,26 @@ print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from loca
 
 
 ---
+### Common workflow
+A common workflow for the library looks like this:
+```python
+import c4v.microscope as ms
+from c4v.scraper.persistency_manager import SqliteManager
+
+db = SqliteManager("my_db.sqlite")        # Replace with your custom db if necessary
+manager = ms.Manager.from_default(db=db)  
+
+# Crawl and scrape
+manager.crawl_and_scrape_for(["primicia"], limit=10)
+
+#  classify objects in database
+manager.run_pending_classification_from_experiment("branch_name", "experiment_name")
+
+# Print some results
+for d in manager.get_all():
+    print(f"{d.title}: {d.label.value}")
+
+```
 ## Using the Low Level Api   
 If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
 modules:

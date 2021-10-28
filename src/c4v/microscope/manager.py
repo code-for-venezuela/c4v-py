@@ -414,7 +414,7 @@ class Manager:
         """
         return Classifier.get_labels()
 
-    @classmethod
+    @staticmethod
     def get_available_crawlers() -> List[str]:
         """
             List of usable names of crawlers
