@@ -9,7 +9,7 @@ object. For example, here you can use it to crawl for urls in some known site:
 import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default()
 
 # crawl new urls from the internet
 d = manager.crawl_new_urls_for(
@@ -33,7 +33,7 @@ The following code will crawl and scrape 10 urls from primicia's website
 import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default() 
 
 # crawl new urls from the internet
 d = manager.crawl_and_scrape_for(
@@ -52,7 +52,7 @@ want to process using this library
 import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default() 
 
 # Try to get data for this urls
 d = manager.get_bulk_data_for(
@@ -190,6 +190,8 @@ print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from loca
 !!! Warning 
     Please not that **this is not a full implementation**, and thus, **it can't be used with the `microscope.Manager` object**
     as a database backend. If you need to do so, follow the instructions in [this](../development/creating-a-persistency-manager.md) page.
+
+
 
 ---
 ## Using the Low Level Api   
