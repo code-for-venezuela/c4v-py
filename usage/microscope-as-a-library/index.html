@@ -139,7 +139,7 @@ object. For example, here you can use it to crawl for urls in some known site:</
 <pre><code class="language-py">import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default()
 
 # crawl new urls from the internet
 d = manager.crawl_new_urls_for(
@@ -162,7 +162,7 @@ print(len(d))  # a number &lt;= 10
 <pre><code class="language-py">import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default() 
 
 # crawl new urls from the internet
 d = manager.crawl_and_scrape_for(
@@ -179,7 +179,7 @@ want to process using this library</p>
 <pre><code class="language-py">import c4v.microscope as ms
 
 # creates a manager object 
-manager = ms.Manager() 
+manager = ms.Manager.from_default() 
 
 # Try to get data for this urls
 d = manager.get_bulk_data_for(
