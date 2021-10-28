@@ -193,7 +193,6 @@ print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from loca
 
 
 
----
 ### Common workflow
 A common workflow for the library looks like this:
 ```python
@@ -214,6 +213,12 @@ for d in manager.get_all():
     print(f"{d.title}: {d.label.value}")
 
 ```
+1. We first create our main manager using a custom database
+2. Then we are crawling and scraping urls for a given site
+3. And finally, we use the classifier created and located in the experiment folder `branch_name/experiment_name` to classify the results
+4. And last but not least, we print the stored data along with its predicted label
+
+---
 ## Using the Low Level Api   
 If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
 modules:
