@@ -25,10 +25,10 @@ include = ["*.html", "*.ini", "*.json",]
 [tool.poetry.dependencies]
 python = "^3.8 || ~3.6.2 || ~3.7.0"
 pip = "^21.0.0"
-tensorflow = "2.5.1"
-tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0" }
-tensorflow-probability = "0.10.0"
-jupyter = "^1.0.0"
+tensorflow = {version = "2.5.1", optional = true}
+tensorflow_hub = { extras=["make_image_classifier"], version = "0.8.0", optional = true }
+tensorflow-probability = { version = "0.10.0", optional = true }
+jupyter = { version = "^1.0.0", optional = true }
 scikit-learn = "0.23.1"
 scikit-multilearn = "0.2.0"
 pandas = "1.1.1"
@@ -41,8 +41,8 @@ click = "7.1.2"
 scipy = "1.5.4"
 nbconvert = "5.6.1"
 traitlets = "4.3.3"
-ipykernel = "5.5.5"
-ipython = "7.16.1"
+ipykernel = { version = "5.5.5", optional = true }
+ipython = { version = "7.16.1", optional = true }
 zipp = "^3.5.0"
 importlib-metadata = "^4.6.1"
 importlib-resources = {version = "^5.2.2"}
@@ -63,6 +63,11 @@ pytest-cov = "^2.10.0"
 pytest-mock = "^3.1.1"
 zipp = { version = "^3.1.0", python = "~3.6 || ~3.7" }
 pylint = "^2.6.0"
+
+[tool.poetry.extras]
+tensorflow = ["tensorflow", "tensorflow_hub", "tensorflow-probability"]
+jupyter = ["jupyter", "ipykernel", "ipython"]
+all = ["jupyter", "ipykernel", "ipython", "tensorflow", "tensorflow_hub", "tensorflow-probability"]
 
 [tool.poetry.scripts]
 c4v = "c4v.c4v_cli:c4v_cli"

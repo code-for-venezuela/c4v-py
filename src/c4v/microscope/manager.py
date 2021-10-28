@@ -12,8 +12,9 @@ from c4v.scraper.settings import INSTALLED_CRAWLERS, INSTALLED_SCRAPERS, SUPPORT
 from c4v.classifier.classifier_experiment import ClassifierExperiment
 from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
-from c4v.config import settings
+from c4v.config import PersistencyManagers, settings
 from c4v.microscope.metadata import Metadata
+import c4v.microscope.utils as utils
 
 # Python imports
 import os
@@ -304,16 +305,32 @@ class Manager:
                                                 parameter
 
         """
+
         # Set up db
-        db = db or SqliteManager(
-                    db_path
-                    or str(
-                        Path(
-                            local_files_path or settings.c4v_folder,
-                            settings.local_sqlite_db_name,
-                        )
+        if db: # if custom db is provided, use it instead of the default one
+            pass
+        elif settings.persistency_manager == PersistencyManagers.SQLITE.value:
+            db = SqliteManager(
+                db_path
+                or str(
+                    Path(
+                        local_files_path or settings.c4v_folder,
+                        settings.local_sqlite_db_name,
                     )
                 )
+            )
+        elif settings.persistency_manager == PersistencyManagers.USER.value:
+            if not settings.user_persistency_manager_module:
+                raise ValueError(f"Requested to create persistency manager from user defined class, but its module name wasn't provided")
+            elif not settings.user_persistency_manager_path:
+                raise ValueError(f"Requested to create persistency manager from user defined class, but its path wasn't provided")
+
+            db = utils._load_user_manager(
+                settings.user_persistency_manager_module, 
+                settings.user_persistency_manager_path
+            )
+        else:
+            raise NotImplementedError(f"Not implemented default db creation for db type: {settings.persistency_manager}")
 
         # Set up metadata
         metadata = Metadata.from_json(metadata) if metadata else Metadata()
@@ -479,3 +496,4 @@ class Manager:
         # Compute loss
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
+
