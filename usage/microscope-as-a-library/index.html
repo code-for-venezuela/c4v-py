@@ -311,7 +311,6 @@ print(&quot;after: &quot;, (end - start).total_seconds()) #  1.7e-05s, retrieved
 <p>Please not that <strong>this is not a full implementation</strong>, and thus, <strong>it can't be used with the <code>microscope.Manager</code> object</strong>
 as a database backend. If you need to do so, follow the instructions in <a href="../../development/creating-a-persistency-manager/">this</a> page.</p>
 </div>
-<hr />
 <h3 id="common-workflow">Common workflow</h3>
 <p>A common workflow for the library looks like this:</p>
 <pre><code class="language-python">import c4v.microscope as ms
@@ -331,6 +330,13 @@ for d in manager.get_all():
     print(f&quot;{d.title}: {d.label.value}&quot;)
 
 </code></pre>
+<ol>
+<li>We first create our main manager using a custom database</li>
+<li>Then we are crawling and scraping urls for a given site</li>
+<li>And finally, we use the classifier created and located in the experiment folder <code>branch_name/experiment_name</code> to classify the results</li>
+<li>And last but not least, we print the stored data along with its predicted label</li>
+</ol>
+<hr />
 <h2 id="using-the-low-level-api">Using the Low Level Api</h2>
 <p>If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
 modules:</p>
