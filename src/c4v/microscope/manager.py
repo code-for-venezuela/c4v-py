@@ -292,21 +292,28 @@ class Manager:
 
     @classmethod
     def from_default(
-        cls, db_path: str = None, metadata: str = None, local_files_path: str = None
+        cls, db_path: str = None, metadata: str = None, local_files_path: str = None, db : BasePersistencyManager = None
     ):
         """
-            Create a Manager instance using files from the default `C4V_FOLDER`
+            Create a Manager instance using files from the default `C4V_FOLDER`.
+            Parameters:
+                - db_path : str = Path to a sqlite db file to use as database.
+                - metadata : str = Path to a valid metadata json file 
+                - local_files_path : str = path to the .c4v folder to use for local files
+                - db : BasePersistencyManager = persistency manager object to use as db manager. When provided, it overrides the db_path 
+                                                parameter
+
         """
         # Set up db
-        db = SqliteManager(
-            db_path
-            or str(
-                Path(
-                    local_files_path or settings.c4v_folder,
-                    settings.local_sqlite_db_name,
+        db = db or SqliteManager(
+                    db_path
+                    or str(
+                        Path(
+                            local_files_path or settings.c4v_folder,
+                            settings.local_sqlite_db_name,
+                        )
+                    )
                 )
-            )
-        )
 
         # Set up metadata
         metadata = Metadata.from_json(metadata) if metadata else Metadata()
