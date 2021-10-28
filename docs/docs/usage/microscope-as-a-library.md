@@ -65,6 +65,31 @@ d = manager.get_bulk_data_for(
 
 print(d) # data for the three given urls
 ```
+### Common workflow
+A common workflow for the library looks like this:
+```python
+import c4v.microscope as ms
+from c4v.scraper.persistency_manager import SqliteManager
+
+db = SqliteManager("my_db.sqlite")        # Replace with your custom db if necessary
+manager = ms.Manager.from_default(db=db)  
+
+# Crawl and scrape
+manager.crawl_and_scrape_for(["primicia"], limit=10)
+
+#  classify objects in database
+manager.run_pending_classification_from_experiment("branch_name", "experiment_name")
+
+# Print some results
+for d in manager.get_all():
+    print(f"{d.title}: {d.label.value}")
+
+```
+1. We first create our main manager using a custom database
+2. Then we are crawling and scraping urls for a given site
+3. And finally, we use the classifier created and located in the experiment folder `branch_name/experiment_name` to classify the results
+4. And last but not least, we print the stored data along with its predicted label
+
 ---
 ## Using Local Storage
 You can provide a database manager to store data scraped with the microscope manager locally, here we will see 
@@ -190,33 +215,6 @@ print("after: ", (end - start).total_seconds()) #  1.7e-05s, retrieved from loca
 !!! Warning 
     Please not that **this is not a full implementation**, and thus, **it can't be used with the `microscope.Manager` object**
     as a database backend. If you need to do so, follow the instructions in [this](../development/creating-a-persistency-manager.md) page.
-
-
-
-### Common workflow
-A common workflow for the library looks like this:
-```python
-import c4v.microscope as ms
-from c4v.scraper.persistency_manager import SqliteManager
-
-db = SqliteManager("my_db.sqlite")        # Replace with your custom db if necessary
-manager = ms.Manager.from_default(db=db)  
-
-# Crawl and scrape
-manager.crawl_and_scrape_for(["primicia"], limit=10)
-
-#  classify objects in database
-manager.run_pending_classification_from_experiment("branch_name", "experiment_name")
-
-# Print some results
-for d in manager.get_all():
-    print(f"{d.title}: {d.label.value}")
-
-```
-1. We first create our main manager using a custom database
-2. Then we are crawling and scraping urls for a given site
-3. And finally, we use the classifier created and located in the experiment folder `branch_name/experiment_name` to classify the results
-4. And last but not least, we print the stored data along with its predicted label
 
 ---
 ## Using the Low Level Api   
