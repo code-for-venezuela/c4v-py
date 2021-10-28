@@ -62,6 +62,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#get-data-for-known-urls">Get data for known urls</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#common-workflow">Common workflow</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-local-storage">Using Local Storage</a>
@@ -71,8 +73,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#retrieving-data-from-a-local-db">Retrieving data from a local db</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#using-your-own-database-implementation">Using your own database implementation</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#common-workflow">Common workflow</a>
     </li>
         </ul>
     </li>
@@ -194,6 +194,31 @@ d = manager.get_bulk_data_for(
 
 print(d) # data for the three given urls
 </code></pre>
+<h3 id="common-workflow">Common workflow</h3>
+<p>A common workflow for the library looks like this:</p>
+<pre><code class="language-python">import c4v.microscope as ms
+from c4v.scraper.persistency_manager import SqliteManager
+
+db = SqliteManager(&quot;my_db.sqlite&quot;)        # Replace with your custom db if necessary
+manager = ms.Manager.from_default(db=db)  
+
+# Crawl and scrape
+manager.crawl_and_scrape_for([&quot;primicia&quot;], limit=10)
+
+#  classify objects in database
+manager.run_pending_classification_from_experiment(&quot;branch_name&quot;, &quot;experiment_name&quot;)
+
+# Print some results
+for d in manager.get_all():
+    print(f&quot;{d.title}: {d.label.value}&quot;)
+
+</code></pre>
+<ol>
+<li>We first create our main manager using a custom database</li>
+<li>Then we are crawling and scraping urls for a given site</li>
+<li>And finally, we use the classifier created and located in the experiment folder <code>branch_name/experiment_name</code> to classify the results</li>
+<li>And last but not least, we print the stored data along with its predicted label</li>
+</ol>
 <hr />
 <h2 id="using-local-storage">Using Local Storage</h2>
 <p>You can provide a database manager to store data scraped with the microscope manager locally, here we will see 
@@ -311,31 +336,6 @@ print(&quot;after: &quot;, (end - start).total_seconds()) #  1.7e-05s, retrieved
 <p>Please not that <strong>this is not a full implementation</strong>, and thus, <strong>it can't be used with the <code>microscope.Manager</code> object</strong>
 as a database backend. If you need to do so, follow the instructions in <a href="../../development/creating-a-persistency-manager/">this</a> page.</p>
 </div>
-<h3 id="common-workflow">Common workflow</h3>
-<p>A common workflow for the library looks like this:</p>
-<pre><code class="language-python">import c4v.microscope as ms
-from c4v.scraper.persistency_manager import SqliteManager
-
-db = SqliteManager(&quot;my_db.sqlite&quot;)        # Replace with your custom db if necessary
-manager = ms.Manager.from_default(db=db)  
-
-# Crawl and scrape
-manager.crawl_and_scrape_for([&quot;primicia&quot;], limit=10)
-
-#  classify objects in database
-manager.run_pending_classification_from_experiment(&quot;branch_name&quot;, &quot;experiment_name&quot;)
-
-# Print some results
-for d in manager.get_all():
-    print(f&quot;{d.title}: {d.label.value}&quot;)
-
-</code></pre>
-<ol>
-<li>We first create our main manager using a custom database</li>
-<li>Then we are crawling and scraping urls for a given site</li>
-<li>And finally, we use the classifier created and located in the experiment folder <code>branch_name/experiment_name</code> to classify the results</li>
-<li>And last but not least, we print the stored data along with its predicted label</li>
-</ol>
 <hr />
 <h2 id="using-the-low-level-api">Using the Low Level Api</h2>
 <p>If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
