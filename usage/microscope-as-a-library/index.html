@@ -72,6 +72,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#using-your-own-database-implementation">Using your own database implementation</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#common-workflow">Common workflow</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-the-low-level-api">Using the Low Level Api</a>
@@ -152,7 +154,7 @@ print(len(d))  # a number &lt;= 10
 </code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can find which crawler names are available for you to use using <code>manager.get_available_crawlers()</code></p>
+<p>You can find which crawler names are available for you to use using <code>ms.Manager.get_available_crawlers()</code></p>
 </div>
 <hr />
 <h2 id="examples">Examples</h2>
@@ -239,7 +241,7 @@ it using code</p>
 </div>
 <h3 id="retrieving-data-from-a-local-db">Retrieving data from a local db</h3>
 <p>Once you have scraped &amp; stored data using the local SQLite manager, you may want to retrieve for further processing. 
-You can do so by using the <code>get_all</code> function that returns all stored ScrapedData instances:</p>
+You can do so by using the <code>get_all</code> function that returns all stored <code>ScrapedData</code> instances:</p>
 <pre><code class="language-py">import c4v.microscope as ms
 
 # creates a manager object
@@ -310,6 +312,25 @@ print(&quot;after: &quot;, (end - start).total_seconds()) #  1.7e-05s, retrieved
 as a database backend. If you need to do so, follow the instructions in <a href="../../development/creating-a-persistency-manager/">this</a> page.</p>
 </div>
 <hr />
+<h3 id="common-workflow">Common workflow</h3>
+<p>A common workflow for the library looks like this:</p>
+<pre><code class="language-python">import c4v.microscope as ms
+from c4v.scraper.persistency_manager import SqliteManager
+
+db = SqliteManager(&quot;my_db.sqlite&quot;)        # Replace with your custom db if necessary
+manager = ms.Manager.from_default(db=db)  
+
+# Crawl and scrape
+manager.crawl_and_scrape_for([&quot;primicia&quot;], limit=10)
+
+#  classify objects in database
+manager.run_pending_classification_from_experiment(&quot;branch_name&quot;, &quot;experiment_name&quot;)
+
+# Print some results
+for d in manager.get_all():
+    print(f&quot;{d.title}: {d.label.value}&quot;)
+
+</code></pre>
 <h2 id="using-the-low-level-api">Using the Low Level Api</h2>
 <p>If you need a more fine-grained control, you can use the primary components of the microscope library, importing the following 
 modules:</p>
