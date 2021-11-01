@@ -16,6 +16,7 @@ from datetime import datetime
 from typing import Type
 from dataclasses import dataclass, field
 
+
 # Local imports
 from c4v.config import settings
 

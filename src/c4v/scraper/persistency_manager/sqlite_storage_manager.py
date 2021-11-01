@@ -3,9 +3,8 @@
     using regular files.
 """
 # Python
-from sqlite3.dbapi2 import connect
 import sqlite3
-from typing import Any, Iterator, Dict, List
+from typing import Any, Iterator, Dict, List, Tuple
 import dataclasses
 import datetime
 
@@ -17,6 +16,7 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.config import settings
 
 DATE_FORMAT = settings.date_format
+
 
 class SqliteManager(BasePersistencyManager):
     """
@@ -79,22 +79,38 @@ class SqliteManager(BasePersistencyManager):
             );"
         )
 
-    def get_all(self, limit: int = -1, scraped: bool = None) -> Iterator[ScrapedData]:
+    def get_all(
+        self, limit: int = -1, scraped: bool = None, order_by: List[str] = None
+    ) -> Iterator[ScrapedData]:
 
         # Retrieve all data stored
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
+            # Order
+            if order_by:
+                parsed_orders = " ORDER BY " + ", ".join(
+                    [
+                        f"{name} {order}"
+                        for (order, name) in (
+                            self._parse_order_and_field_from_order_by_str(order_by=ord)
+                            for ord in order_by
+                        )
+                    ]
+                )
+            else:
+                parsed_orders = ""
+
             # if scraped = true, take only scraped. If false, take non-scraped. If none, take all
             if scraped:
                 new_cur = cursor.execute(
-                    "SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL;",
+                    f"SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL{parsed_orders};",
                 )
             elif scraped == False:
                 new_cur = cursor.execute(
-                    "SELECT * FROM scraped_data WHERE last_scraped IS NULL;",
+                    f"SELECT * FROM scraped_data WHERE last_scraped IS NULL{parsed_orders};",
                 )
             else:
-                new_cur = cursor.execute("SELECT * FROM scraped_data;",)
+                new_cur = cursor.execute(f"SELECT * FROM scraped_data{parsed_orders};",)
 
             # If limit less than 0, then take as much as you can
             if limit < 0:
@@ -113,17 +129,16 @@ class SqliteManager(BasePersistencyManager):
                         if last_scraped
                         else last_scraped
                     )
-                except ValueError as _: # In case it fails using a format not valid for python3.6
+                except ValueError as _:  # In case it fails using a format not valid for python3.6
                     for i in range(len(last_scraped) - 1, -1, -1):
                         if last_scraped[i] == ":":
-                            last_scraped = last_scraped[:i] + last_scraped[i+1:]
+                            last_scraped = last_scraped[:i] + last_scraped[i + 1 :]
                             break
                     last_scraped = (
                         datetime.datetime.strptime(last_scraped, DATE_FORMAT)
                         if last_scraped
                         else last_scraped
                     )
-
 
                 categories = [
                     category
@@ -188,8 +203,12 @@ class SqliteManager(BasePersistencyManager):
             data_to_insert = []
             for data in url_data:
                 new_data = dataclasses.asdict(data)
-                new_data['last_scraped'] = datetime.datetime.strftime(data.last_scraped, DATE_FORMAT) if data.last_scraped else data.last_scraped
-                
+                new_data["last_scraped"] = (
+                    datetime.datetime.strftime(data.last_scraped, DATE_FORMAT)
+                    if data.last_scraped
+                    else data.last_scraped
+                )
+
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             cursor.executemany(
                 "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date)",
@@ -225,6 +244,50 @@ class SqliteManager(BasePersistencyManager):
                 "DELETE FROM scraped_data WHERE url=?", [(url,) for url in urls]
             )
             connection.commit()
+
+    def _parse_order_and_field_from_order_by_str(
+        self, order_by: str
+    ) -> Tuple[str, str]:
+        """
+            Parse order and name of field from the given str
+            Parameters:
+                + order_by : str = A string with the following format:
+                    (+|-)<field_name> where field_name is the name of a field in ScrapedData,
+                    '+' corresponds to a an ascending order, and '-' corresponds to a descending order
+            Return:
+                Tuple such that
+                ('ASC' | 'DESC', <field_name>) 
+        """
+
+        # Check valid format
+        if not order_by:
+            raise ValueError(
+                "Invalid value for order_by string, I'm getting an empty string"
+            )
+        elif order_by[0] != "-" and order_by[0] != "+":
+            raise ValueError(
+                f"Invalid value for order_by string, first char should be the order, on of: [-, +]. Provided string: {order_by}"
+            )
+        elif len(order_by) < 2:
+            raise ValueError(
+                f"Invalid value for order_by string, name of field not provided. Given string: {order_by}"
+            )
+
+        # Parsing order
+        order = "ASC" if order_by[0] == "+" else "DESC"
+
+        # Parsing field name
+        valid_fields = [d.name for d in dataclasses.fields(ScrapedData)]
+        field_name = order_by[1:]
+
+        # Raise error if not a valid string
+        if field_name not in valid_fields:
+            valid_fields_str = "\n".join([f"\t* {s}\n" for s in valid_fields])
+            raise ValueError(
+                f"Invalid value for order_by string, provided name doesn't match any field in ScrapedData. Provided field: {field_name}.\nAvailable fields:\n{valid_fields_str}"
+            )
+
+        return (order, field_name)
 
 
 def _parse_dict_to_url_data(obj: Dict[str, Any]) -> ScrapedData:

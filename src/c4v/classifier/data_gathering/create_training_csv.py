@@ -17,7 +17,7 @@ dfs = []
 for file in files:
     print(f"Openning file: {file}...")
     with open(file) as f:
-        new_df : pd.DataFrame = pd.read_csv(f)
+        new_df: pd.DataFrame = pd.read_csv(f)
     print(f"Rows in file: {len(new_df)}")
     dfs.append(new_df)
 
