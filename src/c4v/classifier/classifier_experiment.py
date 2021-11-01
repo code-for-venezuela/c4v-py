@@ -133,13 +133,16 @@ class ClassifierExperiment(BaseExperiment):
         print(summary)
         return summary
 
-    def classify(self, data: ScrapedData) -> Dict[str, Any]:
+    def classify(self, data: List[ScrapedData]) -> List[Dict[str, Any]]:
         """
             Classify this sentence using configured experiment
             Parameters:
                 sentence : str = sentence or text to be classifier
             Return:
-                Predicted label and score for every other label
+                A List of dicts with the resulting scraped data correctly labelled
+                and its corresponding scores tensor for each possible label. Available fields:
+                    + data : ScrapedData = resulting data instance after classification
+                    + scores : torch.Tensor = Scores for each label returned by the classifier
         """
         return self._classifier.classify(data)
 
