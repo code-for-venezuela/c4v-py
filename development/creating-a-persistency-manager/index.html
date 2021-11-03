@@ -155,6 +155,13 @@ class DictManager(BasePersistencyManager):
 <strong>Return</strong>: <br />
       Iterator of stored ScrapedData instances</p>
 </blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When a data instance is <strong>scraped</strong> (<code>scraped == True</code>), all of its <strong>fields are filled</strong>, 
+meaning that it was <strong>already scraped</strong> and its data was already retrieved. When it's <strong>not scraped</strong> (<code>scraped == False</code>)
+it means that the data is <strong>not complete</strong>, the url is known as a crawler was able to retrieve it, but has been <strong>not yet scraped</strong>. 
+When <code>scraped == None</code>, it means that <strong>it doesn't matter the state of the data instance</strong>, scraped or not.</p>
+</div>
 <p>We start by creating the function and adding some sanity check. Remember that this is possibly going to be useful in the future</p>
 <pre><code class="language-python">from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
@@ -177,7 +184,7 @@ class DictManager(BasePersistencyManager):
                 raise ValueError(&quot;not valid order provided: &quot; + order) 
 
 </code></pre>
-<p>Now we retrieve and filter the stored data:</p>
+<p>Now we retrieve and filter the stored data. Note that it should be sorted in the same way as in any SQL ordering clause:</p>
 <pre><code class="language-python">from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
