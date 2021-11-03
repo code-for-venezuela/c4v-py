@@ -74,15 +74,3 @@ class DictManager(BasePersistencyManager):
         for url in urls:
             if self._stored_data.get(url):
                 del self._stored_data[url]
-
-### TEST ZONE, DELETE LATER
-import datetime
-datas = [
-    ScrapedData("www.michimon.com"),
-    ScrapedData("www.hl3confirmed.com", last_scraped=datetime.datetime.now(), title="I Want To Believe", content="Not yet but soon", author="ubuntuOS")
-]
-dm = DictManager()
-dm.save(datas)
-print(list(dm.get_all()))
-dm.delete(["www.hl3confirmed.com"])
-print(list(dm.get_all()))
