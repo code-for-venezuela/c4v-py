@@ -147,8 +147,7 @@ From the function description:
 from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
-from dat
-aclasses import fields
+from dataclasses import fields
 
 class DictManager(BasePersistencyManager):
     """
