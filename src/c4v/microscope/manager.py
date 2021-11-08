@@ -196,7 +196,7 @@ class Manager:
             urls = urls[:limit - counter.count]
 
             if db:
-                urls = db.filter_scraped_urls(urls)
+                urls = db.filter_known_urls(urls)
                 datas = [ScrapedData(url=url) for url in urls]
 
                 if save_to_db: db.save(datas)
