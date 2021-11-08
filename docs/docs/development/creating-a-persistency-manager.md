@@ -49,6 +49,13 @@ This function is your main interface function to access stored data. Read carefu
 >   **Return**:   
 >       Iterator of stored ScrapedData instances
 
+!!! Note 
+    When a data instance is **scraped** (`scraped == True`), all of its **fields are filled**, 
+    meaning that it was **already scraped** and its data was already retrieved. When it's **not scraped** (`scraped == False`)
+    it means that the data is **not complete**, the url is known as a crawler was able to retrieve it, but has been **not yet scraped**. 
+    When `scraped == None`, it means that **it doesn't matter the state of the data instance**, scraped or not.
+
+
 We start by creating the function and adding some sanity check. Remember that this is possibly going to be useful in the future
 ```python
 from typing import Dict, Iterator, List
@@ -73,7 +80,7 @@ class DictManager(BasePersistencyManager):
         
 ```
 
-Now we retrieve and filter the stored data:
+Now we retrieve and filter the stored data. Note that it should be sorted in the same way as in any SQL ordering clause:
 ```python
 from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
@@ -140,8 +147,7 @@ From the function description:
 from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
-from dat
-aclasses import fields
+from dataclasses import fields
 
 class DictManager(BasePersistencyManager):
     """
