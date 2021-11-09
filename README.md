@@ -7,7 +7,7 @@
 > Solving Venezuela pressing matters one commmit at a time
 
 `c4v-py` is a library used to address Venezuela's pressing issues
-using computer and data science.
+using computer and data science. Check the [online documentation](https://code-for-venezuela.github.io/c4v-py/)
 
 - [Installation](#installation)
 - [Development](#development)
