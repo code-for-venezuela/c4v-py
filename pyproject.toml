@@ -52,6 +52,7 @@ datasets = "^1.10.2"
 torch = "~1.9.0"
 dynaconf = "^3.1.4"
 transformers-interpret = "^0.5.2"
+streamlit = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 GPUtil = "^1.4.0"
