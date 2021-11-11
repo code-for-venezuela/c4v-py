@@ -25,12 +25,12 @@ class Metadata:
                                                     If not provided, the default sqlite based manager is used. 
     """
 
-    classifier_model: str = settings.default_base_language_model                # Absolute path for the model to load
-    base_language_model: str = settings.default_base_language_model             # Absolute path for the base model to load
-    persistency_manager: str = settings.persistency_manager                     # Type of manager to use
-    user_persistency_manager_path: str = settings.user_persistency_manager_path # Path to a persistency manager to use in the CLI tool. If not provided, defaults to a SQLite one
-    user_persistency_manager_module:str = settings.user_persistency_manager_module # module where to get the persistency manager itself
-    
+    classifier_model: str = settings.default_base_language_model  # Absolute path for the model to load
+    base_language_model: str = settings.default_base_language_model  # Absolute path for the base model to load
+    persistency_manager: str = settings.persistency_manager  # Type of manager to use
+    user_persistency_manager_path: str = settings.user_persistency_manager_path  # Path to a persistency manager to use in the CLI tool. If not provided, defaults to a SQLite one
+    user_persistency_manager_module: str = settings.user_persistency_manager_module  # module where to get the persistency manager itself
+
     def to_json_str(self, pretty: bool = False) -> str:
         """
             Return a json-formated string representation for this object
@@ -63,7 +63,7 @@ class Metadata:
         with open(json_path) as f:
             try:
                 return cls(**json.load(f))
-            except TypeError as e: # in case of an unexpected argument 
+            except TypeError as e:  # in case of an unexpected argument
                 raise TypeError(f"Couldn't parse metadata object from json. Error: {e}")
 
 
