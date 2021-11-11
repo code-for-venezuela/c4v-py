@@ -14,7 +14,7 @@ from scrapy import Spider
 
 # Internal imports
 from c4v.scraper.scrapers.base_scraper import BaseScraper
-from c4v.scraper.spider_manager import SpiderManager
+from .spider_manager import SpiderManager
 from c4v.scraper.scraped_data_classes.base_scraped_data import BaseDataFormat
 
 # Python imports

@@ -1,5 +1,5 @@
 # Internal imports
-import c4v.scraper.utils as utils
+from .. import utils
 from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
 
 # External imports

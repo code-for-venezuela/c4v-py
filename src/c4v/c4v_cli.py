@@ -672,7 +672,7 @@ class CLIClient:
                 err=True,
             )
 
-        self._manager.crawl_new_urls_for(
+        self._manager.crawl_and_process_new_urls_for(
             [c for c in crawler_names if c not in not_registered], process, limit=limit
         )
 

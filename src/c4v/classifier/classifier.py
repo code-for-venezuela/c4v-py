@@ -377,12 +377,6 @@ class Classifier(BaseModel):
 
         return metrics_df
 
-    def _get_text_from_scrapeddata(self, data: ScrapedData) -> str:
-        """
-            Returns a string constructed from a scraped data instance
-        """
-        return data.title
-
     def classify(
         self, data: List[ScrapedData], model: str = None
     ) -> List[Dict[str, Any]]:
@@ -490,3 +484,6 @@ class Classifier(BaseModel):
             Get list of possible labels outputs
         """
         return Labels.labels()
+
+    def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
+        return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])

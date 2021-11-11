@@ -1,13 +1,13 @@
-# c4v-py
+# Welcome to Microscope c4v-py 🔬
 
 <p align="center">
-  <img width="125" src="assets/logo.png">
+  <img width="125" src= "img/logo.png">
 </p>
 
-> Solving Venezuela pressing matters one commmit at a time
+> *Solving Venezuela pressing matters one commmit at a time*
 
 `c4v-py` is a library used to address Venezuela's pressing issues
-using computer and data science. Check the [online documentation](https://code-for-venezuela.github.io/c4v-py/)
+using computer and data science.
 
 - [Installation](#installation)
 - [Development](#development)
@@ -22,11 +22,38 @@ pip install c4v-py
 ```
 
 ## Usage
-
-_TODO_
+The c4v-py package can be used either as a command line tool and as 
+a library.
 
 [Can you help us? Open a new issue in
 minutes!](https://github.com/code-for-venezuela/c4v-py/issues/new/choose)
+
+### As a command line tool
+You can use the command line tool with the following command:
+
+```
+c4v --help
+```
+
+### As a library
+Import the main interface, the microscope Manager to access a high level api to 
+common operations:
+```py
+import c4v.microscope as ms
+
+# creates a manager object 
+manager = ms.Manager() 
+
+# crawl new urls from the internet
+d = manager.crawl_new_urls_for(
+    ["primicia"],               # Name of every available crawlers
+    limit=10                    # Maximum ammount of urls to crawl
+)
+
+print(d)       # A (possibly empty) list of urls as string
+print(len(d))  # a number <= 10
+```
+More about it here
 
 ## Contributing
 
