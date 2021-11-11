@@ -223,14 +223,20 @@ class Manager:
 
     @classmethod
     def from_default(
-        cls, db_path: str = None, metadata: str = None, local_files_path: str = None
+        cls, db_path: str = None, metadata: Union[str, Metadata] = None, local_files_path: str = None
     ):
         """
             Create a Manager instance using files from the default `C4V_FOLDER`
         """
 
+        # Set up metadata
+        if isinstance(metadata, str) or metadata == None:
+            metadata = Metadata.from_json(metadata) if metadata else Metadata()
+        elif not isinstance(metadata, Metadata):
+            raise TypeError("Unsupported type for metadata")
+
         # Set up db
-        if settings.persistency_manager == PersistencyManagers.SQLITE.value:
+        if metadata.persistency_manager == PersistencyManagers.SQLITE.value:
             db = SqliteManager(
                 db_path
                 or str(
@@ -240,21 +246,17 @@ class Manager:
                     )
                 )
             )
-        elif settings.persistency_manager == PersistencyManagers.USER.value:
-            if not settings.user_persistency_manager_module:
+        elif metadata.persistency_manager == PersistencyManagers.USER.value:
+            if not metadata.user_persistency_manager_module:
                 raise ValueError(f"Requested to create persistency manager from user defined class, but its module name wasn't provided")
-            elif not settings.user_persistency_manager_path:
+            elif not metadata.user_persistency_manager_path:
                 raise ValueError(f"Requested to create persistency manager from user defined class, but its path wasn't provided")
-
             db = utils._load_user_manager(
-                settings.user_persistency_manager_module, 
-                settings.user_persistency_manager_path
+                metadata.user_persistency_manager_module, 
+                metadata.user_persistency_manager_path
             )
         else:
             raise NotImplementedError(f"Not implemented default db creation for db type: {settings.persistency_manager}")
-
-        # Set up metadata
-        metadata = Metadata.from_json(metadata) if metadata else Metadata()
 
         return cls(db, metadata, local_files_path or settings.c4v_folder)
 

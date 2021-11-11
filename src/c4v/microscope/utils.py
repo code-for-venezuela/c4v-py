@@ -36,7 +36,7 @@ def _load_user_manager(module_name : str, path : str) -> BasePersistencyManager:
         persistency_manager = module.get_persistency_manager()
     except AttributeError as e:
         raise AttributeError(   f"module {module} in path {path} does not provides a 'get_persistency_manager : () -> BasePersistencyManager' function. " +\
-                                f"You should do so in order to get your custom persistency manager object. Note that such object should implement the BasePersistencyManager base class. " +\
+                                f"You should do so in order to set up your custom persistency manager object. Note that such object should implement the BasePersistencyManager base class. " +\
                                 f"\n\tError: {e}"
                             )
     
