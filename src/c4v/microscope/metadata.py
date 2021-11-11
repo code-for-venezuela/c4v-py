@@ -3,6 +3,7 @@
     between runs, here we find the scheme requested for the system
 """
 # Local imports
+from typing import Type
 from c4v.config import settings
 
 # Python imports
@@ -60,7 +61,10 @@ class Metadata:
                 json_path : str = path to file to load, may raise FileNotFound error if file does not exists
         """
         with open(json_path) as f:
-            return cls(**json.load(f))
+            try:
+                return cls(**json.load(f))
+            except TypeError as e: # in case of an unexpected argument 
+                raise TypeError(f"Couldn't parse metadata object from json. Error: {e}")
 
 
 class _MetadataJSONEncoder(json.JSONEncoder):

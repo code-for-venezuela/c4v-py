@@ -234,7 +234,7 @@ class Manager:
             metadata = Metadata.from_json(metadata) if metadata else Metadata()
         elif not isinstance(metadata, Metadata):
             raise TypeError("Unsupported type for metadata")
-
+                    
         # Set up db
         if metadata.persistency_manager == PersistencyManagers.SQLITE.value:
             db = SqliteManager(
