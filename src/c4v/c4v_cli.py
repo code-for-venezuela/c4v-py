@@ -223,7 +223,8 @@ def list(
 @click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
 @click.option(
     "--limit",
-    is_flag=False,
+    is_flag=False, 
+    default=-1,
     help="Limit how much instances to classify in this run. Specially usefull when classifying pending data, if less than 0, then select as much as you can (default). Otherwise, classify at the most the given number",
     type=int,
 )
@@ -404,7 +405,7 @@ def explain(
     except ModuleNotFoundError as e:
         click.echo(f"[ERROR] Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}", err=True)
         return
-        
+
     if label and label not in possible_labels:
         click.echo(
             f"[WARNING] Provided label not a valid label, ignoring label argument {label}.",
