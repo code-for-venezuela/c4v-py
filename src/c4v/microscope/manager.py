@@ -6,18 +6,15 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
-from c4v.scraper.settings import INSTALLED_CRAWLERS, INSTALLED_SCRAPERS, SUPPORTED_DOMAINS
-from c4v.classifier.classifier_experiment import ClassifierExperiment
-from c4v.classifier.classifier import Classifier
-from c4v.classifier.language_model.language_model import LanguageModel
+from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS
 from c4v.config import settings
 from c4v.microscope.metadata import Metadata
 
 # Python imports
 import os
-from typing import Dict, List, Iterable, Callable, Tuple, Any, Type, Union
+from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
 from pathlib import Path
 import sys
 
@@ -304,6 +301,7 @@ class Manager:
                                                 parameter
 
         """
+
         # Set up db
         db = db or SqliteManager(
                     db_path
@@ -335,6 +333,7 @@ class Manager:
                     + data : ScrapedData = resulting data instance after classification
                     + scores : torch.Tensor = Scores for each label returned by the classifier
         """
+        from c4v.classifier.classifier_experiment import ClassifierExperiment
 
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
             branch, experiment
@@ -398,6 +397,8 @@ class Manager:
                 Dict with explaination data
         """
 
+        from c4v.classifier.classifier_experiment import ClassifierExperiment
+
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
             branch, experiment
         )
@@ -412,6 +413,7 @@ class Manager:
             Return:
                 List with possible output labels for the classifier
         """
+        from c4v.classifier.classifier import Classifier
         return Classifier.get_labels()
 
     @staticmethod
@@ -430,7 +432,7 @@ class Manager:
 
     def should_retrain_base_lang_model(
         self,
-        lang_model: LanguageModel,
+        lang_model, #: LanguageModel,
         db_manager: BasePersistencyManager = None,
         eval_dataset_size: int = 250,
         min_loss: float = settings.default_lang_model_min_loss,
