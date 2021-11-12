@@ -458,6 +458,8 @@ class Manager:
         assert eval_dataset_size > 0, "Eval dataset size should be a possitive number"
         assert min_loss >= 0, "min loss should be non negative"
 
+        from c4v.classifier.language_model.language_model import LanguageModel
+
         # set up retrain function
         should_retrain_fn = should_retrain_fn or (lambda x: x > min_loss)
 
