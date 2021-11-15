@@ -2,13 +2,8 @@
 import scrapy
 from scrapy.http import Response
 
-# Python imports
-from datetime import datetime
-from typing import Dict, Any
-import pytz
-
 # Local imports
-import c4v.scraper.utils as utils
+from .. import utils 
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
 
 
