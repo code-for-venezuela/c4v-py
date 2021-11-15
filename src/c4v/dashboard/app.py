@@ -5,7 +5,6 @@
 # Local imports
 from typing import Callable, List
 import c4v.microscope as ms
-import config as c
 
 # Python imports
 from pathlib import Path
@@ -31,23 +30,9 @@ class App:
     # Valid options for scraped
     scraped_options: List[str] = ["Any", "Yes", "No"]
 
-    def __init__(self, config: c.Config = c.Config()) -> None:
-        # create persistency manager based on the specified backend
-        if config.db_backend == c.DBBackEndOptions.SQLITE.value:
-            self._manager = ms.Manager.from_default()
-        else:
-            raise NotImplementedError(
-                f"DB Backend '{config.db_backend}' not yet implemented"
-            )
+    def __init__(self, manager : ms.Manager = None) -> None:
 
-        self._config = config
-
-    @property
-    def config(self) -> c.Config:
-        """
-        Configuration used by this manager object
-        """
-        return self._config
+        self._manager = manager or ms.Manager.from_default()
 
     @property
     def manager(self) -> ms.Manager:
