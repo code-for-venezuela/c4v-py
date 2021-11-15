@@ -3,6 +3,7 @@
     between runs, here we find the scheme requested for the system
 """
 # Local imports
+from typing import Type
 from c4v.config import settings
 
 # Python imports
@@ -13,11 +14,22 @@ import json
 @dataclasses.dataclass
 class Metadata:
     """
-        Data required and stored by the manager to perform common operations
+        Data required and stored by the manager to perform common operations.    
+        # Parameters:
+            - classifier_model : `str` = Default classifier model. Could be a huggingface model or a locally stored one
+            - base_language_model : `str` = Default base language model used as a base for training the new classifier model
+            - persistency_manager : `str` = Persistency manager to use. One of the possible variants of the c4v.config.PersistencyManagers enum class
+            - user_persistency_manager_path : `str` = Path to a file returning a custom persistency manager to use for the CLI
+                                                    tool. Such file should provide a function `get_persistency_manager : () -> BasePersistencyManager` 
+                                                    that will be used to retrieve the Persistency Manager object to use.    
+                                                    If not provided, the default sqlite based manager is used. 
     """
 
-    classifier_model: str = settings.default_base_language_model  # Abosolute path for the model to load
-    base_language_model: str = settings.default_base_language_model  # Abosolute path for the base model to load
+    classifier_model: str = settings.default_base_language_model  # Absolute path for the model to load
+    base_language_model: str = settings.default_base_language_model  # Absolute path for the base model to load
+    persistency_manager: str = settings.persistency_manager  # Type of manager to use
+    user_persistency_manager_path: str = settings.user_persistency_manager_path  # Path to a persistency manager to use in the CLI tool. If not provided, defaults to a SQLite one
+    user_persistency_manager_module: str = settings.user_persistency_manager_module  # module where to get the persistency manager itself
 
     def to_json_str(self, pretty: bool = False) -> str:
         """
@@ -49,7 +61,10 @@ class Metadata:
                 json_path : str = path to file to load, may raise FileNotFound error if file does not exists
         """
         with open(json_path) as f:
-            return cls(**json.load(f))
+            try:
+                return cls(**json.load(f))
+            except TypeError as e:  # in case of an unexpected argument
+                raise TypeError(f"Couldn't parse metadata object from json. Error: {e}")
 
 
 class _MetadataJSONEncoder(json.JSONEncoder):
