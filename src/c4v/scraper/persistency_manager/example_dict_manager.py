@@ -3,7 +3,6 @@ from typing import Dict, Iterator, List
 from c4v.scraper.persistency_manager import BasePersistencyManager
 from c4v.scraper import ScrapedData
 from dataclasses import fields
-import sys
 
 
 class DictManager(BasePersistencyManager):
