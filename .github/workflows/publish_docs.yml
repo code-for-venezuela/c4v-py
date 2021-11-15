@@ -7,7 +7,7 @@ name: c4v-py-docs
 on:
   push:
     branches:
-      - luis/docs # for testing, change to master when this work is ready to PR
+      - master # for testing, change to master when this work is ready to PR
 jobs:
   deploy:
     runs-on: ubuntu-18.04

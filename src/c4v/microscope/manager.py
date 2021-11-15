@@ -126,6 +126,7 @@ class Manager:
         crawler_names: List[str] = None,
         post_process: Callable[[List[str]], None] = None,
         limit=-1,
+        save_to_db : bool = True
     ):
         """
             Crawl for new urls using the given crawlers only
@@ -149,10 +150,12 @@ class Manager:
 
         # Function to process urls as they come
         def save_urls(urls: List[str]):
-            # Filter already known urls and take at the must the necessary ones to fill the required size
-            urls = db.filter_known_urls(urls)[: limit - counter.count]
-            datas = [ScrapedData(url=url, source=Sources.SCRAPING) for url in urls]
-            db.save(datas)
+            if db:
+                # Filter already known urls and take at the must the necessary ones to fill the required size
+                urls = db.filter_known_urls(urls)[: limit - counter.count]
+                datas = [ScrapedData(url=url, source=Sources.SCRAPING) for url in urls]
+
+                if save_to_db: db.save(datas)
 
             # Update how much elements have beed added so far
             counter.add(len(datas))

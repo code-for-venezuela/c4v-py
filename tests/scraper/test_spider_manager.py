@@ -1,6 +1,6 @@
 # Local imports
 from c4v.scraper.scraped_data_classes.elpitazo_scraped_data import ElPitazoData
-import c4v.scraper.spider_manager as spider_manager
+import c4v.scraper.scrapers.spider_manager as spider_manager
 import tests.scraper.utils as utils
 from c4v.scraper.spiders.el_pitazo import ElPitazoSpider
 
