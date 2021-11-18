@@ -41,7 +41,9 @@ BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
 class Classifier(BaseModel):
     """
-        This class provides a simple way to run simple experiments.
+        This is the classifier model, you can use it to do two kinds of classification,
+        binary classification, to tell apart relevant or irrelevant news, and a multi-single label classification,
+        which assumes that an article is relevant and assigns one of a given set of labels to that
     """
 
     def get_dataframe(self, dataset_name: str) -> DataFrame:
