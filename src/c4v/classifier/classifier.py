@@ -520,3 +520,9 @@ class Classifier(BaseModel):
 
     def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
         return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
+
+    @classmethod
+    def binary_classifier(cls, **kwargs):
+        kwargs["labelset"] = BinaryClassificationLabels
+        return cls(**kwargs)
+        
