@@ -13,7 +13,7 @@ from c4v.classifier.experiment import (
     BaseExperimentArguments,
     BaseExperiment,
 )
-from c4v.classifier.classifier import BinaryClassificationLabels, Classifier
+from c4v.classifier.classifier import Classifier
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.config import settings
 
@@ -190,5 +190,7 @@ class ClassifierExperiment(BaseExperiment):
         if classifier_instance:
             classifier_instance.files_folder_path = fs_manager.experiment_content_folder
 
-        classifier_instance = classifier_instance or Classifier.binary_classifier()
+        classifier_instance = classifier_instance or Classifier.binary_classifier(
+            files_folder_path=fs_manager.experiment_content_folder
+        )
         return cls(fs_manager, classifier_instance)
