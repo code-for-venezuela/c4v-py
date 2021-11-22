@@ -8,10 +8,14 @@
     author
     categories
     date
-    label
     source
+    label_service
+    label_relevance
 
-    --- 
+    # Parameters 
+    - client_dataset_file : `str` = filename of the client dataset
+
+    --------------------------------------------------------
     Note that this script won't check for duplicate labels:
     
     key  | a | b | c | label          Key | a | d | label 
@@ -22,7 +26,7 @@
     2    | _ | _ | _ | l3
 """
 # Local imports 
-from c4v.scraper.scraped_data_classes.scraped_data import Sources
+from c4v.scraper.scraped_data_classes.scraped_data import Sources, RelevanceClassificationLabels
 
 # Python imports
 import sys
@@ -32,7 +36,6 @@ import pytz
 
 # Third party
 import pandas as pd
-from pandas.core.indexing import is_nested_tuple
 
 # Get command line argument
 if len(sys.argv) < 2:
@@ -44,7 +47,7 @@ with open(csv_file_name) as file:
     df: pd.DataFrame = pd.read_csv(file)
 
 # Rename columns
-print("Columnds are: ", df.columns)
+print("Columns are: ", df.columns)
 
 df.rename(
     {
@@ -52,14 +55,15 @@ df.rename(
         "tipo_de_evento": "label",
         "tags": "categories",
         "Link de la noticia ": "url",
-        "tipo de evento": "label",
+        "tipo de evento": "label_relevance",
+        "servicio_resumido" : "label_service"
     },
-    axis=1,
+    axis="columns",
     inplace=True,
 )
 
 # Valid columns
-columns = ["url", "title", "content", "author", "categories", "date", "label"]
+columns = ["url", "title", "content", "author", "categories", "date", "label_relevance", "label_service"]
 
 # Remove irrelevant columns
 columns_to_remove = [col for col in df.columns if col not in columns]
@@ -71,19 +75,10 @@ print(f"Columns: {df.columns}")
 # Adding source column
 source_col_val = Sources.CLIENT.value
 print(f"Adding 'source' column with value: {source_col_val}")
-
 df['source'] = source_col_val
 
-old_df = df.copy()
-url_to_labels_df = old_df.groupby("url")
-
-# Remove duplicates
-df.drop_duplicates(inplace=True, ignore_index=True, subset=["url"])
-
-# Try to edit label field
-for (url, sub_df) in url_to_labels_df:
-    labels = list(set(sub_df.label))
-    df.loc[df.url == url, "label"] = [labels]
+# Update label relevance to be relevant for every instance
+df["label_relevance"] = RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO.value
 
 # Complete missing columns:
 df["last_scraped"] = datetime.datetime.now(tz=pytz.utc)
