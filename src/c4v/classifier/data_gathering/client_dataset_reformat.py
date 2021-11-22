@@ -9,7 +9,21 @@
     categories
     date
     label
+    source
+
+    --- 
+    Note that this script won't check for duplicate labels:
+    
+    key  | a | b | c | label          Key | a | d | label 
+    ------------------------          --------------------
+    1    | _ | _ | _ | l1             1   | _ | _ | l1
+    1    | _ | _ | _ | l2       --->  1   | _ | _ | l2
+    2    | _ | _ | _ | l3             2   | _ | _ | l3
+    2    | _ | _ | _ | l3
 """
+# Local imports 
+from c4v.scraper.scraped_data_classes.scraped_data import Sources
+
 # Python imports
 import sys
 import os
@@ -53,6 +67,13 @@ print(f"Removing columns: {columns_to_remove}")
 
 df.drop(columns_to_remove, inplace=True, axis=1)
 print(f"Columns: {df.columns}")
+
+# Adding source column
+source_col_val = Sources.CLIENT.value
+print(f"Adding 'source' column with value: {source_col_val}")
+
+df['source'] = source_col_val
+
 old_df = df.copy()
 url_to_labels_df = old_df.groupby("url")
 
@@ -68,4 +89,4 @@ for (url, sub_df) in url_to_labels_df:
 df["last_scraped"] = datetime.datetime.now(tz=pytz.utc)
 
 filename = f"cleaned_{os.path.basename(csv_file_name)}"
-df.to_csv(filename)
+df.to_csv(filename, index=False)

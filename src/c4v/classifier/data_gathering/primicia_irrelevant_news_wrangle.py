@@ -80,4 +80,4 @@ print(df)
 filename = os.path.basename(csv_file_name)
 print(f"Saving cleaned data to: {filename}")
 with open(filename, "+w") as f:
-    df.to_csv(f)
+    df.to_csv(f, index=False)
