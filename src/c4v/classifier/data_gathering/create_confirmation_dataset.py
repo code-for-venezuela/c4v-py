@@ -140,4 +140,4 @@ print("Creating final dataset...")
 
 filename = "confirmation_dataset.csv"
 print(f"Saving file to: {filename}")
-full_df.to_csv(filename)
+full_df.to_csv(filename, index=False)

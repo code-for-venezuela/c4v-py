@@ -6,11 +6,10 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources, RelevanceClassificationLabels
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.classifier.classifier_experiment import ClassifierExperiment
-from c4v.classifier.classifier import Classifier
 from c4v.classifier.language_model.language_model import LanguageModel
 from c4v.config import PersistencyManagers, settings
 from c4v.microscope.metadata import Metadata
@@ -316,7 +315,7 @@ class Manager:
 
         # Request at the most "limit" instances
         data = list(
-            x for x in self.persistency_manager.get_all(scraped=True) if not x.label
+            x for x in self.persistency_manager.get_all(scraped=True) if not x.label_relevance
         )[:limit]
 
         # classify
@@ -364,7 +363,7 @@ class Manager:
             Return:
                 List with possible output labels for the classifier
         """
-        return Classifier.get_labels()
+        return [x.value for x in RelevanceClassificationLabels]
 
     def should_retrain_base_lang_model(
         self,

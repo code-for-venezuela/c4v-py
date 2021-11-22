@@ -13,23 +13,44 @@ import enum
 # Local imports
 from c4v.config import settings
 
-
-class Labels(enum.Enum):
+class LabelSet(enum.Enum):
     """
-        Every possible label
+        Interface for sets of labels that can be attached to to a model for classification
     """
 
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        """
+            Get a dict mapping from ids to a str, representing the labels for this label set
+        """
+        raise NotImplementedError("Should implement abstract method get_id2label_dict")
+
+class RelevanceClassificationLabels(LabelSet):
+    """
+        Labels for Binary classification, telling if a data instance is relevant or not
+    """
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
     UNKNOWN: str = "UNKNOWN"
 
     @classmethod
-    def labels(cls) -> List[str]:
-        """
-            Get list of labels as strings
-        """
-        return [l.value for l in cls]
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        return {
+            0: cls.IRRELEVANTE.value,
+            1: cls.DENUNCIA_FALTA_DEL_SERVICIO.value,
+        }
 
+class ServiceClassificationLabels(LabelSet):
+    """
+        Labels for service classification, "electricity", "water", "internet"... 
+    """
+    AGUA : str = "AGUA"
+    ASEO_URBANO : str = "ASEO URBANO"
+    COMBINACION : str = "COMBINACIÓN"
+    ELECTRICIDAD : str = "ELECTRICIDAD"
+    GAS_DOMESTICO : str = "GAS DOMÉSTICO"
+    TELECOMUNICACIONES : str = "TELECOMUNICACIONES"
+    UNKNOWN : str = "UNKNOWN"
 
 class Sources(enum.Enum):
     """
@@ -39,7 +60,6 @@ class Sources(enum.Enum):
     UNKOWN: str = "UNKNOWN"
     SCRAPING: str = "SCRAPING"
     CLIENT: str = "CLIENT"
-
 
 @dataclass()
 class ScrapedData:
@@ -61,7 +81,8 @@ class ScrapedData:
     author: str = None
     categories: List[str] = field(default_factory=list)
     date: str = None
-    label: Labels = None
+    label_relevance: RelevanceClassificationLabels = None
+    label_service: ServiceClassificationLabels = None
     source: Sources = None
 
     def pretty_print(self, max_content_len: int = -1) -> str:
@@ -80,7 +101,7 @@ class ScrapedData:
         if max_content_len < len(self.content):
             content = content[:max_content_len] + "..."
 
-        return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}\nlabel: {self.label}\nsource: {self.source}\ncontent:\n\t{content}"
+        return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}\nlabel: {self.label_relevance}\nsource: {self.source}\ncontent:\n\t{content}"
 
     def __hash__(self) -> int:
         return (
@@ -90,10 +111,10 @@ class ScrapedData:
             self.content,
             self.author,
             self.date,
-            self.label,
+            self.label_relevance,
+            self.label_service,
             self.source,
         ).__hash__()
-
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """

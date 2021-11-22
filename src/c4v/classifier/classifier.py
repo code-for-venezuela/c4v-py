@@ -5,7 +5,7 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Labels
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
@@ -78,7 +78,7 @@ class Classifier(BaseModel):
             files_folder_path: str = None, 
             base_model_name: str = settings.default_base_language_model, 
             use_cuda: bool = True, 
-            labelset : Type[LabelSet] = BinaryClassificationLabels
+            labelset : Type[LabelSet] = RelevanceClassificationLabels
             ):
         self._labelset = labelset
         super().__init__(files_folder_path=files_folder_path, base_model_name=base_model_name, use_cuda=use_cuda)
@@ -460,7 +460,7 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label = Labels(self.index_to_label(torch.argmax(x).item()))
+            d.label_relevance = RelevanceClassificationLabels(self.index_to_label(torch.argmax(x).item()))
             result.append({"data": d, "scores": x})
 
         return result
@@ -504,25 +504,20 @@ class Classifier(BaseModel):
 
         return {"scores": scores, "label": label}
 
-    def index_to_label(self, index: int) -> Labels:
+    def index_to_label(self, index: int) -> LabelSet:
         """
             Get index for label
         """
         d = self.labelset.get_id2label_dict()
-        return d.get(index, Labels.IRRELEVANTE.value)
-
-    @staticmethod
-    def get_labels() -> List[str]:
-        """
-            Get list of possible labels outputs
-        """
-        return Labels.labels()
+        label = d.get(index)
+        assert label, "Label shouldn't  be None"
+        return label
 
     def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
         return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
 
     @classmethod
     def binary_classifier(cls, **kwargs):
-        kwargs["labelset"] = BinaryClassificationLabels
+        kwargs["labelset"] = RelevanceClassificationLabels
         return cls(**kwargs)
         

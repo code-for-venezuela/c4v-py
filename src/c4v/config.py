@@ -9,7 +9,6 @@ import enum
 
 _HOME = os.environ.get("HOME")
 
-
 class PersistencyManagers(enum.Enum):
     """
         Possible arguments for "PERSISTENCY_MANAGER" setting,
@@ -22,10 +21,10 @@ class PersistencyManagers(enum.Enum):
     SQLITE: str = "SQLITE"
     USER: str = "USER"
 
-
 settings = Dynaconf(
     envvar_prefix="C4V",
-    settings_files=["settings.toml", ".secrets.toml"],
+    settings_files=["./settings.toml", "config/.secrets.toml"],
+    load_dotenv=True,
     validators=[
         Validator("DATE_FORMAT", default="%Y-%m-%d %H:%M:%S.%f%z"),
         Validator("C4V_FOLDER", default=os.path.join(_HOME, ".c4v")),
@@ -53,9 +52,7 @@ settings = Dynaconf(
         Validator(
             "USER_PERSISTENCY_MANAGER_MODULE", default=None
         ),  # Module from the imported file where to find the the function
-    ],
-    load_dotenv=True,
+    ]
 )
-
 # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
 # `settings_files` = Load this files in the order.
