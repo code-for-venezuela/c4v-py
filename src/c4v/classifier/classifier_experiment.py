@@ -190,7 +190,7 @@ class ClassifierExperiment(BaseExperiment):
         if classifier_instance:
             classifier_instance.files_folder_path = fs_manager.experiment_content_folder
 
-        classifier_instance = classifier_instance or Classifier.binary_classifier(
-            files_folder_path=fs_manager.experiment_content_folder
+        classifier_instance = classifier_instance or Classifier(
+            fs_manager.experiment_content_folder
         )
         return cls(fs_manager, classifier_instance)

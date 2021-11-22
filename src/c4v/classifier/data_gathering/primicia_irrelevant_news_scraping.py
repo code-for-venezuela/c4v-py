@@ -54,7 +54,7 @@ date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S"
 filename = f"primicia_irrelevant_{date_suffix}.csv"
 
 with open(filename, "w+") as file:
-    df.to_csv(file, index=False)
+    df.to_csv(file)
 
 print(f"Data saved to {filename}")
 

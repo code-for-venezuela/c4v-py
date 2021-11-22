@@ -5,13 +5,14 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Labels
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
-from typing import Dict, List, Any, Tuple, Type
+from typing import Dict, List, Any, Tuple
 from pathlib import Path
 from pandas.core.frame import DataFrame
+from importlib import resources
 from enum import Enum
 
 # Third Party
@@ -37,26 +38,11 @@ from transformers.trainer_utils import EvalPrediction
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
+
 class Classifier(BaseModel):
     """
-        This is the classifier model, you can use it to do two kinds of classification,
-        binary classification, to tell apart relevant or irrelevant news, and a multi-single label classification,
-        which assumes that an article is relevant and assigns one of a given set of labels to that
+        This class provides a simple way to run simple experiments.
     """
-
-    def __init__(
-            self, 
-            files_folder_path: str = None, 
-            base_model_name: str = settings.default_base_language_model, 
-            use_cuda: bool = True, 
-            labelset : Type[LabelSet] = RelevanceClassificationLabels
-            ):
-        self._labelset = labelset
-        super().__init__(files_folder_path=files_folder_path, base_model_name=base_model_name, use_cuda=use_cuda)
-
-    @property
-    def labelset(self) -> Type[LabelSet]:
-        return self._labelset
 
     def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
@@ -109,7 +95,7 @@ class Classifier(BaseModel):
                 RobertaTokenizer: tokenizer to retrieve
         """
         return AutoTokenizer.from_pretrained(
-            model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
+            model_name or self._base_model_name, id2label=self.get_id2label_dict()
         )
 
     def load_base_model(
@@ -287,7 +273,7 @@ class Classifier(BaseModel):
             raise ValueError(f"Experiment does not exists: {path}")
 
         model = AutoModelForSequenceClassification.from_pretrained(
-            path, local_files_only=True, id2label=self.labelset.get_id2label_dict()
+            path, local_files_only=True, id2label=self.get_id2label_dict()
         )
         return model
 
@@ -431,7 +417,7 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label_relevance = RelevanceClassificationLabels(self.index_to_label(torch.argmax(x).item()))
+            d.label = Labels(self.index_to_label(torch.argmax(x).item()))
             result.append({"data": d, "scores": x})
 
         return result
@@ -475,20 +461,29 @@ class Classifier(BaseModel):
 
         return {"scores": scores, "label": label}
 
-    def index_to_label(self, index: int) -> LabelSet:
+    def get_id2label_dict(self) -> Dict[int, str]:
+        """
+            Return dict mapping from ids to labels
+        """
+        return {
+            1: Labels.DENUNCIA_FALTA_DEL_SERVICIO.value,
+            0: Labels.IRRELEVANTE.value,
+        }
+
+    def index_to_label(self, index: int) -> Labels:
         """
             Get index for label
         """
-        d = self.labelset.get_id2label_dict()
-        label = d.get(index)
-        assert label, "Label shouldn't  be None"
-        return label
+        d = self.get_id2label_dict()
+
+        return d.get(index, Labels.IRRELEVANTE.value)
+
+    @staticmethod
+    def get_labels() -> List[str]:
+        """
+            Get list of possible labels outputs
+        """
+        return Labels.labels()
 
     def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
         return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
-
-    @classmethod
-    def binary_classifier(cls, **kwargs):
-        kwargs["labelset"] = RelevanceClassificationLabels
-        return cls(**kwargs)
-        

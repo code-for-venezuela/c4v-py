@@ -12,7 +12,7 @@ import datetime
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
-from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import Labels, ScrapedData, Sources
 from c4v.config import settings
 
 DATE_FORMAT = settings.date_format
@@ -56,8 +56,7 @@ class SqliteManager(BasePersistencyManager):
             content TEXT NULL,\
             author TEXT NULL,\
             date DATETIME NULL,\
-            label_relevance TEXT NULL, \
-            label_service TEXT NULL, \
+            label TEXT NULL, \
             source TEXT NULL\
             );"
         )
@@ -123,26 +122,19 @@ class SqliteManager(BasePersistencyManager):
 
             for row in res:
                 # Decompose row
-                (url, last_scraped, title, content, author, date, label_relevance, label_service, source) = row
+                (url, last_scraped, title, content, author, date, label, source) = row
 
-                if label_relevance:
+                if label:
                     try:
-                        label_relevance = RelevanceClassificationLabels(label_relevance)
+                        label = Labels(label)
                     except:  # not a known label
-                        label_relevance = RelevanceClassificationLabels.UNKNOWN
-
-                if label_service:
-                    try:
-                        label_service = ServiceClassificationLabels(label_service)
-                    except:  # not a known label
-                        label_service = ServiceClassificationLabels.UNKNOWN
+                        label = Labels.UNKNOWN
 
                 if source:
                     try:
                         source = Sources(source)
                     except:  # unknown source
                         source = Sources.UNKOWN
-                
 
                 # parse date to datetime:
                 try:
@@ -178,7 +170,7 @@ class SqliteManager(BasePersistencyManager):
                     author=author,
                     date=date,
                     categories=categories,
-                    label_relevance=label_relevance,
+                    label=label,
                     source=source,
                 )
 
@@ -247,19 +239,24 @@ class SqliteManager(BasePersistencyManager):
         with sqlite3.connect(self._db_path) as connection:
             cursor = connection.cursor()
 
+            # I think that this should be removed
+            # for data in url_data:
+            #     new_data = dataclasses.asdict(data)
+            #     new_data["last_scraped"] = (
+            #         datetime.datetime.strftime(data.last_scraped, DATE_FORMAT)
+            #         if data.last_scraped
+            #         else data.last_scraped
+            #     )
+
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             for data in data_to_insert:
-                label_relevance: RelevanceClassificationLabels = data["label_relevance"]
-                data["label_relevance"] = label_relevance.value if label_relevance else label_relevance
-
-                label_service: ServiceClassificationLabels = data['label_service']
-                data["label_service"] = label_service.value if label_service else label_service
-
+                label: Labels = data["label"]
+                data["label"] = label.value if label else label
                 source: Sources = data["source"]
                 data["source"] = source.value if source else source
 
             cursor.executemany(
-                "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date, :label_relevance, :label_service, :source)",
+                "INSERT OR REPLACE INTO scraped_data VALUES (:url, :last_scraped, :title, :content, :author, :date, :label, :source)",
                 data_to_insert,
             )
 
