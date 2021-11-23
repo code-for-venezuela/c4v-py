@@ -78,10 +78,17 @@ class Classifier(BaseModel):
             files_folder_path: str = None, 
             base_model_name: str = settings.default_base_language_model, 
             use_cuda: bool = True, 
-            labelset : Type[LabelSet] = RelevanceClassificationLabels
+            labelset : Type[LabelSet] = RelevanceClassificationLabels,
+            label_column : str = "label"
             ):
+        self._label_column = label_column
         self._labelset = labelset
         super().__init__(files_folder_path=files_folder_path, base_model_name=base_model_name, use_cuda=use_cuda)
+
+    @property
+    def label_column(self) -> str:
+        """ Column used by this model as target label during training """
+        return self.label_column
 
     @property
     def labelset(self) -> Type[LabelSet]:
@@ -94,7 +101,7 @@ class Classifier(BaseModel):
         return C4vDataFrameLoader.get_from_processed(dataset_name)
 
     def prepare_dataframe(
-        self, columns: List[str], dataset_name: str
+        self, columns: List[str], dataset_name: str, label_column: str = None, labelset: Type[LabelSet] = None
     ) -> Tuple[List[str], List[int]]:
         """
             Return the list of text bodies and its corresponding label of whether it is 
@@ -108,16 +115,21 @@ class Classifier(BaseModel):
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe(dataset_name).sample(
+        label_column = label_column or self.label_column
+        labelset = labelset or self.labelset
+
+        df = self.get_dataframe(dataset_name).sample(
             frac=1
         )  # use sample to shuffle rows
 
-        df_pscdd["label"] = (
-            df_pscdd["label"].apply(lambda x: "IRRELEVANTE" not in x)
+        label_2_id_dict = labelset.get_id2label_dict()
+
+        df[label_column] = (
+            df[label_column].apply(lambda x: label_2_id_dict[x])
         ).astype(int)
 
-        df_pscdd = df_pscdd.convert_dtypes()
-        df_issue_text = df_pscdd[[*columns, "label"]]
+        df = df.convert_dtypes()
+        df_issue_text = df[[*columns, label_column]]
         df_issue_text.dropna(inplace=True)
 
         x = [
@@ -125,7 +137,7 @@ class Classifier(BaseModel):
             for tup in zip(*[list(df_issue_text[col]) for col in columns])
         ]
 
-        y = list(df_issue_text["label"])
+        y = list(df_issue_text[label_column])
 
         return x, y
 
@@ -276,6 +288,10 @@ class Classifier(BaseModel):
                 logging_dir : str = logs folder, defaulted to experiment's logs folder
                 path_to_save_checkpoint : str = path to save checkpoint after training is finished, defaults to experiment's folder
                 train_args : TrainArguments = if provided, override all default parameters passed to the training
+                train_dataset: Dataset = Optional dataset to use during training, overriding the default one
+                eval_dataset: Dataset = Optional dataset to use during training, overriding the default one
+                
+
             Return:
                 properly configured trainer instance
 
@@ -344,6 +360,8 @@ class Classifier(BaseModel):
         confirmation_dataset: str = "classifier_confirmation_dataset.csv",
         val_test_proportion: float = 0.2,
         base_model_name: str = None,
+        labelset: Type[LabelSet] = None,
+        label_column: str = None
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
@@ -373,7 +391,12 @@ class Classifier(BaseModel):
             )
 
         # Prepare training dataframe and load model + tokenizer
-        x, y = self.prepare_dataframe(columns=columns, dataset_name=training_dataset)
+        x, y = self.prepare_dataframe(
+                        columns=columns, 
+                        dataset_name=training_dataset, 
+                        label_column=label_column, 
+                        labelset=labelset
+                    )
 
         # Split dataset into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
@@ -519,5 +542,6 @@ class Classifier(BaseModel):
     @classmethod
     def binary_classifier(cls, **kwargs):
         kwargs["labelset"] = RelevanceClassificationLabels
+        kwargs["label_column"] = "label_service"
         return cls(**kwargs)
         

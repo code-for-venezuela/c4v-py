@@ -4,7 +4,7 @@
 """
 # Python imports
 import dataclasses
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Type
 
 # Local imports
 from c4v.classifier.experiment import (
@@ -14,7 +14,7 @@ from c4v.classifier.experiment import (
     BaseExperiment,
 )
 from c4v.classifier.classifier import Classifier
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet
 from c4v.config import settings
 
 
@@ -35,6 +35,8 @@ class ClassifierArgs(BaseExperimentArguments):
     description: str = None  # Optional description for this experiment
     val_dataset_proportion: float = 0.2  # How much in proportion for the training dataset take as eval dataset
     base_model_name: str = settings.default_base_language_model
+    label_column: str = None
+    labelset: Type[LabelSet] = None
 
 
 @dataclasses.dataclass
@@ -103,10 +105,11 @@ class ClassifierExperiment(BaseExperiment):
         if not classifier_instance:
             classifier_instance = Classifier()
 
-        # Set up classifier object
-        classifier_instance.files_folder = (
-            experiment_fs_manager.experiment_content_folder
-        )
+        # # Set up classifier object
+        # classifier_instance.files_folder = (
+        #     experiment_fs_manager.experiment_content_folder
+        # )
+        # Deprecated I think
 
         self._classifier = classifier_instance
 
@@ -127,6 +130,14 @@ class ClassifierExperiment(BaseExperiment):
             val_test_proportion=args.val_dataset_proportion,
             base_model_name=args.base_model_name,
         )
+
+        # Sanity check in arguments
+        if not args.label_column:
+            raise ValueError("label_column not provided in classifier experiment")
+
+        if not args.labelset:
+            raise ValueError("labelset not provided in classifier experiment")
+            
         summary = ClassifierSummary(
             eval_metrics=metrics, description=args.description, user_args=args
         )
