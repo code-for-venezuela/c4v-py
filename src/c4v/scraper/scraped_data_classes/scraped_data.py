@@ -5,7 +5,7 @@
 # Python imports
 from dataclasses import dataclass, asdict, field
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Type
 from datetime import datetime
 import json
 import enum
@@ -24,6 +24,14 @@ class LabelSet(enum.Enum):
             Get a dict mapping from ids to a str, representing the labels for this label set
         """
         raise NotImplementedError("Should implement abstract method get_id2label_dict")
+
+    @classmethod
+    def get_label2id_dict(cls) -> Dict[str, int]:
+        """
+            Get a dict mapping labels to int ids, representing the the ids of each label in this labelset
+        """
+        id2label = cls.get_id2label_dict()
+        return { (v,k) for (k,v) in id2label.items() }
 
 class RelevanceClassificationLabels(LabelSet):
     """
@@ -50,7 +58,22 @@ class ServiceClassificationLabels(LabelSet):
     ELECTRICIDAD : str = "ELECTRICIDAD"
     GAS_DOMESTICO : str = "GAS DOMÉSTICO"
     TELECOMUNICACIONES : str = "TELECOMUNICACIONES"
+    NO_SERVICIO : str = "NO ES SERVICIO"
     UNKNOWN : str = "UNKNOWN"
+
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        return {
+            0 : cls.AGUA.value,
+            1 : cls.ASEO_URBANO.value,
+            2 : cls.COMBINACION.value,
+            3 : cls.ELECTRICIDAD.value,
+            4 : cls.GAS_DOMESTICO.value,
+            5 : cls.TELECOMUNICACIONES.value,
+            6 : cls.NO_SERVICIO.value,
+            7 : cls.UNKNOWN.value,
+        }
+    
 
 class Sources(enum.Enum):
     """

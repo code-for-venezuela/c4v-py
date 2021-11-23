@@ -2,8 +2,8 @@
     Use this script to scrape data from primicia with non-relevant information, 
     and then store it in a csv file in the current working directory
 
-    Script Arguments:
-        limit (position 1) : max ammount of urls to crawl
+    # Parameters:
+        - limit `int` : max ammount of urls to crawl
 """
 # Python imports
 import datetime

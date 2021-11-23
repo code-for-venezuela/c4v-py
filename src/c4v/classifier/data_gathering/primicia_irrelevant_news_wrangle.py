@@ -1,7 +1,8 @@
 """
     Use this script to process output data from the primicia_irrelevant_news_scraping.py script
     The file, in order to match the one used for trainning and provided by the client, should provide the following collumns
-    * label
+    * label_relevance
+    * label_service 
     * title
     * content
     * date
@@ -16,6 +17,9 @@ import pandas as pd
 import sys
 import os
 from pandas.core.frame import DataFrame
+
+# Local imports
+from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ServiceClassificationLabels
 
 # Get command line argument
 if len(sys.argv) < 2:
@@ -42,7 +46,8 @@ df["content"].drop(
 
 # Add label column as irrelevant for every row
 print("Adding irrelevant label to every row...")
-df["label"] = [["IRRELEVANTE"]] * len(df)
+df["label_relevance"] = RelevanceClassificationLabels.IRRELEVANTE.value
+df["label_service"] = ServiceClassificationLabels.NO_SERVICIO.value
 
 # Remove extra linejumps
 print("Removing extra line jumps from article bodies...")
@@ -60,7 +65,8 @@ df.drop_duplicates(inplace=True, subset="url")
 
 # Remove unnecesary columns
 columns = [
-    "label",
+    "label_relevance",
+    "label_service",
     "content",
     "title",
     "author",
@@ -69,9 +75,10 @@ columns = [
     "categories",
     "url",
 ]
+
 columns_to_remove = [c for c in df.columns if c not in columns]
 print(f"Removing the following columns: {columns_to_remove}")
-df.drop(columns_to_remove, inplace=True, axis=1)
+df.drop(columns_to_remove, inplace=True, axis='columns')
 
 print("Cleaned Dataset Shape: ")
 print(df)
