@@ -84,4 +84,5 @@ df["label_relevance"] = RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICI
 df["last_scraped"] = datetime.datetime.now(tz=pytz.utc)
 
 filename = f"cleaned_{os.path.basename(csv_file_name)}"
+print(f"Saving file to: {filename}")
 df.to_csv(filename, index=False)

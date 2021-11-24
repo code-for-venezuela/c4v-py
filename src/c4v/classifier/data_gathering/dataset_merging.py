@@ -64,16 +64,3 @@ filename = f"train_dataset_{date_suffix}.csv"
 
 print("Saving file to ", filename)
 df.to_csv(filename, index=False)
-
-"""
-old_df = df.copy()
-url_to_labels_df = old_df.groupby("url")
-
-# Remove duplicates
-df.drop_duplicates(inplace=True, ignore_index=True, subset=["url"])
-
-# Try to edit label field
-for (url, sub_df) in url_to_labels_df:
-    labels = list(set(sub_df.label))
-    df.loc[df.url == url, "label"] = [labels]
-"""
