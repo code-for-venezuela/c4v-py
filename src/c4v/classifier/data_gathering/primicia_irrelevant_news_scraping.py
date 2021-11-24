@@ -39,7 +39,7 @@ print(f"Scraping up to {LIMIT} urls from primicia")
 crawler = PrimiciaCrawler.from_irrelevant()
 urls = crawler.crawl_urls(up_to=LIMIT)
 
-print(f"URLs scrawled, gathered: {len(urls)}. Scraping new urls...")
+print(f"URLs crawled, gathered: {len(urls)}. Scraping new urls...")
 
 data = bulk_scrape(urls)
 del urls
