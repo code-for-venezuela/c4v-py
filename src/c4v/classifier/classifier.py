@@ -129,6 +129,8 @@ class Classifier(BaseModel):
 
         label_2_id_dict = labelset.get_id2label_dict()
 
+        print(label_2_id_dict)
+
         df[label_column] = (
             df[label_column].apply(lambda x: label_2_id_dict[x])
         ).astype(int)
