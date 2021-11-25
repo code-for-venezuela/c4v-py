@@ -88,7 +88,7 @@ class Classifier(BaseModel):
     @property
     def label_column(self) -> str:
         """ Column used by this model as target label during training """
-        return self.label_column
+        return self._label_column
 
     @property
     def labelset(self) -> Type[LabelSet]:
