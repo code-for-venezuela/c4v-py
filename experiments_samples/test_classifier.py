@@ -19,7 +19,8 @@ args = ClassifierArgs(
         "adafactor" : True,
     },
     columns=['title'],
-    train_dataset_name="classifier_training_dataset.csv",
+    train_dataset_name="relevance_training_dataset.csv",
+    confirmation_dataset_name= "relevance_confirmation_dataset.csv",
     description="Classifier sample",
 )
 
