@@ -104,11 +104,16 @@ class Classifier(BaseModel):
         self, columns: List[str], dataset_name: str, label_column: str = None, labelset: Type[LabelSet] = None
     ) -> Tuple[List[str], List[int]]:
         """
-            Return the list of text bodies and its corresponding label of whether it is 
-            a missing service problem or not, expressed as int
+            Return the list of text bodies and its corresponding label corresponding according to the provided 
+            labelset. Note that no duplicates are allowed
             Parameters:
                 columns : [str] = List of columns to use as part of the experiment 
                 dataset_name : str = name of the dataset to use
+                label_column : str = name of the column to use as label. If not provided, defaults to the configured one
+                                     in this classifier instance
+                labelset : Type[LabelSet] = Set of label to use for training, there's no check that the provided label column 
+                                            values  matches the labels in this labelset. If not provided, defaults to the configured one
+                                            in this classifier instance
             Return:
                 ([str], [int]) = the i'st position of the first list is the body of a news article, and the 
                                  i'st position of the second list tells whether the article i talks about
@@ -129,8 +134,9 @@ class Classifier(BaseModel):
         ).astype(int)
 
         df = df.convert_dtypes()
+        df.drop_duplicates(inplace=True)
         df_issue_text = df[[*columns, label_column]]
-        df_issue_text.dropna(inplace=True)
+        df_issue_text.dropna(inplace=True)    
 
         x = [
             "\n".join(tup)
