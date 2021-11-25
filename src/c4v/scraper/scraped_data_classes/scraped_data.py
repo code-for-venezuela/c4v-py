@@ -31,7 +31,7 @@ class LabelSet(enum.Enum):
             Get a dict mapping labels to int ids, representing the the ids of each label in this labelset
         """
         id2label = cls.get_id2label_dict()
-        return { (v,k) for (k,v) in id2label.items() }
+        return { v:k for (k,v) in id2label.items() }
 
 class RelevanceClassificationLabels(LabelSet):
     """

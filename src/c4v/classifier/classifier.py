@@ -127,7 +127,7 @@ class Classifier(BaseModel):
             frac=1
         )  # use sample to shuffle rows
 
-        label_2_id_dict = labelset.get_id2label_dict()
+        label_2_id_dict = labelset.get_label2id_dict()
 
         print(label_2_id_dict)
 
