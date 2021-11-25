@@ -21,6 +21,7 @@ args = ClassifierArgs(
     columns=['title'],
     train_dataset_name="relevance_training_dataset.csv",
     confirmation_dataset_name= "relevance_confirmation_dataset.csv",
+    label_column="label_relevance",
     description="Classifier sample",
 )
 
