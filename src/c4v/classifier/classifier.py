@@ -171,7 +171,7 @@ class Classifier(BaseModel):
         """
         # Creating model and tokenizer
         model = AutoModelForSequenceClassification.from_pretrained(
-            model_name or self._base_model_name, num_labels=num_labels or len(self.labelset.num_labels())
+            model_name or self._base_model_name, num_labels=num_labels or self.labelset.num_labels()
         )
         # Use GPU if available
         model.to(self._device)
