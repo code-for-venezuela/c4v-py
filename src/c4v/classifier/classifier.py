@@ -406,7 +406,7 @@ class Classifier(BaseModel):
 
         # Split dataset into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
-            x, y, test_size=val_test_proportion
+            x, y, test_size=val_test_proportion, stratify=y
         )
 
         # Load model and tokenizer
