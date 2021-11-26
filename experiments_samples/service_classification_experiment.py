@@ -6,7 +6,7 @@ from c4v.scraper.scraped_data_classes.scraped_data import ServiceClassificationL
 args = ClassifierArgs(
     training_args={
         "per_device_train_batch_size" : 15,
-        "per_device_eval_batch_size" : 15,
+        "per_device_eval_batch_size" : 15,      # change batch size if you're having memory problems
         "num_train_epochs" : 3,
         "warmup_steps" : 1000,
         "save_steps" : 1000,
@@ -24,7 +24,6 @@ args = ClassifierArgs(
     label_column="label_service", 
     description="Service sample",
     labelset=ServiceClassificationLabels
-
 )
 
 exp = ClassifierExperiment.from_branch_and_experiment("samples", "service_classifier")
