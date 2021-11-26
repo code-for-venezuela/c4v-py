@@ -19,6 +19,15 @@ class LabelSet(enum.Enum):
     """
 
     @classmethod
+    def num_labels(cls) -> int:
+        """
+            Ammount of labels to use during classification. 
+            This may be needed in case that the measurement set is using some 
+            special labels that are not used for classification
+        """
+        return len(list(cls.get_id2label_dict().items()))
+
+    @classmethod
     def get_id2label_dict(cls) -> Dict[int, str]:
         """
             Get a dict mapping from ids to a str, representing the labels for this label set
