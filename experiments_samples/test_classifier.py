@@ -2,7 +2,7 @@
     Sample for a classifier experiment
 """
 from c4v.classifier.classifier_experiment import ClassifierArgs, ClassifierExperiment
-
+from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels
 args = ClassifierArgs(
     training_args={
         "per_device_train_batch_size" : 10,
@@ -23,6 +23,8 @@ args = ClassifierArgs(
     confirmation_dataset_name= "relevance_confirmation_dataset.csv",
     label_column="label_relevance",
     description="Classifier sample",
+    labelset=RelevanceClassificationLabels
+
 )
 
 exp = ClassifierExperiment.from_branch_and_experiment("samples", "classifier")
