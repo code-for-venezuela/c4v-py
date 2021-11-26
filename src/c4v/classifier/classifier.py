@@ -160,7 +160,7 @@ class Classifier(BaseModel):
         )
 
     def load_base_model(
-        self, model_name: str = None
+        self, model_name: str = None, num_labels : int = None
     ) -> RobertaForSequenceClassification:
         """
             Create model from model hub, configure them and retrieve it
@@ -171,7 +171,7 @@ class Classifier(BaseModel):
         """
         # Creating model and tokenizer
         model = AutoModelForSequenceClassification.from_pretrained(
-            model_name or self._base_model_name, num_labels=2
+            model_name or self._base_model_name, num_labels=num_labels or len(self.labelset)
         )
         # Use GPU if available
         model.to(self._device)
