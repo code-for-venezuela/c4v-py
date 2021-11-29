@@ -546,7 +546,7 @@ class Classifier(BaseModel):
         return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
 
     @classmethod
-    def binary(cls, **kwargs):
+    def relevance(cls, **kwargs):
         kwargs["labelset"] = RelevanceClassificationLabels
         kwargs["label_column"] = "label_relevance"
         return cls(**kwargs)

@@ -102,14 +102,8 @@ class ClassifierExperiment(BaseExperiment):
         super().__init__(experiment_fs_manager=experiment_fs_manager)
 
         # Set up default values
-        if not classifier_instance:
-            classifier_instance = Classifier()
-
-        # # Set up classifier object
-        # classifier_instance.files_folder = (
-        #     experiment_fs_manager.experiment_content_folder
-        # )
-        # Deprecated I think
+        if not classifier_instance: # default classifier is a relevance classifier
+            classifier_instance = Classifier.relevance()
 
         self._classifier = classifier_instance
 
@@ -201,7 +195,7 @@ class ClassifierExperiment(BaseExperiment):
         if classifier_instance:
             classifier_instance.files_folder_path = fs_manager.experiment_content_folder
 
-        classifier_instance = classifier_instance or Classifier.binary(
+        classifier_instance = classifier_instance or Classifier.relevance(
             files_folder_path=fs_manager.experiment_content_folder
         )
         return cls(fs_manager, classifier_instance)
