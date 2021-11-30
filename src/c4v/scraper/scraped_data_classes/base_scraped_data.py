@@ -3,7 +3,7 @@
 """
 
 # Local imports
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from .scraped_data import ScrapedData
 
 # Python imports:
 from dataclasses import dataclass
