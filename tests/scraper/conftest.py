@@ -61,6 +61,6 @@ def test_sqlite_manager() -> SqliteManager:
 @pytest.fixture
 def test_example_manager() -> DictManager:
     """
-        Build a test sqlite manager
+        Build a test manager
     """
-    return DictManager() # Replace with your own manager
+    return DictManager()

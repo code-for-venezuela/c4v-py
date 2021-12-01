@@ -4,9 +4,9 @@
 # External imports
 from bs4 import BeautifulSoup
 from tabulate import tabulate
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # local imports
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scrapers.base_scraper import BaseScraper
 
 # Python imports

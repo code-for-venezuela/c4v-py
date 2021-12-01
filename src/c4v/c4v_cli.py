@@ -196,15 +196,15 @@ def list(
         else None
     )
 
-    db_manager = SqliteManager(DEFAULT_DB)
+    manager = Manager.from_default()
 
     # Just print urls if requested so
     if urls:
-        for data in db_manager.get_all(limit):
+        for data in manager.get_all(limit):
             click.echo(data.url)
         return
 
-    data = [d for d in db_manager.get_all(limit, scraped_only)]
+    data = [d for d in manager.get_all(limit, scraped_only)]
 
     if count:
         click.echo(len(data))
