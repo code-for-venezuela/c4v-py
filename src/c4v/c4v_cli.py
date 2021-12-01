@@ -11,7 +11,6 @@ from typing import List, Tuple
 from urllib.error import HTTPError
 import os
 from pathlib import Path
-import sys
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -42,7 +41,7 @@ def c4v_cli():
         try:
             path.mkdir(parents=True)
         except Exception as e:
-            print(f"[ERROR] Could not create '{path}' folder: {e}", err=True)
+            click.echo(f"[ERROR] Could not create '{path}' folder: {e}", err=True)
     elif not path.is_dir():
         click.echo(
             f"[ERROR] Files folder '{path}' already exists but it's not a file.",
@@ -335,6 +334,27 @@ def show(url: str, no_scrape: bool = False):
     )
     click.echo(cleaned_content)
     click.echo("+" + ("=" * (line_len - 2)) + "+")
+
+
+@c4v_cli.command()
+def dashboard():
+    """
+        Launch the built in streamlit dashboard within the package might not be 
+        available depending on your currently installed profile
+    """
+    # Try to import streamlit
+    try:
+        import streamlit 
+        import streamlit.cli as slcli
+    except ModuleNotFoundError as e:
+        click.echo(f"[ERROR] Streamlit package not found, you might want to install the corresponding profile for this library. Erro {e}") 
+        return
+    
+    import sys
+
+    sys.argv = ["streamlit", "run", str(Path(Path(__file__).parent, "dashboard", "main.py"))]
+    click.echo("[INFO] Starting c4v dashboard...")
+    sys.exit(slcli.main())
 
 
 @c4v_cli.command()
