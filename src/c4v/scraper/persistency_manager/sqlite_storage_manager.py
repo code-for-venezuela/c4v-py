@@ -231,8 +231,6 @@ class SqliteManager(BasePersistencyManager):
 
     def save(self, url_data: List[ScrapedData]):
         # Save data into database
-
-        # If nothing to do, just return
         if not url_data:
             return
 

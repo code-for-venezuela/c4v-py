@@ -1,7 +1,14 @@
+"""
+    In this module you will find multiple configurations for the app. You can override them by specifying a different
+    .env file, exporting environment variables properly named, or providing a settings.toml file.
+"""
+
 from dynaconf import Dynaconf, Validator
 import os
 import enum
+
 _HOME = os.environ.get("HOME")
+
 
 class PersistencyManagers(enum.Enum):
     """
