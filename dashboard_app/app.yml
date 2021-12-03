@@ -1,0 +1,2 @@
+runtime: python38
+entrypoint: c4v dashboard
