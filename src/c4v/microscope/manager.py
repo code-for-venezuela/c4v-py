@@ -6,9 +6,10 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
-from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS
+from c4v.scraper.crawler.crawlers.base_crawler import BaseCrawler
+from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS, NAME_TO_CRAWLER
 from c4v.config import settings
 from c4v.microscope.metadata import Metadata
 import c4v.microscope.utils as utils
@@ -58,6 +59,11 @@ class Manager:
     def scrape(self, urls : Union[List[str], str] ) -> Union[List[ScrapedData], ScrapedData]:
         """
             Scrape the given url or set of urls and return its results
+            Parameters:
+                urls : [str] | str = Url or list of urls to be scraped. 
+            Return:
+                An instance of scraped data if the given arg was an URL, or a list of ScrapedData in case it 
+                was a list of urls
         """
         if not urls: # if nothing to process, return None
             return None 
@@ -67,6 +73,25 @@ class Manager:
             return scrape(urls)
         
         raise TypeError(f"Expected argument should be a list of urls as strings or a single string url. Given {type(urls)}")
+
+    def crawl(self, crawler : Union[str, BaseCrawler], limit : int = -1) -> List[str]:
+        """
+            Scrape using the provided crawler type up to the given limit
+        """
+        # If it's a crawler name, find a matching crawler and instance it 
+        if isinstance(crawler, str):
+            crawler_class = NAME_TO_CRAWLER.get(crawler)
+            if not crawler_class:
+                raise ValueError(f"'{crawler}' is not a valid crawler name, choices are: {list(NAME_TO_CRAWLER.keys())}")
+            
+            crawler_instance = crawler_class()
+        elif isinstance(crawler, BaseCrawler): 
+            # if it's an instance, just use it 
+            crawler_instance = crawler
+        else:
+            raise TypeError("Invalid crawler argument, should be either a crawler name (str) or a crawler instance")
+        
+        return crawler_instance.crawl_urls(up_to = limit if limit > 0 else None)
 
     def crawl_and_scrape_for(self, crawler_names : List[str] = None, limit : int = -1, save_to_db = True) -> List[ScrapedData]:
         """
@@ -448,7 +473,7 @@ class Manager:
 
     def should_retrain_base_lang_model(
         self,
-        lang_model, #: LanguageModel,
+        lang_model, #: LanguageModel, can't use explicit typing here as the language model must be imported inside this function
         db_manager: BasePersistencyManager = None,
         eval_dataset_size: int = 250,
         min_loss: float = settings.default_lang_model_min_loss,

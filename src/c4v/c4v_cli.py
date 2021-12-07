@@ -12,12 +12,9 @@ from urllib.error import HTTPError
 import os
 from pathlib import Path
 
-from click.utils import echo
-
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
-from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
 from c4v.scraper.utils import data_list_to_table_str
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.config import settings
@@ -535,7 +532,7 @@ def summary(experiment: str):
     # Check if file exists
     if not path.exists():
         CLIClient.error(
-            f"Summary for experiment {experiment} not found in {path}", err=True
+            f"Summary for experiment {experiment} not found in {path}"
         )
         return
     elif not path.is_file():
@@ -702,8 +699,8 @@ class CLIClient:
                     )  # parse every line as a single url
                     lines.extend(content)
             except IOError as e:
-                click.echo(
-                    f"Could not open input file: {file}. Error: {e.strerror}", err=True
+                CLIClient.error(
+                    f"Could not open input file: {file}. Error: {e.strerror}"
                 )
         return lines
 
@@ -721,7 +718,8 @@ class CLIClient:
             following format:
             [INFO] <msg>
         """
-        click.echo(f"[INFO] {msg}")
+        if settings.cli_logging_level >= 10:
+            click.echo(f"[INFO] {msg}")
 
     @staticmethod
     def success(msg : str):
@@ -730,7 +728,8 @@ class CLIClient:
             following format:
             [SUCCESS] <msg>
         """
-        click.echo(f"[SUCCESS] {msg}")
+        if settings.cli_logging_level >= 9:
+            click.echo(f"[SUCCESS] {msg}")
 
     @staticmethod
     def warn(msg : str):
@@ -739,7 +738,8 @@ class CLIClient:
             following format:
             [WARN] <msg>
         """
-        click.echo(f"[WARN] {msg}", err=True)
+        if settings.cli_logging_level >= 8:
+            click.echo(f"[WARN] {msg}", err=True)
 
     @staticmethod
     def error(msg : str):
@@ -748,7 +748,8 @@ class CLIClient:
             following format:
             [Error] <msg>
         """
-        click.echo(f"[ERROR] {msg}", err=True)
+        if settings.cli_logging_level >= 7:
+            click.echo(f"[ERROR] {msg}", err=True)
     
 
 if __name__ == "__main__":

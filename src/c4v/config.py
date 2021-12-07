@@ -15,8 +15,8 @@ class PersistencyManagers(enum.Enum):
         Possible arguments for "PERSISTENCY_MANAGER" setting,
         telling the possible valid variations of persistency managers.
         # Variations:
-            - SQLITE = the default SQLite based persistency manager
-            - USER = Use the user defined persistency manager, specified by the USER_PERSISTENCY_MANAGER_PATH setting.
+            - `SQLITE` = the default SQLite based persistency manager
+            - `USER` = Use the user defined persistency manager, specified by the USER_PERSISTENCY_MANAGER_PATH setting.
     """
 
     SQLITE: str = "SQLITE"
@@ -53,6 +53,16 @@ settings = Dynaconf(
         Validator(
             "USER_PERSISTENCY_MANAGER_MODULE", default=None
         ),  # Module from the imported file where to find the the function
+        Validator(
+            "CLI_LOGGING_LEVEL", default=10
+            # Logging level:
+            #   - 10: error, warn, success, info
+            #   - 9:  error, warn, success
+            #   - 8:  error, warn
+            #   - 7:  error
+            #   - [1-6]:  reserved for future use
+            #   - 0: No logging 
+        )
     ]
 )
 # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
