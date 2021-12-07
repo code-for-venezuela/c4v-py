@@ -12,6 +12,8 @@ from urllib.error import HTTPError
 import os
 from pathlib import Path
 
+from click.utils import echo
+
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 from c4v.scraper.settings import INSTALLED_CRAWLERS
@@ -37,15 +39,14 @@ def c4v_cli():
     # init files if necessary:
     path = Path(DEFAULT_FILES_FOLDER)
     if not path.exists():
-        click.echo(f"[INFO] Creating local files folder at: {DEFAULT_FILES_FOLDER}")
+        CLIClient.info(f"Creating local files folder at: {DEFAULT_FILES_FOLDER}")
         try:
             path.mkdir(parents=True)
         except Exception as e:
-            click.echo(f"[ERROR] Could not create '{path}' folder: {e}", err=True)
+            CLIClient.error(f"Could not create '{path}' folder: {e}")
     elif not path.is_dir():
-        click.echo(
-            f"[ERROR] Files folder '{path}' already exists but it's not a file.",
-            err=True,
+        CLIClient.error(
+            f"Files folder '{path}' already exists but it's not a file."
         )
 
 
@@ -137,13 +138,13 @@ def crawl(
     # Check for errors:
     # if no crawlers to use, just end
     if not crawlers and not all:
-        click.echo(f"Not crawlers provided. Available crawlers:\n{crawlable_sites}")
+        CLIClient.info(f"Not crawlers provided. Available crawlers:\n{crawlable_sites}")
         return
 
     # raise a warnning if incompatible flags where provided
     if all_but and all:
-        click.echo(
-            f"[WARNING] --all and --all-but incompatible flags were provided, using only --all"
+        CLIClient.warn(
+            f"--all and --all-but incompatible flags were provided, using only --all"
         )
 
     # set up crawlers to run
@@ -241,8 +242,8 @@ def classify(
     if (
         n_args < 2
     ):  # Get at the least 2 args, experiment as branch/experiment and some url
-        click.echo(
-            "[ERROR] Should provide at the least 2 arguments, experiment and at the least 1 url"
+        CLIClient.error(
+            "Should provide at the least 2 arguments, experiment and at the least 1 url"
         )
         return
 
@@ -263,24 +264,24 @@ def classify(
         res = manager.run_pending_classification_from_experiment(
             branch, experiment, save=True, limit=limit
         )
-        click.echo(f"[INFO] {len(res)} classified rows")
+        CLIClient.info(f"{len(res)} classified rows")
         return
 
     data = client.get_data_for_urls(urls=inputs[1:], should_scrape=not no_scrape)
 
     # Do nothing if not necessary:
     if not data:
-        click.echo("[INFO] Nothing to classify")
+        CLIClient.info("Nothing to classify")
         return
 
     # Try to classify given data
     try:
         results = manager.run_classification_from_experiment(branch, experiment, data)
     except ValueError as e:
-        click.echo(f"[ERROR] Could not classify provided data.\n\tError: {e}", err=True)
+        CLIClient.error(f"Could not classify provided data.\n\tError: {e}")
         return
     except ModuleNotFoundError as e:
-        click.echo(f"[ERROR] Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}", err=True)
+        CLIClient.error(f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}")
         return
 
     # Pretty print results:
@@ -322,6 +323,7 @@ def show(url: str, no_scrape: bool = False):
     click.echo(f"\tTitle      : {element.title}")
     click.echo(f"\tAuthor     : {element.author}")
     click.echo(f"\tDate       : {element.date}")
+    click.echo(f"\tRelevance  : {element.label.value}")
     click.echo(
         f"\tCategories : {', '.join(element.categories) if element.categories else '<No Category>'}"
     )
@@ -347,13 +349,13 @@ def dashboard():
         import streamlit 
         import streamlit.cli as slcli
     except ModuleNotFoundError as e:
-        click.echo(f"[ERROR] Streamlit package not found, you might want to install the corresponding profile for this library. Erro {e}") 
+        CLIClient.error(f"Streamlit package not found, you might want to install the corresponding profile for this library. Error: {e}") 
         return
     
     import sys
 
     sys.argv = ["streamlit", "run", str(Path(Path(__file__).parent, "dashboard", "main.py"))]
-    click.echo("[INFO] Starting c4v dashboard...")
+    CLIClient.info("[INFO] Starting c4v dashboard...")
     sys.exit(slcli.main())
 
 
@@ -423,17 +425,15 @@ def explain(
     try:
         possible_labels = microscope_manager.get_classifier_labels()
     except ModuleNotFoundError as e:
-        click.echo(f"[ERROR] Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}", err=True)
+        CLIClient.error(f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}")
         return
 
     if label and label not in possible_labels:
-        click.echo(
-            f"[WARNING] Provided label not a valid label, ignoring label argument {label}.",
-            err=True,
+        CLIClient.warn(
+            f"Provided label not a valid label, ignoring label argument {label}.\n" +\
+            f"Possible Labels:\n" +\
+            "\n".join(f"\t* {l}" for l in possible_labels)
         )
-        click.echo(f"Possible Labels:", err=True)
-        for l in possible_labels:
-            click.echo(f"\t* {l}", err=True)
         label = None
 
     # try to explain
@@ -442,7 +442,7 @@ def explain(
             branch, experiment, text_to_explain, html_file=html, additional_label=label
         )
     except ValueError as e:
-        click.echo(f"[ERROR] Could not explain given sentence. Error: {e}")
+        CLIClient.error(f"Could not explain given sentence. Error: {e}")
         return
 
     # Pretty print results
@@ -461,19 +461,17 @@ def experiment():
     """
     path = Path(settings.experiments_dir)
     if not path.exists():
-        click.echo(f"[INFO] Creating experiments folder in: {path}")
+        CLIClient.info(f"Creating experiments folder in: {path}")
         try:
             path.mkdir()
         except Exception as e:
-            click.echo(
-                f"[ERROR] Could not create folder due to the following error: {e}",
-                err=True,
+            CLIClient.error(
+                f"Could not create folder due to the following error: {e}",
             )
 
     elif not path.is_dir():
-        click.echo(
-            f"[ERROR] Could not create folder {path}. File already exists but is not a folder",
-            err=True,
+        CLIClient.error(
+            f"Could not create folder {path}. File already exists but is not a folder",
         )
 
 
@@ -493,7 +491,7 @@ def ls(branch: str = None):
     """
     # TODO tal vez mover esta lógica al ExperimentFSManager?
     if not branch:
-        click.echo(f"[INFO] Listing from {settings.experiments_dir}")
+        CLIClient.info(f"Listing from {settings.experiments_dir}")
         files = CLIClient._ls_files(settings.experiments_dir)
         click.echo("\n".join(files))
         return
@@ -501,18 +499,17 @@ def ls(branch: str = None):
     # Check if branch exists
     path = Path(settings.experiments_dir, branch)
     if not path.exists():
-        click.echo(
-            f"[ERROR] This is not a valid branch name: {branch} in {path}. You can see available branches using the command:\n\tc4v experiment ls",
-            err=True,
+        CLIClient.error(
+            f"This is not a valid branch name: {branch} in {path}. You can see available branches using the command:\n\tc4v experiment ls",
         )
         return
     elif not path.is_dir():
-        click.echo(
-            f"[ERROR] Invalid Branch path: {path}. The branch name '{branch}' does not refers to an actual branch's directory"
+        CLIClient.error(
+            f"Invalid Branch path: {path}. The branch name '{branch}' does not refers to an actual branch's directory"
         )
 
     # As everything is ok, just list files
-    click.echo(f"[INFO] Listing from {path}")
+    CLIClient.info(f"Listing from {path}")
     files = CLIClient._ls_files(path=str(path))
     click.echo("\n".join(files))
 
@@ -537,19 +534,17 @@ def summary(experiment: str):
     path = Path(settings.experiments_dir, branch_name, experiment_name, "summary.txt")
     # Check if file exists
     if not path.exists():
-        click.echo(
-            f"[ERROR] Summary for experiment {experiment} not found in {path}", err=True
+        CLIClient.error(
+            f"Summary for experiment {experiment} not found in {path}", err=True
         )
         return
     elif not path.is_file():
-        click.echo(
-            f"[ERROR] Sumamry for experiment {experiment} in {path} is not a valid file",
-            err=True,
-        )
+        CLIClient.error(f"Sumamry for experiment {experiment} in {path} is not a valid file")
         return
 
     # As everything went ok, print file content
-    click.echo(f"[INFO] Reading summary from: {path}")
+    CLIClient.info(f"Reading summary from: {path}")
+
     click.echo(path.read_text())
 
 
@@ -596,12 +591,10 @@ class CLIClient:
 
         # Warn the user that some urls won't be scraped
         if non_scrapables:
-            click.echo(
-                "[WARNING] some urls won't be retrieved, as they are not scrapable for now.",
-                err=True,
-            )
-            click.echo("Non-scrapable urls:", err=True)
-            click.echo("\n".join([f"\t* {url}" for url in non_scrapables]), err=True)
+            warn_msg = "Some urls won't be retrieved, as they are not scrapable for now.\n"
+            warn_msg += "Non-scrapable urls:\n" 
+            warn_msg += "\n".join(f"\t* {url}" for url in non_scrapables)
+            CLIClient.warn(warn_msg)
 
         # check if some http error happens
         data = []
@@ -610,24 +603,20 @@ class CLIClient:
                 scrapable_urls, should_scrape=should_scrape
             )
         except HTTPError as e:
-            click.echo(
-                f"[ERROR] Could not scrape all data due to connection errors: {e}",
-                err=True,
-            )
+            CLIClient.error(f"Could not scrape all data due to connection errors: {e}")
 
         # Tell the user if some urls where not retrieved
         succesfully_retrieved = {d.url for d in data}
         if any(url not in succesfully_retrieved for url in scrapable_urls):
-            click.echo(f"[WARNING] Some urls couldn't be retrieved: ")
-            click.echo(
-                "\n".join(
+            warn_msg = f"Some urls couldn't be retrieved: \n"
+            warn_msg += "\n".join(
                     [
                         f"\t* {url}"
                         for url in scrapable_urls
                         if url not in succesfully_retrieved
                     ]
                 )
-            )
+            CLIClient.warn(warn_msg)
 
         return data
 
@@ -658,13 +647,11 @@ class CLIClient:
             if len(branch_and_name) == 2:
                 branch, name = branch_and_name
                 return (branch, name)
-
-        click.echo(
-            f"[ERROR] Given experiment name is not valid: {line}. Should be of the form:",
-            err=True,
+        CLIClient.error(
+            f"Given experiment name is not valid: {line}. Should be of the form:\n" +\
+            "\n".join(f"\tbranch_name{separator}experiment_name" for separator in separators)
         )
-        for separator in separators:
-            click.echo(f"\tbranch_name{separator}experiment_name")
+        
         return None
 
     def crawl_new_urls_for(
@@ -691,15 +678,11 @@ class CLIClient:
 
         # Report warning if there's some non registered crawlers
         if not_registered:
-            click.echo(
-                "WARNING: some names in given name list don't correspond to any registered crawler.",
-                err=True,
-            )
-            click.echo(
-                "Unregistered crawler names: \n"
-                + "\n".join([f"\t* {name}" for name in not_registered]),
-                err=True,
-            )
+            err_msg = "Some names in given name list don't correspond to any registered crawler.\n"
+            err_msg +=  "Unregistered crawler names: \n" + \
+                        "\n".join([f"\t* {name}" for name in not_registered])
+
+            CLIClient.warn(err_msg)
 
         self._manager.crawl_and_process_new_urls_for(
             [c for c in crawler_names if c not in not_registered], process, limit=limit
@@ -731,6 +714,42 @@ class CLIClient:
         """
         return [str(x.name) for x in Path(path).glob("*")]
 
+    @staticmethod
+    def info(msg : str):
+        """
+            Info a message to stdout using the click echo function using the
+            following format:
+            [INFO] <msg>
+        """
+        click.echo(f"[INFO] {msg}")
+
+    @staticmethod
+    def success(msg : str):
+        """
+            Log a success message to stdout using the click echo function using the
+            following format:
+            [SUCCESS] <msg>
+        """
+        click.echo(f"[SUCCESS] {msg}")
+
+    @staticmethod
+    def warn(msg : str):
+        """
+            Warn a message to stderr using the click echo function using the
+            following format:
+            [WARN] <msg>
+        """
+        click.echo(f"[WARN] {msg}", err=True)
+
+    @staticmethod
+    def error(msg : str):
+        """
+            Log an error message to stderr using the click echo function using the
+            following format:
+            [Error] <msg>
+        """
+        click.echo(f"[ERROR] {msg}", err=True)
+    
 
 if __name__ == "__main__":
     c4v_cli()
