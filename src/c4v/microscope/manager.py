@@ -56,7 +56,8 @@ class Manager:
     def persistency_manager(self) -> BasePersistencyManager:
         return self._persistency_manager
 
-    def scrape(self, urls : Union[List[str], str] ) -> Union[List[ScrapedData], ScrapedData]:
+    @staticmethod
+    def scrape(urls : Union[List[str], str] ) -> Union[List[ScrapedData], ScrapedData]:
         """
             Scrape the given url or set of urls and return its results
             Parameters:
@@ -74,7 +75,8 @@ class Manager:
         
         raise TypeError(f"Expected argument should be a list of urls as strings or a single string url. Given {type(urls)}")
 
-    def crawl(self, crawler : Union[str, BaseCrawler], limit : int = -1) -> List[str]:
+    @staticmethod
+    def crawl(crawler : Union[str, BaseCrawler], limit : int = -1) -> List[str]:
         """
             Scrape using the provided crawler type up to the given limit
         """

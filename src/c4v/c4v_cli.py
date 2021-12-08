@@ -11,6 +11,7 @@ from typing import List, Tuple
 from urllib.error import HTTPError
 import os
 from pathlib import Path
+import requests
 
 # Local imports
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
@@ -54,7 +55,7 @@ def c4v_cli():
     help="Interpret url list as files instead of urls, so urls are retrieved from such files. The file is expected to be formatted such that there's one url per line",
 )
 @click.option(
-    "--loud", is_flag=True, help="Print scraped data to stdio as it is being scraped"
+    "--loud", is_flag=True, help="Print scraped data to stdout as it is being scraped"
 )
 @click.option(
     "--limit",
@@ -681,9 +682,12 @@ class CLIClient:
 
             CLIClient.warn(err_msg)
 
-        self._manager.crawl_and_process_new_urls_for(
-            [c for c in crawler_names if c not in not_registered], process, limit=limit
-        )
+        try:
+            self._manager.crawl_and_process_new_urls_for(
+                [c for c in crawler_names if c not in not_registered], process, limit=limit
+            )
+        except requests.exceptions.ConnectionError as e:
+            CLIClient.error(f"Couldn't crawl new urls due to connection error: {e}")
 
     @staticmethod
     def _parse_lines_from_files(files: List[str]) -> List[str]:
