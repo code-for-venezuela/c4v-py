@@ -29,7 +29,7 @@ class BigQueryManager(BasePersistencyManager):
 
     def __init__(self, table_name : str, bq_client : bigquery.Client):
         self._table_name = table_name
-        self._client = self.bq_client
+        self._client = bq_client
 
     @property
     def table_name(self) -> str:
@@ -62,11 +62,11 @@ class BigQueryManager(BasePersistencyManager):
 
         # if scraped = true, take only scraped. If false, take non-scraped. If none, take all
         if scraped:
-            query = f"SELECT * FROM scraped_data WHERE last_scraped IS NOT NULL{parsed_orders}"
+            query = f"SELECT * FROM `{self.table_name}` WHERE last_scraped IS NOT NULL{parsed_orders}"
         elif scraped == False:
-            query = f"SELECT * FROM scraped_data WHERE last_scraped IS NULL{parsed_orders}"
+            query = f"SELECT * FROM `{self.table_name}` WHERE last_scraped IS NULL{parsed_orders}"
         else:
-            query = f"SELECT * FROM scraped_data{parsed_orders}"
+            query = f"SELECT * FROM `{self.table_name}` {parsed_orders}"
 
         # If limit less than 0, then take as much as you can
         assert isinstance(limit, int), "limit argument should be a valid integer"
@@ -85,6 +85,8 @@ class BigQueryManager(BasePersistencyManager):
                     label = Labels(label_relevance)
                 except:  # not a known label
                     label = Labels.UNKNOWN
+            else:
+                label = None
 
             if source:
                 try:
@@ -129,7 +131,7 @@ class BigQueryManager(BasePersistencyManager):
 
         res = []
 
-        query_str = "SELECT 1 FROM scraped_data WHERE url=@url AND last_scraped IS NOT NULL;"
+        query_str = f"SELECT 1 FROM `{self.table_name}` WHERE url=@url AND last_scraped IS NOT NULL;"
         for url in urls:
             job_config = bigquery.QueryJobConfig(
                 query_parameters=[
@@ -151,7 +153,7 @@ class BigQueryManager(BasePersistencyManager):
         # checking its last_scrape field
 
         res = []
-        query_str = "SELECT 1 FROM scraped_data WHERE url=@url;"
+        query_str = f"SELECT 1 FROM `{self.table_name}` WHERE url=@url;"
         for url in urls:
             # if last_scraped is null, then it wasn't scraped
             job_config = bigquery.QueryJobConfig(
@@ -171,7 +173,7 @@ class BigQueryManager(BasePersistencyManager):
 
         # Connect to db and check if object was scraped
 
-        query_str = "SELECT 1 FROM scraped_data WHERE last_scraped IS NOT NULL AND url=@url;"
+        query_str = f"SELECT 1 FROM `{self.table_name}` WHERE last_scraped IS NOT NULL AND url=@url;"
         job_config = bigquery.QueryJobConfig(query_parameters=[
             bigquery.ScalarQueryParameter("url", "STRING", url)
         ])
@@ -195,15 +197,25 @@ class BigQueryManager(BasePersistencyManager):
             ###################################
             source: Sources = data["source"]
             data["source"] = source.value if source else source
+        del url_data
 
-        # query_str = "INSERT OR REPLACE INTO scraped_data VALUES (@url, @last_scraped, @title, @content, @author, @date, @label_relevance, @label_service, @source)"
-        errors = self.client.insert_rows_json(data_to_insert)
+        # Delete instances before insert them to give it priority to the ones to be saved right now
+        query_str = f"DELETE FROM `{self.table_name}` WHERE url IN @urls;"
+        query_config = bigquery.QueryJobConfig(query_parameters=
+            [
+                bigquery.ArrayQueryParameter("urls", "STRING", [d['url'] for d in data_to_insert])
+            ]
+        )
+        self.client.query(query_str, job_config=query_config)
+
+        # Now insert updated rows
+        errors = self.client.insert_rows_json(self.table_name, data_to_insert)
         assert not errors, f"There was some errors while trying to insert new data to big query: {errors}"
 
     def delete(self, urls: List[str]):
 
         # Bulk delete provided urls
-        query_str = "DELETE FROM scraped_data WHERE url=@url;"
+        query_str = f"DELETE FROM `{self.table_name}` WHERE url=@url;"
         for url in urls:
             job_config = bigquery.QueryJobConfig(query_parameters=
                 [
