@@ -34,7 +34,7 @@ class Manager:
     def __init__(
         self,
         persistency_manager: BasePersistencyManager,
-        metadata: Metadata,
+        metadata: Metadata = Metadata(),
         local_files_path: str = settings.c4v_folder,
     ):
         self._persistency_manager = persistency_manager
@@ -257,7 +257,7 @@ class Manager:
         crawler_names: List[str] = None,
         limit=-1,
         save_to_db : bool = True
-    ):
+    ) -> List[str]:
         """
             Crawl new urls for the given list of crawlers:
             Parameters:
@@ -459,7 +459,7 @@ class Manager:
         return Classifier.get_labels()
 
     @staticmethod
-    def get_available_crawlers() -> List[str]:
+    def available_crawlers() -> List[str]:
         """
             List of usable names of crawlers
         """

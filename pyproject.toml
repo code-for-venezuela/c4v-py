@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "c4v-py"
-version = "0.1.0.dev020211212"
+version = "0.1.0.dev0202110126"
 description = "Code for Venezuela python library."
 authors = ["Edilmo Palencia <edilmo@gmail.com>"]
 license = "Apache-2.0"
@@ -33,6 +33,7 @@ scikit-multilearn = {version = "0.2.0", optional = true}
 pandas = {version = "1.1.1", optional = true}
 nltk = "^3.5"
 google-cloud-bigquery = { version = "1.26.1", optional = true}
+google-cloud-logging = { version = "^2.7.0", optional = true }
 Scrapy = "^2.5.0"
 beautifulsoup4 = "^4.9.3"
 tabulate = "^0.8.9"
@@ -53,6 +54,7 @@ dynaconf = "^3.1.4"
 transformers-interpret = {version = "^0.5.2", optional = true}
 streamlit = {version = "^1.2.0", optional = true}
 Flask = {version = "^2.0.2", optional = true}
+pytz = "^2021.3"
 
 [tool.poetry.dev-dependencies]
 jupyter = {version = "^1.0.0", optional = true}
@@ -71,7 +73,7 @@ classification = ["transformers", "transformers-interpret", "torch", "datasets" 
 tensorflow = ["tensorflow", "tensorflow_hub", "tensorflow-probability"]
 dashboard  = ["streamlit"]
 jupyter = ["jupyter", "ipykernel", "ipython"]
-gcloud = ["Flask", "google-cloud-bigquery"]
+gcloud = ["Flask", "google-cloud-bigquery", "google-cloud-logging"]
 all = ["transformers", "transformers-interpret", "torch", "datasets" ,"scikit-learn", "scikit-multilearn", "pandas", "tensorflow", "tensorflow_hub", "tensorflow-probability", "jupyter", "ipykernel", "ipython", "streamlit", "Flask"]
 
 [tool.poetry.scripts]

@@ -302,7 +302,7 @@ name = "cachetools"
 version = "4.2.4"
 description = "Extensible memoizing collections and decorators"
 category = "main"
-optional = true
+optional = false
 python-versions = "~=3.5"
 
 [[package]]
@@ -656,12 +656,13 @@ name = "google-api-core"
 version = "1.31.4"
 description = "Google API client core library"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
 google-auth = ">=1.25.0,<2.0dev"
 googleapis-common-protos = ">=1.6.0,<2.0dev"
+grpcio = {version = ">=1.29.0,<2.0dev", optional = true, markers = "extra == \"grpc\""}
 packaging = ">=14.3"
 protobuf = {version = ">=3.12.0", markers = "python_version > \"3\""}
 pytz = "*"
@@ -678,7 +679,7 @@ name = "google-auth"
 version = "1.35.0"
 description = "Google Authentication Library"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
@@ -708,6 +709,31 @@ requests-oauthlib = ">=0.7.0"
 tool = ["click (>=6.0.0)"]
 
 [[package]]
+name = "google-cloud-appengine-logging"
+version = "1.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+google-api-core = {version = ">=1.22.2,<3.0.0dev", extras = ["grpc"]}
+packaging = ">=14.3"
+proto-plus = ">=1.15.0"
+
+[[package]]
+name = "google-cloud-audit-log"
+version = "0.2.0"
+description = "Google Cloud Audit Protos"
+category = "main"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+
+[package.dependencies]
+googleapis-common-protos = ">=1.52.0"
+protobuf = ">=3.6.0"
+
+[[package]]
 name = "google-cloud-bigquery"
 version = "1.26.1"
 description = "Google BigQuery API client library"
@@ -734,7 +760,7 @@ name = "google-cloud-core"
 version = "1.7.2"
 description = "Google Cloud API client core library"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
@@ -744,6 +770,22 @@ six = ">=1.12.0"
 
 [package.extras]
 grpc = ["grpcio (>=1.8.2,<2.0dev)"]
+
+[[package]]
+name = "google-cloud-logging"
+version = "2.7.0"
+description = "Stackdriver Logging API client library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+google-api-core = {version = ">=1.26.0,<3.0.0dev", extras = ["grpc"]}
+google-cloud-appengine-logging = ">=0.1.0,<2.0.0dev"
+google-cloud-audit-log = ">=0.1.0,<1.0.0dev"
+google-cloud-core = ">=1.4.1,<3.0.0dev"
+grpc-google-iam-v1 = ">=0.12.3,<0.13dev"
+proto-plus = ">=1.15.0"
 
 [[package]]
 name = "google-crc32c"
@@ -788,10 +830,11 @@ name = "googleapis-common-protos"
 version = "1.54.0"
 description = "Common protobufs used in Google APIs"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
+grpcio = {version = ">=1.0.0", optional = true, markers = "extra == \"grpc\""}
 protobuf = ">=3.12.0"
 
 [package.extras]
@@ -806,11 +849,23 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "grpc-google-iam-v1"
+version = "0.12.3"
+description = "GRPC library for the google-iam-v1 service"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+googleapis-common-protos = {version = ">=1.5.2,<2.0.0dev", extras = ["grpc"]}
+grpcio = ">=1.0.0,<2.0.0dev"
+
+[[package]]
 name = "grpcio"
 version = "1.42.0"
 description = "HTTP/2-based RPC framework"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -1664,11 +1719,25 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 six = "*"
 
 [[package]]
+name = "proto-plus"
+version = "1.19.8"
+description = "Beautiful, Pythonic protocol buffers."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+protobuf = ">=3.19.0"
+
+[package.extras]
+testing = ["google-api-core[grpc] (>=1.22.2)"]
+
+[[package]]
 name = "protobuf"
 version = "3.19.1"
 description = "Protocol Buffers"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.5"
 
 [[package]]
@@ -2030,7 +2099,7 @@ name = "rsa"
 version = "4.8"
 description = "Pure-Python RSA implementation"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6,<4"
 
 [package.dependencies]
@@ -2759,7 +2828,7 @@ tensorflow = ["tensorflow", "tensorflow_hub", "tensorflow-probability"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8 || ~3.6.2 || ~3.7.0"
-content-hash = "a1705c4318c1c7d5d30a875365a937d87b18d6e31c27ed7ee24b8742fbeb1a27"
+content-hash = "81e9795435bdaee997643101e0619a019362488503e0fe48717b3ad5006a932f"
 
 [metadata.files]
 absl-py = [
@@ -3275,6 +3344,14 @@ google-auth-oauthlib = [
     {file = "google-auth-oauthlib-0.4.6.tar.gz", hash = "sha256:a90a072f6993f2c327067bf65270046384cda5a8ecb20b94ea9a687f1f233a7a"},
     {file = "google_auth_oauthlib-0.4.6-py2.py3-none-any.whl", hash = "sha256:3f2a6e802eebbb6fb736a370fbf3b055edcb6b52878bf2f26330b5e041316c73"},
 ]
+google-cloud-appengine-logging = [
+    {file = "google-cloud-appengine-logging-1.1.0.tar.gz", hash = "sha256:91fe9b0833f6e1a46293dcc0e483716372c9ff4a95ebe51276c5f0092cb9defd"},
+    {file = "google_cloud_appengine_logging-1.1.0-py2.py3-none-any.whl", hash = "sha256:438bdd8e4497368764d86f14b0eae295fc8a41f5a5b83fce89ae5a71067882d2"},
+]
+google-cloud-audit-log = [
+    {file = "google-cloud-audit-log-0.2.0.tar.gz", hash = "sha256:d0852f525ad65705f9fbff6288be4493e1449a7906fb5e01bd71c8d1e424d1fc"},
+    {file = "google_cloud_audit_log-0.2.0-py2.py3-none-any.whl", hash = "sha256:ecc7f5f2168ad4014331d6397fcea3750b2d41900f0ef6d1081cd78b3a6420e9"},
+]
 google-cloud-bigquery = [
     {file = "google-cloud-bigquery-1.26.1.tar.gz", hash = "sha256:51c29b95d460486d9e0210f63e8193691cd08480b69775270e84dd3db87c1bf2"},
     {file = "google_cloud_bigquery-1.26.1-py2.py3-none-any.whl", hash = "sha256:3cf0acb2ae4f1e6628ad0d02b7bf26c3dcf449e864d2a569372230cdc4d29b82"},
@@ -3282,6 +3359,10 @@ google-cloud-bigquery = [
 google-cloud-core = [
     {file = "google-cloud-core-1.7.2.tar.gz", hash = "sha256:b1030aadcbb2aeb4ee51475426351af83c1072456b918fb8fdb80666c4bb63b5"},
     {file = "google_cloud_core-1.7.2-py2.py3-none-any.whl", hash = "sha256:5b77935f3d9573e27007749a3b522f08d764c5b5930ff1527b2ab2743e9f0c15"},
+]
+google-cloud-logging = [
+    {file = "google-cloud-logging-2.7.0.tar.gz", hash = "sha256:5a4ad2832be3b86c8f0fb57b2d382a1f67218137c6f6051372647ac5147d6421"},
+    {file = "google_cloud_logging-2.7.0-py2.py3-none-any.whl", hash = "sha256:12937a7d5079c2c2dcd7d4ec2f9825848e9f53f41f5a71e825040962365b62b0"},
 ]
 google-crc32c = [
     {file = "google-crc32c-1.3.0.tar.gz", hash = "sha256:276de6273eb074a35bc598f8efbc00c7869c5cf2e29c90748fccc8c898c244df"},
@@ -3343,6 +3424,9 @@ googleapis-common-protos = [
 ]
 gputil = [
     {file = "GPUtil-1.4.0.tar.gz", hash = "sha256:099e52c65e512cdfa8c8763fca67f5a5c2afb63469602d5dcb4d296b3661efb9"},
+]
+grpc-google-iam-v1 = [
+    {file = "grpc-google-iam-v1-0.12.3.tar.gz", hash = "sha256:0bfb5b56f648f457021a91c0df0db4934b6e0c300bd0f2de2333383fe958aa72"},
 ]
 grpcio = [
     {file = "grpcio-1.42.0-cp310-cp310-linux_armv7l.whl", hash = "sha256:6e5eec67909795f7b1ff2bd941bd6c2661ca5217ea9c35003d73314100786f60"},
@@ -4012,6 +4096,10 @@ prompt-toolkit = [
 ]
 protego = [
     {file = "Protego-0.1.16.tar.gz", hash = "sha256:a682771bc7b51b2ff41466460896c1a5a653f9a1e71639ef365a72e66d8734b4"},
+]
+proto-plus = [
+    {file = "proto-plus-1.19.8.tar.gz", hash = "sha256:bdf45f0e0be71510eb2ec9db4da78afde7b5fb8b0a507a36340a9b6ce8e48e58"},
+    {file = "proto_plus-1.19.8-py3-none-any.whl", hash = "sha256:3434eadaed845a337d6c488d2b7d055d733aaa231c0c0d4c778ec720bb91cf87"},
 ]
 protobuf = [
     {file = "protobuf-3.19.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:d80f80eb175bf5f1169139c2e0c5ada98b1c098e2b3c3736667f28cbbea39fc8"},
