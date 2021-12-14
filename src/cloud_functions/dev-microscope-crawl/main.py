@@ -18,6 +18,9 @@ def crawl(request : flask.Request):
         # Parameters:
             - `crawler_name` : str = name of the crawler to use while crawling
             - `limit` : int = (optional) Max ammount of urls to save, defaults to 1000
+        # Environment Variables
+            These are the expected environment variables that this function will try to use
+            - `TABLE` : str = Name of the table in big query to use to store results
     """
     # Get logging objects
     logging_client = logging.Client()
