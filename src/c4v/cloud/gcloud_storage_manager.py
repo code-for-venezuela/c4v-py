@@ -14,6 +14,7 @@ from typing import List
 import tempfile
 import tarfile
 import pathlib
+import logging
 
 class ClassifierType(enum.Enum):
     """
@@ -69,11 +70,11 @@ class GCSStorageManager:
 
         # Create a templfile where to download the tar file
         with tempfile.NamedTemporaryFile() as file:
-            print(f"Retrieving file: {blob_name} from bucket {self.bucket.name}")
+            logging.info(f"Retrieving file: {blob_name} from bucket {self.bucket.name}")
             blob.download_to_file(file)
 
             # untar that file to the desired path
-            print(f"Extracting tar file content to '{filepath}'...")
+            logging.info(f"Extracting tar file content to '{filepath}'...")
             tar = tarfile.TarFile(file.name)
             tar.extractall(filepath)
 
@@ -92,12 +93,12 @@ class GCSStorageManager:
         # Create name of file, use the prefix path (the path where to look for files) 
         # and find the file as a tar file
         blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
-        print(f"Creating tar file for file: {filepath}...")
+        logging.info(f"Creating tar file for file: {filepath}...")
 
         # Create a temp file where to tar the folder
         with tempfile.NamedTemporaryFile() as file:
             make_tarfile(file.name, filepath)
-            print(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
+            logging.info(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
             # Get blob and upload to it from local storage
             blob = self.bucket.get_blob(blob_name)
             blob.upload_from_filename(file.name)
@@ -112,7 +113,7 @@ class GCSStorageManager:
         """
         blob_name = filepath if filepath.startswith(self.bucket_prefix_path) \
             else f"{self.bucket_prefix_path}/{filepath}"
-        print(f"Bucket {self.bucket.name}: Retrieving file: {blob_name}")
+        logging.info(f"Bucket {self.bucket.name}: Retrieving file: {blob_name}")
         blob = self.bucket.get_blob(blob_name)
         byte_stream = BytesIO()
         blob.download_to_file(byte_stream)
@@ -127,7 +128,7 @@ class GCSStorageManager:
                 - source_file : `str` = path in local storage to the file that will be uploaded
         """
         blob_name = f"{self.bucket_prefix_path}/{destination_file}"
-        print(f"Bucket {self.bucket.name}: Saving file with name: {blob_name}")
+        logging.info(f"Bucket {self.bucket.name}: Saving file with name: {blob_name}")
         blob = self.bucket.blob(blob_name)
         blob.upload_from_filename(source_file)
 
@@ -140,6 +141,6 @@ class GCSStorageManager:
                 List of filenames of stored objects
         """
         full_prefix = self.bucket_prefix_path if prefix_path is None else f"{self.bucket_prefix_path}/{prefix_path}"
-        print(f"Bucket {self.bucket.name}: Listing files with prefix: {full_prefix}")
+        logging.info(f"Bucket {self.bucket.name}: Listing files with prefix: {full_prefix}")
         blobs = self._client.list_blobs(self.bucket, prefix=full_prefix, delimiter=delimiter)
         return [blob.name for blob in blobs]
