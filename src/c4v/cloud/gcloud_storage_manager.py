@@ -1,6 +1,9 @@
 """
     Cloud storage manager object, to easily retrieve and upload files from and to google cloud storage
 """
+# Internal imports
+from c4v.cloud.utils import make_tarfile
+
 # External imports
 from google.cloud import storage
 import enum
@@ -8,6 +11,8 @@ import enum
 # Python imports
 from io import BytesIO
 from typing import List
+import tempfile
+import tarfile
 
 class ClassifierType(enum.Enum):
     """
@@ -57,13 +62,19 @@ class GCSStorageManager:
         # Create name of file, use the prefix path (the path where to look for files) 
         # and find the file as a tar file
         blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
-        print(f"Retrieving file: {blob_name} from bucket {self.bucket.name}")
 
         # Get blob and download it to local storage
         blob = self.bucket.get_blob(blob_name)
-        with open(filepath, "w+b") as file:
+
+        # Create a templfile where to download the tar file
+        with tempfile.NamedTemporaryFile() as file:
+            print(f"Retrieving file: {blob_name} from bucket {self.bucket.name}")
             blob.download_to_file(file)
-            blob.upload_from_filename()
+
+            # untar that file to the desired path
+            print(f"Extracting tar file content to '{filepath}'...")
+            tar = tarfile.TarFile(file.name)
+            tar.extractall(filepath)
 
     def upload_classifier_model_from(self, type : ClassifierType, filepath : str):
         """
@@ -77,11 +88,15 @@ class GCSStorageManager:
         # Create name of file, use the prefix path (the path where to look for files) 
         # and find the file as a tar file
         blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
-        print(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
+        print(f"Creating tar file for file: {filepath}...")
 
-        # Get blob and upload to it from local storage
-        blob = self.bucket.get_blob(blob_name)
-        blob.upload_from_filename(filepath)
+        # Create a temp file where to tar the folder
+        with tempfile.NamedTemporaryFile() as file:
+            make_tarfile(file.name, filepath)
+            print(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
+            # Get blob and upload to it from local storage
+            blob = self.bucket.get_blob(blob_name)
+            blob.upload_from_filename(file.name)
 
     def get_byte_stream(self, filepath: str) -> BytesIO:
         """
