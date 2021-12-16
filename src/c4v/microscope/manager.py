@@ -527,3 +527,91 @@ class Manager:
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
 
+    def upload_model(self, branch : str, experiment : str, type : str):
+        """
+            Try to upload the model in the provided experiment and branch to google cloud, 
+            you'll need to be authenticated with a valid service account, and have the 
+            gcloud installation profile included in your current installation of the proyect
+
+            # Parameters:
+                - branch : `str` = branch name of model to use
+                - experiment : `str` = experiment name storing model
+                - type : `str` = Type of classifier model to upload, choices are:
+                    - relevance
+                    - service
+        """
+        try:
+            from c4v.classifier.experiment import ExperimentFSManager
+        except ImportError as e:
+            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'classification'. Error: {e}")
+
+        # Create fs manager to get the path of the requested experiment 
+        fs_manager = ExperimentFSManager(experiment_name=experiment, branch_name=branch)
+
+        # Try to upload file
+        self.upload_model_from_directory(fs_manager.experiment_content_folder, type)
+        
+
+    def upload_model_from_directory(self, path : str, type : str):
+        """
+            Try to upload the model in the provided directory to google cloud, 
+            you'll need to be authenticated with a valid service account, and have the 
+            gcloud installation profile included in your current installation of the proyect
+
+            #  Parameters:
+                - path : `str` = path to the model directory
+                - type : `str` = Type of classifier model to upload, choices are:
+                    - relevance
+                    - service
+        """
+        try:
+            from c4v.cloud.gcloud_storage_manager import GCSStorageManager, ClassifierType
+        except ImportError as e:
+            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+
+        # Validate bucket name
+        if settings.storage_bucket is None:
+            raise ValueError("'STORAGE_BUCKET' env variable not provided. Set up such variable to access a gcloud bucket where to store the model")
+
+        # Validate classifier type
+        valid_types = [t.value for t in ClassifierType]
+        if type not in valid_types:
+            raise ValueError(f"Type '{type}' is not a valid type. Choices are: {valid_types}")
+
+        # Get type of classifier to upload
+        classifier_type = ClassifierType(type)
+
+        # Create storage manager object
+        gcs_manager = GCSStorageManager(settings.storage_bucket, "classifiers")
+
+        # Try to upload the file
+        gcs_manager.upload_classifier_model_from(classifier_type, path)
+
+    def download_model_to_directory(self, path : str, type : str):
+        """
+            Try to download the desired model to a local directory. 
+            You'll need to be authenticated with a valid service account, and have the 
+            gcloud installation profile included in your current installation of the proyect
+
+            # Parameters
+                - path : `str` = Where to store the model in local storage
+                - type : `str` = type of model to download. Choices are:
+                    - relevance
+                    - service
+        """
+        try:
+            from c4v.cloud.gcloud_storage_manager import GCSStorageManager, ClassifierType
+        except ImportError as e:
+            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+
+        # Validate classifier type
+        valid_types = [t.value for t in ClassifierType]
+        if type not in valid_types:
+            raise ValueError(f"Type '{type}' is not a valid type. Choices are: {valid_types}")
+        classifier_type = ClassifierType(type)
+
+        # Create storage manager object
+        gcs_manager = GCSStorageManager(settings.storage_bucket, "classifiers")
+
+        # Try to download the file
+        gcs_manager.download_classifier_model_to(classifier_type, path)
