@@ -13,6 +13,7 @@ from io import BytesIO
 from typing import List
 import tempfile
 import tarfile
+import pathlib
 
 class ClassifierType(enum.Enum):
     """
@@ -84,6 +85,9 @@ class GCSStorageManager:
                 - type : `ClassifierType` = type of classifier to get
                 - filepath : `str` = where to find it in local storage
         """
+        # Check if the file exists beforehand 
+        if not pathlib.Path(filepath).exists():
+            raise ValueError(f"Path in filepath '{filepath}' does not exists")
 
         # Create name of file, use the prefix path (the path where to look for files) 
         # and find the file as a tar file
@@ -117,7 +121,7 @@ class GCSStorageManager:
 
     def save_file(self, destination_file : str, source_file : str):
         """
-            Save a csv file into the given path 
+            Save a file into the given path 
             # Parameters:
                 - destination_file : `str` = path inside the bucket where to store the uploaded file
                 - source_file : `str` = path in local storage to the file that will be uploaded
