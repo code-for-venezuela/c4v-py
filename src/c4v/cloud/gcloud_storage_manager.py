@@ -1,5 +1,11 @@
+"""
+    Cloud storage manager object, to easily retrieve and upload files from and to google cloud storage
+"""
+# External imports
 from google.cloud import storage
 import enum
+
+# Python imports
 from io import BytesIO
 
 class ClassifierType(enum.Enum):
@@ -16,24 +22,22 @@ class GCSStorageManager:
     
     # Parameters:
 
-    bucket : `str`
-        The bucket name to interact with.
-    bucket_prefix : `str`
-        The prefix for all interactions with the bucket.
+    bucket : `str` = The bucket name to interact with.
+    bucket_prefix_path : `str` = Path inside the provided bucket where files will be looked for
     """
 
-    def __init__(self, bucket: str, bucket_prefix: str):
+    def __init__(self, bucket_name: str, bucket_prefix_path: str):
         self._client = storage.Client()
-        self._bucket = self._client.bucket(bucket)
-        self._bucket_prefix = bucket_prefix + "/scraped_data"
+        self._bucket = self._client.bucket(bucket_name)
+        self._bucket_prefix_path = bucket_prefix_path
 
     @property
     def bucket(self) -> storage.Bucket:
         return self._bucket
 
     @property
-    def bucket_prefix(self) -> str:
-        return self._bucket_prefix
+    def bucket_prefix_path(self) -> str:
+        return self._bucket_prefix_path
 
     def download_classifier_model_to(self, type : ClassifierType, filepath : str):
         """
@@ -43,7 +47,17 @@ class GCSStorageManager:
                 - type : `ClassifierType` = type of classifier to get
                 - filepath : `str` = where to store it in local storage
         """
-        raise NotImplementedError("Not yet implemented")
+
+        # Create name of file, use the prefix path (the path where to look for files) 
+        # and find the file as a tar file
+        blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
+        print(f"Retrieving file: {blob_name} from bucket {self.bucket.name}")
+
+        # Get blob and download it to local storage
+        blob = self.bucket.get_blob(blob_name)
+        with open(filepath, "w+b") as file:
+            blob.download_to_file(file)
+            blob.upload_from_filename()
 
     def upload_classifier_model_from(self, type : ClassifierType, filepath : str):
         """
@@ -53,12 +67,19 @@ class GCSStorageManager:
                 - type : `ClassifierType` = type of classifier to get
                 - filepath : `str` = where to find it in local storage
         """
-        raise NotImplementedError("Not yet implemented")
 
+        # Create name of file, use the prefix path (the path where to look for files) 
+        # and find the file as a tar file
+        blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
+        print(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
+
+        # Get blob and upload to it from local storage
+        blob = self.bucket.get_blob(blob_name)
+        blob.upload_from_filename(filepath)
 
     def get_byte_stream(self, filepath: str):
-        blob_name = filepath if filepath.startswith(self.bucket_prefix) \
-            else f"{self.bucket_prefix}/{filepath}"
+        blob_name = filepath if filepath.startswith(self.bucket_prefix_path) \
+            else f"{self.bucket_prefix_path}/{filepath}"
         print(f"Bucket {self.bucket.name}: Retrieving file: {blob_name}")
         blob = self.bucket.get_blob(blob_name)
         byte_stream = BytesIO()
@@ -68,14 +89,14 @@ class GCSStorageManager:
 
 
     def save_file(self, destination_file, csv_source_file):
-        blob_name = f"{self.bucket_prefix}/{destination_file}"
+        blob_name = f"{self.bucket_prefix_path}/{destination_file}"
         print(f"Bucket {self.bucket.name}: Saving file with name: {blob_name}")
         blob = self.bucket.blob(blob_name)
         blob.upload_from_filename(csv_source_file)
 
 
     def list_files(self, prefix: str = None, delimiter: str = None):
-        full_prefix = self.bucket_prefix if prefix is None else f"{self.bucket_prefix}/{prefix}"
+        full_prefix = self.bucket_prefix_path if prefix is None else f"{self.bucket_prefix_path}/{prefix}"
         print(f"Bucket {self.bucket.name}: Listing files with prefix: {full_prefix}")
         blobs = self._client.list_blobs(self.bucket, prefix=full_prefix, delimiter=delimiter)
         return [blob.name for blob in blobs]
