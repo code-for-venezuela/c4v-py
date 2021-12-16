@@ -1,6 +1,8 @@
 """
     In this module you will find multiple configurations for the app. You can override them by specifying a different
     .env file, exporting environment variables properly named, or providing a settings.toml file.
+
+    Remember that .env files should be in the project's root.
 """
 
 from dynaconf import Dynaconf, Validator
@@ -62,8 +64,11 @@ settings = Dynaconf(
             #   - 7:  error
             #   - [1-6]:  reserved for future use
             #   - 0: No logging 
+        ),  
+        Validator(
+            "STORAGE_BUCKET", default=None,
+            # Used to choose the name of the bucket where data like the classifier models is stored
         )
     ]
 )
-# `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
-# `settings_files` = Load this files in the order.
+
