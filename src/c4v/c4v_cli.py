@@ -575,7 +575,7 @@ def upload(experiment: str, type: str):
         exit(1)
 
 @experiment.command()
-@click.path("path", nargs=1)
+@click.argument("path", nargs=1)
 @click.argument("type", nargs=1)
 def download(path: str, type: str):
     """

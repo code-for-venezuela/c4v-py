@@ -197,3 +197,15 @@ class App:
         # demanda estar en el el thread principal, cosa que no pasa con streamlit, así que esto fue lo mejor que pude hacer
         assert isinstance(limit, int)
         return os.system(f"c4v scrape --limit {limit}")
+
+    def upload_model_of_type(self, experiment: str, branch: str, type: str):
+        """
+        Upload a classifier model
+        """
+        self.manager.upload_model(experiment, branch, type)
+
+    def download_model_of_type(self, path: str, type: str):
+        """
+        Download the model of type 'type' to path 'path'
+        """
+        self.manager.download_model_to_directory(path, type)

@@ -615,3 +615,16 @@ class Manager:
 
         # Try to download the file
         gcs_manager.download_classifier_model_to(classifier_type, path)
+
+    @staticmethod
+    def cloud_model_types() -> List[str]:
+        """
+            Get a list of names with the valid classifier types currently supported 
+            for cloud operations
+        """
+        try:
+            from c4v.cloud.gcloud_storage_manager import ClassifierType
+        except ImportError as e:
+            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+
+        return [t.value for t in ClassifierType]

@@ -1,10 +1,17 @@
 """
     Entry point for the streamlit app
 """
+
+# Python imports
 import dataclasses
 from typing import List
+from pathlib import Path
+# Third party imports
 import streamlit as sl
-import app
+
+# Internal imports
+import c4v.dashboard.app as app
+from c4v.config import settings
 
 sl.write("# 🔬 C4V Microscope")
 sl.write(
@@ -42,7 +49,7 @@ else:
 # -- < Classification controls > ------------------------------
 # Help Message
 sl.sidebar.write("-----")
-sl.sidebar.write("## Classification controls")
+sl.sidebar.write("## Classification")
 sl.sidebar.write(
     "Run a classification process, select parameters with the following controls."
 )
@@ -112,6 +119,68 @@ sl.sidebar.button(
     on_click=run_classification_callback,
 )
 
+# Downloading and uploading
+sl.sidebar.write("### Uploading and downloading")
+
+def upload_and_download_model():
+    sl.sidebar.write("""
+                Upload a model to be used online during classification. 
+                Specify the type of model to tell the purpose of such model
+            """)
+    # Check that a valid branch is provided
+    if not branch_name and not experiment_name:
+        sl.sidebar.write("⚠️ Provide branch name and experiment name to upload a model")
+        return
+    elif not branch_name:
+        sl.sidebar.write("⚠️ Provide branch name to upload a model")
+        return
+    elif not experiment_name:
+        sl.sidebar.write("⚠️ Provide experiment name to upload a model")
+        return
+    
+    # Check that there's a bucket where to upload the model
+    if not settings.storage_bucket:
+        sl.sidebar.write("⚠️ there's no bucket properly configured where to upload the classifier")
+        return
+
+    # Upload the model
+    model_type = sl.sidebar.selectbox("Type", options=app.manager.cloud_model_types(), help="Type of cloud model to use during classification")
+
+    # Switch to tell if it should download or upload
+    upload_or_download = sl.sidebar.radio("Upload or Download", ["upload", "download"])
+    if upload_or_download == "upload":
+        sl.sidebar.button(
+            "Upload",
+            help=f"Upload model in '{experiment_name}/{branch_name}' of type '{model_type}' to bucket {settings.storage_bucket}",
+            on_click=lambda: print("I have to confirm but dk how")
+            )
+        return
+    
+    # Ask for a path where to download 
+    path = sl.sidebar.text_input("Download Path")
+    def download():
+        path_obj = Path(path)
+        if not path or not path_obj.exists() or not path_obj.is_dir():
+            sl.error(f"The path '{path}' is not a valid download path for a model")
+            return
+
+        sl.info(f"Downloading model of type' {model_type}' to '{path}'...")
+
+        # try to perform download
+        try: 
+            app.download_model_of_type(path, model_type)
+        except Exception as e:
+            sl.error(f"Could not complete download. Error: '{e}'")
+
+
+    sl.sidebar.button(
+        "Download", 
+        help=f"Download model of type '{model_type}' from bucket '{settings.storage_bucket}'",
+        on_click=download
+    )
+
+upload_and_download_model()
+
 # -- < Crawling Controls >  -----------------------------------
 sl.sidebar.write("------")
 sl.sidebar.write("## Crawling")
@@ -128,7 +197,7 @@ else:
 # Crawlers to use
 crawlers = sl.sidebar.multiselect(
     "Crawl for: ",
-    options=app.manager.get_available_crawlers(),
+    options=app.manager.available_crawlers(),
     help="Sites that can be scraped for new data",
 )
 
