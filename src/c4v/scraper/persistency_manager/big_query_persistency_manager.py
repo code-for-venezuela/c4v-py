@@ -207,7 +207,6 @@ class BigQueryManager(BasePersistencyManager):
             ]
         )
         query_job = self.client.query(query_str, job_config=query_config)
-        query_job.
 
         # Now insert updated rows
         errors = self.client.insert_rows_json(self.table_name, data_to_insert)
