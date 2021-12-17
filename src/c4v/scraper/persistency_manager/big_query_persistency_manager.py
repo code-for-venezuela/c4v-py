@@ -268,7 +268,6 @@ class BigQueryManager(BasePersistencyManager):
 
         return (order, field_name)
 
-
 def _parse_dict_to_url_data(obj: Dict[str, Any]) -> ScrapedData:
     """
     Parse dict object into a new object instance
