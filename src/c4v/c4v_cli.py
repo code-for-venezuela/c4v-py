@@ -4,6 +4,7 @@
 """
 # Third party imports
 from datetime import datetime
+import pathlib
 import click
 
 # Python imports
@@ -545,6 +546,65 @@ def summary(experiment: str):
 
     click.echo(path.read_text())
 
+@experiment.command()
+@click.argument("experiment", nargs=1)
+@click.argument("type", nargs=1)
+def upload(experiment: str, type: str):
+    """
+        Upload a valid classifier experiment stored in local storage to the cloud 
+        Don't forget to set up the environment variable C4V_STORAGE_BUCKET, and a valid 
+        service account.
+        Example:
+            - c4v experiment upload my_experiment/my_branch
+    """
+    # Parse branch and esperiment and check if it went ok
+    branch_and_experiment = CLIClient.parse_branch_and_experiment_from(experiment)
+    if not branch_and_experiment:
+        return
+
+    # As everything is ok, parse branch name and experiment
+    branch_name, experiment_name = branch_and_experiment
+
+    client = CLIClient()
+
+    # Try to upload model
+    try:
+        client.manager.upload_model(branch_name, experiment_name, type)
+    except Exception as e:
+        CLIClient.error(f"Could not upload model. Error: {e}")
+        exit(1)
+
+@experiment.command()
+@click.path("path", nargs=1)
+@click.argument("type", nargs=1)
+def download(path: str, type: str):
+    """
+        Upload a valid classifier experiment stored in local storage to the cloud 
+        Don't forget to set up the environment variable C4V_STORAGE_BUCKET, and a valid 
+        service account.
+        Example:
+            - c4v experiment upload my_experiment/my_branch
+    """
+    
+    # Check that path exists and it's a folder
+    path_obj = pathlib.Path(path)
+
+    # Sanity check
+    if not path_obj.exists():
+        CLIClient.error(f"The path '{path}' does not exists")
+        exit(1)
+    elif not path_obj.is_dir():
+        CLIClient.error(f"The path '{path}' is not a directory")
+        exit(1)
+
+    client = CLIClient()
+
+    # Try to download model
+    try:
+        client.manager.download_model_to_directory(path,type)
+    except Exception as e:
+        CLIClient.error(f"Could not download model. Error: {e}")
+        exit(1)
 
 class CLIClient:
     """
@@ -566,6 +626,13 @@ class CLIClient:
             self._urls = CLIClient._parse_lines_from_files(urls)
         else:
             self._urls = urls
+
+    @property
+    def manager(self) -> Manager:
+        """
+            Manager object the client is using to perform its operations
+        """
+        return self._manager
 
     def get_data_for_urls(
         self, urls: List[str] = None, should_scrape: bool = True
