@@ -25,6 +25,10 @@ class BigQueryManager(BasePersistencyManager):
     """
         Use Big Query based storage 
         to manage persistency.
+
+        # Parameters 
+        - table_name : `str` = name of the big query table (prefixed with dataset name) where to perform operations
+
     """
 
     def __init__(self, table_name : str, bq_client : bigquery.Client):

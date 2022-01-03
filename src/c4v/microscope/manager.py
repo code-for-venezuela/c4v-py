@@ -321,6 +321,11 @@ class Manager:
     ):
         """
             Create a Manager instance using files from the default `C4V_FOLDER`
+            # Parameters
+                - db_path : `str` = Path to db file to use as sqlite database
+                - metadata : `str | Metadata` = Metadata used to config this manager object,
+                                                so you can have persistent configurations
+                -local_files_path : `str` = where to search for the files used by this library
         """
 
         # Set up metadata
@@ -340,6 +345,18 @@ class Manager:
                     )
                 )
             )
+        elif metadata.persistency_manager == PersistencyManagers.GCLOUD.value:
+            # Try to import the gcloud persistency manager
+            try:
+                from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+                from google.cloud.bigquery import Client
+            except ImportError as e:
+                raise ImportError(f"Perhaps you might need to install the gcloud installation profile to use a GCLOUD manager. Error: {e}")
+            
+            if not settings.scraped_data_table:
+                raise ValueError("should provide configuration parameter 'SCRAPED_DATA_TABLE' in order to retrieve data from the cloud")
+
+            db = BigQueryManager(settings.scraped_data_table, Client())
         elif metadata.persistency_manager == PersistencyManagers.USER.value:
             if not metadata.user_persistency_manager_module:
                 raise ValueError(

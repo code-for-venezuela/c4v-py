@@ -5,6 +5,9 @@
 # Local imports
 from typing import Callable, List
 import c4v.microscope as ms
+from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+from c4v.microscope.metadata import Metadata
+from c4v.config import PersistencyManagers, settings
 
 # Python imports
 from pathlib import Path
@@ -209,3 +212,33 @@ class App:
         Download the model of type 'type' to path 'path'
         """
         self.manager.download_model_to_directory(path, type)
+
+    @classmethod
+    def cloud_backend():
+        """
+            Create a cloud backed version of this object
+        """
+        return CloudApp()
+
+class CloudApp(App):
+    """
+        App implementation based on cloud actions. Will override 
+        operations like scraping, crawling and classifying to perform a cloud request 
+    """
+    def __init__(self) -> None:
+
+        metadata = Metadata(persistency_manager=PersistencyManagers.GCLOUD.value)
+        manager = ms.Manager.from_default(metadata=metadata)
+        super().__init__(manager=manager)
+
+    def classify(self, branch_name: str, experiment_name: str, limit: int = -1):
+        raise NotImplementedError()
+        return super().classify(branch_name, experiment_name, limit=limit)
+    
+    def scrape(self, limit: int) -> int:
+        raise NotImplementedError()
+        return super().scrape(limit)
+    
+    def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
+        raise NotImplementedError()
+        return super().crawl(crawlers_to_use, limit, progress_function)

@@ -18,7 +18,28 @@ sl.write(
     "In the following dashboard we will see how the scraping, crawling and classification works."
 )
 
-app = app.App()
+# -- < Back End sub menu > -------------------------------------
+backend = sl.sidebar.write("## Select Backend")
+
+sl.sidebar.write(
+    """
+        Select a backend. If using a local backend, operations like scraping and crawling
+        will be performed in you're local computer, and displayed data will come from
+        your local sqlite database. 
+
+        If you select a cloud backend, you'll need to set up the appropiate permissions
+        and configuration environment variables, and operations will be performed
+        on cloud. Displayed data will come from the cloud as well.
+    """
+    )
+
+backend = sl.sidebar.radio("Backend", ["local", "cloud"])
+if backend == "local":
+    app = app.App()
+elif backend == "cloud":
+    app = app.CloudApp()
+else:
+    raise ValueError(f"Invalid backend option: '{backend}'")
 
 # -- < Filtering > ---------------------------------------------
 # Add a title to the sidebar

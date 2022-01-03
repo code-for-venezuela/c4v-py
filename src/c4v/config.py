@@ -18,10 +18,12 @@ class PersistencyManagers(enum.Enum):
         telling the possible valid variations of persistency managers.
         # Variations:
             - `SQLITE` = the default SQLite based persistency manager
+            - `GCLOUD`  = use a google cloud based persistency manager, measurements are stored in cloud
             - `USER` = Use the user defined persistency manager, specified by the USER_PERSISTENCY_MANAGER_PATH setting.
     """
 
     SQLITE: str = "SQLITE"
+    GCLOUD: str  = "GCLOUD"  
     USER: str = "USER"
 
 settings = Dynaconf(
@@ -68,6 +70,10 @@ settings = Dynaconf(
         Validator(
             "STORAGE_BUCKET", default=None,
             # Used to choose the name of the bucket where data like the classifier models is stored
+        ),
+        Validator(
+            "SCRAPED_DATA_TABLE", default=None,
+            # Used to select the table where to retrieve data from in google cloud
         )
     ]
 )
