@@ -3,7 +3,7 @@
 """
 
 # Python imports
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass, asdict, field, fields
 
 from typing import List, Dict, Any
 from datetime import datetime
@@ -94,6 +94,51 @@ class ScrapedData:
             self.source,
         ).__hash__()
 
+    def to_dict(self) -> Dict[str, Any]:
+        """
+            Transform this instance to a dict
+        """
+        d = asdict(self)
+        label : Labels = d.get("label")
+        if label:
+            d['label'] = label.value
+        
+        source : Sources = d.get("source")
+        if source:
+           d['source'] = source.value
+        
+        last_scraped : datetime = d.get('last_scraped')
+        if last_scraped:
+            d['last_scraped'] = datetime.strftime(last_scraped, settings.date_format)
+
+        return d
+
+    @classmethod
+    def from_dict(cls, scraped_data : Dict[str, Any] ):
+        """
+            Create scraped data instance from a dict
+        """
+        # Sanity check
+        valid_fields = ( x.name for x in fields(cls))
+        if any(k for k in scraped_data.keys() not in valid_fields):
+            raise ValueError("Invalid scraped data dict representation")
+
+        # Parse label
+        label : str = scraped_data.get("label")
+        if label:
+            scraped_data['label'] = Labels(label)
+        
+        # Parse source
+        source : str  = scraped_data.get("source")
+        if source:
+           scraped_data['source'] = Sources(source)
+        
+        # Parse date 
+        last_scraped : str = scraped_data.get('last_scraped')
+        if last_scraped:
+            scraped_data['last_scraped'] = datetime.strptime(last_scraped, settings.date_format)
+        
+        return cls(**scraped_data)
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """
