@@ -99,14 +99,18 @@ class ScrapedData:
             Transform this instance to a dict
         """
         d = asdict(self)
+
+        # Convert label to str
         label : Labels = d.get("label")
         if label:
             d['label'] = label.value
         
+        # Convert source to str
         source : Sources = d.get("source")
         if source:
            d['source'] = source.value
         
+        # Convert date to str
         last_scraped : datetime = d.get('last_scraped')
         if last_scraped:
             d['last_scraped'] = datetime.strftime(last_scraped, settings.date_format)
