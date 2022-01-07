@@ -94,6 +94,13 @@ class ScrapedData:
             self.source,
         ).__hash__()
 
+    @property
+    def is_scraped(self) -> bool:
+        """
+            Tells if this instance was already scraped at some point
+        """
+        return self.last_scraped != None
+
     def to_dict(self) -> Dict[str, Any]:
         """
             Transform this instance to a dict
@@ -123,8 +130,8 @@ class ScrapedData:
             Create scraped data instance from a dict
         """
         # Sanity check
-        valid_fields = ( x.name for x in fields(cls))
-        if any(k for k in scraped_data.keys() not in valid_fields):
+        valid_fields = [x.name for x in fields(cls)]
+        if any(k for k in scraped_data.keys() if k not in valid_fields):
             raise ValueError("Invalid scraped data dict representation")
 
         # Parse label

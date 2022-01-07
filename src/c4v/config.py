@@ -74,6 +74,22 @@ settings = Dynaconf(
         Validator(
             "SCRAPED_DATA_TABLE", default=None,
             # Used to select the table where to retrieve data from in google cloud
+        ),
+        Validator(
+            "SCRAPING_CLOUD_URL_TRIGGER", default=None
+            # Url to use to trigger a scaping process in a google cloud function
+        ),
+        Validator(
+            "CRAWLING_CLOUD_URL_TRIGGER", default=None
+            # Url to use to trigger a crawling process in a google cloud function
+        ),
+        Validator(
+            "CLASSIFY_CLOUD_URL_TRIGGER", default=None
+            # Url to use to trigger a classification process in a google cloud function
+        ),
+        Validator(
+            "GCLOUD_PROJECT_ID", default=None
+            # project id for the gcloud project, where all the cloud operations will be performed
         )
     ]
 )
