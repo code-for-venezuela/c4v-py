@@ -236,9 +236,14 @@ class CloudApp(App):
         return super().classify(branch_name, experiment_name, limit=limit)
     
     def scrape(self, limit: int) -> int:
-        raise NotImplementedError()
+        # TESTING ONLY
         return super().scrape(limit)
     
     def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
-        raise NotImplementedError()
+        # TESTING ONLY
         return super().crawl(crawlers_to_use, limit, progress_function)
+
+app = CloudApp()
+# app.crawl(['primicia'], 100, print)
+# app.manager.scrape_pending()
+app.manager.persistency_manager.move()

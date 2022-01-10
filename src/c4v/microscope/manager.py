@@ -356,7 +356,7 @@ class Manager:
             if not settings.scraped_data_table:
                 raise ValueError("should provide configuration parameter 'SCRAPED_DATA_TABLE' in order to retrieve data from the cloud")
 
-            db = BigQueryManager(settings.scraped_data_table, Client())
+            db = BigQueryManager(settings.scraped_data_table, Client(), settings.gcloud_project_id)
         elif metadata.persistency_manager == PersistencyManagers.USER.value:
             if not metadata.user_persistency_manager_module:
                 raise ValueError(
