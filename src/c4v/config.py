@@ -90,6 +90,9 @@ settings = Dynaconf(
         Validator(
             "GCLOUD_PROJECT_ID", default=None
             # project id for the gcloud project, where all the cloud operations will be performed
+        ),
+        Validator(
+            "GCLOUD_MAX_CONTENT_LEN", default=6000
         )
     ]
 )

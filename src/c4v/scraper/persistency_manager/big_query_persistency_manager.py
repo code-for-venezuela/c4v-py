@@ -50,10 +50,11 @@ class BigQueryManager(BasePersistencyManager):
 
     _firestore_db = None
 
-    def __init__(self, table_name : str, bq_client : bigquery.Client, project_id : str):
+    def __init__(self, table_name : str, bq_client : bigquery.Client, project_id : str, gcloud_max_content_len : int = settings.gcloud_max_content_len):
         self._table_name = table_name
         self._client = bq_client
         self._project_id = project_id
+        self._gcloud_max_content_len = gcloud_max_content_len
         self._init_firestore()
 
     @property
@@ -80,6 +81,13 @@ class BigQueryManager(BasePersistencyManager):
     def bq_date_format(self) -> str:
         # Required to send data to big query on list of json 
         return  "%Y-%m-%d %H:%M:%S"
+    
+    @property
+    def gcloud_max_content_len(self) -> int:
+        """
+            Max size for body len for an article
+        """
+        return self._gcloud_max_content_len
 
     def _init_firestore(self):
         """
@@ -131,7 +139,7 @@ class BigQueryManager(BasePersistencyManager):
         if limit < 0:
             query += ";"
         else:
-            query += f" LIMIT={limit};"
+            query += f" LIMIT {limit};"
 
         res = self.client.query(query)
         for row in res:
@@ -151,24 +159,6 @@ class BigQueryManager(BasePersistencyManager):
                     source = Sources(source)
                 except:  # unknown source
                     source = Sources.UNKOWN
-
-            # parse date to datetime:
-            try:
-                last_scraped = (
-                    datetime.datetime.strptime(last_scraped, DATE_FORMAT)
-                    if last_scraped
-                    else last_scraped
-                )
-            except ValueError as _:  # In case it fails using a format not valid for python3.6
-                for i in range(len(last_scraped) - 1, -1, -1):
-                    if last_scraped[i] == ":":
-                        last_scraped = last_scraped[:i] + last_scraped[i + 1 :]
-                        break
-                last_scraped = (
-                    datetime.datetime.strptime(last_scraped, DATE_FORMAT)
-                    if last_scraped
-                    else last_scraped
-                )
 
             yield ScrapedData(
                 url=url,
@@ -406,6 +396,13 @@ class BigQueryManager(BasePersistencyManager):
             source: Sources = data["source"]
             data["source"] = source.value if source else source
             data["last_scraped"] = datetime.datetime.strftime( data["last_scraped"], self.bq_date_format) if data["last_scraped"] else None
+
+            # truncate content if necessary
+            content : str = data.get("content")
+            if content and len(content) > self.gcloud_max_content_len:
+                data['content'] = content[:self.gcloud_max_content_len]
+            
+
         del url_data
 
         # Delete instances before insert them to give it priority to the ones to be saved right now

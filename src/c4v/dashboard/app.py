@@ -242,8 +242,4 @@ class CloudApp(App):
     def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
         # TESTING ONLY
         return super().crawl(crawlers_to_use, limit, progress_function)
-
-app = CloudApp()
-# app.crawl(['primicia'], 100, print)
-# app.manager.scrape_pending()
-app.manager.persistency_manager.move()
+        
