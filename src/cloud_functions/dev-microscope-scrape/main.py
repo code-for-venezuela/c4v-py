@@ -34,10 +34,9 @@ def scrape(request : flask.Request):
 
     # Crawl new urls
     logger.log_text(f"Scraping up to {config.limit} urls.")
-    scraped = config.manager.scrape_pending(limit=config.limit)
-    logger.log_text(f"Scraped {len(scraped)} urls.")
+    config.manager.scrape_pending(limit=config.limit)
     
-    return {"status" : "success", "scraped" : len(scraped)} 
+    return {"status" : "success"} 
 
 class ScrapeFuncConfig:
     """
@@ -82,7 +81,7 @@ class ScrapeFuncConfig:
         """
             Max ammount of urls to crawl, defaults to 100
         """
-        self._limit
+        return self._limit
 
     @property
     def manager(self) -> Manager:
