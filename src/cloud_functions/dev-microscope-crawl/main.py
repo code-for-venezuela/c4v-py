@@ -122,5 +122,3 @@ class CrawlFuncConfig:
     def get_client() -> bigquery.Client:
         client = bigquery.Client()
         return client 
-
-# crawl(FakeRequest({"crawler_name" : "primicia"}))
