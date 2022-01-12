@@ -1,0 +1,5 @@
+c4v-py==0.1.0.dev20221111
+firebase-admin
+google-cloud-bigquery
+google-cloud-logging
+pytz
