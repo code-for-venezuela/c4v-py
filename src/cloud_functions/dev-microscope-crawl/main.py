@@ -39,7 +39,7 @@ def crawl(request : flask.Request):
     crawled = config.manager.crawl_new_urls_for(config.crawler_names, config.limit)
     logger.log_text(f"Crawled {len(crawled)} urls using crawler '{config.crawler_names}'")
     
-    return flask.jsonify({"status" : "success", "crawled" : len(crawled), "crawler_name" : config.crawler_names})
+    return flask.jsonify({"status" : "success", "crawled" : len(crawled), "crawler_names" : config.crawler_names})
 
 class CrawlFuncConfig:
     """
@@ -72,9 +72,9 @@ class CrawlFuncConfig:
             return 
 
         # Parse crawler name 
-        self._crawler_names = request_json.get("crawler_name")
+        self._crawler_names = request_json.get("crawler_names")
         if not self.crawler_names:
-            self._error = "Mandatory field 'crawler_name' not provided in request"
+            self._error = "Mandatory field 'crawler_names' not provided in request"
             return
         elif not isinstance(self.crawler_names, str):
             self._error = "Invalid value for 'crawler_names' arguments, should be a list of strings"
