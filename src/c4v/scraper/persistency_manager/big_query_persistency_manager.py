@@ -50,10 +50,10 @@ class BigQueryManager(BasePersistencyManager):
 
     _firestore_db = None
 
-    def __init__(self, table_name : str, bq_client : bigquery.Client, project_id : str, gcloud_max_content_len : int = settings.gcloud_max_content_len):
+    def __init__(self, table_name : str, bq_client : bigquery.Client, project_num : str, gcloud_max_content_len : int = settings.gcloud_max_content_len):
         self._table_name = table_name
         self._client = bq_client
-        self._project_id = project_id
+        self._project_num = project_num
         self._gcloud_max_content_len = gcloud_max_content_len
         self._init_firestore()
 
@@ -66,8 +66,8 @@ class BigQueryManager(BasePersistencyManager):
         return self._client
 
     @property
-    def project_id(self) -> str:
-        return self._project_id
+    def project_num(self) -> str:
+        return self._project_num
 
     @property
     def _firestore_scraped_data_table_name(self) -> str:
@@ -98,7 +98,7 @@ class BigQueryManager(BasePersistencyManager):
 
         self._credentials = credentials.ApplicationDefault()
         firebase_admin.initialize_app(self._credentials, {
-        'projectId': self.project_id,
+        # 'projectId': self._project_num,
         })
         BigQueryManager._firestore_db = firestore.client()
 
