@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "c4v-py"
-version = "0.1.0.dev0202210127"
+version = "0.1.0.dev020221111"
 description = "Code for Venezuela python library."
 authors = ["Edilmo Palencia <edilmo@gmail.com>"]
 license = "Apache-2.0"
@@ -58,6 +58,7 @@ pytz = "^2021.3"
 google-cloud-storage = { version = "^1.43.0", optional = true }
 google-cloud-functions = { version = "^1.4.0", optional = true}
 firebase-admin = { version = "^5.2.0", optional = true}
+scrapydo = "^0.2.2"
 
 [tool.poetry.dev-dependencies]
 jupyter = {version = "^1.0.0", optional = true}

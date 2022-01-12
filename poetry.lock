@@ -425,6 +425,18 @@ toml = {version = "*", optional = true, markers = "extra == \"toml\""}
 toml = ["toml"]
 
 [[package]]
+name = "crochet"
+version = "2.0.0"
+description = "Use Twisted anywhere!"
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.dependencies]
+Twisted = ">=16.0"
+wrapt = "*"
+
+[[package]]
 name = "cryptography"
 version = "36.0.1"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
@@ -1614,7 +1626,7 @@ twitter = ["twython"]
 
 [[package]]
 name = "notebook"
-version = "6.4.6"
+version = "6.4.7"
 description = "A web-based notebook environment for interactive computing"
 category = "main"
 optional = true
@@ -2315,6 +2327,20 @@ w3lib = ">=1.17.0"
 "zope.interface" = ">=4.1.3"
 
 [[package]]
+name = "scrapydo"
+version = "0.2.2"
+description = "Crochet-based blocking API for Scrapy."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+crochet = ">=1.4.0"
+pygments = "*"
+Scrapy = ">=1.0.0"
+six = "*"
+
+[[package]]
 name = "send2trash"
 version = "1.8.0"
 description = "Send file to trash natively under Mac OS X, Windows and Linux."
@@ -2976,7 +3002,7 @@ tensorflow = ["tensorflow", "tensorflow_hub", "tensorflow-probability"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8 || ~3.6.2 || ~3.7.0"
-content-hash = "b4b0c84965aeeb3cf21eaf724ffd4150b5e0a6f60c16a7fb41877c445fff987c"
+content-hash = "0371b5b1e776b3a320b7bc33f95927b3be448da2af6e23c8fb41ccce68166f4f"
 
 [metadata.files]
 absl-py = [
@@ -3322,6 +3348,10 @@ coverage = [
     {file = "coverage-5.5-pp36-none-any.whl", hash = "sha256:f030f8873312a16414c0d8e1a1ddff2d3235655a2174e3648b4fa66b3f2f1079"},
     {file = "coverage-5.5-pp37-none-any.whl", hash = "sha256:2a3859cb82dcbda1cfd3e6f71c27081d18aa251d20a17d87d26d4cd216fb0af4"},
     {file = "coverage-5.5.tar.gz", hash = "sha256:ebe78fe9a0e874362175b02371bdfbee64d8edc42a044253ddf4ee7d3c15212c"},
+]
+crochet = [
+    {file = "crochet-2.0.0-py3-none-any.whl", hash = "sha256:de7306f0548581b5222c2d91f2175045e672591519896f717affb81ef66c0f5f"},
+    {file = "crochet-2.0.0.tar.gz", hash = "sha256:5f7f6c0d41ec418da16080f0202faac6b30f84a6fca9d8911e9db541f8e4e521"},
 ]
 cryptography = [
     {file = "cryptography-36.0.1-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:73bc2d3f2444bcfeac67dd130ff2ea598ea5f20b40e36d19821b4df8c9c5037b"},
@@ -4168,8 +4198,8 @@ nltk = [
     {file = "nltk-3.6.7.zip", hash = "sha256:51bf1aef5304740a708be7c8e683f7798f03dc5c7a7e7feb758be9e95f4585e3"},
 ]
 notebook = [
-    {file = "notebook-6.4.6-py3-none-any.whl", hash = "sha256:5cad068fa82cd4fb98d341c052100ed50cd69fbfb4118cb9b8ab5a346ef27551"},
-    {file = "notebook-6.4.6.tar.gz", hash = "sha256:7bcdf79bd1cda534735bd9830d2cbedab4ee34d8fe1df6e7b946b3aab0902ba3"},
+    {file = "notebook-6.4.7-py3-none-any.whl", hash = "sha256:968e9c09639fe4b9dbf4b9f028daf861b563c124d735a99d6d48c09317553f31"},
+    {file = "notebook-6.4.7.tar.gz", hash = "sha256:b01da66f11a203b3839d6afa4013674bcfff41c36552f9ad0fbcb2d93c92764a"},
 ]
 numpy = [
     {file = "numpy-1.19.5-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:cc6bd4fd593cb261332568485e20a0712883cf631f6f5e8e86a52caa8b2b50ff"},
@@ -4755,6 +4785,9 @@ scipy = [
 scrapy = [
     {file = "Scrapy-2.5.1-py2.py3-none-any.whl", hash = "sha256:1a9a36970004950ee3c519a14c4db945f9d9a63fecb3d593dddcda477331dde9"},
     {file = "Scrapy-2.5.1.tar.gz", hash = "sha256:13af6032476ab4256158220e530411290b3b934dd602bb6dacacbf6d16141f49"},
+]
+scrapydo = [
+    {file = "scrapydo-0.2.2.tar.gz", hash = "sha256:376ce6fd133dfcefcc1ac5e2d61e768ea38866467c3ba36caa73b0e5b66876b9"},
 ]
 send2trash = [
     {file = "Send2Trash-1.8.0-py3-none-any.whl", hash = "sha256:f20eaadfdb517eaca5ce077640cb261c7d2698385a6a0f072a4a5447fd49fa08"},
