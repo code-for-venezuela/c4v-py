@@ -240,6 +240,6 @@ class CloudApp(App):
         return super().scrape(limit)
     
     def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
-        # TESTING ONLY
+        
         return super().crawl(crawlers_to_use, limit, progress_function)
         

@@ -354,7 +354,7 @@ def dashboard():
     import sys
 
     sys.argv = ["streamlit", "run", str(Path(Path(__file__).parent, "dashboard", "main.py"))]
-    CLIClient.info("[INFO] Starting c4v dashboard...")
+    CLIClient.info("Starting c4v dashboard...")
     sys.exit(slcli.main())
 
 
