@@ -6,7 +6,6 @@ from scrapy.http import Response
 from .. import utils 
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
 
-
 class PrimiciaSpider(scrapy.Spider):
     """
     Spider to scrape Primicia data
