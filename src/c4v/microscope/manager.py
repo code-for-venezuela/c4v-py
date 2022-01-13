@@ -1,3 +1,4 @@
+# %%
 """
     This file exposes the main API for this library, the microscope Manager
 """
@@ -604,7 +605,7 @@ class Manager:
         # Try to upload the file
         gcs_manager.upload_classifier_model_from(classifier_type, path)
 
-    def download_model_to_directory(self, path : str, type : str):
+    def download_model_to_directory(self, path : str, type : str, bucket_name : str = settings.storage_bucket):
         """
             Try to download the desired model to a local directory. 
             You'll need to be authenticated with a valid service account, and have the 
@@ -628,7 +629,7 @@ class Manager:
         classifier_type = ClassifierType(type)
 
         # Create storage manager object
-        gcs_manager = GCSStorageManager(settings.storage_bucket, "classifiers")
+        gcs_manager = GCSStorageManager(bucket_name, "classifiers")
 
         # Try to download the file
         gcs_manager.download_classifier_model_to(classifier_type, path)

@@ -1,3 +1,4 @@
+#%%
 """
     Cloud storage manager object, to easily retrieve and upload files from and to google cloud storage
 """
@@ -22,6 +23,10 @@ class ClassifierType(enum.Enum):
     """
     RELEVANCE : str = "relevance"
     SERVICE   : str = "service"
+
+    @classmethod
+    def choices(cls) -> List[str]:
+        return [x.value for x in cls]
 
 class GCSStorageManager:
     """
