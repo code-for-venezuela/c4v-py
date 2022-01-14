@@ -1,7 +1,7 @@
-#%%
 # Python imports
 import os
 from typing import Dict
+from pathlib import Path
 
 # Local imports 
 from c4v.microscope import Manager
@@ -46,20 +46,34 @@ def classify(request : flask.Request):
     # Download classifier type 
     logger.log_text(f"Downloading classifier of type '{config.type}'")
     #Cloud function vm is a read only s/m. The only writable place is the tmp folder
-    path = "/tmp/model"
-    config.manager.download_model_to_directory(path, config.type)
+    path = Path("/tmp/c4v/experiments/classifier")
+    path.mkdir(parents=True) # Create folder if not exists
+    config.manager.download_model_to_directory(str(path), config.type)
 
-    # Now the model will be stored in ./<type>, where <type> is the one provided as a function argument
+    # Now that the model is stored in /tmp/c4v/experiments/classifier, we need to get its name
+    classifier_name = None
+    for x in path.glob("*"):
+        classifier_name = x.name
+        break
 
-    # DEBUG vamos a probar esto para ver si llegamos hasta aquí
-    # TODO remember to put a return in here
+    assert classifier_name, "Could not retrieve classifier name after downloading classifier"
+
+    # now that the classifier model is properly downloaded, run a classification
+    logger.log_text("Classifying rows...")
+    config.manager.run_pending_classification_from_experiment("classifier", classifier_name, limit=config.limit)
+
+    return {"status" : "success"}
 
 class ClassifierConfig:
     """
         Simple object to parse configurations for a classifier
     """
 
+    DEFAULT_LIMIT = 100
+
     def __init__(self, request : flask.Request):
+
+        ClassifierConfig._set_up_settings()
 
         # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")
@@ -74,7 +88,6 @@ class ClassifierConfig:
             return
 
         # Get type of classifier from request
-
         # Parse options from request
         request_json : Dict = request.get_json()
         classifier_type = request_json.get("type")
@@ -84,6 +97,14 @@ class ClassifierConfig:
             self._error = f"Invalid `type` of classifier '{classifier_type}', choices are: {ClassifierType.choices()}"
             return
         
+        # Get limit
+        # Parse limit
+        try:
+            self._limit = int(request_json.get("limit", self.DEFAULT_LIMIT))
+        except ValueError:
+            self._error = "'limit' field in request should be a valid integer value"
+            return 
+
         self._type = classifier_type
 
         # set up driver data
@@ -102,6 +123,10 @@ class ClassifierConfig:
     @property
     def type(self) -> str:
         return self._type
+
+    @property
+    def limit(self) -> int:
+        return self._limit
 
     @property
     def manager(self) -> Manager:
