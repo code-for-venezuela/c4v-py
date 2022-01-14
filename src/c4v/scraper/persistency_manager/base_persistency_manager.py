@@ -18,7 +18,7 @@ class BasePersistencyManager:
     """
 
     def get_all(
-        self, limit: int, scraped: bool, order_by: List[str] = None
+        self, limit: int = -1, scraped: bool = None, order_by: List[str] = None
     ) -> Iterator[ScrapedData]:
         """
             Return an iterator over the set of stored instances

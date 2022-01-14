@@ -217,7 +217,7 @@ class BigQueryManager(BasePersistencyManager):
 
         return ( self._from_firestore_to_scraped_data(x) for x in scraped_data_ref.stream())
     
-    def get_all(self, limit: int, scraped: bool, order_by: List[str] = None) -> Iterator[ScrapedData]:
+    def get_all(self, limit: int = -1, scraped: bool = None, order_by: List[str] = None) -> Iterator[ScrapedData]:
         # Merge data from firestore to bq
         # TODO Create a merge function to merge results in both queries
 
