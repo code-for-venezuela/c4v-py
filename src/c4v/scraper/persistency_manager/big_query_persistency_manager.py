@@ -272,7 +272,7 @@ class BigQueryManager(BasePersistencyManager):
         """
         d = scraped_data.to_dict()
         d['was_scraped'] = scraped_data.is_scraped
-        d["is_ready_for_bq"] = scraped_data.label != None and scraped_data.is_scraped
+        d["is_ready_for_bq"] = scraped_data.label_relevance != None and scraped_data.label_relevance != None and scraped_data.is_scraped
 
         return d
     
