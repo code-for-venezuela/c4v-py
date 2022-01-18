@@ -160,8 +160,6 @@ class BigQueryManager(BasePersistencyManager):
                 except:  # unknown source
                     source = Sources.UNKOWN
 
-            print(f"My date is {last_scraped} with type {type(last_scraped)}")
-
             yield ScrapedData(
                 url=url,
                 last_scraped=last_scraped,
