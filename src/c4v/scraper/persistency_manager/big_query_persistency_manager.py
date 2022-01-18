@@ -80,7 +80,7 @@ class BigQueryManager(BasePersistencyManager):
     @property
     def bq_date_format(self) -> str:
         # Required to send data to big query on list of json 
-        return  "%Y-%m-%d %H:%M:%S"
+        return  "%Y-%m-%d %H:%M:%S.%f"
     
     @property
     def gcloud_max_content_len(self) -> int:
@@ -159,6 +159,8 @@ class BigQueryManager(BasePersistencyManager):
                     source = Sources(source)
                 except:  # unknown source
                     source = Sources.UNKOWN
+
+            print(f"My date is {last_scraped} with type {type(last_scraped)}")
 
             yield ScrapedData(
                 url=url,

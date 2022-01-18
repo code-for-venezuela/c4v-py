@@ -86,6 +86,7 @@ class App:
                 d.source = d.source.value
             if d.label:
                 d.label = d.label.value
+
             # Default to empty string
             d.content = d.content or ""
 
@@ -101,6 +102,7 @@ class App:
             # break if gathered enough rows
             if len(elems) == max_rows:
                 break
+        
         return pd.DataFrame(elems)
 
     @property
