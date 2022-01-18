@@ -2,8 +2,8 @@
     Use this script to scrape data from primicia with non-relevant information, 
     and then store it in a csv file in the current working directory
 
-    Script Arguments:
-        limit (position 1) : max ammount of urls to crawl
+    # Parameters:
+        - limit `int` : max ammount of urls to crawl
 """
 # Python imports
 import datetime
@@ -39,7 +39,7 @@ print(f"Scraping up to {LIMIT} urls from primicia")
 crawler = PrimiciaCrawler.from_irrelevant()
 urls = crawler.crawl_urls(up_to=LIMIT)
 
-print(f"URLs scrawled, gathered: {len(urls)}. Scraping new urls...")
+print(f"URLs crawled, gathered: {len(urls)}. Scraping new urls...")
 
 data = bulk_scrape(urls)
 del urls
@@ -54,7 +54,7 @@ date_suffix = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S"
 filename = f"primicia_irrelevant_{date_suffix}.csv"
 
 with open(filename, "w+") as file:
-    df.to_csv(file)
+    df.to_csv(file, index=False)
 
 print(f"Data saved to {filename}")
 

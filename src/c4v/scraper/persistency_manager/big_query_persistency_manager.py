@@ -11,7 +11,7 @@ import datetime
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
-from c4v.scraper.scraped_data_classes.scraped_data import Labels, ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import ServiceClassificationLabels, RelevanceClassificationLabels, ScrapedData, Sources
 from c4v.config import settings
 import uuid
 
@@ -148,11 +148,19 @@ class BigQueryManager(BasePersistencyManager):
 
             if label_relevance:
                 try:
-                    label = Labels(label_relevance)
+                    label_relevance = RelevanceClassificationLabels(label_relevance)
                 except:  # not a known label
-                    label = Labels.UNKNOWN
+                    label_relevance = RelevanceClassificationLabels.UNKNOWN
             else:
-                label = None
+                label_relevance = None
+
+            if label_service:
+                try:
+                    label_service = ServiceClassificationLabels(label_service)
+                except:  # not a known label
+                    label_service = ServiceClassificationLabels.UNKNOWN
+            else:
+                label_service = None
 
             if source:
                 try:
@@ -168,7 +176,8 @@ class BigQueryManager(BasePersistencyManager):
                 author=author,
                 date=date,
                 categories=categories,
-                label=label,
+                label_relevance=label_relevance,
+                label_service=label_service,
                 source=source,
             )
         
@@ -387,12 +396,10 @@ class BigQueryManager(BasePersistencyManager):
 
         data_to_insert = [dataclasses.asdict(data) for data in url_data]
         for data in data_to_insert:
-            ##### Should be gone in the future:
-            label: Labels = data["label"]
-            del data['label']
-            data["label_relevance"] = label.value if label else label 
-            data["label_service"]   = None 
-            ###################################
+            label_relevance: RelevanceClassificationLabels = data["label_relevance"]
+            data["label_relevance"] = label_relevance.value if label_relevance else label_relevance 
+            label_service: ServiceClassificationLabels = data["label_service"]
+            data["label_service"] = label_service.value if label_service else label_service 
             source: Sources = data["source"]
             data["source"] = source.value if source else source
             data["last_scraped"] = datetime.datetime.strftime( data["last_scraped"], self.bq_date_format) if data["last_scraped"] else None
@@ -465,7 +472,6 @@ class BigQueryManager(BasePersistencyManager):
             
 
     def delete(self, urls: List[str]):
-
         # Bulk delete provided urls
         query_str = f"DELETE FROM `{self.table_name}` WHERE url=@url;"
         for url in urls:

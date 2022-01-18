@@ -22,7 +22,7 @@ for file in files:
     dfs.append(new_df)
 
 # Remove irrelevant columns
-columns = ["url", "title", "content", "author", "categories", "date", "label"]
+columns = ["url", "title", "content", "author", "categories", "date", "label", "source"]
 
 # Concate dataframes
 df = pd.concat(dfs)
@@ -39,4 +39,4 @@ print(df)
 # Saving dataframe
 filename = "aggregated_dataframe.csv"
 print(f"Saving csv to: {filename}")
-df.to_csv(filename)
+df.to_csv(filename, index=False)

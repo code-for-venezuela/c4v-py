@@ -5,7 +5,7 @@
 # Python imports
 from dataclasses import dataclass, asdict, field, fields
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Type
 from datetime import datetime
 import json
 import enum
@@ -13,23 +13,76 @@ import enum
 # Local imports
 from c4v.config import settings
 
-
-class Labels(enum.Enum):
+class LabelSet(enum.Enum):
     """
-        Every possible label
+        Interface for sets of labels that can be attached to to a model for classification
     """
 
+    @classmethod
+    def num_labels(cls) -> int:
+        """
+            Ammount of labels to use during classification. 
+            This may be needed in case that the measurement set is using some 
+            special labels that are not used for classification
+        """
+        return len(list(cls.get_id2label_dict().items()))
+
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        """
+            Get a dict mapping from ids to a str, representing the labels for this label set
+        """
+        raise NotImplementedError("Should implement abstract method get_id2label_dict")
+
+    @classmethod
+    def get_label2id_dict(cls) -> Dict[str, int]:
+        """
+            Get a dict mapping labels to int ids, representing the the ids of each label in this labelset
+        """
+        id2label = cls.get_id2label_dict()
+        return { v:k for (k,v) in id2label.items() }
+
+class RelevanceClassificationLabels(LabelSet):
+    """
+        Labels for Binary classification, telling if a data instance is relevant or not
+    """
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
     UNKNOWN: str = "UNKNOWN"
 
     @classmethod
-    def labels(cls) -> List[str]:
-        """
-            Get list of labels as strings
-        """
-        return [l.value for l in cls]
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        return {
+            0: cls.IRRELEVANTE.value,
+            1: cls.DENUNCIA_FALTA_DEL_SERVICIO.value,
+        }
 
+class ServiceClassificationLabels(LabelSet):
+    """
+        Labels for service classification, "electricity", "water", "internet"... 
+    """
+    AGUA : str = "AGUA"
+    ASEO_URBANO : str = "ASEO URBANO"
+    COMBINACION : str = "COMBINACIÓN"
+    ELECTRICIDAD : str = "ELECTRICIDAD"
+    GAS_DOMESTICO : str = "GAS DOMÉSTICO"
+    TELECOMUNICACIONES : str = "TELECOMUNICACIONES"
+    NO_SERVICIO : str = "NO ES SERVICIO"
+    UNKNOWN : str = "UNKNOWN"
+
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        return {
+            0 : cls.AGUA.value,
+            1 : cls.ASEO_URBANO.value,
+            2 : cls.COMBINACION.value,
+            3 : cls.ELECTRICIDAD.value,
+            4 : cls.GAS_DOMESTICO.value,
+            5 : cls.TELECOMUNICACIONES.value,
+            6 : cls.NO_SERVICIO.value,
+            7 : cls.UNKNOWN.value,
+        }
+    
 
 class Sources(enum.Enum):
     """
@@ -39,7 +92,6 @@ class Sources(enum.Enum):
     UNKOWN: str = "UNKNOWN"
     SCRAPING: str = "SCRAPING"
     CLIENT: str = "CLIENT"
-
 
 @dataclass()
 class ScrapedData:
@@ -61,7 +113,8 @@ class ScrapedData:
     author: str = None
     categories: List[str] = field(default_factory=list)
     date: str = None
-    label: Labels = None
+    label_relevance: RelevanceClassificationLabels = None
+    label_service: ServiceClassificationLabels = None
     source: Sources = None
 
     def pretty_print(self, max_content_len: int = -1) -> str:
@@ -80,7 +133,7 @@ class ScrapedData:
         if max_content_len < len(self.content):
             content = content[:max_content_len] + "..."
 
-        return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}\nlabel: {self.label}\nsource: {self.source}\ncontent:\n\t{content}"
+        return f"title: {self.title}\nauthor: {self.author}\ndate: {self.date}\ncategories:\n{categories}\nlabel: {self.label_relevance}\nsource: {self.source}\ncontent:\n\t{content}"
 
     def __hash__(self) -> int:
         return (
@@ -90,7 +143,8 @@ class ScrapedData:
             self.content,
             self.author,
             self.date,
-            self.label,
+            self.label_relevance,
+            self.label_service,
             self.source,
         ).__hash__()
 
@@ -107,10 +161,15 @@ class ScrapedData:
         """
         d = asdict(self)
 
-        # Convert label to str
-        label : Labels = d.get("label")
-        if label:
-            d['label'] = label.value
+        # Convert label relevance to str
+        label_relevance : RelevanceClassificationLabels = d.get("label_relevance")
+        if label_relevance:
+            d['label_relevance'] = label_relevance.value
+
+        # Convert label service to str
+        label_service : ServiceClassificationLabels = d.get("label_service")
+        if label_service:
+            d['label_service'] = label_service.value
         
         # Convert source to str
         source : Sources = d.get("source")
@@ -132,13 +191,18 @@ class ScrapedData:
         # Sanity check
         valid_fields = [x.name for x in fields(cls)]
         if any(k for k in scraped_data.keys() if k not in valid_fields):
-            raise ValueError("Invalid scraped data dict representation")
+            raise ValueError(f"Invalid scraped data dict representation. Invalid fields: {[k for k in scraped_data.keys() if k not in valid_fields]}")
 
-        # Parse label
-        label : str = scraped_data.get("label")
-        if label:
-            scraped_data['label'] = Labels(label)
+        # Parse relevance label
+        label_relevance : str = scraped_data.get("label_relevance")
+        if label_relevance:
+            scraped_data['label_relevance'] = RelevanceClassificationLabels(label_relevance)
         
+        # Parse service label
+        label_service : str = scraped_data.get("label_service")
+        if label_service:
+            scraped_data['label_service'] = ServiceClassificationLabels(label_service)
+
         # Parse source
         source : str  = scraped_data.get("source")
         if source:

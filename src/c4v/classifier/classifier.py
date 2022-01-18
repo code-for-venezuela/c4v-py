@@ -5,14 +5,13 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Labels
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Type
 from pathlib import Path
 from pandas.core.frame import DataFrame
-from importlib import resources
 from enum import Enum
 
 # Third Party
@@ -38,11 +37,62 @@ from transformers.trainer_utils import EvalPrediction
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
+class LabelSet(Enum):
+    """
+        Interface for sets of labels that can be attached to to a model for classification
+    """
+
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        """
+            Get a dict mapping from ids to a str, representing the labels for this label set
+        """
+        raise NotImplementedError("Should implement abstract method get_id2label_dict")
+
+class BinaryClassificationLabels(LabelSet):
+    """
+        Labels for Binary classification, telling if a data instance is relevant or not
+    """
+    IRRELEVANTE: str = "IRRELEVANTE"
+    DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
+    UNKNOWN: str = "UNKNOWN"
+
+
+    @classmethod
+    def get_id2label_dict(cls) -> Dict[int, str]:
+        return {
+            0: cls.IRRELEVANTE.value,
+            1: cls.DENUNCIA_FALTA_DEL_SERVICIO.value,
+        }
+
 
 class Classifier(BaseModel):
     """
-        This class provides a simple way to run simple experiments.
+        This is the classifier model, you can use it to do two kinds of classification,
+        binary classification, to tell apart relevant or irrelevant news, and a multi-single label classification,
+        which assumes that an article is relevant and assigns one of a given set of labels to that
     """
+
+    def __init__(
+            self, 
+            files_folder_path: str = None, 
+            base_model_name: str = settings.default_base_language_model, 
+            use_cuda: bool = True, 
+            labelset : Type[LabelSet] = RelevanceClassificationLabels,
+            label_column : str = "label"
+            ):
+        self._label_column = label_column
+        self._labelset = labelset
+        super().__init__(files_folder_path=files_folder_path, base_model_name=base_model_name, use_cuda=use_cuda)
+
+    @property
+    def label_column(self) -> str:
+        """ Column used by this model as target label during training """
+        return self._label_column
+
+    @property
+    def labelset(self) -> Type[LabelSet]:
+        return self._labelset
 
     def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
@@ -51,38 +101,49 @@ class Classifier(BaseModel):
         return C4vDataFrameLoader.get_from_processed(dataset_name)
 
     def prepare_dataframe(
-        self, columns: List[str], dataset_name: str
+        self, columns: List[str], dataset_name: str, label_column: str = None, labelset: Type[LabelSet] = None
     ) -> Tuple[List[str], List[int]]:
         """
-            Return the list of text bodies and its corresponding label of whether it is 
-            a missing service problem or not, expressed as int
+            Return the list of text bodies and its corresponding label corresponding according to the provided 
+            labelset. Note that no duplicates are allowed
             Parameters:
                 columns : [str] = List of columns to use as part of the experiment 
                 dataset_name : str = name of the dataset to use
+                label_column : str = name of the column to use as label. If not provided, defaults to the configured one
+                                     in this classifier instance
+                labelset : Type[LabelSet] = Set of label to use for training, there's no check that the provided label column 
+                                            values  matches the labels in this labelset. If not provided, defaults to the configured one
+                                            in this classifier instance
             Return:
                 ([str], [int]) = the i'st position of the first list is the body of a news article, and the 
                                  i'st position of the second list tells whether the article i talks about
                                  a missing service or not, expressed as an int (1 if it is, 0 if not)
         """
 
-        df_pscdd = self.get_dataframe(dataset_name).sample(
+        label_column = label_column or self.label_column
+        labelset = labelset or self.labelset
+
+        df = self.get_dataframe(dataset_name).sample(
             frac=1
         )  # use sample to shuffle rows
 
-        df_pscdd["label"] = (
-            df_pscdd["label"].apply(lambda x: "IRRELEVANTE" not in x)
+        label_2_id_dict = labelset.get_label2id_dict()
+
+        df[label_column] = (
+            df[label_column].apply(lambda x: label_2_id_dict[x])
         ).astype(int)
 
-        df_pscdd = df_pscdd.convert_dtypes()
-        df_issue_text = df_pscdd[[*columns, "label"]]
-        df_issue_text.dropna(inplace=True)
+        df = df.convert_dtypes()
+        df.drop_duplicates(inplace=True)
+        df_issue_text = df[[*columns, label_column]]
+        df_issue_text.dropna(inplace=True)    
 
         x = [
             "\n".join(tup)
             for tup in zip(*[list(df_issue_text[col]) for col in columns])
         ]
 
-        y = list(df_issue_text["label"])
+        y = list(df_issue_text[label_column])
 
         return x, y
 
@@ -95,11 +156,11 @@ class Classifier(BaseModel):
                 RobertaTokenizer: tokenizer to retrieve
         """
         return AutoTokenizer.from_pretrained(
-            model_name or self._base_model_name, id2label=self.get_id2label_dict()
+            model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
         )
 
     def load_base_model(
-        self, model_name: str = None
+        self, model_name: str = None, num_labels : int = None
     ) -> RobertaForSequenceClassification:
         """
             Create model from model hub, configure them and retrieve it
@@ -110,7 +171,7 @@ class Classifier(BaseModel):
         """
         # Creating model and tokenizer
         model = AutoModelForSequenceClassification.from_pretrained(
-            model_name or self._base_model_name, num_labels=2
+            model_name or self._base_model_name, num_labels=num_labels or self.labelset.num_labels()
         )
         # Use GPU if available
         model.to(self._device)
@@ -233,6 +294,10 @@ class Classifier(BaseModel):
                 logging_dir : str = logs folder, defaulted to experiment's logs folder
                 path_to_save_checkpoint : str = path to save checkpoint after training is finished, defaults to experiment's folder
                 train_args : TrainArguments = if provided, override all default parameters passed to the training
+                train_dataset: Dataset = Optional dataset to use during training, overriding the default one
+                eval_dataset: Dataset = Optional dataset to use during training, overriding the default one
+                
+
             Return:
                 properly configured trainer instance
 
@@ -273,7 +338,7 @@ class Classifier(BaseModel):
             raise ValueError(f"Experiment does not exists: {path}")
 
         model = AutoModelForSequenceClassification.from_pretrained(
-            path, local_files_only=True, id2label=self.get_id2label_dict()
+            path, local_files_only=True, id2label=self.labelset.get_id2label_dict()
         )
         return model
 
@@ -301,6 +366,8 @@ class Classifier(BaseModel):
         confirmation_dataset: str = "classifier_confirmation_dataset.csv",
         val_test_proportion: float = 0.2,
         base_model_name: str = None,
+        labelset: Type[LabelSet] = None,
+        label_column: str = None
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
@@ -330,11 +397,16 @@ class Classifier(BaseModel):
             )
 
         # Prepare training dataframe and load model + tokenizer
-        x, y = self.prepare_dataframe(columns=columns, dataset_name=training_dataset)
+        x, y = self.prepare_dataframe(
+                        columns=columns, 
+                        dataset_name=training_dataset, 
+                        label_column=label_column, 
+                        labelset=labelset
+                    )
 
         # Split dataset into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
-            x, y, test_size=val_test_proportion
+            x, y, test_size=val_test_proportion, stratify=y
         )
 
         # Load model and tokenizer
@@ -377,12 +449,6 @@ class Classifier(BaseModel):
 
         return metrics_df
 
-    def _get_text_from_scrapeddata(self, data: ScrapedData) -> str:
-        """
-            Returns a string constructed from a scraped data instance
-        """
-        return data.title
-
     def classify(
         self, data: List[ScrapedData], model: str = None
     ) -> List[Dict[str, Any]]:
@@ -423,7 +489,7 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label = Labels(self.index_to_label(torch.argmax(x).item()))
+            d.label_relevance = RelevanceClassificationLabels(self.index_to_label(torch.argmax(x).item()))
             result.append({"data": d, "scores": x})
 
         return result
@@ -467,26 +533,21 @@ class Classifier(BaseModel):
 
         return {"scores": scores, "label": label}
 
-    def get_id2label_dict(self) -> Dict[int, str]:
-        """
-            Return dict mapping from ids to labels
-        """
-        return {
-            1: Labels.DENUNCIA_FALTA_DEL_SERVICIO.value,
-            0: Labels.IRRELEVANTE.value,
-        }
-
-    def index_to_label(self, index: int) -> Labels:
+    def index_to_label(self, index: int) -> LabelSet:
         """
             Get index for label
         """
-        d = self.get_id2label_dict()
+        d = self.labelset.get_id2label_dict()
+        label = d.get(index)
+        assert label, "Label shouldn't  be None"
+        return label
 
-        return d.get(index, Labels.IRRELEVANTE.value)
+    def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
+        return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
 
-    @staticmethod
-    def get_labels() -> List[str]:
-        """
-            Get list of possible labels outputs
-        """
-        return Labels.labels()
+    @classmethod
+    def relevance(cls, **kwargs):
+        kwargs["labelset"] = RelevanceClassificationLabels
+        kwargs["label_column"] = "label_relevance"
+        return cls(**kwargs)
+        

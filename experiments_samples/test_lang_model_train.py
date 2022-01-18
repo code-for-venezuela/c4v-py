@@ -1,5 +1,9 @@
 """
     Perform a fillmask training on a base model.
+    The data will be retrieved from the local storage of data.
+    Use this script to perform a fillmask task over the stored data.
+    You might need to scrape more data if the model couldn't find enough 
+    data.
 """
 
 from c4v.classifier.language_model.language_model import LanguageModel

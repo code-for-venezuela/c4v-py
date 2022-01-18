@@ -289,7 +289,7 @@ def classify(
         data: ScrapedData = result["data"]
         scores = result["scores"]
         click.echo(f"\t{data.title if data.title else '<no title>'} ({data.url})")
-        click.echo(f"\t\t{data.label}")
+        click.echo(f"\t\t{data.label_relevance}")
         click.echo(f"\t\t{scores}")
 
 
