@@ -78,8 +78,10 @@ class App:
             # Reformat enum fields
             if d.source:
                 d.source = d.source.value
+                
             if d.label_relevance:
                 d.label_relevance = d.label_relevance.value
+
             # Default to empty string
             d.content = d.content or ""
 
