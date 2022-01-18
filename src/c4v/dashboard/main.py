@@ -77,28 +77,37 @@ sl.sidebar.write(
 
 # Branch names
 NO_BRANCH_NAME = "No Branch"
-branch_name = sl.sidebar.selectbox(
-    "Branch: ",
-    [NO_BRANCH_NAME] + app.available_branchs,
-    help="Experiment branch to select a classifier model from",
-)
-experiment_options = (
-    []
-    if branch_name == NO_BRANCH_NAME
-    else app.available_experiments_for_branch(branch_name)
-)
-experiment_name = sl.sidebar.selectbox(
-    "Experiment: ",
-    experiment_options,
-    help="Experiment name corresponding to provided branch",
-)
-
-# Description for experiment if provided
-if experiment_name:
-    sl.sidebar.write("### Summary for this experiment: ")
-    sl.sidebar.text_area(
-        "Summary", app.experiment_summary(branch_name, experiment_name), height=100
+if backend == "local":
+    branch_name = sl.sidebar.selectbox(
+        "Branch: ",
+        [NO_BRANCH_NAME] + app.available_branchs,
+        help="Experiment branch to select a classifier model from",
     )
+    experiment_options = (
+        []
+        if branch_name == NO_BRANCH_NAME
+        else app.available_experiments_for_branch(branch_name)
+    )
+    experiment_name = sl.sidebar.selectbox(
+        "Experiment: ",
+        experiment_options,
+        help="Experiment name corresponding to provided branch",
+    )
+
+    # Description for experiment if provided
+    if experiment_name:
+        sl.sidebar.write("### Summary for this experiment: ")
+        sl.sidebar.text_area(
+            "Summary", app.experiment_summary(branch_name, experiment_name), height=100
+        )
+elif backend == "cloud":
+    classifier_type = sl.sidebar.selectbox(
+        "Type: ",
+        ["relevance", "service"], 
+        help="The classifier type specifies which information is predicted by the classifier"
+    )
+else:
+    assert False, f"Invalid backend option: {backend}"
 
 # Set limits
 use_classiffication_limit = sl.sidebar.checkbox(
@@ -117,13 +126,13 @@ else:
     max_rows_to_classify = -1
 
 # Run classification button
-def run_classification_callback():
+def run_local_classification_callback():
     if not experiment_name:
         sl.warning(
             "No experiment set up. Select one to choose a classifier model to use during classification"
         )
     else:
-        sl.info("Running classification process, this may take a while...")
+        sl.info("Running classification process, this might take a while...")
         try:
             app.classify(branch_name, experiment_name, max_rows_to_classify)
             sl.success("Classification finished")
@@ -133,17 +142,26 @@ def run_classification_callback():
                 + f"Error: {e}"
             )
 
+def run_cloud_classification_callback():
+    sl.info("Running classification process, this might take a while...")
+    try:
+        app.classify_by_type(classifier_type, max_rows_to_classify)
+        sl.success("Classification finished")
+    except Exception as e:
+        sl.error(
+            f"Unable to classify using model of type {classifier_type} {('and up to ' + str(max_rows_to_classify)) if max_rows_to_classify >= 0 else ''}.    "
+            + f"Error: {e}"
+        )
 
 sl.sidebar.button(
     "Classify",
     help="Perform the classification process",
-    on_click=run_classification_callback,
+    on_click=run_local_classification_callback if backend == "local" else run_cloud_classification_callback,
 )
 
 # Downloading and uploading
-sl.sidebar.write("### Uploading and downloading")
-
 def upload_and_download_model():
+    sl.sidebar.write("### Uploading and downloading")
     sl.sidebar.write("""
                 Upload a model to be used online during classification. 
                 Specify the type of model to tell the purpose of such model
@@ -200,7 +218,8 @@ def upload_and_download_model():
         on_click=download
     )
 
-upload_and_download_model()
+if backend == "local":
+    upload_and_download_model()
 
 # -- < Crawling Controls >  -----------------------------------
 sl.sidebar.write("------")

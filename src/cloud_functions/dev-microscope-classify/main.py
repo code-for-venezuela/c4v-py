@@ -47,8 +47,9 @@ def classify(request : flask.Request):
     logger.log_text(f"Downloading classifier of type '{config.type}'")
     #Cloud function vm is a read only s/m. The only writable place is the tmp folder
     path = Path("/tmp/c4v/experiments/classifier")
-    path.mkdir(parents=True) # Create folder if not exists
-    config.manager.download_model_to_directory(str(path), config.type)
+    if not path.exists():
+        path.mkdir(parents=True) # Create folder if not exists
+        config.manager.download_model_to_directory(str(path), config.type)
 
     # Now that the model is stored in /tmp/c4v/experiments/classifier, we need to get its name
     classifier_name = None
@@ -62,7 +63,7 @@ def classify(request : flask.Request):
     logger.log_text("Classifying rows...")
     config.manager.run_pending_classification_from_experiment("classifier", classifier_name, limit=config.limit)
 
-    return {"status" : "success"}
+    return flask.jsonify({"status" : "success"})
 
 class ClassifierConfig:
     """
@@ -89,7 +90,7 @@ class ClassifierConfig:
 
         # Get type of classifier from request
         # Parse options from request
-        request_json : Dict = request.get_json()
+        request_json : Dict = request.get_json() or {}
         classifier_type = request_json.get("type")
 
         # Parse classifier type

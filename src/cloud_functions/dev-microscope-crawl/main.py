@@ -50,7 +50,7 @@ class CrawlFuncConfig:
     def __init__(self, request : flask.Request) -> None:
 
         # Parse options from request
-        request_json : Dict = request.get_json()
+        request_json : Dict = request.get_json() or {}
 
          # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")
@@ -72,12 +72,10 @@ class CrawlFuncConfig:
             return 
 
         # Parse crawler name 
-        self._crawler_names = request_json.get("crawler_names")
+        self._ks = request_json.get("crawler_names")
         if not self.crawler_names:
             self._error = "Mandatory field 'crawler_names' not provided in request"
             return
-        elif not isinstance(self.crawler_names, str):
-            self._error = "Invalid value for 'crawler_names' arguments, should be a list of strings"
 
         # Check that crawler name is a valid crawler name
         for crawler_name in self.crawler_names:

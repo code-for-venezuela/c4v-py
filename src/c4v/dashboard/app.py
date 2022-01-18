@@ -1,6 +1,7 @@
 """
     State for the application and functions used to retrieve data needed to feed the 
-    page. This is basically a wrapper over c4v-py
+    page. This is basically a wrapper over c4v-py.
+    Also, you have multiple backends to perform operations both locally and in the cloud
 """
 # Local imports
 from typing import Callable, List
@@ -11,6 +12,8 @@ from c4v.config import PersistencyManagers, settings
 
 # Python imports
 from pathlib import Path
+from typing import Dict, Any
+from urllib import request, parse
 import os
 
 # Third party imports
@@ -232,14 +235,63 @@ class CloudApp(App):
         super().__init__(manager=manager)
 
     def classify(self, branch_name: str, experiment_name: str, limit: int = -1):
-        raise NotImplementedError()
-        return super().classify(branch_name, experiment_name, limit=limit)
+        raise NotImplementedError("Cloud app doesn't implements classification by branch and experiment")
+    
+    def classify_by_type(self, type: str, limit: int = -1):
+        """
+            Run a classification on the cloud based on the type of classification you want to perform
+            # Parameters
+                - `type` : `str` = type of classification you want to run, one of:
+                    + relevance
+                    + service
+                - `limit` : `int` = max ammount of rows to classify in one run
+        """
+        result = self._make_request(settings.classify_cloud_url_trigger, {"type" : type, "limit" : limit})
+        
     
     def scrape(self, limit: int) -> int:
-        # TESTING ONLY
-        return super().scrape(limit)
+        result = self._make_request(settings.scraping_cloud_url_trigger, {"limit" : limit})
+        # Return response code
+        return 0 if result.get("status") == "success" else 1
     
     def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
         
-        return super().crawl(crawlers_to_use, limit, progress_function)
+        # Perform request
+        result = self._make_request(settings.crawling_cloud_url_trigger, {"crawler_names" : crawlers_to_use, "limit" : limit})
+        progress_function(["" for _ in range(result.get("crawled", 0))])
+    
+    def _make_request(self, url : str, data : Dict[str, Any]) -> Dict[str, Any]:
+        """
+            Perform a post request to the url "url" providing the data in "data"
+            and return retrieved answer as dict
+        """
+        try:
+            import google.auth.transport.requests as google_requests
+            import google.oauth2.id_token as google_token
+        except ImportError as e:
+            raise ImportError(f"Could not import google cloud related dependencies. Maybe you're missing the 'gcloud' installation profile?. Error: {e}")
+
+        import json
+
+        # Create post request and encode data
+        req = request.Request(url, method= "POST", 
+            data = 
+                str(
+                    json.dumps(data)
+                ).encode("utf-8")
+            )
         
+        # Get auth token 
+        auth_req = google_requests.Request()
+        id_token = google_token.fetch_id_token(auth_req, url)
+
+        # set proper headers
+        req.add_header("Authorization", f"Bearer {id_token}")
+        req.add_header('content-type', 'application/json')
+        
+        # Get response 
+        response = request.urlopen(req)
+        result = response.read()
+
+        # Parse result
+        return json.loads(result)

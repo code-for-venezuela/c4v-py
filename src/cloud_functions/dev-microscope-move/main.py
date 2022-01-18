@@ -40,7 +40,7 @@ class MoveConfig:
     def __init__(self, request : flask.Request) -> None:
 
         # Parse options from request
-        request_json : Dict = request.get_json()
+        request_json : Dict = request.get_json() or {}
 
          # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")

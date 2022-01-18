@@ -59,7 +59,7 @@ class ScrapeFuncConfig:
             return
 
         # Parse options from request
-        request_json : Dict = request.get_json()
+        request_json : Dict = request.get_json() or {}
 
         # Parse limit
         try:
