@@ -6,7 +6,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, Sources, RelevanceClassificationLabels
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url
 from c4v.scraper.settings import INSTALLED_CRAWLERS
 from c4v.config import settings
@@ -316,7 +316,7 @@ class Manager:
 
         # Request at the most "limit" instances
         data = list(
-            x for x in self.persistency_manager.get_all(scraped=True) if not x.label
+            x for x in self.persistency_manager.get_all(scraped=True) if not x.label_relevance
         )[:limit]
 
         # classify
@@ -346,6 +346,7 @@ class Manager:
                                          label is different from this one, then explain how 
                                          much this label was contributing to its corresponding value, 
                                          ignored if not provided
+                html_file : str = where to store results in html. If not provided, they wont be stored
             Return:
                 Dict with explaination data
         """
@@ -367,6 +368,7 @@ class Manager:
                 List with possible output labels for the classifier
         """
         from c4v.classifier.classifier import Classifier
+        raise NotImplementedError("Get classifier labels should be reimplemented")
         return Classifier.get_labels()
 
     def should_retrain_base_lang_model(

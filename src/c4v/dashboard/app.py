@@ -67,9 +67,9 @@ class App:
 
         # Add filtering
         if label == "NO LABEL":
-            query = (x for x in query if not x.label)
+            query = (x for x in query if not x.label_relevance)
         elif label != "ANY":
-            query = (x for x in query if x.label and x.label.value == label)
+            query = (x for x in query if x.label_relevance and x.label_relevance.value == label)
 
         elems = []
         for d in query:
@@ -78,8 +78,10 @@ class App:
             # Reformat enum fields
             if d.source:
                 d.source = d.source.value
-            if d.label:
-                d.label = d.label.value
+                
+            if d.label_relevance:
+                d.label_relevance = d.label_relevance.value
+
             # Default to empty string
             d.content = d.content or ""
 

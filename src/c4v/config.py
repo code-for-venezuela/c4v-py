@@ -9,7 +9,6 @@ import enum
 
 _HOME = os.environ.get("HOME")
 
-
 class PersistencyManagers(enum.Enum):
     """
         Possible arguments for "PERSISTENCY_MANAGER" setting,
