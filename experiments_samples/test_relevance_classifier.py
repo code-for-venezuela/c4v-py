@@ -27,5 +27,5 @@ args = ClassifierArgs(
 
 )
 
-exp = ClassifierExperiment.from_branch_and_experiment("samples", "classifier")
+exp = ClassifierExperiment.from_branch_and_experiment("samples", "relevance_classifier")
 exp.run_experiment(args)

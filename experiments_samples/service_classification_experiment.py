@@ -7,7 +7,7 @@ args = ClassifierArgs(
     training_args={
         "per_device_train_batch_size" : 15,
         "per_device_eval_batch_size" : 15,      # change batch size if you're having memory problems
-        "num_train_epochs" : 3,
+        "num_train_epochs" : 50,
         "warmup_steps" : 1000,
         "save_steps" : 1000,
         "save_total_limit" : 1,
@@ -17,6 +17,7 @@ args = ClassifierArgs(
         "eval_accumulation_steps" : 1,
         "learning_rate" : 5e-07,
         "adafactor" : True,
+        "metric_for_best_model" : "accuracy"
     },
     columns=['title'],
     train_dataset_name="service_training_dataset.csv",  # note that this is the same experiment as relevance classification but using different parameters
