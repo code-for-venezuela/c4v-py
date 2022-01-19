@@ -179,6 +179,7 @@ class SqliteManager(BasePersistencyManager):
                     date=date,
                     categories=categories,
                     label_relevance=label_relevance,
+                    label_service=label_service,
                     source=source,
                 )
 
@@ -280,6 +281,7 @@ class SqliteManager(BasePersistencyManager):
 
             # save changes
             connection.commit()
+            print([x.label_service for x in self.get_all()])
 
     def delete(self, urls: List[str]):
 

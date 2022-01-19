@@ -140,7 +140,7 @@ def run_local_classification_callback():
     else:
         sl.info("Running classification process, this might take a while...")
         try:
-            app.classify(branch_name, experiment_name, max_rows_to_classify)
+            app.classify(branch_name, experiment_name, max_rows_to_classify, type=classifier_type)
             sl.success("Classification finished")
         except MemoryError as e:
             sl.error(

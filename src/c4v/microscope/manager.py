@@ -398,11 +398,19 @@ class Manager:
         """
         from c4v.classifier.classifier_experiment import ClassifierExperiment
 
+        # Update service field in case of 
+
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
             branch, experiment, type=type
         )
 
-        return classifier_experiment.classify(data)
+        type_to_field = {"relevance" : "label_relevance", "service" : "label_service"}
+
+        # Sanity check
+        if not type_to_field.get(type):
+            raise ValueError(f"'{type}' is not a valid classifier type. Possible options: {list(type_to_field.keys())}")
+
+        return classifier_experiment.classify(data, type_to_field[type])
 
     def run_pending_classification_from_experiment(
         self, branch: str, experiment: str, save: bool = True, limit: int = -1, type : str = None
@@ -429,7 +437,7 @@ class Manager:
 
         # Request at the most "limit" instances
         data = list(
-            x for x in self.persistency_manager.get_all(scraped=True) if not x.label_relevance
+            x for x in self.persistency_manager.get_all(scraped=True) if (x.label_relevance == None if type == 'relevance' else x.label_service == None)
         )[:limit]
 
         # classify
