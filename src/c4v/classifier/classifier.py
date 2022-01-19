@@ -172,7 +172,6 @@ class Classifier(BaseModel):
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        print("My labelset is", self.labelset)
         return RobertaTokenizer.from_pretrained(
             model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
         )
@@ -355,11 +354,9 @@ class Classifier(BaseModel):
         if not Path(path, "config.json").exists():
             raise ValueError(f"Experiment does not exists: {path}")
 
-        print("My labels are: ", self.labelset.get_id2label_dict())
         model = AutoModelForSequenceClassification.from_pretrained(
             path, local_files_only=True, id2label=self.labelset.get_id2label_dict()
         )
-        print("My model is of type: ", type(model))
         return model
 
     def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> DataFrame:
@@ -505,7 +502,6 @@ class Classifier(BaseModel):
 
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer()
-        print("My tokenizer is of type ", type(roberta_tokenizer))
         tokenized_input = roberta_tokenizer(
             [self._get_text_from_scrapeddata(d) for d in data],
             padding=True,
