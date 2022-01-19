@@ -3,11 +3,12 @@
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
+from telnetlib import SE
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
+from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
 from c4v.scraper.crawler.crawlers.base_crawler import BaseCrawler
 from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS, NAME_TO_CRAWLER
@@ -398,8 +399,6 @@ class Manager:
         """
         from c4v.classifier.classifier_experiment import ClassifierExperiment
 
-        # Update service field in case of 
-
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
             branch, experiment, type=type
         )
@@ -435,10 +434,19 @@ class Manager:
         # Parse limit
         limit = limit if limit >= 0 else sys.maxsize
 
+        # If is of type service, update rows you already know that are not service problems
+        if type == "service":
+            self._update_irrelevant_service()
+
         # Request at the most "limit" instances
-        data = list(
-            x for x in self.persistency_manager.get_all(scraped=True) if (x.label_relevance == None if type == 'relevance' else x.label_service == None)
-        )[:limit]
+        if type == "relevance":
+            data = list(x for x in self.persistency_manager.get_all(scraped=True) if x.label_relevance == None)[:limit]
+        elif type == "service":
+            data = list(
+                    x for x in self.persistency_manager.get_all(scraped=True) 
+                    if x.label_service == None and \
+                    x.label_relevance == RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO
+                )[:limit]
 
         # classify
         results = self.run_classification_from_experiment(branch, experiment, data, type = type)
@@ -649,6 +657,31 @@ class Manager:
 
         # Try to download the file
         gcs_manager.download_classifier_model_to(classifier_type, path)
+
+    def _update_irrelevant_service(self, bulk_size : int = 1000):
+        """
+            Update 'label_service' field in instances where 'label_relevance' == 'IRRELEVANTE',
+            since we already know that such instances are not about services. Use bulk size to specify how
+            much elements to save per bulk
+        """
+        assert bulk_size > 0
+
+        # Irrelevant instances
+        data = (x for x in self.persistency_manager.get_all() if x.label_relevance == RelevanceClassificationLabels.IRRELEVANTE)
+
+        # Buffer to store elements to save
+        data_to_save = []
+        for d in data:
+            d.label_service = ServiceClassificationLabels.NO_SERVICIO
+            data_to_save.append(d)
+
+            # Once you collect 'bulk_size' elements, perform a save and reset buffer
+            if len(data_to_save) == bulk_size:
+                self.persistency_manager.save(data_to_save)
+                data_to_save = []
+        
+        # Save what is left at the end 
+        self.persistency_manager.save(data_to_save)
 
     @staticmethod
     def cloud_model_types() -> List[str]:
