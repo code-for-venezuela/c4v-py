@@ -5,7 +5,7 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels, ServiceClassificationLabels
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
@@ -90,9 +90,19 @@ class Classifier(BaseModel):
         """ Column used by this model as target label during training """
         return self._label_column
 
+    @label_column.setter
+    def label_column(self, label_column) -> str:
+        """ Column used by this model as target label during training """
+        self._label_column = label_column
+
     @property
     def labelset(self) -> Type[LabelSet]:
         return self._labelset
+
+    @labelset.setter
+    def labelset(self, labelset = Type[LabelSet]):
+        self._labelset = labelset
+
 
     def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
@@ -155,6 +165,7 @@ class Classifier(BaseModel):
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
+        print("My labelset is", self.labelset)
         return AutoTokenizer.from_pretrained(
             model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
         )
@@ -337,9 +348,11 @@ class Classifier(BaseModel):
         if not Path(path, "config.json").exists():
             raise ValueError(f"Experiment does not exists: {path}")
 
+        print("My labels are: ", self.labelset.get_id2label_dict())
         model = AutoModelForSequenceClassification.from_pretrained(
             path, local_files_only=True, id2label=self.labelset.get_id2label_dict()
         )
+        print("My model is of type: ", type(model))
         return model
 
     def evaluate_metrics(self, trainer: Trainer, val_dataset: Dataset) -> DataFrame:
@@ -476,6 +489,7 @@ class Classifier(BaseModel):
 
         # Tokenize input
         roberta_tokenizer = self.load_tokenizer()
+        print("My tokenizer is of type ", type(roberta_tokenizer))
         tokenized_input = roberta_tokenizer(
             [self._get_text_from_scrapeddata(d) for d in data],
             padding=True,
@@ -489,7 +503,7 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label_relevance = RelevanceClassificationLabels(self.index_to_label(torch.argmax(x).item()))
+            d.label_relevance = self.labelset(self.index_to_label(torch.argmax(x).item()))
             result.append({"data": d, "scores": x})
 
         return result
@@ -549,5 +563,11 @@ class Classifier(BaseModel):
     def relevance(cls, **kwargs):
         kwargs["labelset"] = RelevanceClassificationLabels
         kwargs["label_column"] = "label_relevance"
+        return cls(**kwargs)
+
+    @classmethod
+    def service(cls, **kwargs):
+        kwargs["labelset"] = ServiceClassificationLabels
+        kwargs["label_column"] = "label_service"
         return cls(**kwargs)
         

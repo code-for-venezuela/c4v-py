@@ -146,6 +146,10 @@ class BigQueryManager(BasePersistencyManager):
             # Decompose row
             (url, last_scraped, title, content, author, date, label_relevance, label_service, source, categories) = row
 
+            # Add timezone to date
+            if last_scraped:
+                last_scraped = pytz.utc.localize(last_scraped)
+                
             if label_relevance:
                 try:
                     label_relevance = RelevanceClassificationLabels(label_relevance)

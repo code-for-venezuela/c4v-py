@@ -28,6 +28,13 @@ class LabelSet(enum.Enum):
         return len(list(cls.get_id2label_dict().items()))
 
     @classmethod
+    def labels(cls) -> List[str]:
+        """
+            A list with every possible label string for this labelset
+        """
+        return [x.name for x in cls]
+
+    @classmethod
     def get_id2label_dict(cls) -> Dict[int, str]:
         """
             Get a dict mapping from ids to a str, representing the labels for this label set

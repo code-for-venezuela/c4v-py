@@ -379,14 +379,17 @@ class Manager:
         return cls(db, metadata, local_files_path or settings.c4v_folder)
 
     def run_classification_from_experiment(
-        self, branch: str, experiment: str, data: List[ScrapedData]
+        self, branch: str, experiment: str, data: List[ScrapedData], type : str = None
     ) -> List[Dict[str, Any]]:
         """
             Classify given data instance list, returning its metrics
             Parameters:
-                branch : str = branch name of model to use
-                experiment : str = experiment name storing model
-                data : [ScrapedData] = Instance to be classified
+                - branch : str = branch name of model to use
+                - experiment : str = experiment name storing model
+                - data : [ScrapedData] = Instance to be classified
+                - type : str = type of classifier to use. One of the following:  
+                    + relevance
+                    + service
             Return:
                 A List of dicts with the resulting scraped data correctly labelled
                 and its corresponding scores tensor for each possible label. Available fields:
@@ -396,23 +399,26 @@ class Manager:
         from c4v.classifier.classifier_experiment import ClassifierExperiment
 
         classifier_experiment = ClassifierExperiment.from_branch_and_experiment(
-            branch, experiment
+            branch, experiment, type=type
         )
 
         return classifier_experiment.classify(data)
 
     def run_pending_classification_from_experiment(
-        self, branch: str, experiment: str, save: bool = True, limit: int = -1
+        self, branch: str, experiment: str, save: bool = True, limit: int = -1, type : str = None
     ) -> List[Dict[str, Any]]:
         """
             Classify data pending for classification in local db, returning the obtained results and saving it 
             to database. 
-            Parameters:
-                branch : str = branch name
-                experiment : str = experiment name
-                save : bool = if should store results in db
-                limit : maximum number of rows to classify
-            Return:
+            # Parameters:
+                - branch : str = branch name
+                - experiment : str = experiment name
+                - save : bool = if should store results in db
+                - limit : int = maximum number of rows to classify
+                - type : str = type of classifier to use. One of the following:   
+                    + relevance   
+                    + service   
+            # Return:
                 A List of dicts with the resulting scraped data correctly labelled
                 and its corresponding scores tensor for each possible label. Available fields:
                     + data : ScrapedData = resulting data instance after classification
@@ -427,7 +433,7 @@ class Manager:
         )[:limit]
 
         # classify
-        results = self.run_classification_from_experiment(branch, experiment, data)
+        results = self.run_classification_from_experiment(branch, experiment, data, type = type)
 
         # Save if requested so
         if save:

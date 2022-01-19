@@ -116,6 +116,9 @@ class ClassifierExperiment(BaseExperiment):
 
     def experiment_to_run(self, args: ClassifierArgs) -> ClassifierSummary:
         # Run a training process
+        self._classifier.labelset = args.labelset
+        self._classifier.label_column = args.label_column
+        
         metrics = self._classifier.run_training(
             args.training_args,
             columns=args.columns,
@@ -182,20 +185,30 @@ class ClassifierExperiment(BaseExperiment):
         branch_name: str,
         experiment_name: str,
         classifier_instance: Classifier = None,
+        type : str = None
     ):
         """
             Create an experiment from a branch name, an experiment name, and a classifier instance
-            Parameters:
-                branch_name : str = Branch name for the experiment
-                experiment_name : str = Experiment name
-                classifier_instance : Classifier = optional classifier instance, will be defaulted if none was provided
+            # Parameters:
+                - `branch_name` : `str` = Branch name for the experiment
+                - `experiment_name` : `str` = Experiment name
+                - `classifier_instance` : `Classifier` = (optional) classifier instance, will be defaulted if none was provided. Also, overrides `type` argument
+                - `type` : `str` = (optional) type of classifier to use. One of the following:
+                    + relevance
+                    + service
         """
         fs_manager = ExperimentFSManager(branch_name, experiment_name)
 
         if classifier_instance:
             classifier_instance.files_folder_path = fs_manager.experiment_content_folder
 
-        classifier_instance = classifier_instance or Classifier.relevance(
-            files_folder_path=fs_manager.experiment_content_folder
-        )
+        if not classifier_instance:        
+            if type == "relevance" or type is None: # relevance is default
+                classifier_instance = Classifier.relevance(
+                                        files_folder_path=fs_manager.experiment_content_folder
+                                    )
+            elif type == "service":
+                classifier_instance = Classifier.service(
+                                        files_folder_path=fs_manager.experiment_content_folder
+                                    ) 
         return cls(fs_manager, classifier_instance)

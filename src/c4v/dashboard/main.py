@@ -47,17 +47,24 @@ sl.sidebar.write("## Filters")
 sl.sidebar.write("Specify which data you want to see with the following filters")
 
 # Add a selector to filter by label
-label = sl.sidebar.selectbox(
-    "Label: ", options=app.label_options, help="Label assigned by the classifier"
+relevance = sl.sidebar.selectbox(
+    "Relevance: ", options=app.relevance_options, help="relevance label assigned by the classifier"
 )
+
+service = sl.sidebar.selectbox(
+    "Service: ", options=app.service_options, help="service label assigned by the classifier"
+)
+
 scraped = sl.sidebar.selectbox(
     "Scraped: ",
     options=app.scraped_options,
     help="Whether the instance data is complete or not",
 )
+
 use_max_rows = sl.sidebar.checkbox(
     "Limit Rows: ", value=True, help="Max ammount of rows to show"
 )
+
 # -- < Row Limits > -------------------------------------------
 # If limiting the max amount of rows, then ask for a max value
 if use_max_rows:
@@ -73,6 +80,13 @@ sl.sidebar.write("-----")
 sl.sidebar.write("## Classification")
 sl.sidebar.write(
     "Run a classification process, select parameters with the following controls."
+)
+
+# Classification type
+classifier_type = sl.sidebar.selectbox(
+    "Type: ",
+    ["relevance", "service"], 
+    help="The classifier type specifies which information is predicted by the classifier"
 )
 
 # Branch names
@@ -100,14 +114,6 @@ if backend == "local":
         sl.sidebar.text_area(
             "Summary", app.experiment_summary(branch_name, experiment_name), height=100
         )
-elif backend == "cloud":
-    classifier_type = sl.sidebar.selectbox(
-        "Type: ",
-        ["relevance", "service"], 
-        help="The classifier type specifies which information is predicted by the classifier"
-    )
-else:
-    assert False, f"Invalid backend option: {backend}"
 
 # Set limits
 use_classiffication_limit = sl.sidebar.checkbox(
@@ -136,7 +142,7 @@ def run_local_classification_callback():
         try:
             app.classify(branch_name, experiment_name, max_rows_to_classify)
             sl.success("Classification finished")
-        except Exception as e:
+        except MemoryError as e:
             sl.error(
                 f"Unable to classify using model {branch_name}/{experiment_name} {('and up to ' + str(max_rows_to_classify)) if max_rows_to_classify >= 0 else ''}.    "
                 + f"Error: {e}"
@@ -145,7 +151,7 @@ def run_local_classification_callback():
 def run_cloud_classification_callback():
     sl.info("Running classification process, this might take a while...")
     try:
-        app.classify_by_type(classifier_type, max_rows_to_classify)
+        app.classify(classifier_type, max_rows_to_classify)
         sl.success("Classification finished")
     except Exception as e:
         sl.error(
@@ -342,4 +348,4 @@ sl.sidebar.button(
 )
 
 # -- < Show Dashboard > ---------------------------------------
-sl.dataframe(app.get_dashboard_data(label=label, max_rows=max_rows, scraped=scraped))
+sl.dataframe(app.get_dashboard_data(label_relevance=relevance, label_service=service, max_rows=max_rows, scraped=scraped))

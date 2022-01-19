@@ -6,9 +6,9 @@
 # Local imports
 from typing import Callable, List
 import c4v.microscope as ms
-from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
 from c4v.microscope.metadata import Metadata
 from c4v.config import PersistencyManagers, settings
+from c4v.scraper.scraped_data_classes.scraped_data import ServiceClassificationLabels, RelevanceClassificationLabels
 
 # Python imports
 from pathlib import Path
@@ -26,11 +26,17 @@ class App:
     """
 
     # Valid options for labels
-    label_options: List[str] = [
+    relevance_options: List[str] = [
         "ANY",
-        "IRRELEVANTE",
-        "PROBLEMA DEL SERVICIO",
+        *RelevanceClassificationLabels.labels(),
         "NO LABEL",
+    ]
+
+    # Service options
+    service_options : List[str] = [
+        "ANY",
+        *ServiceClassificationLabels.labels(),
+        "NO LABEL"
     ]
 
     # Valid options for scraped
@@ -51,7 +57,8 @@ class App:
         self,
         max_rows: int = 100,
         max_content_len: int = 200,
-        label: str = "ANY",
+        label_relevance: str = "ANY",
+        label_service: str = "ANY",
         scraped: str = "Any",
     ) -> pd.DataFrame:
         """
@@ -63,7 +70,8 @@ class App:
             - scraped : `str` = (optional) if the instances should be scraped.
         """
         # Some sanity check
-        assert label in App.label_options, f"invalid label: {label}"
+        assert label_relevance in App.relevance_options, f"invalid label: {label_relevance}"
+        assert label_service in App.service_options, f"invalid label: {label_service}"
         assert scraped in App.scraped_options, f"invalid scraped option: {scraped}"
 
         # get value depending on if the instances should be scraped
@@ -72,10 +80,16 @@ class App:
         query = self._manager.get_all(scraped=opt_2_val[scraped])
 
         # Add filtering
-        if label == "NO LABEL":
+        if label_relevance == "NO LABEL":
             query = (x for x in query if not x.label_relevance)
-        elif label != "ANY":
-            query = (x for x in query if x.label_relevance and x.label_relevance.value == label)
+        elif label_relevance != "ANY":
+            query = (x for x in query if x.label_relevance and x.label_relevance.value == label_relevance)
+        
+        # Add filtering
+        if label_service == "NO LABEL":
+            query = (x for x in query if not x.label_service)
+        elif label_service != "ANY":
+            query = (x for x in query if x.label_service and x.label_service.value == label_service)
 
         elems = []
         for d in query:
@@ -102,7 +116,8 @@ class App:
                 else d.content[:max_content_len] + "..."
             )
             elems.append(d)
-
+            print(d.last_scraped)
+            # d.last_scraped = None
             # break if gathered enough rows
             if len(elems) == max_rows:
                 break
@@ -165,16 +180,19 @@ class App:
 
         return summary_path.read_text()
 
-    def classify(self, branch_name: str, experiment_name: str, limit: int = -1):
+    def classify(self, branch_name: str, experiment_name: str, limit: int = -1, type : str = "relevance"):
         """
         Run a classification process.
         # Parameters
             - branch_name : `str ` = Branch name for experiment
             - experiment_name : `str ` = Experiment name for experiment
-            - limit  : `int` = Max ammount of rows to classify, provide a negative number for no limit
+            - limit  : `int` = (optional) Max ammount of rows to classify, provide a negative number for no limit
+            - type : `str` = (optional) type of classification to perform. One of the following 
+                + relevance (default)
+                + service
         """
         self._manager.run_pending_classification_from_experiment(
-            branch_name, experiment_name, limit=limit
+            branch_name, experiment_name, limit=limit, type=type
         )
 
     def crawl(
@@ -240,20 +258,8 @@ class CloudApp(App):
         manager = ms.Manager.from_default(metadata=metadata)
         super().__init__(manager=manager)
 
-    def classify(self, branch_name: str, experiment_name: str, limit: int = -1):
-        raise NotImplementedError("Cloud app doesn't implements classification by branch and experiment")
-    
-    def classify_by_type(self, type: str, limit: int = -1):
-        """
-            Run a classification on the cloud based on the type of classification you want to perform
-            # Parameters
-                - `type` : `str` = type of classification you want to run, one of:
-                    + relevance
-                    + service
-                - `limit` : `int` = max ammount of rows to classify in one run
-        """
+    def classify(self, branch_name: str, experiment_name: str, type : str = "relevance", limit: int = -1):
         result = self._make_request(settings.classify_cloud_url_trigger, {"type" : type, "limit" : limit})
-        
     
     def scrape(self, limit: int) -> int:
         result = self._make_request(settings.scraping_cloud_url_trigger, {"limit" : limit})

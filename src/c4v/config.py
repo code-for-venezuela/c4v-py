@@ -37,7 +37,7 @@ settings = Dynaconf(
         ),  # Path to the local sqlite db file
         Validator("LOCAL_SQLITE_DB", default=os.path.join(_HOME, ".c4v/c4v_db.sqlite")),
         Validator(
-            "DEFAULT_BASE_LANGUAGE_MODEL", default="BSC-TeMU/roberta-base-bne"
+            "DEFAULT_BASE_LANGUAGE_MODEL", default="PlanTL-GOB-ES/roberta-base-bne"
         ),  # Base language model for the classifier
         Validator(
             "DEFAULT_LANG_MODEL_MIN_LOSS", default=0.15
