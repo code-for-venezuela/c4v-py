@@ -71,6 +71,13 @@ class Classifier(BaseModel):
         This is the classifier model, you can use it to do two kinds of classification,
         binary classification, to tell apart relevant or irrelevant news, and a multi-single label classification,
         which assumes that an article is relevant and assigns one of a given set of labels to that
+
+        # Parameters
+            + files_folder_path : str = Where to store resulting model after training, or retrieve it during classification
+            + base_model_name : str = Name of the huggingface model to use as base during training
+            + use_cuda : bool = If should use GPU (cuda). It will be used in every operation if so.
+            + labelset : Type[LabelSet] = labelset to use to get corresponding labels during trainning and classification
+            + label_column : str = Label to use during training as actual label
     """
 
     def __init__(
@@ -79,7 +86,7 @@ class Classifier(BaseModel):
             base_model_name: str = settings.default_base_language_model, 
             use_cuda: bool = True, 
             labelset : Type[LabelSet] = RelevanceClassificationLabels,
-            label_column : str = "label"
+            label_column : str = "label",
             ):
         self._label_column = label_column
         self._labelset = labelset
@@ -166,7 +173,7 @@ class Classifier(BaseModel):
                 RobertaTokenizer: tokenizer to retrieve
         """
         print("My labelset is", self.labelset)
-        return AutoTokenizer.from_pretrained(
+        return RobertaTokenizer.from_pretrained(
             model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
         )
 
@@ -243,15 +250,15 @@ class Classifier(BaseModel):
         pred = np.argmax(pred, axis=1)
 
         accuracy = accuracy_score(y_true=labels, y_pred=pred)
-        recall = recall_score(y_true=labels, y_pred=pred)
-        precision = precision_score(y_true=labels, y_pred=pred)
-        f1 = f1_score(y_true=labels, y_pred=pred)
+        recall = recall_score(y_true=labels, y_pred=pred, average="weighted")
+        precision = precision_score(y_true=labels, y_pred=pred, average="weighted")
+        f1 = f1_score(y_true=labels, y_pred=pred, average="weighted")
 
         return {
             "accuracy": accuracy,
             "precision": precision,
             "recall": recall,
-            "f1": f1,
+            # "f1": f1,
         }
 
     def _get_default_train_args(self) -> Dict[str, Any]:
@@ -463,7 +470,7 @@ class Classifier(BaseModel):
         return metrics_df
 
     def classify(
-        self, data: List[ScrapedData], model: str = None
+        self, data: List[ScrapedData], model: str = None, scraped_data_label_field : str = "label_relevance"
     ) -> List[Dict[str, Any]]:
         """
             Classify the given data instance, returning classification metrics
@@ -472,12 +479,21 @@ class Classifier(BaseModel):
                 data : ScrapedData = Data instance to classify
                 model : str = model name of model to load use when classifying. If no model provided,
                               use the model configured for this classifier
+                scraped_data_label_field : str = Field of scraped data that corresponds to this classification. Required to know 
+                    where to store the predicted label
             Return:
                 A List of dicts with the resulting scraped data correctly labelled
                 and its corresponding scores tensor for each possible label. Available fields:
                     + data : ScrapedData = resulting data instance after classification
                     + scores : torch.Tensor = Scores for each label returned by the classifier
         """
+        # Sanity check
+        assert scraped_data_label_field in { d.name for d in dataclasses.fields(ScrapedData) }
+
+        # If nothing to do, just return empty list
+        if not data:
+            return []
+
         # Get model from experiment:
         if model is None:
             model = self._files_folder
@@ -503,7 +519,7 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label_relevance = self.labelset(self.index_to_label(torch.argmax(x).item()))
+            setattr(d, scraped_data_label_field, self.labelset(self.index_to_label(torch.argmax(x).item())))
             result.append({"data": d, "scores": x})
 
         return result
