@@ -188,16 +188,22 @@ def upload_and_download_model():
         sl.sidebar.write("⚠️ there's no bucket properly configured where to upload the classifier")
         return
 
-    # Upload the model
-    model_type = sl.sidebar.selectbox("Type", options=app.manager.cloud_model_types(), help="Type of cloud model to use during classification")
-
     # Switch to tell if it should download or upload
     upload_or_download = sl.sidebar.radio("Upload or Download", ["upload", "download"])
+
+    def upload():
+        sl.info(f"Uploading model in {branch_name}/{experiment_name} of type '{classifier_type}' to bucket...")
+        try:
+            app.upload_model_of_type(experiment_name, branch_name, classifier_type)
+            sl.success("Upload successful")
+        except Exception as e:
+            sl.error(f"Could not complete upload. Error: '{e}'")
+
     if upload_or_download == "upload":
         sl.sidebar.button(
             "Upload",
-            help=f"Upload model in '{experiment_name}/{branch_name}' of type '{model_type}' to bucket {settings.storage_bucket}",
-            on_click=lambda: print("I have to confirm but dk how")
+            help=f"Upload model in '{experiment_name}/{branch_name}' of type '{classifier_type}' to bucket {settings.storage_bucket or '<no bucket specified in environment>'}",
+            on_click=upload
             )
         return
     
@@ -209,18 +215,19 @@ def upload_and_download_model():
             sl.error(f"The path '{path}' is not a valid download path for a model")
             return
 
-        sl.info(f"Downloading model of type' {model_type}' to '{path}'...")
+        sl.info(f"Downloading model of type' {classifier_type}' to '{path}'...")
 
         # try to perform download
         try: 
-            app.download_model_of_type(path, model_type)
+            app.download_model_of_type(path, classifier_type)
+            sl.success("Download successful")
         except Exception as e:
             sl.error(f"Could not complete download. Error: '{e}'")
 
 
     sl.sidebar.button(
         "Download", 
-        help=f"Download model of type '{model_type}' from bucket '{settings.storage_bucket}'",
+        help=f"Download model of type '{classifier_type}' from bucket '{settings.storage_bucket}'",
         on_click=download
     )
 

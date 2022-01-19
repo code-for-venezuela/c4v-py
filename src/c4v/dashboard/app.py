@@ -232,7 +232,7 @@ class App:
         """
         Upload a classifier model
         """
-        self.manager.upload_model(experiment, branch, type)
+        self.manager.upload_model(branch,experiment, type)
 
     def download_model_of_type(self, path: str, type: str):
         """
