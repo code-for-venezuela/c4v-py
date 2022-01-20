@@ -354,5 +354,24 @@ sl.sidebar.button(
     on_click=scrape_callback,
 )
 
+# Move function on cloud backend
+if backend == "cloud":
+
+    def move():
+        sl.info("Moving data from firestore to big query")
+        try:
+            app.move()
+            sl.success("Move operation succesful")
+        except Exception as e:
+            sl.error(f"Could not perform move operation. Error: {e}")
+
+
+    sl.sidebar.write("-------")
+    sl.sidebar.write("# Move")
+    sl.sidebar.write("Move instances from firestore to big query")
+    sl.sidebar.button(
+        "Move", on_click=move
+    )
+
 # -- < Show Dashboard > ---------------------------------------
 sl.dataframe(app.get_dashboard_data(label_relevance=relevance, label_service=service, max_rows=max_rows, scraped=scraped))

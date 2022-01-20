@@ -272,6 +272,14 @@ class CloudApp(App):
         result = self._make_request(settings.crawling_cloud_url_trigger, {"crawler_names" : crawlers_to_use, "limit" : limit})
         progress_function(["" for _ in range(result.get("crawled", 0))])
     
+    def move(self):
+        """
+            Move data from firestore to big query
+        """
+        # Assume that this persistency manager is a big query one
+        self.manager.persistency_manager.move()
+        
+
     def _make_request(self, url : str, data : Dict[str, Any]) -> Dict[str, Any]:
         """
             Perform a post request to the url "url" providing the data in "data"
