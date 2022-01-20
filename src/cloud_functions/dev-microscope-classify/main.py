@@ -2,6 +2,8 @@
 import os
 from typing import Dict
 from pathlib import Path
+import gc
+import shutil
 
 # Local imports 
 from c4v.microscope import Manager
@@ -61,7 +63,13 @@ def classify(request : flask.Request):
 
     # now that the classifier model is properly downloaded, run a classification
     logger.log_text("Classifying rows...")
-    config.manager.run_pending_classification_from_experiment("classifier", classifier_name, limit=config.limit)
+    config.manager.run_pending_classification_from_experiment("classifier", classifier_name, limit=config.limit, type=config.type)
+
+    # Free resources
+    del config.manager
+    shutil.rmtree(str(path))
+    gc.collect()
+
 
     return flask.jsonify({"status" : "success"})
 
