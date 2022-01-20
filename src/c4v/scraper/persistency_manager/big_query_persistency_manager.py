@@ -146,43 +146,19 @@ class BigQueryManager(BasePersistencyManager):
             # Decompose row
             (url, last_scraped, title, content, author, date, label_relevance, label_service, source, categories) = row
 
-            # Add timezone to date
-            if last_scraped:
-                last_scraped = pytz.utc.localize(last_scraped)
-                
-            if label_relevance:
-                try:
-                    label_relevance = RelevanceClassificationLabels(label_relevance)
-                except:  # not a known label
-                    label_relevance = RelevanceClassificationLabels.UNKNOWN
-            else:
-                label_relevance = None
-
-            if label_service:
-                try:
-                    label_service = ServiceClassificationLabels(label_service)
-                except:  # not a known label
-                    label_service = ServiceClassificationLabels.UNKNOWN
-            else:
-                label_service = None
-
-            if source:
-                try:
-                    source = Sources(source)
-                except:  # unknown source
-                    source = Sources.UNKOWN
-
-            yield ScrapedData(
-                url=url,
-                last_scraped=last_scraped,
-                title=title,
-                content=content,
-                author=author,
-                date=date,
-                categories=categories,
-                label_relevance=label_relevance,
-                label_service=label_service,
-                source=source,
+            yield ScrapedData.from_dict(
+                {
+                    "url" : url,
+                    "last_scraped" : last_scraped,
+                    "title" : title,
+                    "content" : content,
+                    "author" : author,
+                    "date" : date,
+                    "label_relevance" : label_relevance,
+                    "label_service" : label_service,
+                    "source" : source,
+                    "categories" : categories,
+                }
             )
         
     def _get_all_from_firestore(
@@ -398,21 +374,13 @@ class BigQueryManager(BasePersistencyManager):
         if not url_data:
             return
 
-        data_to_insert = [dataclasses.asdict(data) for data in url_data]
+        data_to_insert = [data.to_dict() for data in url_data]
         for data in data_to_insert:
-            label_relevance: RelevanceClassificationLabels = data["label_relevance"]
-            data["label_relevance"] = label_relevance.value if label_relevance else label_relevance 
-            label_service: ServiceClassificationLabels = data["label_service"]
-            data["label_service"] = label_service.value if label_service else label_service 
-            source: Sources = data["source"]
-            data["source"] = source.value if source else source
-            data["last_scraped"] = datetime.datetime.strftime( data["last_scraped"], self.bq_date_format) if data["last_scraped"] else None
-
+            
             # truncate content if necessary
             content : str = data.get("content")
             if content and len(content) > self.gcloud_max_content_len:
                 data['content'] = content[:self.gcloud_max_content_len]
-            
 
         del url_data
 
