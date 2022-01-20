@@ -447,6 +447,8 @@ class Manager:
                     if x.label_service == None and \
                     x.label_relevance == RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO
                 )[:limit]
+        else:
+            raise ValueError(f"Invalid type of classifier: {type}")
 
         # classify
         results = self.run_classification_from_experiment(branch, experiment, data, type = type)
