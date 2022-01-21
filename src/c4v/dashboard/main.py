@@ -151,7 +151,7 @@ def run_local_classification_callback():
 def run_cloud_classification_callback():
     sl.info("Running classification process, this might take a while...")
     try:
-        app.classify(classifier_type, max_rows_to_classify)
+        app.classify(classifier_type, max_rows_to_classify, type=classifier_type)
         sl.success("Classification finished")
     except Exception as e:
         sl.error(

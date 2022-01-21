@@ -116,7 +116,6 @@ class App:
                 else d.content[:max_content_len] + "..."
             )
             elems.append(d)
-            print(d.last_scraped)
             # d.last_scraped = None
             # break if gathered enough rows
             if len(elems) == max_rows:
@@ -191,9 +190,11 @@ class App:
                 + relevance (default)
                 + service
         """
-        self._manager.run_pending_classification_from_experiment(
-            branch_name, experiment_name, limit=limit, type=type
-        )
+        import torch
+        with torch.no_grad():
+            self._manager.run_pending_classification_from_experiment(
+                branch_name, experiment_name, limit=limit, type=type
+            )
 
     def crawl(
         self,
@@ -277,7 +278,7 @@ class CloudApp(App):
             Move data from firestore to big query
         """
         # Assume that this persistency manager is a big query one
-        self.manager.persistency_manager.move()
+        self.manager.pe.move()
         
 
     def _make_request(self, url : str, data : Dict[str, Any]) -> Dict[str, Any]:

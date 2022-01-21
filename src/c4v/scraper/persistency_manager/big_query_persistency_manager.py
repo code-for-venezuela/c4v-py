@@ -226,7 +226,7 @@ class BigQueryManager(BasePersistencyManager):
         if scraped == False: 
             return 
 
-        for x in self._get_all_from_bq(limit, scraped , order_by):
+        for x in self._get_all_from_bq(limit - returned if limit > 0 else limit, scraped , order_by):
             yield x
 
 

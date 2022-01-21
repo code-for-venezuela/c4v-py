@@ -14,6 +14,7 @@ from c4v.cloud.gcloud_storage_manager import ClassifierType
 # Third party imports
 import flask
 from google.cloud import bigquery, logging
+import torch
 
 def classify(request : flask.Request):
     """
@@ -48,7 +49,7 @@ def classify(request : flask.Request):
     # Download classifier type 
     logger.log_text(f"Downloading classifier of type '{config.type}'")
     #Cloud function vm is a read only s/m. The only writable place is the tmp folder
-    path = Path("/tmp/c4v/experiments/classifier")
+    path = Path(f"/tmp/c4v/experiments/{config.type}")
     if not path.exists():
         path.mkdir(parents=True) # Create folder if not exists
         config.manager.download_model_to_directory(str(path), config.type)
@@ -63,13 +64,12 @@ def classify(request : flask.Request):
 
     # now that the classifier model is properly downloaded, run a classification
     logger.log_text("Classifying rows...")
-    config.manager.run_pending_classification_from_experiment("classifier", classifier_name, limit=config.limit, type=config.type)
+
+    with torch.no_grad():
+        config.manager.run_pending_classification_from_experiment(config.type, classifier_name, limit=config.limit, type=config.type)
 
     # Free resources
-    del config.manager
-    shutil.rmtree(str(path))
-    gc.collect()
-
+    config.clear_manager()
 
     return flask.jsonify({"status" : "success"})
 
@@ -123,11 +123,17 @@ class ClassifierConfig:
 
         self._error = None
 
+    def clear_manager(self):
+        """
+            Free memory 
+        """
+        del self._manager
+        gc.collect()
+
     @staticmethod
     def _set_up_settings():
         settings.c4v_folder = "/tmp/c4v"
         settings.experiments_dir = "/tmp/c4v/experiments"
-
 
     @property
     def type(self) -> str:
