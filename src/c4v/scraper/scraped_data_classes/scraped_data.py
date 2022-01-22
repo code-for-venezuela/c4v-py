@@ -32,7 +32,7 @@ class LabelSet(enum.Enum):
         """
             A list with every possible label string for this labelset
         """
-        return [x.name for x in cls]
+        return [x.value for x in cls]
 
     @classmethod
     def get_id2label_dict(cls) -> Dict[int, str]:
