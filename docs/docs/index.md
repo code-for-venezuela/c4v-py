@@ -21,6 +21,12 @@ Use pip to install the package:
 pip install c4v-py
 ```
 
+### Installation profiles 
+You can access to multiple installation profiles to fit your specific needs of the library, and match the type
+of environment you need:
+
+TODO
+
 ## Usage
 The c4v-py package can be used either as a command line tool and as 
 a library.
