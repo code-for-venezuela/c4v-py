@@ -1,4 +1,7 @@
 # Creating a Crawler
+The base crawler works by scanning a site's sitemap looking for new urls to scrape. Creating a new crawler is about **telling the crawler how to 
+look for new urls in the sitemap.** 
+
 To create a crawler, all you need to do is to implement the base class `BaseCrawler` in `c4v.scraper.crawler.crawlers.base_crawler`. To do so, you have to provide an implementation for the required methods, a crawler `name`, and its `start_sitemap_url`. 
 
 For example:
@@ -28,10 +31,10 @@ class SampleCrawler(BaseCrawler):
 
 Usually, sitemaps are compound by more sitemaps, and this method will tell the crawler **which of those sub sitemaps are desired**. A common approach to check if this specific sitemap is useful or not is **checking its url**, as it might contain some specific patterns to imply some meaning.
 
-With all this done, we already have a fully functional crawler, but **it's not yet available to the library** for some common operations, such as trigerring a crawling  for this new site.
 
-## Fine grained url filtering
+### Fine grained url filtering
 Maybe you want to perform some checking for each url that is to be scraped in the future, in order to do this, you can *optionally* implement the `should_scrape` method that will check if each url is a valid one.
+
 
 ```python
 class SampleCrawler(BaseCrawler):
@@ -43,7 +46,8 @@ class SampleCrawler(BaseCrawler):
         return url.startswith("https://samplesite.com") and len(url) > 42
 ```
 
-# Adding a crawler
+With all this done, we already have a fully functional crawler, but **it's not yet available to the library** for some common operations, such as trigerring a crawling  for this new site.
+## Adding a crawler
 
 To add a crawler, all we need to do is to add its class to the `INSTALLED_CRAWLERS` list in the `c4v.scraper.settings` file:
 ```python
@@ -56,7 +60,7 @@ INSTALLED_CRAWLERS: List[Type[BaseCrawler]] = [
 ```
 Now our new crawler will be available for common operations with scrapers, it will be recognized by the `microscope.Manager` object and it will be available for the CLI
 
-# Adding irrelevant articles filtering
+## Adding irrelevant articles filtering
 Sometimes we need to create a dataset with **non-relevant labeled data**, and label a lot of rows by hand can be a tiresome and time consuming task. In this case, you can specify the crawler that you want to crawl **only links that hold irrelevant information**.
 
 To do this, you can provide a list `IRRELEVANT_URLS` with **regex patterns** for links that you already know that are ensured to be irrelevant for your use case.
