@@ -23,9 +23,7 @@ pip install c4v-py
 
 ### Installation profiles 
 You can access to multiple installation profiles to fit your specific needs of the library, and match the type
-of environment you need:
-
-TODO
+of environment you need. More about it [here](usage/installation.md)
 
 ## Usage
 The c4v-py package can be used either as a command line tool and as 
