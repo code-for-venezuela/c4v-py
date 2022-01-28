@@ -8,7 +8,10 @@ from typing import Callable, List
 import c4v.microscope as ms
 from c4v.microscope.metadata import Metadata
 from c4v.config import PersistencyManagers, settings
-from c4v.scraper.scraped_data_classes.scraped_data import ServiceClassificationLabels, RelevanceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    ServiceClassificationLabels,
+    RelevanceClassificationLabels,
+)
 
 # Python imports
 from pathlib import Path
@@ -33,16 +36,16 @@ class App:
     ]
 
     # Service options
-    service_options : List[str] = [
+    service_options: List[str] = [
         "ANY",
         *ServiceClassificationLabels.labels(),
-        "NO LABEL"
+        "NO LABEL",
     ]
 
     # Valid options for scraped
     scraped_options: List[str] = ["Any", "Yes", "No"]
 
-    def __init__(self, manager : ms.Manager = None) -> None:
+    def __init__(self, manager: ms.Manager = None) -> None:
 
         self._manager = manager or ms.Manager.from_default()
 
@@ -70,7 +73,9 @@ class App:
             - scraped : `str` = (optional) if the instances should be scraped.
         """
         # Some sanity check
-        assert label_relevance in App.relevance_options, f"invalid label: {label_relevance}"
+        assert (
+            label_relevance in App.relevance_options
+        ), f"invalid label: {label_relevance}"
         assert label_service in App.service_options, f"invalid label: {label_service}"
         assert scraped in App.scraped_options, f"invalid scraped option: {scraped}"
 
@@ -83,13 +88,21 @@ class App:
         if label_relevance == "NO LABEL":
             query = (x for x in query if not x.label_relevance)
         elif label_relevance != "ANY":
-            query = (x for x in query if x.label_relevance and x.label_relevance.value == label_relevance)
-        
+            query = (
+                x
+                for x in query
+                if x.label_relevance and x.label_relevance.value == label_relevance
+            )
+
         # Add filtering
         if label_service == "NO LABEL":
             query = (x for x in query if not x.label_service)
         elif label_service != "ANY":
-            query = (x for x in query if x.label_service and x.label_service.value == label_service)
+            query = (
+                x
+                for x in query
+                if x.label_service and x.label_service.value == label_service
+            )
 
         elems = []
         for d in query:
@@ -98,10 +111,10 @@ class App:
             # Reformat enum fields
             if d.source:
                 d.source = d.source.value
-                
+
             if d.label_relevance:
                 d.label_relevance = d.label_relevance.value
-            
+
             if d.label_service:
                 d.label_service = d.label_service.value
 
@@ -120,7 +133,7 @@ class App:
             # break if gathered enough rows
             if len(elems) == max_rows:
                 break
-        
+
         return pd.DataFrame(elems)
 
     @property
@@ -179,7 +192,13 @@ class App:
 
         return summary_path.read_text()
 
-    def classify(self, branch_name: str, experiment_name: str, limit: int = -1, type : str = "relevance"):
+    def classify(
+        self,
+        branch_name: str,
+        experiment_name: str,
+        limit: int = -1,
+        type: str = "relevance",
+    ):
         """
         Run a classification process.
         # Parameters
@@ -191,6 +210,7 @@ class App:
                 + service
         """
         import torch
+
         with torch.no_grad():
             self._manager.run_pending_classification_from_experiment(
                 branch_name, experiment_name, limit=limit, type=type
@@ -233,7 +253,7 @@ class App:
         """
         Upload a classifier model
         """
-        self.manager.upload_model(branch,experiment, type)
+        self.manager.upload_model(branch, experiment, type)
 
     def download_model_of_type(self, path: str, type: str):
         """
@@ -248,40 +268,59 @@ class App:
         """
         return CloudApp()
 
+
 class CloudApp(App):
     """
         App implementation based on cloud actions. Will override 
         operations like scraping, crawling and classifying to perform a cloud request 
     """
+
     def __init__(self) -> None:
 
         metadata = Metadata(persistency_manager=PersistencyManagers.GCLOUD.value)
         manager = ms.Manager.from_default(metadata=metadata)
         super().__init__(manager=manager)
 
-    def classify(self, branch_name: str, experiment_name: str, type : str = "relevance", limit: int = -1):
-        result = self._make_request(settings.classify_cloud_url_trigger, {"type" : type, "limit" : limit})
-    
+    def classify(
+        self,
+        branch_name: str,
+        experiment_name: str,
+        type: str = "relevance",
+        limit: int = -1,
+    ):
+        result = self._make_request(
+            settings.classify_cloud_url_trigger, {"type": type, "limit": limit}
+        )
+
     def scrape(self, limit: int) -> int:
-        result = self._make_request(settings.scraping_cloud_url_trigger, {"limit" : limit})
+        result = self._make_request(
+            settings.scraping_cloud_url_trigger, {"limit": limit}
+        )
         # Return response code
         return 0 if result.get("status") == "success" else 1
-    
-    def crawl(self, crawlers_to_use: List[str], limit: int, progress_function: Callable[[List[str]], None]):
-        
+
+    def crawl(
+        self,
+        crawlers_to_use: List[str],
+        limit: int,
+        progress_function: Callable[[List[str]], None],
+    ):
+
         # Perform request
-        result = self._make_request(settings.crawling_cloud_url_trigger, {"crawler_names" : crawlers_to_use, "limit" : limit})
+        result = self._make_request(
+            settings.crawling_cloud_url_trigger,
+            {"crawler_names": crawlers_to_use, "limit": limit},
+        )
         progress_function(["" for _ in range(result.get("crawled", 0))])
-    
+
     def move(self):
         """
             Move data from firestore to big query
         """
         # Assume that this persistency manager is a big query one
         self.manager.pe.move()
-        
 
-    def _make_request(self, url : str, data : Dict[str, Any]) -> Dict[str, Any]:
+    def _make_request(self, url: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """
             Perform a post request to the url "url" providing the data in "data"
             and return retrieved answer as dict
@@ -290,27 +329,26 @@ class CloudApp(App):
             import google.auth.transport.requests as google_requests
             import google.oauth2.id_token as google_token
         except ImportError as e:
-            raise ImportError(f"Could not import google cloud related dependencies. Maybe you're missing the 'gcloud' installation profile?. Error: {e}")
+            raise ImportError(
+                f"Could not import google cloud related dependencies. Maybe you're missing the 'gcloud' installation profile?. Error: {e}"
+            )
 
         import json
 
         # Create post request and encode data
-        req = request.Request(url, method= "POST", 
-            data = 
-                str(
-                    json.dumps(data)
-                ).encode("utf-8")
-            )
-        
-        # Get auth token 
+        req = request.Request(
+            url, method="POST", data=str(json.dumps(data)).encode("utf-8")
+        )
+
+        # Get auth token
         auth_req = google_requests.Request()
         id_token = google_token.fetch_id_token(auth_req, url)
 
         # set proper headers
         req.add_header("Authorization", f"Bearer {id_token}")
-        req.add_header('content-type', 'application/json')
-        
-        # Get response 
+        req.add_header("content-type", "application/json")
+
+        # Get response
         response = request.urlopen(req)
         result = response.read()
 

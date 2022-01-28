@@ -102,7 +102,7 @@ class ClassifierExperiment(BaseExperiment):
         super().__init__(experiment_fs_manager=experiment_fs_manager)
 
         # Set up default values
-        if not classifier_instance: # default classifier is a relevance classifier
+        if not classifier_instance:  # default classifier is a relevance classifier
             classifier_instance = Classifier.relevance()
 
         self._classifier = classifier_instance
@@ -118,7 +118,7 @@ class ClassifierExperiment(BaseExperiment):
         # Run a training process
         self._classifier.labelset = args.labelset
         self._classifier.label_column = args.label_column
-        
+
         metrics = self._classifier.run_training(
             args.training_args,
             columns=args.columns,
@@ -134,14 +134,16 @@ class ClassifierExperiment(BaseExperiment):
 
         if not args.labelset:
             raise ValueError("labelset not provided in classifier experiment")
-            
+
         summary = ClassifierSummary(
             eval_metrics=metrics, description=args.description, user_args=args
         )
         print(summary)
         return summary
 
-    def classify(self, data: List[ScrapedData], scraped_data_label_field : str) -> List[Dict[str, Any]]:
+    def classify(
+        self, data: List[ScrapedData], scraped_data_label_field: str
+    ) -> List[Dict[str, Any]]:
         """
             Classify this sentence using configured experiment
             Parameters:
@@ -153,7 +155,9 @@ class ClassifierExperiment(BaseExperiment):
                     + data : ScrapedData = resulting data instance after classification
                     + scores : torch.Tensor = Scores for each label returned by the classifier
         """
-        return self._classifier.classify(data, scraped_data_label_field=scraped_data_label_field)
+        return self._classifier.classify(
+            data, scraped_data_label_field=scraped_data_label_field
+        )
 
     def explain(
         self, sentence: str, html_file: str = None, additional_label: str = None
@@ -186,7 +190,7 @@ class ClassifierExperiment(BaseExperiment):
         branch_name: str,
         experiment_name: str,
         classifier_instance: Classifier = None,
-        type : str = None
+        type: str = None,
     ):
         """
             Create an experiment from a branch name, an experiment name, and a classifier instance
@@ -203,13 +207,13 @@ class ClassifierExperiment(BaseExperiment):
         if classifier_instance:
             classifier_instance.files_folder_path = fs_manager.experiment_content_folder
 
-        if not classifier_instance:        
-            if type == "relevance" or type is None: # relevance is default
+        if not classifier_instance:
+            if type == "relevance" or type is None:  # relevance is default
                 classifier_instance = Classifier.relevance(
-                                        files_folder_path=fs_manager.experiment_content_folder
-                                    )
+                    files_folder_path=fs_manager.experiment_content_folder
+                )
             elif type == "service":
                 classifier_instance = Classifier.service(
-                                        files_folder_path=fs_manager.experiment_content_folder
-                                    ) 
+                    files_folder_path=fs_manager.experiment_content_folder
+                )
         return cls(fs_manager, classifier_instance)

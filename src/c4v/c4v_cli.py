@@ -44,9 +44,7 @@ def c4v_cli():
         except Exception as e:
             CLIClient.error(f"Could not create '{path}' folder: {e}")
     elif not path.is_dir():
-        CLIClient.error(
-            f"Files folder '{path}' already exists but it's not a file."
-        )
+        CLIClient.error(f"Files folder '{path}' already exists but it's not a file.")
 
 
 @c4v_cli.command()
@@ -222,7 +220,7 @@ def list(
 @click.option("--file", is_flag=True, help="Get urls of news to classify from a file")
 @click.option(
     "--limit",
-    is_flag=False, 
+    is_flag=False,
     default=-1,
     help="Limit how much instances to classify in this run. Specially usefull when classifying pending data, if less than 0, then select as much as you can (default). Otherwise, classify at the most the given number",
     type=int,
@@ -280,7 +278,9 @@ def classify(
         CLIClient.error(f"Could not classify provided data.\n\tError: {e}")
         return
     except ModuleNotFoundError as e:
-        CLIClient.error(f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}")
+        CLIClient.error(
+            f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}"
+        )
         return
 
     # Pretty print results:
@@ -345,15 +345,21 @@ def dashboard():
     """
     # Try to import streamlit
     try:
-        import streamlit 
+        import streamlit
         import streamlit.cli as slcli
     except ModuleNotFoundError as e:
-        CLIClient.error(f"Streamlit package not found, you might want to install the corresponding profile for this library. Error: {e}") 
+        CLIClient.error(
+            f"Streamlit package not found, you might want to install the corresponding profile for this library. Error: {e}"
+        )
         return
-    
+
     import sys
 
-    sys.argv = ["streamlit", "run", str(Path(Path(__file__).parent, "dashboard", "main.py"))]
+    sys.argv = [
+        "streamlit",
+        "run",
+        str(Path(Path(__file__).parent, "dashboard", "main.py")),
+    ]
     CLIClient.info("Starting c4v dashboard...")
     sys.exit(slcli.main())
 
@@ -424,14 +430,16 @@ def explain(
     try:
         possible_labels = microscope_manager.get_classifier_labels()
     except ModuleNotFoundError as e:
-        CLIClient.error(f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}")
+        CLIClient.error(
+            f"Could not found some modules, maybe you should try to change the installation profile of c4v. Erro: {e}"
+        )
         return
 
     if label and label not in possible_labels:
         CLIClient.warn(
-            f"Provided label not a valid label, ignoring label argument {label}.\n" +\
-            f"Possible Labels:\n" +\
-            "\n".join(f"\t* {l}" for l in possible_labels)
+            f"Provided label not a valid label, ignoring label argument {label}.\n"
+            + f"Possible Labels:\n"
+            + "\n".join(f"\t* {l}" for l in possible_labels)
         )
         label = None
 
@@ -464,9 +472,7 @@ def experiment():
         try:
             path.mkdir()
         except Exception as e:
-            CLIClient.error(
-                f"Could not create folder due to the following error: {e}",
-            )
+            CLIClient.error(f"Could not create folder due to the following error: {e}",)
 
     elif not path.is_dir():
         CLIClient.error(
@@ -533,18 +539,19 @@ def summary(experiment: str):
     path = Path(settings.experiments_dir, branch_name, experiment_name, "summary.txt")
     # Check if file exists
     if not path.exists():
-        CLIClient.error(
-            f"Summary for experiment {experiment} not found in {path}"
-        )
+        CLIClient.error(f"Summary for experiment {experiment} not found in {path}")
         return
     elif not path.is_file():
-        CLIClient.error(f"Sumamry for experiment {experiment} in {path} is not a valid file")
+        CLIClient.error(
+            f"Sumamry for experiment {experiment} in {path} is not a valid file"
+        )
         return
 
     # As everything went ok, print file content
     CLIClient.info(f"Reading summary from: {path}")
 
     click.echo(path.read_text())
+
 
 @experiment.command()
 @click.argument("experiment", nargs=1)
@@ -574,6 +581,7 @@ def upload(experiment: str, type: str):
         CLIClient.error(f"Could not upload model. Error: {e}")
         exit(1)
 
+
 @experiment.command()
 @click.argument("path", nargs=1)
 @click.argument("type", nargs=1)
@@ -585,7 +593,7 @@ def download(path: str, type: str):
         Example:
             - c4v experiment upload my_experiment/my_branch
     """
-    
+
     # Check that path exists and it's a folder
     path_obj = pathlib.Path(path)
 
@@ -601,10 +609,11 @@ def download(path: str, type: str):
 
     # Try to download model
     try:
-        client.manager.download_model_to_directory(path,type)
+        client.manager.download_model_to_directory(path, type)
     except Exception as e:
         CLIClient.error(f"Could not download model. Error: {e}")
         exit(1)
+
 
 class CLIClient:
     """
@@ -656,8 +665,10 @@ class CLIClient:
 
         # Warn the user that some urls won't be scraped
         if non_scrapables:
-            warn_msg = "Some urls won't be retrieved, as they are not scrapable for now.\n"
-            warn_msg += "Non-scrapable urls:\n" 
+            warn_msg = (
+                "Some urls won't be retrieved, as they are not scrapable for now.\n"
+            )
+            warn_msg += "Non-scrapable urls:\n"
             warn_msg += "\n".join(f"\t* {url}" for url in non_scrapables)
             CLIClient.warn(warn_msg)
 
@@ -675,12 +686,12 @@ class CLIClient:
         if any(url not in succesfully_retrieved for url in scrapable_urls):
             warn_msg = f"Some urls couldn't be retrieved: \n"
             warn_msg += "\n".join(
-                    [
-                        f"\t* {url}"
-                        for url in scrapable_urls
-                        if url not in succesfully_retrieved
-                    ]
-                )
+                [
+                    f"\t* {url}"
+                    for url in scrapable_urls
+                    if url not in succesfully_retrieved
+                ]
+            )
             CLIClient.warn(warn_msg)
 
         return data
@@ -713,10 +724,12 @@ class CLIClient:
                 branch, name = branch_and_name
                 return (branch, name)
         CLIClient.error(
-            f"Given experiment name is not valid: {line}. Should be of the form:\n" +\
-            "\n".join(f"\tbranch_name{separator}experiment_name" for separator in separators)
+            f"Given experiment name is not valid: {line}. Should be of the form:\n"
+            + "\n".join(
+                f"\tbranch_name{separator}experiment_name" for separator in separators
+            )
         )
-        
+
         return None
 
     def crawl_new_urls_for(
@@ -744,14 +757,17 @@ class CLIClient:
         # Report warning if there's some non registered crawlers
         if not_registered:
             err_msg = "Some names in given name list don't correspond to any registered crawler.\n"
-            err_msg +=  "Unregistered crawler names: \n" + \
-                        "\n".join([f"\t* {name}" for name in not_registered])
+            err_msg += "Unregistered crawler names: \n" + "\n".join(
+                [f"\t* {name}" for name in not_registered]
+            )
 
             CLIClient.warn(err_msg)
 
         try:
             self._manager.crawl_and_process_new_urls_for(
-                [c for c in crawler_names if c not in not_registered], process, limit=limit
+                [c for c in crawler_names if c not in not_registered],
+                process,
+                limit=limit,
             )
         except requests.exceptions.ConnectionError as e:
             CLIClient.error(f"Couldn't crawl new urls due to connection error: {e}")
@@ -783,7 +799,7 @@ class CLIClient:
         return [str(x.name) for x in Path(path).glob("*")]
 
     @staticmethod
-    def info(msg : str):
+    def info(msg: str):
         """
             Info a message to stdout using the click echo function using the
             following format:
@@ -793,7 +809,7 @@ class CLIClient:
             click.echo(f"[INFO] {msg}")
 
     @staticmethod
-    def success(msg : str):
+    def success(msg: str):
         """
             Log a success message to stdout using the click echo function using the
             following format:
@@ -803,7 +819,7 @@ class CLIClient:
             click.echo(f"[SUCCESS] {msg}")
 
     @staticmethod
-    def warn(msg : str):
+    def warn(msg: str):
         """
             Warn a message to stderr using the click echo function using the
             following format:
@@ -813,7 +829,7 @@ class CLIClient:
             click.echo(f"[WARN] {msg}", err=True)
 
     @staticmethod
-    def error(msg : str):
+    def error(msg: str):
         """
             Log an error message to stderr using the click echo function using the
             following format:
@@ -821,7 +837,7 @@ class CLIClient:
         """
         if settings.cli_logging_level >= 7:
             click.echo(f"[ERROR] {msg}", err=True)
-    
+
 
 if __name__ == "__main__":
     c4v_cli()

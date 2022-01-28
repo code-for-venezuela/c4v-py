@@ -81,5 +81,6 @@ class DictManager(BasePersistencyManager):
             if self._stored_data.get(url):
                 del self._stored_data[url]
 
+
 def get_persistency_manager():
     return DictManager()

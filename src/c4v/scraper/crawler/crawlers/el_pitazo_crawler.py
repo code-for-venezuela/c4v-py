@@ -5,6 +5,7 @@
 # Local imports
 from c4v.scraper.crawler.crawlers import base_crawler
 
+
 class ElPitazoCrawler(base_crawler.BaseCrawler):
     """
         Class to crawl El Pitazo urls 

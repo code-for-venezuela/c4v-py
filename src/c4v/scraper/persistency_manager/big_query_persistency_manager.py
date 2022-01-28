@@ -11,7 +11,12 @@ import datetime
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
-from c4v.scraper.scraped_data_classes.scraped_data import ServiceClassificationLabels, RelevanceClassificationLabels, ScrapedData, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    ServiceClassificationLabels,
+    RelevanceClassificationLabels,
+    ScrapedData,
+    Sources,
+)
 from c4v.config import settings
 import uuid
 
@@ -23,7 +28,6 @@ from firebase_admin import firestore
 from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 import datetime
 import pytz
-
 
 
 DATE_FORMAT = settings.date_format
@@ -46,11 +50,17 @@ class BigQueryManager(BasePersistencyManager):
         - bq_client : `bigquery.Client` = client object to use 
         - project_id : `str` = name of the project in gcloud to connect to in order to access firestore
                                 (you can fill it by using the C4V_GCLOUD_PROJECT_ID variable)
-    """                         
+    """
 
     _firestore_db = None
 
-    def __init__(self, table_name : str, bq_client : bigquery.Client, project_num : str, gcloud_max_content_len : int = settings.gcloud_max_content_len):
+    def __init__(
+        self,
+        table_name: str,
+        bq_client: bigquery.Client,
+        project_num: str,
+        gcloud_max_content_len: int = settings.gcloud_max_content_len,
+    ):
         self._table_name = table_name
         self._client = bq_client
         self._project_num = project_num
@@ -71,17 +81,17 @@ class BigQueryManager(BasePersistencyManager):
 
     @property
     def _firestore_scraped_data_table_name(self) -> str:
-        return u"scraped_data"
+        return "scraped_data"
 
-    @property 
+    @property
     def _firestore_db_ref(self) -> Any:
         return self._firestore_db.collection(self._firestore_scraped_data_table_name)
 
     @property
     def bq_date_format(self) -> str:
-        # Required to send data to big query on list of json 
-        return  "%Y-%m-%d %H:%M:%S.%f"
-    
+        # Required to send data to big query on list of json
+        return "%Y-%m-%d %H:%M:%S.%f"
+
     @property
     def gcloud_max_content_len(self) -> int:
         """
@@ -93,15 +103,17 @@ class BigQueryManager(BasePersistencyManager):
         """
             Initialization code for firestore
         """
-        if (BigQueryManager._firestore_db != None):
-            return # nothing to init
+        if BigQueryManager._firestore_db != None:
+            return  # nothing to init
 
         self._credentials = credentials.ApplicationDefault()
-        firebase_admin.initialize_app(self._credentials, {
-        # 'projectId': self._project_num,
-        })
+        firebase_admin.initialize_app(
+            self._credentials,
+            {
+                # 'projectId': self._project_num,
+            },
+        )
         BigQueryManager._firestore_db = firestore.client()
-
 
     def _get_all_from_bq(
         self, limit: int = -1, scraped: bool = None, order_by: List[str] = None
@@ -110,7 +122,7 @@ class BigQueryManager(BasePersistencyManager):
             Get all data from Big Query according to the get all arguments
         """
         # Retrieve all data stored
-        
+
         # Create the query string
         # Order
         if order_by:
@@ -144,26 +156,41 @@ class BigQueryManager(BasePersistencyManager):
         res = self.client.query(query)
         for row in res:
             # Decompose row
-            (url, last_scraped, title, content, author, date, label_relevance, label_service, source, categories) = row
+            (
+                url,
+                last_scraped,
+                title,
+                content,
+                author,
+                date,
+                label_relevance,
+                label_service,
+                source,
+                categories,
+            ) = row
 
             yield ScrapedData.from_dict(
                 {
-                    "url" : url,
-                    "last_scraped" : last_scraped,
-                    "title" : title,
-                    "content" : content,
-                    "author" : author,
-                    "date" : date,
-                    "label_relevance" : label_relevance,
-                    "label_service" : label_service,
-                    "source" : source,
-                    "categories" : categories,
+                    "url": url,
+                    "last_scraped": last_scraped,
+                    "title": title,
+                    "content": content,
+                    "author": author,
+                    "date": date,
+                    "label_relevance": label_relevance,
+                    "label_service": label_service,
+                    "source": source,
+                    "categories": categories,
                 }
             )
-        
+
     def _get_all_from_firestore(
-        self, limit: int = -1, scraped: bool = None, order_by: List[str] = None, ready : bool = None
-        ) -> Iterator[ScrapedData]:
+        self,
+        limit: int = -1,
+        scraped: bool = None,
+        order_by: List[str] = None,
+        ready: bool = None,
+    ) -> Iterator[ScrapedData]:
         """
             Get all data from Firestore according to the get all arguments.
             Firestore data will have the following format:
@@ -185,18 +212,21 @@ class BigQueryManager(BasePersistencyManager):
 
         # If scraped specified
         if scraped == True:
-            scraped_data_ref = scraped_data_ref.where(u'was_scraped', u'==', True)
+            scraped_data_ref = scraped_data_ref.where("was_scraped", "==", True)
         elif scraped == False:
-            scraped_data_ref = scraped_data_ref.where(u'was_scraped', u'==', False)
-        
+            scraped_data_ref = scraped_data_ref.where("was_scraped", "==", False)
+
         # If ready specified
         if ready != None:
             assert isinstance(ready, bool), "ready argument should be bool"
-            scraped_data_ref = scraped_data_ref.where(u'is_ready_for_bq', u'==', ready)
+            scraped_data_ref = scraped_data_ref.where("is_ready_for_bq", "==", ready)
 
         # if order by is provided:
         if order_by:
-            parsed_orders = (self._parse_order_and_field_from_order_by_str(order, True) for order in order_by)
+            parsed_orders = (
+                self._parse_order_and_field_from_order_by_str(order, True)
+                for order in order_by
+            )
             for (order, field) in parsed_orders:
                 scraped_data_ref = scraped_data_ref.order_by(field, direction=order)
 
@@ -204,33 +234,40 @@ class BigQueryManager(BasePersistencyManager):
         if limit > 0:
             scraped_data_ref = scraped_data_ref.limit(limit)
 
-        return ( self._from_firestore_to_scraped_data(x) for x in scraped_data_ref.stream())
-    
-    def get_all(self, limit: int = -1, scraped: bool = None, order_by: List[str] = None) -> Iterator[ScrapedData]:
+        return (
+            self._from_firestore_to_scraped_data(x) for x in scraped_data_ref.stream()
+        )
+
+    def get_all(
+        self, limit: int = -1, scraped: bool = None, order_by: List[str] = None
+    ) -> Iterator[ScrapedData]:
         # Merge data from firestore to bq
         # TODO Create a merge function to merge results in both queries
 
         returned = 0
-        for x in self._get_all_from_firestore(limit, scraped , order_by):
+        for x in self._get_all_from_firestore(limit, scraped, order_by):
             yield x
             returned += 1
 
         # Sanity check
-        assert returned <= limit or limit < 0, "There should not be more returned urls than the provided limit"
+        assert (
+            returned <= limit or limit < 0
+        ), "There should not be more returned urls than the provided limit"
 
-        # Check if already at the max 
+        # Check if already at the max
         if returned == limit and limit > 0:
             return
 
         # This is an optimization, there's no non-scraped data in BQ
-        if scraped == False: 
-            return 
+        if scraped == False:
+            return
 
-        for x in self._get_all_from_bq(limit - returned if limit > 0 else limit, scraped , order_by):
+        for x in self._get_all_from_bq(
+            limit - returned if limit > 0 else limit, scraped, order_by
+        ):
             yield x
 
-
-    def _from_firestore_to_scraped_data(self, data : Any) -> ScrapedData:
+    def _from_firestore_to_scraped_data(self, data: Any) -> ScrapedData:
         """
             Used to convert from firestore stored object to actual scraped data object.
             It will remove the firestore-specific fields.
@@ -238,12 +275,12 @@ class BigQueryManager(BasePersistencyManager):
             
         """
         data = data.to_dict()
-        del data['was_scraped']
-        del data['is_ready_for_bq']
+        del data["was_scraped"]
+        del data["is_ready_for_bq"]
 
         return ScrapedData.from_dict(data)
 
-    def _from_scraped_data_to_firestore(self, scraped_data : ScrapedData) -> ScrapedData:
+    def _from_scraped_data_to_firestore(self, scraped_data: ScrapedData) -> ScrapedData:
         """
             Used to convert from actual scraped data to an actual firestore storable object.
             It will add firestore-specific fields:
@@ -251,42 +288,53 @@ class BigQueryManager(BasePersistencyManager):
                 - is_ready_for_bq : bool = tells if this instance can be saved into big query
         """
         d = scraped_data.to_dict()
-        d['was_scraped'] = scraped_data.is_scraped
-        d["is_ready_for_bq"] = scraped_data.label_relevance != None and scraped_data.label_relevance != None and scraped_data.is_scraped
+        d["was_scraped"] = scraped_data.is_scraped
+        d["is_ready_for_bq"] = (
+            scraped_data.label_relevance != None
+            and scraped_data.label_relevance != None
+            and scraped_data.is_scraped
+        )
 
         return d
-    
+
     def _filter_scraped_urls_bq(self, urls: List[str]) -> List[str]:
         return self._filter_known_urls_bq(urls)
 
     def _filter_scraped_urls_firestore(self, urls: List[str]) -> List[str]:
         # Get table reference
-        scraped_data_ref = self._firestore_db.collection(self._firestore_scraped_data_table_name)
+        scraped_data_ref = self._firestore_db.collection(
+            self._firestore_scraped_data_table_name
+        )
 
         # Max ammount of elements in "in" query of firestore
         chunk_size = 10
 
-        # get urls such that there's not 
+        # get urls such that there's not
         lo = 0
         result = []
-        while (lo < len(urls)):
+        while lo < len(urls):
             # Current chunk to check
-            chunk = set(urls[lo:lo + chunk_size])
+            chunk = set(urls[lo : lo + chunk_size])
 
             # Urls that are both in the list and scraped
-            scraped_urls = {x.get("url") for x in scraped_data_ref.where("url", 'in', chunk).where("was_scraped", "==", True).stream()}
-            
+            scraped_urls = {
+                x.get("url")
+                for x in scraped_data_ref.where("url", "in", chunk)
+                .where("was_scraped", "==", True)
+                .stream()
+            }
+
             for url in chunk:
                 if url not in scraped_urls:
                     result.append(url)
 
             # firestore has a max "in" query size of 10
             lo += chunk_size
-        
+
         return result
 
     def filter_scraped_urls(self, urls: List[str]) -> List[str]:
-        # Just filter from firestore what was filtered from bq. 
+        # Just filter from firestore what was filtered from bq.
         # Note that bq might be a more precise tool as it holds only complete data
         return self._filter_scraped_urls_firestore(self._filter_scraped_urls_bq(urls))
 
@@ -295,13 +343,11 @@ class BigQueryManager(BasePersistencyManager):
         # Otherwise it is unkown for the DB, and thus it's also not scraped
         query_str = f"SELECT url FROM `{self.table_name}` WHERE url in UNNEST(@url);"
         job_config = bigquery.QueryJobConfig(
-            query_parameters=[
-                bigquery.ArrayQueryParameter("url", "STRING", urls)
-            ]
+            query_parameters=[bigquery.ArrayQueryParameter("url", "STRING", urls)]
         )
 
-        # Create a set to discard results in such set 
-        res : Set(str)= set(urls)
+        # Create a set to discard results in such set
+        res: Set(str) = set(urls)
 
         # if last_scraped is null, then it wasn't scraped
         query = self.client.query(query_str, job_config=job_config)
@@ -310,33 +356,38 @@ class BigQueryManager(BasePersistencyManager):
             # Remove urls in DB
             if url in res:
                 res.remove(url)
-        
+
         return list(res)
 
     def _filter_known_urls_firestore(self, urls: List[str]) -> List[str]:
         # Get table reference
-        scraped_data_ref = self._firestore_db.collection(self._firestore_scraped_data_table_name)
+        scraped_data_ref = self._firestore_db.collection(
+            self._firestore_scraped_data_table_name
+        )
 
         # Max ammount of elements in "in" query of firestore
         chunk_size = 10
 
-        # get urls such that there's not 
+        # get urls such that there's not
         lo = 0
         result = []
-        while (lo < len(urls)):
+        while lo < len(urls):
             # Current chunk to check
-            chunk = urls[lo:lo + chunk_size]
+            chunk = urls[lo : lo + chunk_size]
 
             # Urls that are both in the list and scraped
-            known_urls = {x.get("url") for x in scraped_data_ref.where("url", 'in', chunk).stream()}
-            
+            known_urls = {
+                x.get("url")
+                for x in scraped_data_ref.where("url", "in", chunk).stream()
+            }
+
             for url in chunk:
                 if url not in known_urls:
                     result.append(url)
 
             # firestore has a max "in" query size of 10
             lo += chunk_size
-        
+
         return result
 
     def filter_known_urls(self, urls: List[str]) -> List[str]:
@@ -346,23 +397,29 @@ class BigQueryManager(BasePersistencyManager):
     def _was_scraped_bq(self, url: str) -> bool:
         # Connect to db and check if object was scraped
         query_str = f"SELECT 1 FROM `{self.table_name}` WHERE url=@url;"
-        job_config = bigquery.QueryJobConfig(query_parameters=[
-            bigquery.ScalarQueryParameter("url", "STRING", url)
-        ])
+        job_config = bigquery.QueryJobConfig(
+            query_parameters=[bigquery.ScalarQueryParameter("url", "STRING", url)]
+        )
 
         for _ in self.client.query(query_str, job_config=job_config):
-            return True # consume just one, altought there should be at the most one element in this query
-        
+            return True  # consume just one, altought there should be at the most one element in this query
+
         return False
 
     def _was_scraped_firestore(self, url: str) -> bool:
         # Get reference to table
-        scraped_data_ref = self._firestore_db.collection(self._firestore_scraped_data_table_name)
+        scraped_data_ref = self._firestore_db.collection(
+            self._firestore_scraped_data_table_name
+        )
 
         # check if exists
-        for _ in scraped_data_ref.where('url', '==', url).where('was_scraped', '==', True).stream():
+        for _ in (
+            scraped_data_ref.where("url", "==", url)
+            .where("was_scraped", "==", True)
+            .stream()
+        ):
             return True
-        
+
         return False
 
     def was_scraped(self, url: str) -> bool:
@@ -376,26 +433,30 @@ class BigQueryManager(BasePersistencyManager):
 
         data_to_insert = [data.to_dict() for data in url_data]
         for data in data_to_insert:
-            
+
             # truncate content if necessary
-            content : str = data.get("content")
+            content: str = data.get("content")
             if content and len(content) > self.gcloud_max_content_len:
-                data['content'] = content[:self.gcloud_max_content_len]
+                data["content"] = content[: self.gcloud_max_content_len]
 
         del url_data
 
         # Delete instances before insert them to give it priority to the ones to be saved right now
         query_str = f"DELETE FROM `{self.table_name}` WHERE url IN @urls;"
-        query_config = bigquery.QueryJobConfig(query_parameters=
-            [
-                bigquery.ArrayQueryParameter("urls", "STRING", [d['url'] for d in data_to_insert])
+        query_config = bigquery.QueryJobConfig(
+            query_parameters=[
+                bigquery.ArrayQueryParameter(
+                    "urls", "STRING", [d["url"] for d in data_to_insert]
+                )
             ]
         )
         query_job = self.client.query(query_str, job_config=query_config)
 
         # Now insert updated rows
         errors = self.client.insert_rows_json(self.table_name, data_to_insert)
-        assert not errors, f"There was some errors while trying to insert new data to big query: {errors}"
+        assert (
+            not errors
+        ), f"There was some errors while trying to insert new data to big query: {errors}"
 
     def _save_firestore(self, url_data: List[ScrapedData]):
         # Perform save operation for firestore
@@ -403,7 +464,7 @@ class BigQueryManager(BasePersistencyManager):
         db_ref = self._firestore_db_ref
 
         # Convert into firestore-specific format
-        fs_data = ((x.url , self._from_scraped_data_to_firestore(x)) for x in url_data)
+        fs_data = ((x.url, self._from_scraped_data_to_firestore(x)) for x in url_data)
         for (url, data) in fs_data:
             db_ref.document(self._get_url_uuid(url)).set(data)
 
@@ -418,7 +479,7 @@ class BigQueryManager(BasePersistencyManager):
         """
         # TODO maybe use transaction?
         data_ref = self._firestore_db_ref
-        data_stream = data_ref.where("is_ready_for_bq", '==', True)
+        data_stream = data_ref.where("is_ready_for_bq", "==", True)
 
         results = []
         for data in data_stream.stream():
@@ -426,7 +487,7 @@ class BigQueryManager(BasePersistencyManager):
             sd = self._from_firestore_to_scraped_data(data)
             results.append(sd)
             data_ref.document(self._get_url_uuid(sd.url)).delete()
-        
+
         return results
 
     def move(self):
@@ -436,26 +497,23 @@ class BigQueryManager(BasePersistencyManager):
         """
         data_to_move = self._retrieve_and_delete_ready_from_firestore()
         try:
-            # try to save data to bq 
+            # try to save data to bq
             self._save_bq(data_to_move)
         except Exception as e:
             # save it back to firestore if it wasn't possible
             self.save(data_to_move)
-            
 
     def delete(self, urls: List[str]):
         # Bulk delete provided urls
         query_str = f"DELETE FROM `{self.table_name}` WHERE url=@url;"
         for url in urls:
-            job_config = bigquery.QueryJobConfig(query_parameters=
-                [
-                    bigquery.ScalarQueryParameter("url", "STRING", url)
-                ]
+            job_config = bigquery.QueryJobConfig(
+                query_parameters=[bigquery.ScalarQueryParameter("url", "STRING", url)]
             )
             self.client.query(query_str, job_config=job_config)
 
     def _parse_order_and_field_from_order_by_str(
-        self, order_by: str, use_firestore_order : bool = False
+        self, order_by: str, use_firestore_order: bool = False
     ) -> Tuple[str, str]:
         """
             Parse order and name of field from the given str
@@ -485,7 +543,11 @@ class BigQueryManager(BasePersistencyManager):
 
         # Parsing order
         if use_firestore_order:
-            order = firestore.Query.ASCENDING if order_by[0] == "+" else firestore.Query.DESCENDING
+            order = (
+                firestore.Query.ASCENDING
+                if order_by[0] == "+"
+                else firestore.Query.DESCENDING
+            )
         else:
             order = "ASC" if order_by[0] == "+" else "DESC"
 
@@ -503,12 +565,13 @@ class BigQueryManager(BasePersistencyManager):
         return (order, field_name)
 
     @staticmethod
-    def _get_url_uuid(url : str) -> str:
+    def _get_url_uuid(url: str) -> str:
         """
             Use this function to get an uuid from an url, 
             useful to hash urls into ids in firestore
         """
         return str(uuid.uuid3(uuid.NAMESPACE_URL, url))
+
 
 def _parse_dict_to_url_data(obj: Dict[str, Any]) -> ScrapedData:
     """

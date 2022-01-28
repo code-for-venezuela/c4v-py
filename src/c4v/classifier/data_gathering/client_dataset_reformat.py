@@ -25,8 +25,11 @@
     2    | _ | _ | _ | l3             2   | _ | _ | l3
     2    | _ | _ | _ | l3
 """
-# Local imports 
-from c4v.scraper.scraped_data_classes.scraped_data import Sources, RelevanceClassificationLabels
+# Local imports
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    Sources,
+    RelevanceClassificationLabels,
+)
 
 # Python imports
 import sys
@@ -56,14 +59,23 @@ df.rename(
         "tags": "categories",
         "Link de la noticia ": "url",
         "tipo de evento": "label_relevance",
-        "servicio_resumido" : "label_service"
+        "servicio_resumido": "label_service",
     },
     axis="columns",
     inplace=True,
 )
 
 # Valid columns
-columns = ["url", "title", "content", "author", "categories", "date", "label_relevance", "label_service"]
+columns = [
+    "url",
+    "title",
+    "content",
+    "author",
+    "categories",
+    "date",
+    "label_relevance",
+    "label_service",
+]
 
 # Remove irrelevant columns
 columns_to_remove = [col for col in df.columns if col not in columns]
@@ -75,7 +87,7 @@ print(f"Columns: {df.columns}")
 # Adding source column
 source_col_val = Sources.CLIENT.value
 print(f"Adding 'source' column with value: {source_col_val}")
-df['source'] = source_col_val
+df["source"] = source_col_val
 
 # Update label relevance to be relevant for every instance
 df["label_relevance"] = RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO.value
