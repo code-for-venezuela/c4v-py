@@ -8,7 +8,7 @@ from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import LabelSet, RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
 from c4v.scraper.crawler.crawlers.base_crawler import BaseCrawler
 from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS, NAME_TO_CRAWLER
@@ -19,7 +19,7 @@ from c4v.config import PersistencyManagers, settings
 
 
 # Python imports
-from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
+from typing import Dict, List, Iterable, Callable, Tuple, Any, Union, Type
 from pathlib import Path
 import sys
 
@@ -380,7 +380,7 @@ class Manager:
         return cls(db, metadata, local_files_path or settings.c4v_folder)
 
     def run_classification_from_experiment(
-        self, branch: str, experiment: str, data: List[ScrapedData], type : str = None
+        self, branch: str, experiment: str, data: List[ScrapedData], type : str = "relevance"
     ) -> List[Dict[str, Any]]:
         """
             Classify given data instance list, returning its metrics
@@ -412,7 +412,7 @@ class Manager:
         return classifier_experiment.classify(data, type_to_field[type])
 
     def run_pending_classification_from_experiment(
-        self, branch: str, experiment: str, save: bool = True, limit: int = -1, type : str = None
+        self, branch: str, experiment: str, save: bool = True, limit: int = -1, type : str = "relevance"
     ) -> List[Dict[str, Any]]:
         """
             Classify data pending for classification in local db, returning the obtained results and saving it 
@@ -492,15 +492,27 @@ class Manager:
             sentence, html_file, additional_label=additional_label
         )
 
-    def get_classifier_labels(self) -> List[str]:
+    def get_classifier_labels(self, type: str = "relevance") -> List[str]:
         """
             Get list of possible labels for classifier
-            Return:
+            # Parameters:
+                - type : str = Type of classifier label, possible values:
+                    - relevance 
+                    - service
+            # Return:
                 List with possible output labels for the classifier
         """
-        from c4v.classifier.classifier import Classifier
-        raise NotImplementedError("Get classifier labels should be reimplemented")
-        return Classifier.get_labels()
+        
+        str_to_labelset = {
+            "relevance" : RelevanceClassificationLabels,
+            "service" : ServiceClassificationLabels
+        }
+
+        labelset : Type[LabelSet] = str_to_labelset.get(type) 
+        if not labelset:
+            raise ValueError(f"Invalid type of classifier: {type}. Choices are: {list(str_to_labelset.keys())}")
+
+        return labelset.labels()
 
     @staticmethod
     def available_crawlers() -> List[str]:

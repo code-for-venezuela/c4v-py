@@ -34,8 +34,8 @@ settings = Dynaconf(
         Validator("C4V_FOLDER", default=os.path.join(_HOME, ".c4v")),
         Validator(
             "LOCAL_SQLITE_DB_NAME", default="c4v_db.sqlite"
-        ),  # Path to the local sqlite db file
-        Validator("LOCAL_SQLITE_DB", default=os.path.join(_HOME, ".c4v/c4v_db.sqlite")),
+        ),  
+        Validator("LOCAL_SQLITE_DB", default=os.path.join(_HOME, ".c4v/c4v_db.sqlite")), # Path to the local sqlite db file
         Validator(
             "DEFAULT_BASE_LANGUAGE_MODEL", default="PlanTL-GOB-ES/roberta-base-bne"
         ),  # Base language model for the classifier
@@ -55,7 +55,7 @@ settings = Dynaconf(
         ),  # Path for the cusmtom user persistency manager python file. Should export a function: `get_persistency_manager : () -> BasePersistencyManager`
         Validator(
             "USER_PERSISTENCY_MANAGER_MODULE", default=None
-        ),  # Module from the imported file where to find the the function
+        ),  # Module from the imported file where to find the function
         Validator(
             "CLI_LOGGING_LEVEL", default=10
             # Logging level:
