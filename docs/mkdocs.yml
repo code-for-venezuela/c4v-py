@@ -15,6 +15,7 @@ nav:
     - 'Creating a Scraper': 'development/creating-a-scraper.md'
     - 'Creating a Crawler': 'development/creating-a-crawler.md'
     - 'Creating a Persistency Manager': 'development/creating-a-persistency-manager.md'
+    - 'Experiments and classification': 'development/experiments.md'
 
 theme: readthedocs
 markdown_extensions:
