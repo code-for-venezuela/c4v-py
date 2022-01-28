@@ -1,4 +1,3 @@
-# %%
 """
     This file exposes the main API for this library, the microscope Manager
 """
