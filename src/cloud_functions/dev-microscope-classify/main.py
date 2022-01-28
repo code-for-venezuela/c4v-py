@@ -3,7 +3,6 @@ import os
 from typing import Dict
 from pathlib import Path
 import gc
-import shutil
 
 # Local imports
 from c4v.microscope import Manager
