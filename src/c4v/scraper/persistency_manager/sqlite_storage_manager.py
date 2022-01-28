@@ -281,7 +281,6 @@ class SqliteManager(BasePersistencyManager):
 
             # save changes
             connection.commit()
-            print([x.label_service for x in self.get_all()])
 
     def delete(self, urls: List[str]):
 
