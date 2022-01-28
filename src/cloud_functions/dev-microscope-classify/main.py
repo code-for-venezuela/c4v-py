@@ -5,10 +5,12 @@ from pathlib import Path
 import gc
 import shutil
 
-# Local imports 
+# Local imports
 from c4v.microscope import Manager
 from c4v.config import settings
-from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+from c4v.scraper.persistency_manager.big_query_persistency_manager import (
+    BigQueryManager,
+)
 from c4v.cloud.gcloud_storage_manager import ClassifierType
 
 # Third party imports
@@ -16,7 +18,8 @@ import flask
 from google.cloud import bigquery, logging
 import torch
 
-def classify(request : flask.Request):
+
+def classify(request: flask.Request):
     """
     Function to run a classification process over the cloud based data
     # Parameters:
@@ -39,19 +42,19 @@ def classify(request : flask.Request):
     logging_client = logging.Client()
     logger = logging_client.logger("microscope-classify")
 
-    # Parse config 
+    # Parse config
     config = ClassifierConfig(request)
     if config.error:
         logger.log_text(config.error, severity="ERROR")
         print(config.error)
-        return flask.jsonify({"status":"error", "msg" : config.error})
+        return flask.jsonify({"status": "error", "msg": config.error})
 
-    # Download classifier type 
+    # Download classifier type
     logger.log_text(f"Downloading classifier of type '{config.type}'")
-    #Cloud function vm is a read only s/m. The only writable place is the tmp folder
+    # Cloud function vm is a read only s/m. The only writable place is the tmp folder
     path = Path(f"/tmp/c4v/experiments/{config.type}")
     if not path.exists():
-        path.mkdir(parents=True) # Create folder if not exists
+        path.mkdir(parents=True)  # Create folder if not exists
         config.manager.download_model_to_directory(str(path), config.type)
 
     # Now that the model is stored in /tmp/c4v/experiments/classifier, we need to get its name
@@ -60,18 +63,23 @@ def classify(request : flask.Request):
         classifier_name = x.name
         break
 
-    assert classifier_name, "Could not retrieve classifier name after downloading classifier"
+    assert (
+        classifier_name
+    ), "Could not retrieve classifier name after downloading classifier"
 
     # now that the classifier model is properly downloaded, run a classification
     logger.log_text("Classifying rows...")
 
     with torch.no_grad():
-        config.manager.run_pending_classification_from_experiment(config.type, classifier_name, limit=config.limit, type=config.type)
+        config.manager.run_pending_classification_from_experiment(
+            config.type, classifier_name, limit=config.limit, type=config.type
+        )
 
     # Free resources
     config.clear_manager()
 
-    return flask.jsonify({"status" : "success"})
+    return flask.jsonify({"status": "success"})
+
 
 class ClassifierConfig:
     """
@@ -80,7 +88,7 @@ class ClassifierConfig:
 
     DEFAULT_LIMIT = 100
 
-    def __init__(self, request : flask.Request):
+    def __init__(self, request: flask.Request):
 
         ClassifierConfig._set_up_settings()
 
@@ -98,21 +106,21 @@ class ClassifierConfig:
 
         # Get type of classifier from request
         # Parse options from request
-        request_json : Dict = request.get_json() or {}
+        request_json: Dict = request.get_json() or {}
         classifier_type = request_json.get("type")
 
         # Parse classifier type
         if classifier_type not in ClassifierType.choices():
             self._error = f"Invalid `type` of classifier '{classifier_type}', choices are: {ClassifierType.choices()}"
             return
-        
+
         # Get limit
         # Parse limit
         try:
             self._limit = int(request_json.get("limit", self.DEFAULT_LIMIT))
         except ValueError:
             self._error = "'limit' field in request should be a valid integer value"
-            return 
+            return
 
         self._type = classifier_type
 
@@ -158,4 +166,4 @@ class ClassifierConfig:
     @staticmethod
     def get_client() -> bigquery.Client:
         client = bigquery.Client()
-        return client 
+        return client

@@ -3,13 +3,16 @@ from typing import Dict
 import os
 
 # Local imports
-from  c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+from c4v.scraper.persistency_manager.big_query_persistency_manager import (
+    BigQueryManager,
+)
 
 # Third party imports
 import flask
-from google.cloud import  bigquery, logging
+from google.cloud import bigquery, logging
 
-def move(request : flask.Request):
+
+def move(request: flask.Request):
     """
         This function will move data from firestore to big query once it's complete
         # Return
@@ -25,24 +28,25 @@ def move(request : flask.Request):
 
     config = MoveConfig(request)
     if config.error:
-        logger.log_text(config.error, severity="ERROR" )
-        return {"status" : "error", "msg" : config.error}
-    
+        logger.log_text(config.error, severity="ERROR")
+        return {"status": "error", "msg": config.error}
+
     config.manager.move()
 
-    return {"status" : "success"}
+    return {"status": "success"}
+
 
 class MoveConfig:
     """
         This class holds the set up for the move function
     """
 
-    def __init__(self, request : flask.Request) -> None:
+    def __init__(self, request: flask.Request) -> None:
 
         # Parse options from request
-        request_json : Dict = request.get_json() or {}
+        request_json: Dict = request.get_json() or {}
 
-         # Parse table name fron environment variables
+        # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")
         if not table_name:
             self._error = "No table name provided in environment variables"
@@ -53,7 +57,6 @@ class MoveConfig:
         if not project_id:
             self._error = "No PROJECT_ID  provided in environment variables"
             return
-
 
         # set up driver data
         self._scrape_data_table_name = table_name
@@ -77,4 +80,4 @@ class MoveConfig:
     @staticmethod
     def get_client() -> bigquery.Client:
         client = bigquery.Client()
-        return client 
+        return client

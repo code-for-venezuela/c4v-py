@@ -5,13 +5,15 @@ import os
 
 # Local imports
 from c4v.microscope import Manager
-from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+from c4v.scraper.persistency_manager.big_query_persistency_manager import (
+    BigQueryManager,
+)
 
 # Third Party Imports
 from google.cloud import bigquery, logging
 
 
-def scrape(request : flask.Request):
+def scrape(request: flask.Request):
     """
         function to trigger a scraping process in google cloud. 
         this function expects the following parameters through post request:
@@ -25,26 +27,28 @@ def scrape(request : flask.Request):
     # Get logging objects
     logging_client = logging.Client()
     logger = logging_client.logger("microscope-scrape")
-    
-    # Parse config 
+
+    # Parse config
     config = ScrapeFuncConfig(request)
     if config.error:
         logger.log_text(config.error, severity="ERROR")
-        return {"status" : "error", "msg" : config.error} 
+        return {"status": "error", "msg": config.error}
 
     # Crawl new urls
     logger.log_text(f"Scraping up to {config.limit} urls.")
     config.manager.scrape_pending(limit=config.limit)
-    
-    return {"status" : "success"} 
+
+    return {"status": "success"}
+
 
 class ScrapeFuncConfig:
     """
         This class holds the set up for the crawl function
     """
-    DEFAULT_LIMIT : int = 100
 
-    def __init__(self, request : flask.Request) -> None:
+    DEFAULT_LIMIT: int = 100
+
+    def __init__(self, request: flask.Request) -> None:
 
         # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")
@@ -59,14 +63,14 @@ class ScrapeFuncConfig:
             return
 
         # Parse options from request
-        request_json : Dict = request.get_json() or {}
+        request_json: Dict = request.get_json() or {}
 
         # Parse limit
         try:
             self._limit = int(request_json.get("limit", self.DEFAULT_LIMIT))
         except ValueError:
             self._error = "'limit' field in request should be a valid integer value"
-            return 
+            return
 
         # set up driver data
         self._scrape_data_table_name = table_name
@@ -102,4 +106,4 @@ class ScrapeFuncConfig:
     @staticmethod
     def get_client() -> bigquery.Client:
         client = bigquery.Client()
-        return client 
+        return client
