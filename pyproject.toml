@@ -42,7 +42,7 @@ scipy = {version = "1.5.4", optional = true}
 nbconvert = "5.6.1"
 traitlets = "4.3.3"
 ipykernel = { version = "5.5.5", optional = true }
-ipython = { version = "7.16.1", optional = true }
+ipython = { version = "7.16.3", optional = true }
 zipp = "^3.5.0"
 importlib-metadata = "^4.6.1"
 importlib-resources = {version = "^5.2.2"}
