@@ -19,7 +19,10 @@ import os
 from pandas.core.frame import DataFrame
 
 # Local imports
-from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ServiceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    RelevanceClassificationLabels,
+    ServiceClassificationLabels,
+)
 
 # Get command line argument
 if len(sys.argv) < 2:
@@ -28,7 +31,7 @@ if len(sys.argv) < 2:
 
 csv_file_name = sys.argv[1]  # name of csv file
 try:
-        df: DataFrame = pd.read_csv(csv_file_name)
+    df: DataFrame = pd.read_csv(csv_file_name)
 except Exception as e:
     print(
         f"[Error] Could not write to provided file: {csv_file_name}.\n\tError: {e}",
@@ -51,6 +54,7 @@ df["content"].drop(
 
 # Remove extra linejumps
 print("Removing extra line jumps from article bodies...")
+
 
 def strip_extra_linejumps(s: str) -> str:
     return "\n".join([line for line in s.splitlines() if line.strip() != ""])
@@ -75,12 +79,11 @@ columns = [
 ]
 columns_to_remove = [c for c in df.columns if c not in columns]
 print(f"Removing the following columns: {columns_to_remove}")
-df.drop(columns_to_remove, inplace=True, axis='columns')
+df.drop(columns_to_remove, inplace=True, axis="columns")
 print("Cleaned Dataset Shape: ")
 print(df)
 
 # Save resulting file
-filename = 'cleaned_' + os.path.basename(csv_file_name)
+filename = "cleaned_" + os.path.basename(csv_file_name)
 print(f"Saving cleaned data to: {filename}")
 df.to_csv(filename, index=False)
-    

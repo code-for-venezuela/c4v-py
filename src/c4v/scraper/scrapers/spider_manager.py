@@ -10,6 +10,8 @@ from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData
 
 # Python imports
 from typing import List, Type
+
+
 class SpiderManager:
     """
         Utility class to perform common operations in 
@@ -19,7 +21,7 @@ class SpiderManager:
     _process = None
     _scrapydo_initialized = False
 
-    def __init__(self, spider : Type[scrapy.Spider]) -> None:
+    def __init__(self, spider: Type[scrapy.Spider]) -> None:
 
         self.spider = spider
         self._scraped_items = []

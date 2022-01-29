@@ -12,7 +12,12 @@ import datetime
 from c4v.scraper.persistency_manager.base_persistency_manager import (
     BasePersistencyManager,
 )
-from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels, Sources
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    RelevanceClassificationLabels,
+    ScrapedData,
+    ServiceClassificationLabels,
+    Sources,
+)
 from c4v.config import settings
 
 DATE_FORMAT = settings.date_format
@@ -123,7 +128,17 @@ class SqliteManager(BasePersistencyManager):
 
             for row in res:
                 # Decompose row
-                (url, last_scraped, title, content, author, date, label_relevance, label_service, source) = row
+                (
+                    url,
+                    last_scraped,
+                    title,
+                    content,
+                    author,
+                    date,
+                    label_relevance,
+                    label_service,
+                    source,
+                ) = row
 
                 if label_relevance:
                     try:
@@ -142,7 +157,6 @@ class SqliteManager(BasePersistencyManager):
                         source = Sources(source)
                     except:  # unknown source
                         source = Sources.UNKOWN
-                
 
                 # parse date to datetime:
                 try:
@@ -249,10 +263,14 @@ class SqliteManager(BasePersistencyManager):
             data_to_insert = [dataclasses.asdict(data) for data in url_data]
             for data in data_to_insert:
                 label_relevance: RelevanceClassificationLabels = data["label_relevance"]
-                data["label_relevance"] = label_relevance.value if label_relevance else label_relevance
+                data["label_relevance"] = (
+                    label_relevance.value if label_relevance else label_relevance
+                )
 
-                label_service: ServiceClassificationLabels = data['label_service']
-                data["label_service"] = label_service.value if label_service else label_service
+                label_service: ServiceClassificationLabels = data["label_service"]
+                data["label_service"] = (
+                    label_service.value if label_service else label_service
+                )
 
                 source: Sources = data["source"]
                 data["source"] = source.value if source else source
@@ -281,7 +299,6 @@ class SqliteManager(BasePersistencyManager):
 
             # save changes
             connection.commit()
-            print([x.label_service for x in self.get_all()])
 
     def delete(self, urls: List[str]):
 

@@ -5,13 +5,15 @@ import os
 
 # Local imports
 from c4v.microscope import Manager
-from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+from c4v.scraper.persistency_manager.big_query_persistency_manager import (
+    BigQueryManager,
+)
 
 # Third Party Imports
 from google.cloud import bigquery, logging
 
 
-def crawl(request : flask.Request):
+def crawl(request: flask.Request):
     """
         function to trigger a crawling process in google cloud. 
         this function expects the following parameters through post request:
@@ -27,32 +29,44 @@ def crawl(request : flask.Request):
     logging_client = logging.Client()
     logger = logging_client.logger("microscope-crawl")
 
-    # Parse config 
+    # Parse config
     config = CrawlFuncConfig(request)
     if config.error:
         logger.log_text(config.error, severity="ERROR")
         print(config.error)
-        return flask.jsonify({"status":"error", "msg" : config.error})
+        return flask.jsonify({"status": "error", "msg": config.error})
 
     # Crawl new urls
-    logger.log_text(f"Crawling up to {config.limit} urls using crawler '{config.crawler_names}'")
+    logger.log_text(
+        f"Crawling up to {config.limit} urls using crawler '{config.crawler_names}'"
+    )
     crawled = config.manager.crawl_new_urls_for(config.crawler_names, config.limit)
-    logger.log_text(f"Crawled {len(crawled)} urls using crawler '{config.crawler_names}'")
-    
-    return flask.jsonify({"status" : "success", "crawled" : len(crawled), "crawler_names" : config.crawler_names})
+    logger.log_text(
+        f"Crawled {len(crawled)} urls using crawler '{config.crawler_names}'"
+    )
+
+    return flask.jsonify(
+        {
+            "status": "success",
+            "crawled": len(crawled),
+            "crawler_names": config.crawler_names,
+        }
+    )
+
 
 class CrawlFuncConfig:
     """
         This class holds the set up for the crawl function
     """
-    DEFAULT_LIMIT : int = 100
 
-    def __init__(self, request : flask.Request) -> None:
+    DEFAULT_LIMIT: int = 100
+
+    def __init__(self, request: flask.Request) -> None:
 
         # Parse options from request
-        request_json : Dict = request.get_json() or {}
+        request_json: Dict = request.get_json() or {}
 
-         # Parse table name fron environment variables
+        # Parse table name fron environment variables
         table_name = os.environ.get("TABLE")
         if not table_name:
             self._error = "No table name provided in environment variables"
@@ -69,9 +83,9 @@ class CrawlFuncConfig:
             self._limit = int(request_json.get("limit", self.DEFAULT_LIMIT))
         except ValueError:
             self._error = "'limit' field in request should be a valid integer value"
-            return 
+            return
 
-        # Parse crawler name 
+        # Parse crawler name
         self._ks = request_json.get("crawler_names")
         if not self.crawler_names:
             self._error = "Mandatory field 'crawler_names' not provided in request"
@@ -119,4 +133,4 @@ class CrawlFuncConfig:
     @staticmethod
     def get_client() -> bigquery.Client:
         client = bigquery.Client()
-        return client 
+        return client

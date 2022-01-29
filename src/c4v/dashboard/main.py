@@ -6,6 +6,7 @@
 import dataclasses
 from typing import List
 from pathlib import Path
+
 # Third party imports
 import streamlit as sl
 
@@ -31,7 +32,7 @@ sl.sidebar.write(
         and configuration environment variables, and operations will be performed
         on cloud. Displayed data will come from the cloud as well.
     """
-    )
+)
 
 backend = sl.sidebar.radio("Backend", ["local", "cloud"])
 if backend == "local":
@@ -48,11 +49,15 @@ sl.sidebar.write("Specify which data you want to see with the following filters"
 
 # Add a selector to filter by label
 relevance = sl.sidebar.selectbox(
-    "Relevance: ", options=app.relevance_options, help="relevance label assigned by the classifier"
+    "Relevance: ",
+    options=app.relevance_options,
+    help="relevance label assigned by the classifier",
 )
 
 service = sl.sidebar.selectbox(
-    "Service: ", options=app.service_options, help="service label assigned by the classifier"
+    "Service: ",
+    options=app.service_options,
+    help="service label assigned by the classifier",
 )
 
 scraped = sl.sidebar.selectbox(
@@ -85,8 +90,8 @@ sl.sidebar.write(
 # Classification type
 classifier_type = sl.sidebar.selectbox(
     "Type: ",
-    ["relevance", "service"], 
-    help="The classifier type specifies which information is predicted by the classifier"
+    ["relevance", "service"],
+    help="The classifier type specifies which information is predicted by the classifier",
 )
 
 # Branch names
@@ -140,13 +145,16 @@ def run_local_classification_callback():
     else:
         sl.info("Running classification process, this might take a while...")
         try:
-            app.classify(branch_name, experiment_name, max_rows_to_classify, type=classifier_type)
+            app.classify(
+                branch_name, experiment_name, max_rows_to_classify, type=classifier_type
+            )
             sl.success("Classification finished")
         except MemoryError as e:
             sl.error(
                 f"Unable to classify using model {branch_name}/{experiment_name} {('and up to ' + str(max_rows_to_classify)) if max_rows_to_classify >= 0 else ''}.    "
                 + f"Error: {e}"
             )
+
 
 def run_cloud_classification_callback():
     sl.info("Running classification process, this might take a while...")
@@ -159,19 +167,24 @@ def run_cloud_classification_callback():
             + f"Error: {e}"
         )
 
+
 sl.sidebar.button(
     "Classify",
     help="Perform the classification process",
-    on_click=run_local_classification_callback if backend == "local" else run_cloud_classification_callback,
+    on_click=run_local_classification_callback
+    if backend == "local"
+    else run_cloud_classification_callback,
 )
 
 # Downloading and uploading
 def upload_and_download_model():
     sl.sidebar.write("### Uploading and downloading")
-    sl.sidebar.write("""
+    sl.sidebar.write(
+        """
                 Upload a model to be used online during classification. 
                 Specify the type of model to tell the purpose of such model
-            """)
+            """
+    )
     # Check that a valid branch is provided
     if not branch_name and not experiment_name:
         sl.sidebar.write("⚠️ Provide branch name and experiment name to upload a model")
@@ -182,17 +195,21 @@ def upload_and_download_model():
     elif not experiment_name:
         sl.sidebar.write("⚠️ Provide experiment name to upload a model")
         return
-    
+
     # Check that there's a bucket where to upload the model
     if not settings.storage_bucket:
-        sl.sidebar.write("⚠️ there's no bucket properly configured where to upload the classifier")
+        sl.sidebar.write(
+            "⚠️ there's no bucket properly configured where to upload the classifier"
+        )
         return
 
     # Switch to tell if it should download or upload
     upload_or_download = sl.sidebar.radio("Upload or Download", ["upload", "download"])
 
     def upload():
-        sl.info(f"Uploading model in {branch_name}/{experiment_name} of type '{classifier_type}' to bucket...")
+        sl.info(
+            f"Uploading model in {branch_name}/{experiment_name} of type '{classifier_type}' to bucket..."
+        )
         try:
             app.upload_model_of_type(experiment_name, branch_name, classifier_type)
             sl.success("Upload successful")
@@ -203,12 +220,13 @@ def upload_and_download_model():
         sl.sidebar.button(
             "Upload",
             help=f"Upload model in '{experiment_name}/{branch_name}' of type '{classifier_type}' to bucket {settings.storage_bucket or '<no bucket specified in environment>'}",
-            on_click=upload
-            )
+            on_click=upload,
+        )
         return
-    
-    # Ask for a path where to download 
+
+    # Ask for a path where to download
     path = sl.sidebar.text_input("Download Path")
+
     def download():
         path_obj = Path(path)
         if not path or not path_obj.exists() or not path_obj.is_dir():
@@ -218,18 +236,18 @@ def upload_and_download_model():
         sl.info(f"Downloading model of type' {classifier_type}' to '{path}'...")
 
         # try to perform download
-        try: 
+        try:
             app.download_model_of_type(path, classifier_type)
             sl.success("Download successful")
         except Exception as e:
             sl.error(f"Could not complete download. Error: '{e}'")
 
-
     sl.sidebar.button(
-        "Download", 
+        "Download",
         help=f"Download model of type '{classifier_type}' from bucket '{settings.storage_bucket}'",
-        on_click=download
+        on_click=download,
     )
+
 
 if backend == "local":
     upload_and_download_model()
@@ -365,13 +383,17 @@ if backend == "cloud":
         except Exception as e:
             sl.error(f"Could not perform move operation. Error: {e}")
 
-
     sl.sidebar.write("-------")
     sl.sidebar.write("# Move")
     sl.sidebar.write("Move instances from firestore to big query")
-    sl.sidebar.button(
-        "Move", on_click=move
-    )
+    sl.sidebar.button("Move", on_click=move)
 
 # -- < Show Dashboard > ---------------------------------------
-sl.dataframe(app.get_dashboard_data(label_relevance=relevance, label_service=service, max_rows=max_rows, scraped=scraped))
+sl.dataframe(
+    app.get_dashboard_data(
+        label_relevance=relevance,
+        label_service=service,
+        max_rows=max_rows,
+        scraped=scraped,
+    )
+)

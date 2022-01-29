@@ -13,6 +13,7 @@ import enum
 # Local imports
 from c4v.config import settings
 
+
 class LabelSet(enum.Enum):
     """
         Interface for sets of labels that can be attached to to a model for classification
@@ -47,12 +48,14 @@ class LabelSet(enum.Enum):
             Get a dict mapping labels to int ids, representing the the ids of each label in this labelset
         """
         id2label = cls.get_id2label_dict()
-        return { v:k for (k,v) in id2label.items() }
+        return {v: k for (k, v) in id2label.items()}
+
 
 class RelevanceClassificationLabels(LabelSet):
     """
         Labels for Binary classification, telling if a data instance is relevant or not
     """
+
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
     UNKNOWN: str = "UNKNOWN"
@@ -64,32 +67,34 @@ class RelevanceClassificationLabels(LabelSet):
             1: cls.DENUNCIA_FALTA_DEL_SERVICIO.value,
         }
 
+
 class ServiceClassificationLabels(LabelSet):
     """
         Labels for service classification, "electricity", "water", "internet"... 
     """
-    AGUA : str = "AGUA"
-    ASEO_URBANO : str = "ASEO URBANO"
-    COMBINACION : str = "COMBINACIÓN"
-    ELECTRICIDAD : str = "ELECTRICIDAD"
-    GAS_DOMESTICO : str = "GAS DOMÉSTICO"
-    TELECOMUNICACIONES : str = "TELECOMUNICACIONES"
-    NO_SERVICIO : str = "NO ES SERVICIO"
-    UNKNOWN : str = "UNKNOWN"
+
+    AGUA: str = "AGUA"
+    ASEO_URBANO: str = "ASEO URBANO"
+    COMBINACION: str = "COMBINACIÓN"
+    ELECTRICIDAD: str = "ELECTRICIDAD"
+    GAS_DOMESTICO: str = "GAS DOMÉSTICO"
+    TELECOMUNICACIONES: str = "TELECOMUNICACIONES"
+    NO_SERVICIO: str = "NO ES SERVICIO"
+    UNKNOWN: str = "UNKNOWN"
 
     @classmethod
     def get_id2label_dict(cls) -> Dict[int, str]:
         return {
-            0 : cls.AGUA.value,
-            1 : cls.ASEO_URBANO.value,
-            2 : cls.COMBINACION.value,
-            3 : cls.ELECTRICIDAD.value,
-            4 : cls.GAS_DOMESTICO.value,
-            5 : cls.TELECOMUNICACIONES.value,
-            6 : cls.NO_SERVICIO.value,
-            7 : cls.UNKNOWN.value,
+            0: cls.AGUA.value,
+            1: cls.ASEO_URBANO.value,
+            2: cls.COMBINACION.value,
+            3: cls.ELECTRICIDAD.value,
+            4: cls.GAS_DOMESTICO.value,
+            5: cls.TELECOMUNICACIONES.value,
+            6: cls.NO_SERVICIO.value,
+            7: cls.UNKNOWN.value,
         }
-    
+
 
 class Sources(enum.Enum):
     """
@@ -99,6 +104,7 @@ class Sources(enum.Enum):
     UNKOWN: str = "UNKNOWN"
     SCRAPING: str = "SCRAPING"
     CLIENT: str = "CLIENT"
+
 
 @dataclass()
 class ScrapedData:
@@ -169,58 +175,65 @@ class ScrapedData:
         d = asdict(self)
 
         # Convert label relevance to str
-        label_relevance : RelevanceClassificationLabels = d.get("label_relevance")
+        label_relevance: RelevanceClassificationLabels = d.get("label_relevance")
         if label_relevance:
-            d['label_relevance'] = label_relevance.value
+            d["label_relevance"] = label_relevance.value
 
         # Convert label service to str
-        label_service : ServiceClassificationLabels = d.get("label_service")
+        label_service: ServiceClassificationLabels = d.get("label_service")
         if label_service:
-            d['label_service'] = label_service.value
-        
+            d["label_service"] = label_service.value
+
         # Convert source to str
-        source : Sources = d.get("source")
+        source: Sources = d.get("source")
         if source:
-           d['source'] = source.value
-        
+            d["source"] = source.value
+
         # Convert date to str
-        last_scraped : datetime = d.get('last_scraped')
+        last_scraped: datetime = d.get("last_scraped")
         if last_scraped:
-            d['last_scraped'] = datetime.strftime(last_scraped, settings.date_format)
+            d["last_scraped"] = datetime.strftime(last_scraped, settings.date_format)
 
         return d
 
     @classmethod
-    def from_dict(cls, scraped_data : Dict[str, Any] ):
+    def from_dict(cls, scraped_data: Dict[str, Any]):
         """
             Create scraped data instance from a dict
         """
         # Sanity check
         valid_fields = [x.name for x in fields(cls)]
         if any(k for k in scraped_data.keys() if k not in valid_fields):
-            raise ValueError(f"Invalid scraped data dict representation. Invalid fields: {[k for k in scraped_data.keys() if k not in valid_fields]}")
+            raise ValueError(
+                f"Invalid scraped data dict representation. Invalid fields: {[k for k in scraped_data.keys() if k not in valid_fields]}"
+            )
 
         # Parse relevance label
-        label_relevance : str = scraped_data.get("label_relevance")
+        label_relevance: str = scraped_data.get("label_relevance")
         if label_relevance:
-            scraped_data['label_relevance'] = RelevanceClassificationLabels(label_relevance)
-        
+            scraped_data["label_relevance"] = RelevanceClassificationLabels(
+                label_relevance
+            )
+
         # Parse service label
-        label_service : str = scraped_data.get("label_service")
+        label_service: str = scraped_data.get("label_service")
         if label_service:
-            scraped_data['label_service'] = ServiceClassificationLabels(label_service)
+            scraped_data["label_service"] = ServiceClassificationLabels(label_service)
 
         # Parse source
-        source : str  = scraped_data.get("source")
+        source: str = scraped_data.get("source")
         if source:
-           scraped_data['source'] = Sources(source)
-        
-        # Parse date 
-        last_scraped : str = scraped_data.get('last_scraped')
+            scraped_data["source"] = Sources(source)
+
+        # Parse date
+        last_scraped: str = scraped_data.get("last_scraped")
         if last_scraped:
-            scraped_data['last_scraped'] = datetime.strptime(last_scraped, settings.date_format)
-        
+            scraped_data["last_scraped"] = datetime.strptime(
+                last_scraped, settings.date_format
+            )
+
         return cls(**scraped_data)
+
 
 class ScrapedDataEncoder(json.JSONEncoder):
     """

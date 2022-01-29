@@ -17,16 +17,19 @@ import tarfile
 import pathlib
 import logging
 
+
 class ClassifierType(enum.Enum):
     """
         Possible types of classifiers
     """
-    RELEVANCE : str = "relevance"
-    SERVICE   : str = "service"
+
+    RELEVANCE: str = "relevance"
+    SERVICE: str = "service"
 
     @classmethod
     def choices(cls) -> List[str]:
         return [x.value for x in cls]
+
 
 class GCSStorageManager:
     """
@@ -57,7 +60,7 @@ class GCSStorageManager:
         """
         return self._bucket_prefix_path
 
-    def download_classifier_model_to(self, type : ClassifierType, filepath : str):
+    def download_classifier_model_to(self, type: ClassifierType, filepath: str):
         """
             Try to download the classifier model of type 'type' to the provided filepath in local storage
 
@@ -66,7 +69,7 @@ class GCSStorageManager:
                 - filepath : `str` = where to store it in local storage
         """
 
-        # Create name of file, use the prefix path (the path where to look for files) 
+        # Create name of file, use the prefix path (the path where to look for files)
         # and find the file as a tar file
         blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
 
@@ -83,7 +86,7 @@ class GCSStorageManager:
             tar = tarfile.TarFile(file.name)
             tar.extractall(filepath)
 
-    def upload_classifier_model_from(self, type : ClassifierType, filepath : str):
+    def upload_classifier_model_from(self, type: ClassifierType, filepath: str):
         """
             Try to upload the classifier model of type 'type' stored in the provided filepath in local storage
 
@@ -91,11 +94,11 @@ class GCSStorageManager:
                 - type : `ClassifierType` = type of classifier to get
                 - filepath : `str` = where to find it in local storage
         """
-        # Check if the file exists beforehand 
+        # Check if the file exists beforehand
         if not pathlib.Path(filepath).exists():
             raise ValueError(f"Path in filepath '{filepath}' does not exists")
 
-        # Create name of file, use the prefix path (the path where to look for files) 
+        # Create name of file, use the prefix path (the path where to look for files)
         # and find the file as a tar file
         blob_name = f"{self.bucket_prefix_path}/{type.value}.tar"
         logging.info(f"Creating tar file for file: {filepath}...")
@@ -103,7 +106,9 @@ class GCSStorageManager:
         # Create a temp file where to tar the folder
         with tempfile.NamedTemporaryFile() as file:
             make_tarfile(file.name, filepath)
-            logging.info(f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'")
+            logging.info(
+                f"Uploading to blob: '{blob_name}' from local storage '{filepath}' to bucket: '{self.bucket.name}'"
+            )
             # Get blob and upload to it from local storage
             blob = self.bucket.get_blob(blob_name)
             blob.upload_from_filename(file.name)
@@ -116,8 +121,11 @@ class GCSStorageManager:
             # Return:
                 A BytesIO object holding the entirely downloaded object 
         """
-        blob_name = filepath if filepath.startswith(self.bucket_prefix_path) \
+        blob_name = (
+            filepath
+            if filepath.startswith(self.bucket_prefix_path)
             else f"{self.bucket_prefix_path}/{filepath}"
+        )
         logging.info(f"Bucket {self.bucket.name}: Retrieving file: {blob_name}")
         blob = self.bucket.get_blob(blob_name)
         byte_stream = BytesIO()
@@ -125,7 +133,7 @@ class GCSStorageManager:
         byte_stream.seek(0)
         return byte_stream
 
-    def save_file(self, destination_file : str, source_file : str):
+    def save_file(self, destination_file: str, source_file: str):
         """
             Save a file into the given path 
             # Parameters:
@@ -145,7 +153,15 @@ class GCSStorageManager:
             # Return:
                 List of filenames of stored objects
         """
-        full_prefix = self.bucket_prefix_path if prefix_path is None else f"{self.bucket_prefix_path}/{prefix_path}"
-        logging.info(f"Bucket {self.bucket.name}: Listing files with prefix: {full_prefix}")
-        blobs = self._client.list_blobs(self.bucket, prefix=full_prefix, delimiter=delimiter)
+        full_prefix = (
+            self.bucket_prefix_path
+            if prefix_path is None
+            else f"{self.bucket_prefix_path}/{prefix_path}"
+        )
+        logging.info(
+            f"Bucket {self.bucket.name}: Listing files with prefix: {full_prefix}"
+        )
+        blobs = self._client.list_blobs(
+            self.bucket, prefix=full_prefix, delimiter=delimiter
+        )
         return [blob.name for blob in blobs]

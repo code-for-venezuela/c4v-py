@@ -1,14 +1,18 @@
-# %%
 """
     This file exposes the main API for this library, the microscope Manager
 """
 # Local imports
 from telnetlib import SE
 from c4v.scraper.persistency_manager.base_persistency_manager import (
-    BasePersistencyManager
+    BasePersistencyManager,
 )
 from c4v.scraper.persistency_manager.sqlite_storage_manager import SqliteManager
-from c4v.scraper.scraped_data_classes.scraped_data import RelevanceClassificationLabels, ScrapedData, ServiceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    LabelSet,
+    RelevanceClassificationLabels,
+    ScrapedData,
+    ServiceClassificationLabels,
+)
 from c4v.scraper.scraper import bulk_scrape, _get_scraper_from_url, scrape
 from c4v.scraper.crawler.crawlers.base_crawler import BaseCrawler
 from c4v.scraper.settings import INSTALLED_CRAWLERS, SUPPORTED_DOMAINS, NAME_TO_CRAWLER
@@ -19,7 +23,7 @@ from c4v.config import PersistencyManagers, settings
 
 
 # Python imports
-from typing import Dict, List, Iterable, Callable, Tuple, Any, Union
+from typing import Dict, List, Iterable, Callable, Tuple, Any, Union, Type
 from pathlib import Path
 import sys
 
@@ -59,7 +63,7 @@ class Manager:
         return self._persistency_manager
 
     @staticmethod
-    def scrape(urls : Union[List[str], str] ) -> Union[List[ScrapedData], ScrapedData]:
+    def scrape(urls: Union[List[str], str]) -> Union[List[ScrapedData], ScrapedData]:
         """
             Scrape the given url or set of urls and return its results
             Parameters:
@@ -68,36 +72,44 @@ class Manager:
                 An instance of scraped data if the given arg was an URL, or a list of ScrapedData in case it 
                 was a list of urls
         """
-        if not urls: # if nothing to process, return None
-            return None 
+        if not urls:  # if nothing to process, return None
+            return None
         elif isinstance(urls, list) and urls and isinstance(urls[0], str):
             return bulk_scrape(urls)
         elif isinstance(urls, str):
             return scrape(urls)
-        
-        raise TypeError(f"Expected argument should be a list of urls as strings or a single string url. Given {type(urls)}")
+
+        raise TypeError(
+            f"Expected argument should be a list of urls as strings or a single string url. Given {type(urls)}"
+        )
 
     @staticmethod
-    def crawl(crawler : Union[str, BaseCrawler], limit : int = -1) -> List[str]:
+    def crawl(crawler: Union[str, BaseCrawler], limit: int = -1) -> List[str]:
         """
             Scrape using the provided crawler type up to the given limit
         """
-        # If it's a crawler name, find a matching crawler and instance it 
+        # If it's a crawler name, find a matching crawler and instance it
         if isinstance(crawler, str):
             crawler_class = NAME_TO_CRAWLER.get(crawler)
             if not crawler_class:
-                raise ValueError(f"'{crawler}' is not a valid crawler name, choices are: {list(NAME_TO_CRAWLER.keys())}")
-            
+                raise ValueError(
+                    f"'{crawler}' is not a valid crawler name, choices are: {list(NAME_TO_CRAWLER.keys())}"
+                )
+
             crawler_instance = crawler_class()
-        elif isinstance(crawler, BaseCrawler): 
-            # if it's an instance, just use it 
+        elif isinstance(crawler, BaseCrawler):
+            # if it's an instance, just use it
             crawler_instance = crawler
         else:
-            raise TypeError("Invalid crawler argument, should be either a crawler name (str) or a crawler instance")
-        
-        return crawler_instance.crawl_urls(up_to = limit if limit > 0 else None)
+            raise TypeError(
+                "Invalid crawler argument, should be either a crawler name (str) or a crawler instance"
+            )
 
-    def crawl_and_scrape_for(self, crawler_names : List[str] = None, limit : int = -1, save_to_db = True) -> List[ScrapedData]:
+        return crawler_instance.crawl_urls(up_to=limit if limit > 0 else None)
+
+    def crawl_and_scrape_for(
+        self, crawler_names: List[str] = None, limit: int = -1, save_to_db=True
+    ) -> List[ScrapedData]:
         """
             Crawl and scrape data for the given list of crawlers
             Parameters:
@@ -106,12 +118,14 @@ class Manager:
             Return:
                 List of scraped data    
         """
-        urls = self.crawl_new_urls_for(crawler_names=crawler_names, limit=limit, save_to_db=save_to_db)
+        urls = self.crawl_new_urls_for(
+            crawler_names=crawler_names, limit=limit, save_to_db=save_to_db
+        )
         data = self.get_bulk_data_for(urls, save_to_db=save_to_db)
         return data
 
     def get_bulk_data_for(
-        self, urls: List[str], should_scrape: bool = True, save_to_db = True
+        self, urls: List[str], should_scrape: bool = True, save_to_db=True
     ) -> List[ScrapedData]:
         """
             Retrieve scraped data for given url set if scrapable
@@ -127,7 +141,7 @@ class Manager:
 
         # Separate scraped urls from non scraped
         not_scraped = db.filter_scraped_urls(urls) if db else urls
-        
+
         # Scrape missing instances if necessary
         items = []
         if should_scrape and not_scraped:
@@ -156,8 +170,9 @@ class Manager:
                 limit : int = how much measurements to scrape, set a negative number for no limit
         """
         if not self._persistency_manager:
-            raise AttributeError("Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function")
-
+            raise AttributeError(
+                "Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function"
+            )
 
         db = self._persistency_manager
 
@@ -179,7 +194,9 @@ class Manager:
                 An iterator returning available rows
         """
         if not self._persistency_manager:
-            raise AttributeError("Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function")
+            raise AttributeError(
+                "Storage scheme not configured for microscope Manager instance, provide a db scheme to use this function"
+            )
 
         return self._persistency_manager.get_all(limit, scraped)
 
@@ -188,7 +205,7 @@ class Manager:
         crawler_names: List[str] = None,
         post_process: Callable[[List[str]], None] = None,
         limit=-1,
-        save_to_db = True
+        save_to_db=True,
     ):
         """
             Crawl for new urls using the given crawlers only
@@ -217,13 +234,14 @@ class Manager:
         # Function to process urls as they come
         def save_urls(urls: List[str]):
 
-            urls = urls[:limit - counter.count]
+            urls = urls[: limit - counter.count]
 
             if db:
                 urls = db.filter_known_urls(urls)
                 datas = [ScrapedData(url=url) for url in urls]
 
-                if save_to_db: db.save(datas)
+                if save_to_db:
+                    db.save(datas)
 
             # Update how much elements have beed added so far
             counter.add(len(urls))
@@ -247,18 +265,23 @@ class Manager:
 
         # Warns the user if no crawler could be found
         if not crawlers_to_run:
-            given_crawler_list = "\n".join([f"\t* {c}" for c in crawler_names] or ["\t<No crawlers>"])
-            actual_crawler_list = "\n".join([f"\t* {c.name}" for c in INSTALLED_CRAWLERS] or ["\t<No crawlers>"])
-            print(f"[Warning] No crawler available to run. Given crawler list: \n{given_crawler_list}\n Available crawlers: \n{actual_crawler_list}", file=sys.stderr)
+            given_crawler_list = "\n".join(
+                [f"\t* {c}" for c in crawler_names] or ["\t<No crawlers>"]
+            )
+            actual_crawler_list = "\n".join(
+                [f"\t* {c.name}" for c in INSTALLED_CRAWLERS] or ["\t<No crawlers>"]
+            )
+            print(
+                f"[Warning] No crawler available to run. Given crawler list: \n{given_crawler_list}\n Available crawlers: \n{actual_crawler_list}",
+                file=sys.stderr,
+            )
 
         # crawl for every crawler
         for crawler in crawlers_to_run:
             crawler.crawl_and_process_urls(save_urls, should_stop)
 
-    def crawl_new_urls_for( self,
-        crawler_names: List[str] = None,
-        limit=-1,
-        save_to_db : bool = True
+    def crawl_new_urls_for(
+        self, crawler_names: List[str] = None, limit=-1, save_to_db: bool = True
     ) -> List[str]:
         """
             Crawl new urls for the given list of crawlers:
@@ -266,11 +289,16 @@ class Manager:
                 crawler_names : [str] = list of names of scrapers to use when crawling
         """
         items = []
-        
-        def collect_urls(urls : List[str]):
+
+        def collect_urls(urls: List[str]):
             items.extend(urls)
 
-        self.crawl_and_process_new_urls_for(crawler_names=crawler_names, limit=limit, post_process=collect_urls, save_to_db=save_to_db)
+        self.crawl_and_process_new_urls_for(
+            crawler_names=crawler_names,
+            limit=limit,
+            post_process=collect_urls,
+            save_to_db=save_to_db,
+        )
 
         return items
 
@@ -350,15 +378,23 @@ class Manager:
         elif metadata.persistency_manager == PersistencyManagers.GCLOUD.value:
             # Try to import the gcloud persistency manager
             try:
-                from c4v.scraper.persistency_manager.big_query_persistency_manager import BigQueryManager
+                from c4v.scraper.persistency_manager.big_query_persistency_manager import (
+                    BigQueryManager,
+                )
                 from google.cloud.bigquery import Client
             except ImportError as e:
-                raise ImportError(f"Perhaps you might need to install the gcloud installation profile to use a GCLOUD manager. Error: {e}")
-            
-            if not settings.scraped_data_table:
-                raise ValueError("should provide configuration parameter 'SCRAPED_DATA_TABLE' in order to retrieve data from the cloud")
+                raise ImportError(
+                    f"Perhaps you might need to install the gcloud installation profile to use a GCLOUD manager. Error: {e}"
+                )
 
-            db = BigQueryManager(settings.scraped_data_table, Client(), settings.gcloud_project_id)
+            if not settings.scraped_data_table:
+                raise ValueError(
+                    "should provide configuration parameter 'SCRAPED_DATA_TABLE' in order to retrieve data from the cloud"
+                )
+
+            db = BigQueryManager(
+                settings.scraped_data_table, Client(), settings.gcloud_project_id
+            )
         elif metadata.persistency_manager == PersistencyManagers.USER.value:
             if not metadata.user_persistency_manager_module:
                 raise ValueError(
@@ -380,7 +416,11 @@ class Manager:
         return cls(db, metadata, local_files_path or settings.c4v_folder)
 
     def run_classification_from_experiment(
-        self, branch: str, experiment: str, data: List[ScrapedData], type : str = None
+        self,
+        branch: str,
+        experiment: str,
+        data: List[ScrapedData],
+        type: str = "relevance",
     ) -> List[Dict[str, Any]]:
         """
             Classify given data instance list, returning its metrics
@@ -403,16 +443,23 @@ class Manager:
             branch, experiment, type=type
         )
 
-        type_to_field = {"relevance" : "label_relevance", "service" : "label_service"}
+        type_to_field = {"relevance": "label_relevance", "service": "label_service"}
 
         # Sanity check
         if not type_to_field.get(type):
-            raise ValueError(f"'{type}' is not a valid classifier type. Possible options: {list(type_to_field.keys())}")
+            raise ValueError(
+                f"'{type}' is not a valid classifier type. Possible options: {list(type_to_field.keys())}"
+            )
 
         return classifier_experiment.classify(data, type_to_field[type])
 
     def run_pending_classification_from_experiment(
-        self, branch: str, experiment: str, save: bool = True, limit: int = -1, type : str = None
+        self,
+        branch: str,
+        experiment: str,
+        save: bool = True,
+        limit: int = -1,
+        type: str = "relevance",
     ) -> List[Dict[str, Any]]:
         """
             Classify data pending for classification in local db, returning the obtained results and saving it 
@@ -440,18 +487,26 @@ class Manager:
 
         # Request at the most "limit" instances
         if type == "relevance":
-            data = list(x for x in self.persistency_manager.get_all(scraped=True) if x.label_relevance == None)[:limit]
+            data = list(
+                x
+                for x in self.persistency_manager.get_all(scraped=True)
+                if x.label_relevance == None
+            )[:limit]
         elif type == "service":
             data = list(
-                    x for x in self.persistency_manager.get_all(scraped=True) 
-                    if x.label_service == None and \
-                    x.label_relevance == RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO
-                )[:limit]
+                x
+                for x in self.persistency_manager.get_all(scraped=True)
+                if x.label_service == None
+                and x.label_relevance
+                == RelevanceClassificationLabels.DENUNCIA_FALTA_DEL_SERVICIO
+            )[:limit]
         else:
             raise ValueError(f"Invalid type of classifier: {type}")
 
         # classify
-        results = self.run_classification_from_experiment(branch, experiment, data, type = type)
+        results = self.run_classification_from_experiment(
+            branch, experiment, data, type=type
+        )
 
         # Save if requested so
         if save:
@@ -492,15 +547,29 @@ class Manager:
             sentence, html_file, additional_label=additional_label
         )
 
-    def get_classifier_labels(self) -> List[str]:
+    def get_classifier_labels(self, type: str = "relevance") -> List[str]:
         """
             Get list of possible labels for classifier
-            Return:
+            # Parameters:
+                - type : str = Type of classifier label, possible values:
+                    - relevance 
+                    - service
+            # Return:
                 List with possible output labels for the classifier
         """
-        from c4v.classifier.classifier import Classifier
-        raise NotImplementedError("Get classifier labels should be reimplemented")
-        return Classifier.get_labels()
+
+        str_to_labelset = {
+            "relevance": RelevanceClassificationLabels,
+            "service": ServiceClassificationLabels,
+        }
+
+        labelset: Type[LabelSet] = str_to_labelset.get(type)
+        if not labelset:
+            raise ValueError(
+                f"Invalid type of classifier: {type}. Choices are: {list(str_to_labelset.keys())}"
+            )
+
+        return labelset.labels()
 
     @staticmethod
     def available_crawlers() -> List[str]:
@@ -516,10 +585,9 @@ class Manager:
         """
         return SUPPORTED_DOMAINS
 
-
     def should_retrain_base_lang_model(
         self,
-        lang_model, #: LanguageModel, can't use explicit typing here as the language model must be imported inside this function
+        lang_model,  #: LanguageModel, can't use explicit typing here as the language model must be imported inside this function
         db_manager: BasePersistencyManager = None,
         eval_dataset_size: int = 250,
         min_loss: float = settings.default_lang_model_min_loss,
@@ -571,7 +639,7 @@ class Manager:
         loss = lang_model.eval_accuracy(ds)
         return should_retrain_fn(loss)
 
-    def upload_model(self, branch : str, experiment : str, type : str):
+    def upload_model(self, branch: str, experiment: str, type: str):
         """
             Try to upload the model in the provided experiment and branch to google cloud, 
             you'll need to be authenticated with a valid service account, and have the 
@@ -587,16 +655,17 @@ class Manager:
         try:
             from c4v.classifier.experiment import ExperimentFSManager
         except ImportError as e:
-            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'classification'. Error: {e}")
+            raise ImportError(
+                f"Some dependencies missing, you might need to use an installation profile containing 'classification'. Error: {e}"
+            )
 
-        # Create fs manager to get the path of the requested experiment 
+        # Create fs manager to get the path of the requested experiment
         fs_manager = ExperimentFSManager(experiment_name=experiment, branch_name=branch)
 
         # Try to upload file
         self.upload_model_from_directory(fs_manager.experiment_content_folder, type)
-        
 
-    def upload_model_from_directory(self, path : str, type : str):
+    def upload_model_from_directory(self, path: str, type: str):
         """
             Try to upload the model in the provided directory to google cloud, 
             you'll need to be authenticated with a valid service account, and have the 
@@ -609,18 +678,27 @@ class Manager:
                     - service
         """
         try:
-            from c4v.cloud.gcloud_storage_manager import GCSStorageManager, ClassifierType
+            from c4v.cloud.gcloud_storage_manager import (
+                GCSStorageManager,
+                ClassifierType,
+            )
         except ImportError as e:
-            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+            raise ImportError(
+                f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}"
+            )
 
         # Validate bucket name
         if settings.storage_bucket is None:
-            raise ValueError("'STORAGE_BUCKET' env variable not provided. Set up such variable to access a gcloud bucket where to store the model")
+            raise ValueError(
+                "'STORAGE_BUCKET' env variable not provided. Set up such variable to access a gcloud bucket where to store the model"
+            )
 
         # Validate classifier type
         valid_types = [t.value for t in ClassifierType]
         if type not in valid_types:
-            raise ValueError(f"Type '{type}' is not a valid type. Choices are: {valid_types}")
+            raise ValueError(
+                f"Type '{type}' is not a valid type. Choices are: {valid_types}"
+            )
 
         # Get type of classifier to upload
         classifier_type = ClassifierType(type)
@@ -631,7 +709,9 @@ class Manager:
         # Try to upload the file
         gcs_manager.upload_classifier_model_from(classifier_type, path)
 
-    def download_model_to_directory(self, path : str, type : str, bucket_name : str = settings.storage_bucket):
+    def download_model_to_directory(
+        self, path: str, type: str, bucket_name: str = settings.storage_bucket
+    ):
         """
             Try to download the desired model to a local directory. 
             You'll need to be authenticated with a valid service account, and have the 
@@ -644,14 +724,21 @@ class Manager:
                     - service
         """
         try:
-            from c4v.cloud.gcloud_storage_manager import GCSStorageManager, ClassifierType
+            from c4v.cloud.gcloud_storage_manager import (
+                GCSStorageManager,
+                ClassifierType,
+            )
         except ImportError as e:
-            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+            raise ImportError(
+                f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}"
+            )
 
         # Validate classifier type
         valid_types = [t.value for t in ClassifierType]
         if type not in valid_types:
-            raise ValueError(f"Type '{type}' is not a valid type. Choices are: {valid_types}")
+            raise ValueError(
+                f"Type '{type}' is not a valid type. Choices are: {valid_types}"
+            )
         classifier_type = ClassifierType(type)
 
         # Create storage manager object
@@ -660,7 +747,7 @@ class Manager:
         # Try to download the file
         gcs_manager.download_classifier_model_to(classifier_type, path)
 
-    def _update_irrelevant_service(self, bulk_size : int = 1000):
+    def _update_irrelevant_service(self, bulk_size: int = 1000):
         """
             Update 'label_service' field in instances where 'label_relevance' == 'IRRELEVANTE',
             since we already know that such instances are not about services. Use bulk size to specify how
@@ -669,7 +756,11 @@ class Manager:
         assert bulk_size > 0
 
         # Irrelevant instances
-        data = (x for x in self.persistency_manager.get_all() if x.label_relevance == RelevanceClassificationLabels.IRRELEVANTE)
+        data = (
+            x
+            for x in self.persistency_manager.get_all()
+            if x.label_relevance == RelevanceClassificationLabels.IRRELEVANTE
+        )
 
         # Buffer to store elements to save
         data_to_save = []
@@ -681,8 +772,8 @@ class Manager:
             if len(data_to_save) == bulk_size:
                 self.persistency_manager.save(data_to_save)
                 data_to_save = []
-        
-        # Save what is left at the end 
+
+        # Save what is left at the end
         self.persistency_manager.save(data_to_save)
 
     @staticmethod
@@ -694,6 +785,8 @@ class Manager:
         try:
             from c4v.cloud.gcloud_storage_manager import ClassifierType
         except ImportError as e:
-            raise ImportError(f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}")
+            raise ImportError(
+                f"Some dependencies missing, you might need to use an installation profile containing 'gcloud'. Error: {e}"
+            )
 
         return [t.value for t in ClassifierType]
