@@ -5,12 +5,6 @@
 # Local imports
 from c4v.scraper.crawler.crawlers import base_crawler
 
-# Third party imports
-
-
-# Python imports
-from typing import List
-
 
 class ElPitazoCrawler(base_crawler.BaseCrawler):
     """

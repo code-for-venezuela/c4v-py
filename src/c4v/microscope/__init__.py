@@ -1,1 +1,1 @@
-from c4v.microscope.manager import Manager
+from c4v.microscope.manager import Manager, Metadata

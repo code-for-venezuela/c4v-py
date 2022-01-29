@@ -23,18 +23,22 @@ import pandas as pd
 # -- < Input & sanity check > ---------------------------
 
 # Utility function that will log an error and end the program  execution with a non-zero exit code
-def raise_error(msg : str):
+def raise_error(msg: str):
     print(f"[ERROR] {msg}", file=sys.stderr)
     exit(1)
 
 
 # should provide at the least name of this file, path to dataset, and at the least one column to remove
-if len(sys.argv) < 3: 
-    raise_error("Expected at the least 2 arguments, path to dataset as csv and a non-empty list of columns to remove")
+if len(sys.argv) < 3:
+    raise_error(
+        "Expected at the least 2 arguments, path to dataset as csv and a non-empty list of columns to remove"
+    )
 
 # Try to parse label flag
-if sys.argv[2] == '-l' and len(sys.argv) < 5:
-    raise_error("Expected at the least 3 arguments, path to dataset as csv, label flag value and a non-empty list of columns to remove")
+if sys.argv[2] == "-l" and len(sys.argv) < 5:
+    raise_error(
+        "Expected at the least 3 arguments, path to dataset as csv, label flag value and a non-empty list of columns to remove"
+    )
 elif sys.argv[2] == "-l":
     label_column = sys.argv[3]
     columns_start_index = 4
@@ -62,19 +66,21 @@ dataframe = pd.read_csv(file)
 # Get dataset columns
 actual_columns = list(dataframe.columns)
 
-# Check consistent columns 
-if any(x not in actual_columns for x in columns) or ( False if not label_column else (label_column not in actual_columns)):
+# Check consistent columns
+if any(x not in actual_columns for x in columns) or (
+    False if not label_column else (label_column not in actual_columns)
+):
     raise_error("Inconsistent columns and csv. Provided columns not in csv format")
 
 # -- < filter out undesired columns > ---------------------
 print("Deleting columns...")
 columns_to_drop = [c for c in actual_columns if c not in columns]
-dataframe.drop(columns_to_drop, axis='columns', inplace=True)
+dataframe.drop(columns_to_drop, axis="columns", inplace=True)
 
 # Rename column to label if requested so
 if label_column:
     print(f"Renaming column {label_column} to 'label'...")
-    dataframe.rename({label_column : 'label'}, axis='columns', inplace=True)
+    dataframe.rename({label_column: "label"}, axis="columns", inplace=True)
 
 # -- < Save to file > -------------------------------------
 filename = path_to_file.stem + "_trimmed_cols.csv"

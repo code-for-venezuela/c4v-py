@@ -3,7 +3,7 @@ import scrapy
 from scrapy.http import Response
 
 # Local imports
-from .. import utils 
+from .. import utils
 from c4v.scraper.scraped_data_classes.primicia_scraped_data import PrimiciaData
 
 

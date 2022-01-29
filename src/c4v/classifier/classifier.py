@@ -5,7 +5,12 @@
 # Local imports
 import dataclasses
 from c4v.config import settings
-from c4v.scraper.scraped_data_classes.scraped_data import ScrapedData, LabelSet, RelevanceClassificationLabels
+from c4v.scraper.scraped_data_classes.scraped_data import (
+    ScrapedData,
+    LabelSet,
+    RelevanceClassificationLabels,
+    ServiceClassificationLabels,
+)
 from c4v.classifier.base_model import BaseModel, C4vDataFrameLoader
 
 # Python imports
@@ -37,6 +42,7 @@ from transformers.trainer_utils import EvalPrediction
 BASE_C4V_FOLDER = settings.c4v_folder
 BASE_LANGUAGE_MODEL = settings.default_base_language_model
 
+
 class LabelSet(Enum):
     """
         Interface for sets of labels that can be attached to to a model for classification
@@ -49,14 +55,15 @@ class LabelSet(Enum):
         """
         raise NotImplementedError("Should implement abstract method get_id2label_dict")
 
+
 class BinaryClassificationLabels(LabelSet):
     """
         Labels for Binary classification, telling if a data instance is relevant or not
     """
+
     IRRELEVANTE: str = "IRRELEVANTE"
     DENUNCIA_FALTA_DEL_SERVICIO: str = "PROBLEMA DEL SERVICIO"
     UNKNOWN: str = "UNKNOWN"
-
 
     @classmethod
     def get_id2label_dict(cls) -> Dict[int, str]:
@@ -71,28 +78,48 @@ class Classifier(BaseModel):
         This is the classifier model, you can use it to do two kinds of classification,
         binary classification, to tell apart relevant or irrelevant news, and a multi-single label classification,
         which assumes that an article is relevant and assigns one of a given set of labels to that
+
+        # Parameters
+            + files_folder_path : str = Where to store resulting model after training, or retrieve it during classification
+            + base_model_name : str = Name of the huggingface model to use as base during training
+            + use_cuda : bool = If should use GPU (cuda). It will be used in every operation if so.
+            + labelset : Type[LabelSet] = labelset to use to get corresponding labels during trainning and classification
+            + label_column : str = Label to use during training as actual label
     """
 
     def __init__(
-            self, 
-            files_folder_path: str = None, 
-            base_model_name: str = settings.default_base_language_model, 
-            use_cuda: bool = True, 
-            labelset : Type[LabelSet] = RelevanceClassificationLabels,
-            label_column : str = "label"
-            ):
+        self,
+        files_folder_path: str = None,
+        base_model_name: str = settings.default_base_language_model,
+        use_cuda: bool = True,
+        labelset: Type[LabelSet] = RelevanceClassificationLabels,
+        label_column: str = "label",
+    ):
         self._label_column = label_column
         self._labelset = labelset
-        super().__init__(files_folder_path=files_folder_path, base_model_name=base_model_name, use_cuda=use_cuda)
+        super().__init__(
+            files_folder_path=files_folder_path,
+            base_model_name=base_model_name,
+            use_cuda=use_cuda,
+        )
 
     @property
     def label_column(self) -> str:
         """ Column used by this model as target label during training """
         return self._label_column
 
+    @label_column.setter
+    def label_column(self, label_column) -> str:
+        """ Column used by this model as target label during training """
+        self._label_column = label_column
+
     @property
     def labelset(self) -> Type[LabelSet]:
         return self._labelset
+
+    @labelset.setter
+    def labelset(self, labelset=Type[LabelSet]):
+        self._labelset = labelset
 
     def get_dataframe(self, dataset_name: str) -> DataFrame:
         """
@@ -101,7 +128,11 @@ class Classifier(BaseModel):
         return C4vDataFrameLoader.get_from_processed(dataset_name)
 
     def prepare_dataframe(
-        self, columns: List[str], dataset_name: str, label_column: str = None, labelset: Type[LabelSet] = None
+        self,
+        columns: List[str],
+        dataset_name: str,
+        label_column: str = None,
+        labelset: Type[LabelSet] = None,
     ) -> Tuple[List[str], List[int]]:
         """
             Return the list of text bodies and its corresponding label corresponding according to the provided 
@@ -136,7 +167,7 @@ class Classifier(BaseModel):
         df = df.convert_dtypes()
         df.drop_duplicates(inplace=True)
         df_issue_text = df[[*columns, label_column]]
-        df_issue_text.dropna(inplace=True)    
+        df_issue_text.dropna(inplace=True)
 
         x = [
             "\n".join(tup)
@@ -155,12 +186,13 @@ class Classifier(BaseModel):
             Return:
                 RobertaTokenizer: tokenizer to retrieve
         """
-        return AutoTokenizer.from_pretrained(
-            model_name or self._base_model_name, id2label=self.labelset.get_id2label_dict()
+        return RobertaTokenizer.from_pretrained(
+            model_name or self._base_model_name,
+            id2label=self.labelset.get_id2label_dict(),
         )
 
     def load_base_model(
-        self, model_name: str = None, num_labels : int = None
+        self, model_name: str = None, num_labels: int = None
     ) -> RobertaForSequenceClassification:
         """
             Create model from model hub, configure them and retrieve it
@@ -171,7 +203,8 @@ class Classifier(BaseModel):
         """
         # Creating model and tokenizer
         model = AutoModelForSequenceClassification.from_pretrained(
-            model_name or self._base_model_name, num_labels=num_labels or self.labelset.num_labels()
+            model_name or self._base_model_name,
+            num_labels=num_labels or self.labelset.num_labels(),
         )
         # Use GPU if available
         model.to(self._device)
@@ -232,15 +265,15 @@ class Classifier(BaseModel):
         pred = np.argmax(pred, axis=1)
 
         accuracy = accuracy_score(y_true=labels, y_pred=pred)
-        recall = recall_score(y_true=labels, y_pred=pred)
-        precision = precision_score(y_true=labels, y_pred=pred)
-        f1 = f1_score(y_true=labels, y_pred=pred)
+        recall = recall_score(y_true=labels, y_pred=pred, average="weighted")
+        precision = precision_score(y_true=labels, y_pred=pred, average="weighted")
+        f1 = f1_score(y_true=labels, y_pred=pred, average="weighted")
 
         return {
             "accuracy": accuracy,
             "precision": precision,
             "recall": recall,
-            "f1": f1,
+            # "f1": f1,
         }
 
     def _get_default_train_args(self) -> Dict[str, Any]:
@@ -367,7 +400,7 @@ class Classifier(BaseModel):
         val_test_proportion: float = 0.2,
         base_model_name: str = None,
         labelset: Type[LabelSet] = None,
-        label_column: str = None
+        label_column: str = None,
     ) -> DataFrame:
         """
             Run an experiment specified by given train_args, and write a summary if requested so
@@ -398,11 +431,11 @@ class Classifier(BaseModel):
 
         # Prepare training dataframe and load model + tokenizer
         x, y = self.prepare_dataframe(
-                        columns=columns, 
-                        dataset_name=training_dataset, 
-                        label_column=label_column, 
-                        labelset=labelset
-                    )
+            columns=columns,
+            dataset_name=training_dataset,
+            label_column=label_column,
+            labelset=labelset,
+        )
 
         # Split dataset into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
@@ -450,7 +483,10 @@ class Classifier(BaseModel):
         return metrics_df
 
     def classify(
-        self, data: List[ScrapedData], model: str = None
+        self,
+        data: List[ScrapedData],
+        model: str = None,
+        scraped_data_label_field: str = "label_relevance",
     ) -> List[Dict[str, Any]]:
         """
             Classify the given data instance, returning classification metrics
@@ -459,12 +495,23 @@ class Classifier(BaseModel):
                 data : ScrapedData = Data instance to classify
                 model : str = model name of model to load use when classifying. If no model provided,
                               use the model configured for this classifier
+                scraped_data_label_field : str = Field of scraped data that corresponds to this classification. Required to know 
+                    where to store the predicted label
             Return:
                 A List of dicts with the resulting scraped data correctly labelled
                 and its corresponding scores tensor for each possible label. Available fields:
                     + data : ScrapedData = resulting data instance after classification
                     + scores : torch.Tensor = Scores for each label returned by the classifier
         """
+        # Sanity check
+        assert scraped_data_label_field in {
+            d.name for d in dataclasses.fields(ScrapedData)
+        }
+
+        # If nothing to do, just return empty list
+        if not data:
+            return []
+
         # Get model from experiment:
         if model is None:
             model = self._files_folder
@@ -489,7 +536,11 @@ class Classifier(BaseModel):
 
         result = []
         for (x, d) in zip(output, data):
-            d.label_relevance = RelevanceClassificationLabels(self.index_to_label(torch.argmax(x).item()))
+            setattr(
+                d,
+                scraped_data_label_field,
+                self.labelset(self.index_to_label(torch.argmax(x).item())),
+            )
             result.append({"data": d, "scores": x})
 
         return result
@@ -542,7 +593,9 @@ class Classifier(BaseModel):
         assert label, "Label shouldn't  be None"
         return label
 
-    def _get_text_from_scrapeddata(self, scraped_data : ScrapedData, columns : List[str] = ["title"]) -> str:
+    def _get_text_from_scrapeddata(
+        self, scraped_data: ScrapedData, columns: List[str] = ["title"]
+    ) -> str:
         return ". ".join([scraped_data.__getattribute__(attr) for attr in columns])
 
     @classmethod
@@ -550,4 +603,9 @@ class Classifier(BaseModel):
         kwargs["labelset"] = RelevanceClassificationLabels
         kwargs["label_column"] = "label_relevance"
         return cls(**kwargs)
-        
+
+    @classmethod
+    def service(cls, **kwargs):
+        kwargs["labelset"] = ServiceClassificationLabels
+        kwargs["label_column"] = "label_service"
+        return cls(**kwargs)

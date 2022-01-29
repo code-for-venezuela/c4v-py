@@ -20,14 +20,17 @@ import pandas as pd
 
 # Not enough arguments checking
 if len(sys.argv) < 3:
-    print("Not enough arguments: expected column and at the least one dataset", file=sys.stderr)
+    print(
+        "Not enough arguments: expected column and at the least one dataset",
+        file=sys.stderr,
+    )
     exit(1)
 
 
 # get value for column
 label_column_name = sys.argv[1]
 
-# get value for datasets 
+# get value for datasets
 datasets_files = sys.argv[2:]
 
 # Validate datasets
@@ -46,7 +49,10 @@ for file in datasets_files:
 
     # Check that it provides the label column
     if label_column_name not in new_df.columns:
-        print(f"Dataset '{file}' does not provides the requested column: {label_column_name}", file=sys.stderr)
+        print(
+            f"Dataset '{file}' does not provides the requested column: {label_column_name}",
+            file=sys.stderr,
+        )
         exit(1)
 
     dfs.append(new_df)

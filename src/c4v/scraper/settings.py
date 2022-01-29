@@ -29,6 +29,9 @@ check_scrapers_consistency(INSTALLED_SCRAPERS)
 # Spider
 URL_TO_SCRAPER = {s.intended_domain: s for s in INSTALLED_SCRAPERS}
 
+# Dict with information to map from name to crawler
+NAME_TO_CRAWLER = {c.name: c for c in INSTALLED_CRAWLERS}
+
 # root dir, so we can get resources from module directories
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
