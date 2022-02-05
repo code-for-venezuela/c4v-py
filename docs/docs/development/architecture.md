@@ -76,19 +76,77 @@ urls = [
 
 assert m.split_non_scrapable(urls) == (urls[:2], urls[2:])
 ```
-### TODO
-add more useful examples
 ## Creation 
 You can create a new scraper in order to support scraping for new sites. More details about this in ["creating a scraper"](./creating-a-scraper.md)
 # Crawler
-TODO
+The easiest way to call a crawler to get more urls is to use the `microscope.Manager` object:
+
+### Crawling N urls for a given site
+```python
+import c4v.microscope as ms
+
+manager = ms.Manager.from_default()
+# Crawls 100 urls using the crawler named "primicia"
+manager.crawl("primicia", limit = 100)
+```
+
+But, how do you know which values could be supported by this command? 
+### Getting possible crawlers
+```python
+import c4v.microscope as ms
+
+manager = ms.Manager.from_default()
+
+print(manager.available_crawlers())
+# ['primicia', 'el_pitazo']
+```
+You can use this list to check if a given crawler is a valid one or not.
+
+### Crawling new urls
+You can get unknown urls by using the configured database by using the following code. You can choose to not save them if you prefer so.
+```python
+import c4v.microscope as ms
+
+manager = ms.Manager.from_default()
+
+# None of the retrieved urls are already in database, store them after retrieve
+print(manager.crawl_new_urls_for(['primicia'], limit = 100))
+
+# None of the retrieved urls are already in database, don't save them
+print(manager.crawl_new_urls_for(['primicia'], limit = 100, save_to_db=False))
+```
+
+### Crawl and scrape
+Perhaps you just want to crawl urls to scrape it afterwards, you can do easily following this example:
+```python
+import c4v.microscope as ms
+
+manager = ms.Manager.from_default()
+
+# Crawl, scrape, and save to db at the same time
+manager.crawl_and_scrape_for(['primicia'], limit = 100)
+```
 ## Creation
 You can create a new crawler in order to support exploring new urls for new sites. More details about this in ["creating a crawler"](./creating-a-crawler.md)
 # Persistency Manager
-TODO
+The persistency manager component helps you to specify how data is persisted.
+There's multiple persistency managers, and users can even provide their own, but all of them should provide the same api. Right now, we have two specially important persistency managers:
+
+1. `SQLiteManager` : A persistency manager to **store data in a local SQLite db**, used by the default `microscope.Manager` object configuration and the cli tool.
+2. `BigQueryManager` : A persistency manager **that stores data in google cloud and firestore**. When a new instance comes from a crawling, **they're persisted to firestore** as long as its data is not filled by a scraper and a classifier. When all components run and the data is filled, **they're moved to Big Query**.
+
 ## Creation
 You can create a new `Persistency Manager` object in order to support new ways of storing data. More details about this in ["creating a persistency manager"](./creating-a-persistency-manager.md)
 # Experiment
-TODO
+An experiment is **a python script specifying a training run for a model class**, you can use them to create models and fast experimentation. Since they're python files, you can perform all the data manipulation you need before you run you're experiment. Right now we have the following models and experiments:
+
+- `service_classification_experiment.py` : An experiment to train a multi label model into service type classification.
+
+- `test_lang_model_train.py` : An experiment to train a model in a fill mask task in order to improve it's accuracy with a specific spanish dialect.
+
+- `test_relevance_classifier.py` : An experiment to train a model to tell if an article is relevant or not.
+
 # ExperimentFSManager
-TODO
+It's an object that will manage how experiments are saved. Usually, experiments are specified by a **branch** and an **experiment name**, in a file folder structure inside the c4v folder.
+
+

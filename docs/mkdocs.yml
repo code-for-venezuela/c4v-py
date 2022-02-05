@@ -3,15 +3,19 @@ site_url: https://microscope.com
 nav:
   - Home: 'index.md'
   - 'Using Microscope' :
+    - 'Installation' : 'usage/installation.md'
+    - 'Configuration and environment variables' : 'usage/configuration.md'
     - 'Microscope as a Library' : 'usage/microscope-as-a-library.md'
     - 'Primary Components' : 'usage/primary-components.md'
     - 'Microscope as a command line tool' : 'usage/microscope-as-cli.md'   
+    - 'Providing your own persistency scheme' : 'usage/providing-a-custom-persistency-manager.md'
 
   - Development: 
     - Architecture: 'development/architecture.md'
     - 'Creating a Scraper': 'development/creating-a-scraper.md'
     - 'Creating a Crawler': 'development/creating-a-crawler.md'
     - 'Creating a Persistency Manager': 'development/creating-a-persistency-manager.md'
+    - 'Experiments and classification': 'development/experiments.md'
 
 theme: readthedocs
 markdown_extensions:
