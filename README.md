@@ -10,8 +10,8 @@
 using computer and data science. Check the [online documentation](https://code-for-venezuela.github.io/c4v-py/)
 
 - [Installation](#installation)
-- [Development](#development)
-- [Pending](#pending)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
 
 ## Installation
 
